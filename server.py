@@ -1118,6 +1118,21 @@ def _first_href(links, base):
 
 # ---------------------------------------------------------------- server
 
+def _tools():
+    import tools  # imported lazily: tools.py builds on the fetch/parse helpers above
+    return tools
+
+
+TOOL_ROUTES = {
+    "/api/keywords": lambda q: _tools().keyword_ideas(q.get("q", ""), q.get("hl", "en"), q.get("gl", "us"), q.get("deep", "1") != "0"),
+    "/api/topics": lambda q: _tools().topics(q.get("q", ""), q.get("hl", "en"), q.get("gl", "us")),
+    "/api/page": lambda q: _tools().page(q.get("url", ""), q.get("kw", "")),
+    "/api/domain": lambda q: _tools().domain(q.get("d", "")),
+    "/api/intent": lambda q: {"items": [{"kw": k, "intent": _tools().intent(k)} for k in
+                                        [" ".join(x.lower().split()) for x in q.get("q", "").split("\n")][:500] if k]},
+}
+
+
 class Handler(SimpleHTTPRequestHandler):
     def __init__(self, *a, **k):
         super().__init__(*a, directory=ROOT, **k)
@@ -1134,6 +1149,28 @@ class Handler(SimpleHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(body)
 
+    def _tool(self, fn):
+        """Run a research tool; expected failures go back as {error} with a 200, like /api/audit."""
+        try:
+            return self._json(200, fn())
+        except AuditError as e:
+            return self._json(200, {"error": str(e)})
+        except Exception as e:
+            return self._json(500, {"error": f"The tool failed unexpectedly: {e.__class__.__name__}"})
+
+    def do_POST(self):
+        u = urlparse(self.path)
+        if u.path != "/api/backlinks":
+            self.send_error(404)
+            return
+        length = min(int(self.headers.get("Content-Length") or 0), 1_000_000)
+        try:
+            body = json.loads(self.rfile.read(length) or b"{}")
+        except ValueError:
+            return self._json(400, {"error": "Send JSON."})
+        import tools
+        return self._tool(lambda: tools.backlink_audit(str(body.get("target") or ""), [str(s) for s in body.get("sources") or []]))
+
     def do_GET(self):
         u = urlparse(self.path)
         if u.path == "/api/audit":
@@ -1149,6 +1186,9 @@ class Handler(SimpleHTTPRequestHandler):
                 return self._json(500, {"error": f"The audit failed unexpectedly: {e.__class__.__name__}"})
         if u.path == "/api/pagespeed":
             return self._pagespeed((parse_qs(u.query).get("url") or [""])[0])
+        if u.path in TOOL_ROUTES:
+            q = {k: v[0] for k, v in parse_qs(u.query).items()}
+            return self._tool(lambda: TOOL_ROUTES[u.path](q))
         if u.path == "/api/health":
             return self._json(200, {"ok": True})
         # never serve source control, the server itself or dotfiles

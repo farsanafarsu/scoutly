@@ -40,5 +40,26 @@
     try{['scoutly.user','scoutly.site','scoutly.campaigns','scoutly.audits'].forEach(function(k){sessionStorage.removeItem(k)})}catch(_){}
     location.href='login.html?mode=login'});
 
-  window.Scoutly={user:user,say:say,closeNav:closeNav,read:read,write:write,showSite:showSite};
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  /* JSON from the local server (python server.py). Errors come back as {error} with a 200. */
+  function api(path,opts){
+    return fetch(path,opts).then(function(r){return r.text().then(function(txt){var j=null;try{j=JSON.parse(txt)}catch(_){}
+      if(!j)throw new Error(r.status===404||r.status===501?'The Scoutly server isn’t running. Start it from the project folder with: python server.py':'The server sent an unexpected response.');
+      if(j.error)throw new Error(typeof j.error==='string'?j.error:(j.error.message||'Request failed.'));return j})});
+  }
+  function csv(rows,name){
+    var body=rows.map(function(r){return r.map(function(v){v=v==null?'':String(v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v}).join(',')}).join('\r\n');
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+body],{type:'text/csv'}));a.download=name;document.body.appendChild(a);a.click();
+    setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500);
+  }
+  /* Keyword Manager lists, kept in this browser (localStorage) so they survive closing the tab. */
+  var LK='scoutly.kwlists';
+  function lists(){try{return JSON.parse(localStorage.getItem(LK)||'{}')||{}}catch(_){return {}}}
+  function saveLists(l){try{localStorage.setItem(LK,JSON.stringify(l))}catch(_){}}
+  function addToList(name,kws){var l=lists();name=name||'My keywords';var cur=l[name]||{created:new Date().toISOString(),items:[]};
+    var have={};cur.items.forEach(function(k){have[k.kw]=1});var added=0;
+    kws.forEach(function(k){if(!have[k.kw]){cur.items.push(k);have[k.kw]=1;added++}});l[name]=cur;saveLists(l);return added}
+  function qs(k){return new URLSearchParams(location.search).get(k)||''}
+
+  window.Scoutly={user:user,say:say,closeNav:closeNav,read:read,write:write,showSite:showSite,esc:esc,api:api,csv:csv,lists:lists,saveLists:saveLists,addToList:addToList,qs:qs};
 })();

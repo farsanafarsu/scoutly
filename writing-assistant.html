@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SEO Writing Assistant — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.wa{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;margin-top:20px;align-items:start}
+.ed{background:var(--card);border:1px solid var(--ln)}
+.ed .fld{padding:14px 18px;border-bottom:1px solid var(--ln)}
+.ed label{display:flex;justify-content:space-between;font:600 10px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
+.ed label span{letter-spacing:0;text-transform:none;font-weight:500}
+.ed input{width:100%;margin-top:8px;padding:6px 0;border:0;background:none;font:600 20px/1.3 Geist,sans-serif;color:var(--ink)}.ed input:focus{outline:0}
+.ed input.meta{font:400 14px/1.5 Geist,sans-serif}
+.ed textarea{display:block;width:100%;min-height:560px;padding:18px;border:0;background:#fff;font:400 16px/1.75 Geist,sans-serif;color:var(--ink);resize:vertical}.ed textarea:focus{outline:0}
+.side2{position:sticky;top:84px;display:grid;gap:14px;max-height:calc(100vh - 100px);overflow:auto}
+.box{background:var(--card);border:1px solid var(--ln);padding:16px}
+.box h3{font:600 10px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin-bottom:12px}
+.score{display:flex;align-items:center;gap:16px}
+.score b{display:grid;place-items:center;width:84px;height:84px;flex:none;border:4px solid currentColor;font:500 34px/1 var(--D)}
+.score p{font:400 12px/1.6 var(--M);color:var(--sl)}
+.chk li{display:flex;gap:9px;align-items:flex-start;padding:7px 0;border-bottom:1px solid var(--ln);font:400 12px/1.5 var(--M);color:var(--sl)}.chk li:last-child{border-bottom:0}
+.chk i{width:9px;height:9px;flex:none;margin-top:4px}.chk .g{background:var(--ok)}.chk .y{background:var(--wa)}.chk .r{background:var(--cr)}
+.st{display:grid;grid-template-columns:1fr 1fr;gap:8px}.st div{padding:10px;background:#fff;border:1px solid var(--ln)}
+.st small{display:block;font:600 9px/1.3 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}.st b{display:block;margin-top:4px;font:500 18px/1 var(--D)}
+.rec{display:flex;flex-wrap:wrap;gap:5px}.rec .used{color:var(--ok);border-color:rgba(23,166,115,.4);background:rgba(23,166,115,.06)}
+.kwi{display:flex;gap:8px}.kwi input{flex:1;min-width:0;height:36px;padding:0 10px;border:1px solid var(--ln);border-radius:3px;font:400 12.5px/1 var(--M)}
+@media(max-width:1100px){.wa{grid-template-columns:minmax(0,1fr)}.side2{position:static;max-height:none}}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">On-page &amp; tech SEO</p>
+      <h1>SEO Writing Assistant</h1>
+      <p class="desc">Write or paste your article and get live feedback on readability, length, keyword use, headings, title and meta description. Start lines with <code>#</code> for the H1 and <code>##</code> for sections. Your draft is saved in this browser as you type.</p>
+    </div>
+    <div class="wa">
+      <div class="ed">
+        <div class="fld"><label for="ti">SEO title <span id="tiN">0 / 60</span></label><input id="ti" placeholder="Write a title that includes your keyword"></div>
+        <div class="fld"><label for="md">Meta description <span id="mdN">0 / 160</span></label><input class="meta" id="md" placeholder="Summarise the page in 120–160 characters"></div>
+        <textarea id="tx" aria-label="Article text" placeholder="# Your main heading&#10;&#10;Start writing here…&#10;&#10;## A section heading&#10;&#10;More text…"></textarea>
+      </div>
+      <div class="side2">
+        <div class="box"><h3>Overall score</h3><div class="score"><b id="sc">0</b><p id="scT">Add target keywords and start writing.</p></div></div>
+        <div class="box"><h3>Target keywords</h3><div class="kwi"><input id="kws" placeholder="dermal fillers, lip fillers"><button class="btn sm p" type="button" id="rec"><svg class="i"><use href="#i-wand"/></svg>Ideas</button></div>
+          <ul class="chk" id="kwList" style="margin-top:10px"></ul></div>
+        <div class="box"><h3>Checks</h3><ul class="chk" id="chk"></ul></div>
+        <div class="box"><h3>Stats</h3><div class="st" id="stats"></div><div class="qf sm" style="margin-top:10px"><label for="target">Target length (words)</label><input id="target" type="number" min="100" step="50" value="1000"></div></div>
+        <div class="box"><h3>Recommended words</h3><div class="rec" id="recs"><span class="meta-note">Press “Ideas” to get related words people search for.</span></div></div>
+        <div class="box"><button class="btn sm" type="button" id="dl" style="width:100%"><svg class="i"><use href="#i-dl"/></svg>Download as Markdown</button></div>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,recs=[],KEY='scoutly.draft';
+  function load(){try{var d=JSON.parse(localStorage.getItem(KEY)||'null');if(d){$('ti').value=d.ti||'';$('md').value=d.md||'';$('tx').value=d.tx||'';$('kws').value=d.kws||'';$('target').value=d.target||1000;recs=d.recs||[]}}catch(_){}}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify({ti:$('ti').value,md:$('md').value,tx:$('tx').value,kws:$('kws').value,target:$('target').value,recs:recs}))}catch(_){}}
+  function syl(w){w=w.toLowerCase();if(w.length<=3)return 1;w=w.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/,'').replace(/^y/,'');var m=w.match(/[aeiouy]{1,2}/g);return Math.max(1,m?m.length:1)}
+  function count(text,kw){if(!kw)return 0;var re=new RegExp('\\b'+kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'\\s+')+'\\b','gi');return (text.match(re)||[]).length}
+  function analyze(){
+    var raw=$('tx').value,lines=raw.split('\n'),h1=lines.filter(function(l){return /^#\s/.test(l)}).map(function(l){return l.replace(/^#\s+/,'')}),h2=lines.filter(function(l){return /^##\s/.test(l)});
+    var body=lines.map(function(l){return l.replace(/^#+\s*/,'')}).join('\n'),words=body.match(/[A-Za-z0-9’']+/g)||[],wc=words.length;
+    var sentences=body.split(/[.!?]+(?:\s|$)/).map(function(s){return s.trim()}).filter(function(s){return s.split(/\s+/).length>2});
+    var sylls=words.reduce(function(a,w){return a+syl(w)},0),fk=wc&&sentences.length?Math.round(206.835-1.015*(wc/sentences.length)-84.6*(sylls/wc)):null;
+    var longS=sentences.filter(function(s){return s.split(/\s+/).length>25}).length,passive=(body.match(/\b(is|are|was|were|be|been|being)\s+\w+(ed|en)\b/gi)||[]).length;
+    var paras=body.split(/\n\s*\n/).filter(function(p){return p.trim()}),longP=paras.filter(function(p){return (p.match(/\S+/g)||[]).length>150}).length;
+    var kws=$('kws').value.split(',').map(function(s){return s.trim().toLowerCase()}).filter(Boolean),ti=$('ti').value,md=$('md').value,target=+$('target').value||1000,lower=body.toLowerCase();
+    $('tiN').textContent=ti.length+' / 60';$('mdN').textContent=md.length+' / 160';
+    // keyword table
+    $('kwList').innerHTML=kws.map(function(k,i){var n=count(body,k),inT=count(ti,k)>0,inH=h1.some(function(h){return count(h,k)>0});var c=n&&(i>0||inT&&inH)?'g':n?'y':'r';
+      return '<li><i class="'+c+'"></i><span><b>'+esc(k)+'</b> · used '+n+'×'+(i===0?' · title '+(inT?'✓':'✗')+' · H1 '+(inH?'✓':'✗'):'')+'</span></li>'}).join('')||'<li><span class="meta-note">Add one or more keywords, separated by commas. The first one is your main keyword.</span></li>';
+    // checks: [state, text, weight, score 0..1]
+    var C=[];
+    function add(sc,txt,w){C.push({s:sc,t:txt,w:w})}
+    add(fk==null?0:fk>=60?1:fk>=50?0.7:fk>=40?0.4:0.15,fk==null?'Readability: start writing.':'Readability '+fk+' ('+(fk>=70?'easy':fk>=60?'plain English':fk>=50?'fairly hard':'hard')+'). 60 or higher suits most readers.',2);
+    add(Math.min(1,wc/target),wc+' of '+target+' target words.',2);
+    if(kws.length){var main=kws[0];add((count(body,main)?0.4:0)+(count(ti,main)?0.3:0)+(h1.some(function(h){return count(h,main)})?0.3:0),'Main keyword in text, title and H1.',3);
+      var others=kws.slice(1);if(others.length)add(others.filter(function(k){return count(body,k)}).length/others.length,'Secondary keywords used: '+others.filter(function(k){return count(body,k)}).length+' of '+others.length+'.',1);
+      var dens=wc?count(body,main)*main.split(/\s+/).length/wc*100:0;if(dens>3)add(0.3,'Main keyword density is '+dens.toFixed(1)+'%. Over 3% reads as stuffing.',1)}
+    else add(0,'Add a target keyword.',3);
+    add(!ti?0:ti.length>=30&&ti.length<=60?1:0.5,ti?'Title is '+ti.length+' characters (30–60 is best).':'Add an SEO title.',1);
+    add(!md?0:md.length>=120&&md.length<=160?1:0.5,md?'Meta description is '+md.length+' characters (120–160 is best).':'Add a meta description.',1);
+    add(h1.length===1?1:h1.length?0.5:0,h1.length===1?'One H1 heading.':h1.length?h1.length+' H1 headings; keep one.':'Add an H1 (a line starting with “# ”).',1);
+    add(Math.min(1,h2.length/Math.max(2,Math.round(wc/300))),h2.length+' section headings (##). About one per 300 words helps scanning.',1);
+    add(longS?Math.max(0,1-longS/Math.max(1,sentences.length)*4):1,longS?longS+' sentence'+(longS>1?'s are':' is')+' over 25 words.':'No overly long sentences.',1);
+    add(passive>3?0.5:1,passive?passive+' possible passive-voice phrase'+(passive>1?'s':'')+'.':'Active voice throughout.',0.5);
+    add(longP?0.5:1,longP?longP+' paragraph'+(longP>1?'s are':' is')+' over 150 words.':'Paragraphs are a comfortable length.',0.5);
+    if(recs.length){var used=recs.filter(function(r){return lower.indexOf(r)>-1}).length;add(Math.min(1,used/Math.min(10,recs.length)),'Recommended words used: '+used+' of '+recs.length+'.',1.5)}
+    /* a short draft can't score high however tidy it is: length scales the whole score */
+    var tw=C.reduce(function(a,c){return a+c.w},0),lenF=0.4+0.6*Math.min(1,wc/target),score=wc?Math.round(C.reduce(function(a,c){return a+c.w*c.s},0)/tw*lenF*100)/10:0;
+    $('sc').textContent=score.toFixed(1);$('sc').style.color=score>=8?'var(--ok)':score>=6?'#c98400':'var(--cr)';
+    $('scT').textContent=!wc?'Start writing to get a score.':score>=8?'Great: this is ready to publish.':score>=6?'Good. Work through the yellow and red checks.':'Needs work. Start with the red checks.';
+    $('chk').innerHTML=C.map(function(c){return '<li><i class="'+(c.s>=0.85?'g':c.s>=0.45?'y':'r')+'"></i><span>'+esc(c.t)+'</span></li>'}).join('');
+    $('stats').innerHTML=[['Words',wc],['Reading time',Math.max(1,Math.round(wc/230))+' min'],['Sentences',sentences.length],['Avg sentence',sentences.length?Math.round(wc/sentences.length)+' words':'—'],['Paragraphs',paras.length],['Headings',h1.length+h2.length]]
+      .map(function(x){return '<div><small>'+x[0]+'</small><b>'+x[1]+'</b></div>'}).join('');
+    $('recs').innerHTML=recs.length?recs.map(function(r){return '<span class="tag'+(lower.indexOf(r)>-1?' used':'')+'">'+esc(r)+'</span>'}).join(''):$('recs').innerHTML;
+    save();
+  }
+  var t;['ti','md','tx','kws','target'].forEach(function(i){$(i).addEventListener('input',function(){clearTimeout(t);t=setTimeout(analyze,150)})});
+  $('rec').onclick=function(){var main=$('kws').value.split(',')[0].trim();if(!main)return S.say('Add a target keyword first.');this.disabled=true;var b=this;
+    $('recs').innerHTML='<span class="meta-note">Collecting related searches…</span>';
+    S.api('/api/keywords?q='+encodeURIComponent(main)).then(function(d){var mainT=main.toLowerCase().split(/\s+/);
+      recs=d.groups.map(function(g){return g.term}).filter(function(t){return mainT.indexOf(t)<0&&!/^\d+$/.test(t)}).slice(0,24);
+      d.keywords.slice(0,40).forEach(function(k){if(recs.length<36&&k.words<=4&&k.kw!==d.seed&&recs.indexOf(k.kw)<0&&k.kw.indexOf(main.toLowerCase())<0)recs.push(k.kw)});
+      b.disabled=false;analyze()}).catch(function(e){b.disabled=false;$('recs').innerHTML='<span class="meta-note">'+esc(e.message)+'</span>'})};
+  $('dl').onclick=function(){var md='---\ntitle: "'+$('ti').value.replace(/"/g,'\\"')+'"\ndescription: "'+$('md').value.replace(/"/g,'\\"')+'"\n---\n\n'+$('tx').value+'\n';
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([md],{type:'text/markdown'}));a.download=($('ti').value||'draft').replace(/\W+/g,'-').toLowerCase().slice(0,60)+'.md';document.body.appendChild(a);a.click();setTimeout(function(){a.remove()},500)};
+  load();if(S.qs('kw')&&!$('kws').value)$('kws').value=S.qs('kw');analyze();
+})();
+</script>
+</body>
+</html>

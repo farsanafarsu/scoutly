@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keyword Gap — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.urls{display:grid;gap:10px;flex:1 1 100%}
+.urls .row{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;align-items:center}
+.urls .row i{display:block;width:14px;height:14px}
+.c0{background:var(--b)}.c1{background:#17a673}.c2{background:#f5a524}.c3{background:#e5484d}.c4{background:#7a5cff}
+.urls input{height:42px;padding:0 12px;border:1px solid var(--ln);border-radius:3px;font:400 13.5px/1 var(--M)}
+.urls input:focus{outline:0;border-color:var(--b)}
+.who-h{display:flex;flex-wrap:wrap;gap:8px 18px;padding:14px 16px;border-bottom:1px solid var(--ln)}
+.who-h span{display:inline-flex;align-items:center;gap:7px;font:400 12px/1.3 var(--M);color:var(--sl);max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.who-h i{width:10px;height:10px;flex:none}
+.cnt{display:inline-block;min-width:26px;padding:2px 6px;text-align:center;font:500 11.5px/1.3 var(--M)}
+.cnt.z{color:#b4bccd}.cnt.hi{background:rgba(23,166,115,.12);color:#0d7a54}.cnt.lo{background:rgba(229,72,77,.08);color:#b42328}
+th .dot2{display:inline-block;width:9px;height:9px;margin-right:6px;vertical-align:0}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">Keyword research</p>
+      <h1>Keyword Gap</h1>
+      <p class="desc">Compare the words and phrases your page uses with competitor pages that rank for the same topic. Scoutly reads each page and finds the terms you're missing, the ones you use less, and the ones only you cover. Titles and headings count extra.</p>
+    </div>
+    <form class="qbar" id="f" novalidate>
+      <div class="urls">
+        <div class="row"><i class="c0"></i><input id="u0" placeholder="Your page, e.g. yoursite.com/dermal-fillers" inputmode="url" autocapitalize="off" spellcheck="false" aria-label="Your page"></div>
+        <div class="row"><i class="c1"></i><input id="u1" placeholder="Competitor page 1" inputmode="url" autocapitalize="off" spellcheck="false" aria-label="Competitor page 1"></div>
+        <div class="row"><i class="c2"></i><input id="u2" placeholder="Competitor page 2 (optional)" inputmode="url" autocapitalize="off" spellcheck="false" aria-label="Competitor page 2"></div>
+        <div class="row"><i class="c3"></i><input id="u3" placeholder="Competitor page 3 (optional)" inputmode="url" autocapitalize="off" spellcheck="false" aria-label="Competitor page 3"></div>
+        <div class="row"><i class="c4"></i><input id="u4" placeholder="Competitor page 4 (optional)" inputmode="url" autocapitalize="off" spellcheck="false" aria-label="Competitor page 4"></div>
+      </div>
+      <button class="btn p" type="submit"><svg class="i"><use href="#i-gap"/></svg>Compare</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div class="loading" id="load" hidden><span class="spin"></span>Reading the pages…</div>
+
+    <section class="panel" id="out" hidden>
+      <div class="who-h" id="who"></div>
+      <div class="toolbar">
+        <div class="seg" role="group" aria-label="Gap type" id="seg"></div>
+        <input type="search" id="find" placeholder="Filter terms…" aria-label="Filter terms">
+        <span class="grow"></span>
+        <button class="btn sm" type="button" id="add"><svg class="i"><use href="#i-plus"/></svg>Add shown to list</button>
+        <button class="btn sm" type="button" id="exp"><svg class="i"><use href="#i-dl"/></svg>Export CSV</button>
+      </div>
+      <p class="meta-note pad" id="explain"></p>
+      <div class="dt-wrap"><table class="dt"><thead id="th"></thead><tbody id="rows"></tbody></table></div>
+    </section>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc;
+  var pages=[],rows=[],tab='missing';
+  var TABS=[['shared','Shared','Terms every page uses.'],['missing','Missing','Every competitor uses these and you don’t. Usually the biggest opportunity.'],['weak','Weak','You use these less than every competitor.'],
+            ['strong','Strong','You use these more than every competitor.'],['untapped','Untapped','At least one competitor uses these and you don’t.'],['unique','Unique','Only your page uses these.'],['all','All','Every term found.']];
+  function classify(r){var you=r.c[0],comp=r.c.slice(1),any=comp.some(function(x){return x>0}),all=comp.every(function(x){return x>0});
+    var t=[];if(you>0&&all)t.push('shared');if(!you&&all)t.push('missing');if(you>0&&all&&comp.every(function(x){return you<x}))t.push('weak');
+    if(you>0&&comp.every(function(x){return you>x}))t.push('strong');if(!you&&any)t.push('untapped');if(you>0&&!any)t.push('unique');t.push('all');return t}
+  function shown(){var q=$('find').value.toLowerCase();return rows.filter(function(r){return r.t.indexOf(tab)>-1&&(!q||r.term.indexOf(q)>-1)})}
+  function render(){
+    var counts={};TABS.forEach(function(x){counts[x[0]]=rows.filter(function(r){return r.t.indexOf(x[0])>-1}).length});
+    $('seg').innerHTML=TABS.map(function(x){return '<button type="button" data-t="'+x[0]+'" aria-pressed="'+(tab===x[0])+'">'+x[1]+'<span>'+counts[x[0]]+'</span></button>'}).join('');
+    $('explain').textContent=TABS.find(function(x){return x[0]===tab})[2];
+    $('th').innerHTML='<tr><th>Term</th>'+pages.map(function(p,i){return '<th class="n"><span class="dot2 c'+p.i+'"></span>'+(i?'Comp '+i:'You')+'</th>'}).join('')+'</tr>';
+    var r=shown();
+    $('rows').innerHTML=r.slice(0,600).map(function(x){var mx=Math.max.apply(null,x.c);return '<tr><td><a href="keyword-overview.html?q='+encodeURIComponent(x.term)+'">'+esc(x.term)+'</a></td>'+x.c.map(function(n){return '<td class="n"><span class="cnt'+(!n?' z':n===mx&&mx>0?' hi':'')+'">'+n+'</span></td>'}).join('')+'</tr>'}).join('')||'<tr><td colspan="'+(pages.length+1)+'" class="meta-note">No terms in this view.</td></tr>';
+  }
+  $('f').addEventListener('submit',function(e){e.preventDefault();$('err').textContent='';
+    var urls=[0,1,2,3,4].map(function(i){return {i:i,u:$('u'+i).value.trim()}}).filter(function(x){return x.u});
+    if(!$('u0').value.trim()||urls.length<2){$('err').textContent='Add your page and at least one competitor page.';return}
+    history.replaceState(null,'','?'+urls.map(function(x){return 'u'+x.i+'='+encodeURIComponent(x.u)}).join('&'));
+    $('out').hidden=true;$('load').hidden=false;
+    Promise.all(urls.map(function(x){return S.api('/api/page?url='+encodeURIComponent(x.u)).then(function(d){d.i=x.i;return d}).catch(function(err){throw new Error((x.i?'Competitor '+x.i:'Your page')+': '+err.message)})}))
+      .then(function(ps){pages=ps;var m={};
+        ps.forEach(function(p,pi){p.terms.forEach(function(t){(m[t.term]=m[t.term]||ps.map(function(){return 0}))[pi]=t.count})});
+        rows=Object.keys(m).map(function(k){return {term:k,c:m[k],sum:m[k].reduce(function(a,b){return a+b},0)}}).sort(function(a,b){return b.sum-a.sum});
+        rows.forEach(function(r){r.t=classify(r)});
+        $('who').innerHTML=ps.map(function(p,i){return '<span title="'+esc(p.finalUrl)+'"><i class="c'+p.i+'"></i>'+(i?'Comp '+i+': ':'You: ')+esc(p.finalUrl.replace(/^https?:\/\/(www\.)?/,''))+' · '+p.words+' words</span>'}).join('');
+        tab=rows.some(function(r){return r.t.indexOf('missing')>-1})?'missing':'untapped';render();$('load').hidden=true;$('out').hidden=false})
+      .catch(function(e){$('load').hidden=true;$('err').textContent=e.message});
+  });
+  $('seg').addEventListener('click',function(e){var b=e.target.closest('[data-t]');if(b){tab=b.dataset.t;render()}});
+  $('find').addEventListener('input',render);
+  $('exp').onclick=function(){S.csv([['Term'].concat(pages.map(function(p,i){return i?'Competitor '+i+' ('+p.finalUrl+')':'You ('+p.finalUrl+')'}))].concat(shown().map(function(r){return [r.term].concat(r.c)})),'scoutly-keyword-gap-'+tab+'.csv')};
+  $('add').onclick=function(){var r=shown().slice(0,200);if(!r.length)return;var name=prompt('Add '+r.length+' terms to which list?','Keyword gap');if(!name)return;
+    S.api('/api/intent?q='+encodeURIComponent(r.map(function(x){return x.term}).join('\n'))).then(function(d){var n=S.addToList(name.trim(),d.items.map(function(k){return {kw:k.kw,intent:k.intent,added:new Date().toISOString()}}));S.say(n+' added to “'+name.trim()+'”.')}).catch(function(e){S.say(e.message)})};
+  [0,1,2,3,4].forEach(function(i){if(S.qs('u'+i))$('u'+i).value=S.qs('u'+i)});
+  if(S.qs('u0')&&S.qs('u1'))$('f').requestSubmit();
+})();
+</script>
+</body>
+</html>

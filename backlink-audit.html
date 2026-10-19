@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backlink Audit — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.how{margin-top:14px;padding:14px 16px;border:1px solid var(--ln);background:var(--card);font:400 12.5px/1.7 var(--M);color:var(--sl)}
+.how b{color:var(--ink)}.how ol{margin:6px 0 0;padding-left:18px;list-style:decimal}
+.file{display:inline-flex;align-items:center;gap:8px;cursor:pointer}.file input{display:none}
+.pbar{height:4px;margin-top:12px;background:var(--bg2)}.pbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--b),var(--sky));transition:width .3s}
+.risk{display:flex;align-items:center;gap:8px}.risk i{display:block;width:60px;height:6px;background:var(--bg2)}.risk i b{display:block;height:100%}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">Link building</p>
+      <h1>Backlink Audit</h1>
+      <p class="desc">Check the links pointing to your site: which ones still exist, which are nofollow or sponsored, what anchor text they use, and which come from risky pages. Then download a disavow file for Google if you need one.</p>
+    </div>
+    <div class="how"><b>Where to get your links (free):</b>
+      <ol><li>Open <a href="https://search.google.com/search-console/links" target="_blank" rel="noopener noreferrer" style="color:var(--b);text-decoration:underline">Google Search Console → Links</a>.</li><li>Under <b>Top linking sites</b>, choose <b>More</b>, then <b>Export external links → Latest links</b>.</li><li>Upload that CSV below, or paste the linking page URLs.</li></ol></div>
+    <form class="qbar" id="f" novalidate>
+      <div class="qf sm" style="flex:1 1 220px"><label for="target">Your website</label><input id="target" placeholder="yoursite.com" autocapitalize="off" spellcheck="false"></div>
+      <div class="qf" style="flex:1 1 100%"><label for="src">Linking pages (one URL per line, up to 300)</label><textarea id="src" placeholder="https://blog.example.com/post-that-links-to-you&#10;https://directory.example.org/listing/123"></textarea>
+        <small><label class="file"><input type="file" id="csv" accept=".csv,.txt"><span class="btn sm"><svg class="i"><use href="#i-upload"/></svg>Upload CSV</span></label> <span id="csvN"></span></small></div>
+      <button class="btn p" type="submit" id="go"><svg class="i"><use href="#i-link"/></svg>Audit links</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div class="loading" id="load" hidden><span class="spin"></span><div style="flex:1"><span id="loadT">Checking links…</span><div class="pbar"><i id="pb"></i></div></div></div>
+
+    <div id="out" hidden>
+      <div class="kpis" id="kpis"></div>
+      <section class="panel">
+        <div class="toolbar"><div class="seg" role="group" aria-label="Show" id="seg"></div><span class="grow"></span>
+          <button class="btn sm" type="button" id="exp"><svg class="i"><use href="#i-dl"/></svg>Export CSV</button>
+          <button class="btn sm" type="button" id="dis"><svg class="i"><use href="#i-dl"/></svg>Disavow file</button></div>
+        <div class="dt-wrap"><table class="dt"><thead><tr><th>Linking page</th><th>Status</th><th>Link</th><th>Anchor text</th><th>Type</th><th class="n">Outbound domains</th><th>Risk</th></tr></thead><tbody id="rows"></tbody></table></div>
+        <p class="meta-note pad">Risk is a rule of thumb (spam-prone domain endings, gambling/pharma words, pages linking to hundreds of sites, noindex), not a Google verdict. Only disavow links you’re confident are manipulative; most sites never need to.</p>
+      </section>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,rows=[],view='all';
+  var VIEWS=[['all','All',function(){return true}],['live','Live',function(r){return r.found}],['lost','Lost',function(r){return !r.found}],['nofollow','Nofollow / sponsored',function(r){return r.found&&r.rel.some(function(x){return /nofollow|sponsored|ugc/.test(x)})}],['risky','Risky',function(r){return r.risk>=40}]];
+  function urlsFrom(text){var out=[],seen={};text.split(/\r?\n/).forEach(function(line){
+      var cells=line.split(/,(?=(?:[^"]*"[^"]*")*[^"]*$)/).map(function(c){return c.replace(/^"|"$/g,'').trim()});
+      var u=cells.find(function(c){return /^https?:\/\//i.test(c)})||(/^[a-z0-9.-]+\.[a-z]{2,}(\/\S*)?$/i.test(cells[0]||'')?cells[0]:null);
+      if(u&&!seen[u]){seen[u]=1;out.push(u)}});return out}
+  $('csv').addEventListener('change',function(){var f=this.files[0];if(!f)return;var r=new FileReader();r.onload=function(){var u=urlsFrom(String(r.result));$('src').value=u.join('\n');$('csvN').textContent=u.length+' URLs loaded from '+f.name};r.readAsText(f)});
+  function typeOf(r){if(!r.found)return '';var t=r.rel.filter(function(x){return /nofollow|sponsored|ugc/.test(x)});return t.length?t.map(function(x){return '<span class="tag wr">'+esc(x)+'</span>'}).join(' '):'<span class="tag ok">follow</span>'}
+  function render(){
+    var c={};VIEWS.forEach(function(v){c[v[0]]=rows.filter(v[2]).length});
+    var risky=c.risky;
+    $('kpis').innerHTML=[['link','Links checked',rows.length,''],['check','Live',c.live,'Link still on the page'],['broken','Lost',c.lost,'Page gone or link removed'],['filter','Nofollow / sponsored',c.nofollow,'Don’t pass ranking value'],['alert','Risky',risky,'Worth a closer look']]
+      .map(function(k){return '<div class="kpi"><small><svg class="i"><use href="#i-'+k[0]+'"/></svg>'+k[1]+'</small><b>'+k[2]+'</b><span>'+k[3]+'</span></div>'}).join('');
+    $('seg').innerHTML=VIEWS.map(function(v){return '<button type="button" data-v="'+v[0]+'" aria-pressed="'+(view===v[0])+'">'+v[1]+'<span>'+c[v[0]]+'</span></button>'}).join('');
+    var f=VIEWS.find(function(v){return v[0]===view})[2];
+    $('rows').innerHTML=rows.filter(f).map(function(r){var col=r.risk>=60?'var(--cr)':r.risk>=40?'var(--wa)':'var(--ok)';
+      return '<tr><td class="u"><a href="'+esc(r.source)+'" target="_blank" rel="noopener noreferrer">'+esc(r.source.replace(/^https?:\/\//,''))+'</a>'+(r.title?'<div class="meta-note">'+esc(r.title.slice(0,90))+'</div>':'')+'</td>'+
+        '<td><span class="tag '+(r.status&&r.status<400?'ok':'bad')+'">'+(r.status||'—')+'</span></td><td>'+(r.found?'<span class="tag ok">Found</span>':'<span class="tag bad">Not found</span>')+'</td>'+
+        '<td>'+esc(r.anchor||'')+'</td><td>'+typeOf(r)+'</td><td class="n">'+(r.outbound||0)+'</td>'+
+        '<td><span class="risk"><i><b style="width:'+r.risk+'%;background:'+col+'"></b></i>'+r.risk+'</span>'+(r.flags.length?'<div class="meta-note">'+esc(r.flags.join(' · '))+'</div>':'')+'</td></tr>'}).join('')||'<tr><td colspan="7" class="meta-note">No links in this view.</td></tr>';
+  }
+  $('seg').addEventListener('click',function(e){var b=e.target.closest('[data-v]');if(b){view=b.dataset.v;render()}});
+  $('f').addEventListener('submit',function(e){e.preventDefault();$('err').textContent='';
+    var target=$('target').value.trim(),src=urlsFrom($('src').value).slice(0,300);
+    if(!target){$('err').textContent='Enter your website.';return}if(!src.length){$('err').textContent='Add at least one linking page URL.';return}
+    S.write('scoutly.blTarget',target);
+    rows=[];$('out').hidden=true;$('load').hidden=false;$('go').disabled=true;var done=0,B=20,chunks=[];
+    for(var i=0;i<src.length;i+=B)chunks.push(src.slice(i,i+B));
+    (function next(){
+      if(!chunks.length){$('load').hidden=true;$('go').disabled=false;view='all';render();$('out').hidden=false;return}
+      var ch=chunks.shift();$('loadT').textContent='Checking links… '+done+' of '+src.length;$('pb').style.width=(done/src.length*100)+'%';
+      S.api('/api/backlinks',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({target:target,sources:ch})})
+        .then(function(d){rows=rows.concat(d.rows);done+=ch.length;next()})
+        .catch(function(err){$('load').hidden=true;$('go').disabled=false;$('err').textContent=err.message;if(rows.length){render();$('out').hidden=false}});
+    })();
+  });
+  $('exp').onclick=function(){S.csv([['Linking page','Status','Link found','Anchor','Rel','Outbound domains','Risk','Flags']].concat(rows.map(function(r){return [r.source,r.status,r.found?'yes':'no',r.anchor,r.rel.join(' '),r.outbound,r.risk,r.flags.join('; ')]})),'scoutly-backlink-audit.csv')};
+  $('dis').onclick=function(){var risky=rows.filter(function(r){return r.risk>=40});if(!risky.length)return S.say('No risky links to disavow.');
+    var doms={};risky.forEach(function(r){try{doms[new URL(r.final||r.source).hostname.replace(/^www\./,'')]=1}catch(_){}});
+    var txt='# Disavow file generated by Scoutly on '+new Date().toISOString().slice(0,10)+'\n# Review every line before uploading at https://search.google.com/search-console/disavow-links\n'+Object.keys(doms).map(function(d){return 'domain:'+d}).join('\n')+'\n';
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([txt],{type:'text/plain'}));a.download='disavow.txt';document.body.appendChild(a);a.click();setTimeout(function(){a.remove()},500)};
+  $('target').value=S.read('scoutly.blTarget')||S.read('scoutly.site')||'';
+})();
+</script>
+</body>
+</html>

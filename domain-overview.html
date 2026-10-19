@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Domain Overview — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.facts dl{display:grid;grid-template-columns:150px minmax(0,1fr);gap:0}
+.facts dt,.facts dd{margin:0;padding:9px 0;border-bottom:1px solid var(--ln);font:400 12.5px/1.5 var(--M)}
+.facts dt{color:var(--mu)}.facts dd{color:var(--ink);overflow-wrap:anywhere}
+.facts dl>:nth-last-child(-n+2){border-bottom:0}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.acts{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.dh{display:flex;align-items:center;gap:14px;margin-top:20px;padding:18px 20px;background:#040817;color:#fff;border:1px solid rgba(127,160,255,.16)}
+.dh img{width:36px;height:36px;padding:4px;background:#fff;object-fit:contain}
+.dh h2{font:500 22px/1.15 var(--D);letter-spacing:.02em;overflow-wrap:anywhere}.dh p{margin-top:4px;font:400 12px/1.5 var(--M);color:rgba(214,224,255,.7)}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">Competitive research</p>
+      <h1>Domain Overview</h1>
+      <p class="desc">A snapshot of any website from public sources: domain age and registrar, SSL certificate, hosting and email setup, technology stack, social profiles and SEO basics. Traffic, keyword and backlink numbers need a paid data provider and are marked as such.</p>
+    </div>
+    <form class="qbar" id="f" novalidate>
+      <div class="qf"><label for="d">Domain</label><input id="d" placeholder="e.g. competitor.com" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+      <button class="btn p" type="submit"><svg class="i"><use href="#i-search"/></svg>Analyze</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div class="loading" id="load" hidden><span class="spin"></span>Checking the site, DNS, certificate and registration…</div>
+
+    <div id="out" hidden>
+      <div class="dh"><img id="fav" alt="" width="36" height="36"><div><h2 id="dName"></h2><p id="dTitle"></p></div></div>
+      <div class="kpis" id="kpis"></div>
+      <div class="acts"><a class="btn p" id="toAudit" href="audit.html"><svg class="i"><use href="#i-audit"/></svg>Run a full site audit</a><a class="btn" id="toVs" href="domain-vs-domain.html"><svg class="i"><use href="#i-vs"/></svg>Compare with competitors</a></div>
+      <div class="cols2">
+        <section class="panel facts"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-globe"/></svg></span><div><h2>Site</h2><p>Homepage and SEO basics</p></div></div><dl class="pad" id="site"></dl></section>
+        <section class="panel facts"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-cal"/></svg></span><div><h2>Registration &amp; security</h2><p>RDAP and TLS certificate</p></div></div><dl class="pad" id="reg"></dl></section>
+      </div>
+      <div class="cols2">
+        <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-build"/></svg></span><div><h2>Technology</h2><p>Detected from the homepage code and headers</p></div></div><div class="pad tags" id="tech"></div></section>
+        <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-link"/></svg></span><div><h2>Social profiles</h2><p>Linked from the homepage</p></div></div><div class="pad tags" id="soc"></div></section>
+      </div>
+      <section class="panel facts" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-pulse"/></svg></span><div><h2>DNS &amp; email</h2><p>Google Public DNS</p></div></div><dl class="pad" id="dns"></dl></section>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc;
+  function dl(rows){return rows.map(function(r){return '<dt>'+r[0]+'</dt><dd>'+(r[1]==null||r[1]===''?'<span style="color:var(--mu)">—</span>':r[1])+'</dd>'}).join('')}
+  function yes(b,y,n){return b?'<span class="tag ok">'+(y||'Yes')+'</span>':'<span class="tag bad">'+(n||'No')+'</span>'}
+  function date(s){return s?new Date(s).toLocaleDateString(undefined,{year:'numeric',month:'short',day:'numeric'}):null}
+  function kpi(icon,label,val,sub,lock){return '<div class="kpi'+(lock?' lockd':'')+'"><small><svg class="i"><use href="#i-'+(lock?'lock':icon)+'"/></svg>'+label+'</small><b>'+val+'</b><span>'+sub+'</span></div>'}
+  function run(d){
+    $('err').textContent='';d=d.trim().replace(/^https?:\/\//i,'').split('/')[0];if(!d){$('err').textContent='Enter a domain.';return}
+    history.replaceState(null,'','?d='+encodeURIComponent(d));$('out').hidden=true;$('load').hidden=false;
+    S.api('/api/domain?d='+encodeURIComponent(d)).then(function(x){
+      $('fav').src='https://www.google.com/s2/favicons?sz=64&domain='+encodeURIComponent(x.domain);$('dName').textContent=x.domain;$('dTitle').textContent=x.title||'';
+      var ssl=x.ssl||{},rg=x.registration||{};
+      $('kpis').innerHTML=kpi('cal','Domain age',x.ageYears!=null?x.ageYears+' yrs':'—',rg.created?'Since '+date(rg.created):'Registration date not public')+
+        kpi('lock','SSL',ssl.valid?ssl.daysLeft+' days':ssl.valid===false?'Invalid':'—',ssl.valid?'Valid · '+esc(ssl.issuer||''):esc(ssl.error||'No HTTPS'))+
+        kpi('speed','Response',x.ms+' ms','Homepage, HTTP '+x.status)+
+        kpi('page','Sitemap URLs',x.sitemap?x.sitemap.urls+(x.sitemap.index?' files':''):'—',x.sitemap?(x.sitemap.index?'Sitemap index':'In sitemap.xml'):'No sitemap found')+
+        kpi('build','Technologies',x.tech.length,'Detected')+
+        kpi('','Authority score','—','Needs a data provider',1)+kpi('','Organic traffic','—','Needs a data provider',1)+kpi('','Backlinks','—','Needs a data provider',1);
+      $('site').innerHTML=dl([['Final URL','<a href="'+esc(x.finalUrl)+'" target="_blank" rel="noopener noreferrer">'+esc(x.finalUrl)+'</a>'],['Title',esc(x.title)],['Description',esc(x.description)],['Language',esc(x.lang)],['HTTPS',yes(x.https)],['Server',esc(x.server)],
+        ['robots.txt',yes(x.robots,'Found','Missing')],['XML sitemap',x.sitemapUrl?'<a href="'+esc(x.sitemapUrl)+'" target="_blank" rel="noopener noreferrer">'+esc(x.sitemapUrl)+'</a>':yes(false,'','Not found')],['llms.txt',yes(x.llms,'Found','None')],
+        ['Schema types',x.schema.length?x.schema.map(function(s){return '<span class="tag in">'+esc(s)+'</span>'}).join(' '):null],['Homepage words',x.words],['Internal links',x.internalLinks]]);
+      $('reg').innerHTML=dl([['Registered',date(rg.created)],['Expires',date(rg.expires)],['Last updated',date(rg.updated)],['Registrar',esc(rg.registrar)],
+        ['SSL issuer',esc(ssl.issuer)],['SSL expires',ssl.expires?date(ssl.expires)+(ssl.daysLeft<21?' <span class="tag bad">renew soon</span>':''):null],['Certificate names',ssl.names?esc(ssl.names.join(', ')):null]]);
+      $('dns').innerHTML=dl([['IP (A)',esc(x.dns.a.join(', '))],['Name servers',esc(x.dns.ns.join(', '))],['Mail servers (MX)',esc(x.dns.mx.join(', '))],['Email provider',esc(x.dns.mail)],['SPF record',yes(x.dns.spf,'Present','Missing')]]);
+      $('tech').innerHTML=x.tech.map(function(t){return '<span class="tag">'+esc(t)+'</span>'}).join('')||'<span class="meta-note">Nothing recognisable in the homepage code.</span>';
+      $('soc').innerHTML=Object.keys(x.socials).map(function(k){return '<a class="tag in" href="'+esc(x.socials[k])+'" target="_blank" rel="noopener noreferrer">'+esc(k)+'</a>'}).join('')||'<span class="meta-note">No social profiles linked from the homepage.</span>';
+      $('toAudit').href='audit.html?url='+encodeURIComponent(x.finalUrl);$('toVs').href='domain-vs-domain.html?d='+encodeURIComponent(x.domain);
+      $('load').hidden=true;$('out').hidden=false;
+    }).catch(function(e){$('load').hidden=true;$('err').textContent=e.message});
+  }
+  $('f').addEventListener('submit',function(e){e.preventDefault();run($('d').value)});
+  var d=S.qs('d')||'';if(d){$('d').value=d;run(d)}else{$('d').value=S.read('scoutly.site')||'';$('d').focus()}
+})();
+</script>
+</body>
+</html>

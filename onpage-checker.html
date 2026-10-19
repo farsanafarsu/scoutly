@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>On-Page SEO Checker — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.comps{flex:1 1 100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px}
+.comps input{height:42px;padding:0 12px;border:1px solid var(--ln);border-radius:3px;font:400 13px/1 var(--M);width:100%}.comps input:focus{outline:0;border-color:var(--b)}
+.hint a{color:var(--b);text-decoration:underline}
+.idea{display:grid;grid-template-columns:120px minmax(0,1fr);gap:16px;padding:14px 18px;border-bottom:1px solid var(--ln)}
+.idea:last-child{border-bottom:0}
+.idea .k{display:grid;gap:6px;align-content:start}
+.idea h4{font:600 14.5px/1.35 Geist,sans-serif}.idea p{margin-top:4px;font:400 12.5px/1.6 var(--M);color:var(--sl);overflow-wrap:anywhere}
+.idea .terms{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.ok-row{display:flex;gap:10px;align-items:center;padding:9px 18px;border-bottom:1px solid var(--ln);font:400 12.5px/1.4 var(--M);color:var(--sl)}.ok-row svg{color:var(--ok);width:15px;height:15px;flex:none}
+.pr-h{color:var(--cr)}.pr-m{color:#a46a00}.pr-l{color:var(--b)}
+@media(max-width:640px){.idea{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">On-page &amp; tech SEO</p>
+      <h1>On-Page SEO Checker</h1>
+      <p class="desc">Get a to-do list for one page and one keyword. Add the pages that already rank in Google for that keyword and Scoutly compares your page with them: length, related words, keyword placement, technical setup and how it will look in results.</p>
+    </div>
+    <form class="qbar" id="f" novalidate>
+      <div class="qf"><label for="url">Your page</label><input id="url" placeholder="yoursite.com/dermal-fillers" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+      <div class="qf"><label for="kw">Target keyword</label><input id="kw" placeholder="dermal fillers in kochi" autocomplete="off"></div>
+      <div class="comps"><input id="c1" placeholder="Ranking competitor page 1 (optional)" aria-label="Competitor page 1" autocapitalize="off" spellcheck="false"><input id="c2" placeholder="Competitor page 2 (optional)" aria-label="Competitor page 2" autocapitalize="off" spellcheck="false"><input id="c3" placeholder="Competitor page 3 (optional)" aria-label="Competitor page 3" autocapitalize="off" spellcheck="false"></div>
+      <small class="meta-note hint" style="flex:1 1 100%">Tip: <a id="gLink" href="https://www.google.com" target="_blank" rel="noopener noreferrer">search your keyword on Google</a> and paste the top results here for the best comparison.</small>
+      <button class="btn p" type="submit"><svg class="i"><use href="#i-check"/></svg>Get ideas</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div class="loading" id="load" hidden><span class="spin"></span>Reading your page and the competitors…</div>
+    <div id="out" hidden>
+      <div class="kpis" id="kpis"></div>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-bulb"/></svg></span><div><h2>Ideas to improve this page</h2><p id="ideasP"></p></div></div><div id="ideas"></div></section>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-check"/></svg></span><div><h2>Already good</h2><p>Nothing to do here</p></div></div><div id="good"></div></section>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc;
+  $('kw').addEventListener('input',function(){$('gLink').href='https://www.google.com/search?q='+encodeURIComponent(this.value)});
+  function has(s,kw){s=(s||'').toLowerCase();var t=kw.toLowerCase().split(/\s+/).filter(function(w){return w.length>2});return s.indexOf(kw.toLowerCase())>-1||(t.length&&t.every(function(w){return s.indexOf(w)>-1}))}
+  function analyze(me,comps,kw){
+    var ideas=[],good=[];
+    function idea(cat,pr,title,detail,terms){ideas.push({cat:cat,pr:pr,title:title,detail:detail,terms:terms})}
+    function ok(t){good.push(t)}
+    var avg=comps.length?Math.round(comps.reduce(function(a,c){return a+c.words},0)/comps.length):null;
+    // strategy: keyword placement
+    [['title','title',me.title,'h'],['H1','h1',me.h1.join(' '),'h'],['meta description','desc',me.description,'m'],['URL','url',me.finalUrl.replace(/[-_/]/g,' '),'l'],['first 100 words','intro',me.text.split(/\s+/).slice(0,100).join(' '),'m'],
+     ['subheadings','h2',me.headings.filter(function(h){return h.level===2||h.level===3}).map(function(h){return h.text}).join(' '),'l']].forEach(function(x){
+      if(has(x[2],kw))ok('Keyword appears in the '+x[0]+'.');else idea('Strategy',x[3],'Use “'+kw+'” in the '+x[0],x[0]==='URL'?'A descriptive URL helps a little; only change it on new pages, or redirect the old URL.':'Search engines and readers use the '+x[0]+' to judge what the page is about.')});
+    // content length
+    if(avg){if(me.words<avg*0.7)idea('Content','h','Expand the content','Your page has '+me.words+' words; the competitors average '+avg+'. Cover the subtopics they cover (see related words below).');
+      else if(me.words>avg*2.5)idea('Content','l','Consider tightening the content','Your page has '+me.words+' words versus a '+avg+' word average. Long is fine if it stays focused.');
+      else ok('Length ('+me.words+' words) is in line with the competitors ('+avg+' average).')}
+    else if(me.words<500)idea('Content','m','Add more depth','Your page has '+me.words+' words. Pages that rank for competitive topics usually cover the subject in more detail.');else ok('The page has '+me.words+' words of content.');
+    if(me.readability!=null){if(me.readability<40)idea('Content','m','Make the text easier to read','Readability score is '+me.readability+' (Flesch). Shorter sentences and simpler words help; 50–70 suits most audiences.');else ok('Readability is fine ('+me.readability+' Flesch).')}
+    var h2=me.headings.filter(function(h){return h.level===2}).length;if(h2<2)idea('Content','m','Break the page into sections','Only '+h2+' H2 subheading'+(h2===1?'':'s')+'. Clear sections help readers and search engines, and can earn featured snippets.');else ok(h2+' H2 sections structure the page.');
+    if(me.imagesNoAlt)idea('Content','l','Add alt text to images',me.imagesNoAlt+' of '+me.images+' images have no alt text.');else if(me.images)ok('All '+me.images+' images have alt text.');else idea('Content','l','Add a relevant image','The page has no images. A photo, diagram or table can make it more useful and eligible for image results.');
+    // semantic
+    if(comps.length){var mine={};me.terms.forEach(function(t){mine[t.term]=1});var cnt={};comps.forEach(function(c){var seen={};c.terms.forEach(function(t){if(!seen[t.term]){seen[t.term]=1;cnt[t.term]=(cnt[t.term]||0)+1}})});
+      var need=comps.length>1?2:1,miss=Object.keys(cnt).filter(function(t){return cnt[t]>=need&&!mine[t]&&t.split(' ').length<=3&&kw.toLowerCase().indexOf(t)<0}).sort(function(a,b){return cnt[b]-cnt[a]}).slice(0,30);
+      if(miss.length)idea('Related words','h','Cover the related words competitors use','These terms appear on '+(need>1?'at least '+need+' of the competitor pages':'the competitor page')+' but not on yours. Use the ones that fit naturally.',miss);else ok('Your page already covers the terms the competitors use.')}
+    // technical
+    if(me.status!==200)idea('Technical','h','Page returns HTTP '+me.status,'Only pages that load with 200 OK can rank.');else ok('Page loads with 200 OK.');
+    if(me.noindex)idea('Technical','h','Remove noindex','The page tells search engines not to index it, so it can’t rank at all.');
+    if(!me.canonical)idea('Technical','l','Add a canonical tag','Point it at this URL so duplicates (tracking parameters, www/non-www) don’t compete.');else ok('Canonical tag is set.');
+    if(!me.viewport)idea('Technical','h','Add a mobile viewport tag','Google indexes the mobile version first.');
+    if(!me.schema.length)idea('Technical','m','Add structured data','No schema markup found. Article, FAQPage, Product or LocalBusiness markup can make the result richer.');else ok('Structured data: '+me.schema.join(', ')+'.');
+    if(me.ms>1500)idea('Technical','m','Speed up the server response','First byte took '+me.ms+' ms. Use caching or a CDN.');
+    var cl=comps.length?Math.round(comps.reduce(function(a,c){return a+c.internalLinks},0)/comps.length):null;if(me.internalLinks<3)idea('Technical','m','Add internal links','Only '+me.internalLinks+' internal links. Link to related pages, and link to this page from them.');
+    // search appearance
+    var t=me.title||'';if(!t)idea('Search appearance','h','Add a title','The page has no title tag.');else if(t.length>60)idea('Search appearance','m','Shorten the title','“'+t+'” is '+t.length+' characters and may be cut off in results (aim for 50–60).');else if(t.length<30)idea('Search appearance','l','Make the title more descriptive','“'+t+'” is only '+t.length+' characters.');else ok('Title length is good.');
+    var d=me.description||'';if(!d)idea('Search appearance','m','Write a meta description','Without one, Google picks a snippet from the page. Write 120–160 characters that make people want to click.');else if(d.length>160||d.length<70)idea('Search appearance','l','Adjust the meta description length','It’s '+d.length+' characters; 120–160 works best.');else ok('Meta description length is good.');
+    if(!me.ogImage)idea('Search appearance','l','Add a social share image','No og:image, so shares on WhatsApp, LinkedIn and Facebook show no picture.');
+    var order={h:0,m:1,l:2};ideas.sort(function(a,b){return order[a.pr]-order[b.pr]});
+    return {ideas:ideas,good:good,avg:avg};
+  }
+  $('f').addEventListener('submit',function(e){e.preventDefault();$('err').textContent='';
+    var url=$('url').value.trim(),kw=$('kw').value.trim(),cs=[1,2,3].map(function(i){return $('c'+i).value.trim()}).filter(Boolean);
+    if(!url||!kw){$('err').textContent='Add your page and a target keyword.';return}
+    history.replaceState(null,'','?url='+encodeURIComponent(url)+'&kw='+encodeURIComponent(kw)+cs.map(function(c,i){return '&c'+(i+1)+'='+encodeURIComponent(c)}).join(''));
+    $('out').hidden=true;$('load').hidden=false;
+    Promise.all([url].concat(cs).map(function(u,i){return S.api('/api/page?url='+encodeURIComponent(u)).catch(function(err){if(!i)throw err;return null})})).then(function(ps){
+      var me=ps[0],comps=ps.slice(1).filter(Boolean),r=analyze(me,comps,kw),c={h:0,m:0,l:0};r.ideas.forEach(function(x){c[x.pr]++});
+      $('kpis').innerHTML=[['bulb','Ideas',r.ideas.length,'To improve this page'],['alert','High priority',c.h,'Do these first'],['page','Words',me.words,r.avg?'Competitors average '+r.avg:'On your page'],['pen','Readability',me.readability==null?'—':me.readability,'Flesch score; 50–70 is easy'],['vs','Competitors compared',comps.length,comps.length<cs.length?(cs.length-comps.length)+' couldn’t be read':'Pages from Google’s top results']]
+        .map(function(k){return '<div class="kpi"><small><svg class="i"><use href="#i-'+k[0]+'"/></svg>'+k[1]+'</small><b>'+k[2]+'</b><span>'+k[3]+'</span></div>'}).join('');
+      var PR={h:['High','pr-h'],m:['Medium','pr-m'],l:['Low','pr-l']};
+      $('ideasP').textContent=me.finalUrl+' · “'+kw+'”';
+      $('ideas').innerHTML=r.ideas.map(function(x){return '<div class="idea"><div class="k"><span class="tag">'+x.cat+'</span><span class="'+PR[x.pr][1]+'" style="font:600 10.5px/1 var(--M);letter-spacing:.1em;text-transform:uppercase">'+PR[x.pr][0]+' priority</span></div><div><h4>'+esc(x.title)+'</h4><p>'+esc(x.detail)+'</p>'+(x.terms?'<div class="terms">'+x.terms.map(function(t){return '<span class="tag in">'+esc(t)+'</span>'}).join('')+'</div>':'')+'</div></div>'}).join('')||'<p class="pad meta-note">No ideas: this page is in great shape for this keyword.</p>';
+      $('good').innerHTML=r.good.map(function(t){return '<div class="ok-row"><svg class="i"><use href="#i-check"/></svg>'+esc(t)+'</div>'}).join('');
+      $('load').hidden=true;$('out').hidden=false;
+    }).catch(function(e){$('load').hidden=true;$('err').textContent=e.message});
+  });
+  ['url','kw','c1','c2','c3'].forEach(function(k){if(S.qs(k))$(k).value=S.qs(k)});
+  $('gLink').href='https://www.google.com/search?q='+encodeURIComponent($('kw').value);
+  if(S.qs('url')&&S.qs('kw'))$('f').requestSubmit();else if(!$('url').value)$('url').value=S.read('scoutly.site')||'';
+})();
+</script>
+</body>
+</html>
