@@ -178,6 +178,30 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
 .toast{position:fixed;left:50%;bottom:24px;z-index:80;transform:translate(-50%,20px);opacity:0;pointer-events:none;padding:12px 16px;background:var(--nv);color:#fff;font:500 12px/1.5 var(--M);box-shadow:0 20px 40px -16px rgba(5,10,31,.6);transition:opacity .25s,transform .25s;max-width:calc(100% - 32px)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
+/* first-login (empty) states */
+.status i{background:var(--wa);box-shadow:0 0 0 3px rgba(245,165,36,.18)}.has-site .status i{background:var(--b);box-shadow:0 0 0 3px rgba(47,91,255,.18)}
+.proj{color:var(--b);border-color:rgba(47,91,255,.35);font-weight:600}.has-site .proj{color:var(--ink);border-color:var(--ln);font-weight:500}
+.hero-bar .live.setup{color:#ffd48a}.hero-bar .live.setup i{background:var(--wa);box-shadow:0 0 10px var(--wa)}
+.has-site .hero-bar .live.setup{color:#9fc4ff}.has-site .hero-bar .live.setup i{background:var(--sky);box-shadow:0 0 10px var(--sky)}
+.recent span{letter-spacing:.04em;text-transform:none;font-size:11.5px}
+.setup-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:640px;margin-top:24px;border-top:1px solid rgba(255,255,255,.08);counter-reset:s}
+.setup-steps li{counter-increment:s;display:flex;gap:12px;padding:16px 14px 2px 0}.setup-steps li+li{padding-left:16px;border-left:1px solid rgba(255,255,255,.08)}
+.setup-steps i{position:relative;flex:none;display:grid;place-items:center;width:24px;height:24px;border:1.5px solid rgba(255,255,255,.25);font:600 11px/1 var(--M);font-style:normal;color:rgba(214,224,255,.6)}
+.setup-steps i:before{content:counter(s)}
+.setup-steps .done i{border-color:#3ddba5;background:#3ddba5;color:var(--nv)}.setup-steps .done i:before{content:"✓"}
+.setup-steps .now i{border-color:var(--sky);color:var(--sky);box-shadow:0 0 0 4px rgba(90,200,250,.14)}
+.setup-steps b{display:block;font:500 13px/1.3 var(--D);letter-spacing:.04em;text-transform:uppercase;color:rgba(214,224,255,.6)}
+.setup-steps .done b,.setup-steps .now b{color:#fff}
+.setup-steps span{display:block;margin-top:4px;font:400 11px/1.4 var(--M);color:rgba(214,224,255,.5);overflow-wrap:anywhere}.setup-steps .now span{color:var(--sky)}
+.stats.nodata b{color:#b4bccd}.stats.nodata small{color:var(--mu)}
+.empty{display:grid;justify-items:center;gap:0;padding:44px 28px 46px;text-align:center}
+.empty-i{display:grid;place-items:center;width:52px;height:52px;border:1px dashed rgba(47,91,255,.45);color:var(--b);background:rgba(47,91,255,.05)}
+.empty h3{margin-top:16px;font:500 16px/1.2 var(--D);letter-spacing:.04em;text-transform:uppercase}
+.empty p{max-width:360px;margin-top:8px;font:400 12.5px/1.7 var(--M);color:var(--sl)}
+.empty .btn{margin-top:18px}
+.bars.ghost span{color:var(--mu)}.bars.ghost .bar{background:repeating-linear-gradient(90deg,var(--bg2) 0 6px,transparent 6px 9px)}.bars.ghost em{color:#b4bccd}
+.ring b{color:var(--ink)}
+@media(max-width:640px){.setup-steps{grid-template-columns:1fr}.setup-steps li+li{padding-left:0;border-left:0;border-top:1px solid rgba(255,255,255,.06)}.setup-steps li{padding:12px 0}}
 @media(max-width:1380px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
 @media(max-width:1100px){.cols{grid-template-columns:minmax(0,1fr)}.hero{grid-template-columns:minmax(0,1fr)}.hero-viz{display:none}}
 @media(max-width:960px){
@@ -251,68 +275,65 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
 <div class="main">
   <header class="top">
     <button class="icon-b menu-b" id="menuB" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="side"><svg class="i"><use href="#i-menu"/></svg></button>
-    <span class="status"><i aria-hidden="true"></i><span>Crawl monitor on</span></span>
-    <button class="proj" type="button" data-soon="Project switcher">yourwebsite.com <svg class="i" style="width:14px;height:14px"><use href="#i-down"/></svg></button>
+    <span class="status" id="status"><i aria-hidden="true"></i><span id="statusT">No website yet</span></span>
+    <button class="proj" type="button" id="projB"><span id="projT">+ Add a website</span></button>
     <div class="top-r">
-      <button class="icon-b" type="button" aria-label="Alerts, 3 new" data-soon="Alerts"><svg class="i"><use href="#i-bell"/></svg><b>3</b></button>
+      <button class="icon-b" type="button" aria-label="Alerts" data-soon="Alerts"><svg class="i"><use href="#i-bell"/></svg></button>
       <div class="who"><span class="av" id="av" aria-hidden="true">FN</span><div><b id="whoName">Farsana N</b><small id="whoMail"></small></div></div>
     </div>
   </header>
 
   <main class="page">
-    <p class="demo-n" role="note">Demo workspace: every number on this page is sample data. Live audits start when accounts open.</p>
-
     <section class="hero" aria-labelledby="hi">
       <span class="hero-edge" aria-hidden="true"></span>
       <div class="hero-bar">
-        <span class="live"><i aria-hidden="true"></i>Monitoring</span><span class="sep" aria-hidden="true"></span><span>yourwebsite.com</span>
+        <span class="live setup" id="stepT"><i aria-hidden="true"></i>Setup · step 2 of 3</span><span class="sep" aria-hidden="true"></span><span id="barSite">No website connected</span>
         <span class="when"><span id="date"></span><span class="sep" aria-hidden="true"></span><span class="clock" id="clock">--:--:--</span></span>
       </div>
 
       <div class="hero-main">
-        <p class="lbl lt">SEO · AEO · GEO workspace</p>
-        <h1 id="hi"><span id="greet">Welcome back,</span> <span class="l2" id="first">Farsana</span></h1>
-        <p class="hero-sub">Since your last visit Scoutly found <b>3 things worth your time</b>. Start with the critical ones, or run a fresh audit below.</p>
+        <p class="lbl lt">Your workspace is ready</p>
+        <h1 id="hi"><span>Welcome,</span> <span class="l2" id="first">Farsana</span></h1>
+        <p class="hero-sub" id="heroSub">Add the website you want Scoutly to watch. Your first audit fills this dashboard with <b>real findings from your own pages</b>.</p>
 
         <form class="cmd" id="scan" novalidate>
           <svg class="i" aria-hidden="true"><use href="#i-globe"/></svg>
           <span class="pre" aria-hidden="true">https://</span>
           <label class="sr-only" for="scanUrl">Website URL</label>
           <input id="scanUrl" placeholder="yourwebsite.com" inputmode="url" autocapitalize="off" spellcheck="false" autocomplete="url">
-          <button class="btn p" type="submit">Run audit <span aria-hidden="true">→</span></button>
+          <button class="btn p" type="submit">Add &amp; audit <span aria-hidden="true">→</span></button>
         </form>
-        <div class="recent"><span>Recent</span><button type="button" data-fill>yourwebsite.com</button><button type="button" data-fill>blog.yourwebsite.com</button><button type="button" data-fill>shop.example</button></div>
+        <p class="recent" id="scanHint"><span>Scoutly only reads public pages. Nothing on your site is changed.</span></p>
 
-        <div class="focus" aria-label="Today's focus">
-          <a href="#issH"><b><i class="f-cr" aria-hidden="true"></i>5</b><span>New broken links</span></a>
-          <a href="#issH"><b><i class="f-wr" aria-hidden="true"></i>3.1s</b><span>Mobile LCP on homepage</span></a>
-          <a href="#feedH"><b><i class="f-ok" aria-hidden="true"></i>+1</b><span>New AI citation</span></a>
-        </div>
+        <ol class="setup-steps" aria-label="Get set up">
+          <li class="done"><i aria-hidden="true"></i><div><b>Create your account</b><span>Done</span></div></li>
+          <li class="now" id="s2"><i aria-hidden="true"></i><div><b>Add your website</b><span id="s2t">Enter it above</span></div></li>
+          <li id="s3"><i aria-hidden="true"></i><div><b>Run your first audit</b><span id="s3t">Starts after step 2</span></div></li>
+        </ol>
       </div>
 
       <div class="hero-viz" aria-hidden="true">
-        <p class="tag">SCOUT · SCANNING</p>
+        <p class="tag" id="vizTag">SCOUT · STANDING BY</p>
         <div class="radar">
           <span class="rr r1"></span><span class="rr r2"></span><span class="rr r3"></span><span class="x"></span><span class="y"></span>
           <span class="sweep"></span>
-          <span class="blip" style="left:22%;top:30%"></span><span class="blip cr" style="left:80%;top:26%"></span><span class="blip wr" style="left:74%;top:78%"></span><span class="blip" style="left:28%;top:74%"></span>
           <img src="assets/scoutly.webp" alt="" width="180" height="194">
-          <div class="chipc a"><span class="mini" style="--v:82"></span><div><small>Health</small><b>82<em>▲ 4</em></b></div></div>
-          <div class="chipc b"><div><small>Last crawl · 12 min ago</small><b>1,248 pages</b></div></div>
+          <div class="chipc a"><span class="mini" style="--v:0"></span><div><small>Health</small><b>—</b></div></div>
+          <div class="chipc b"><div><small id="vizK">Waiting for</small><b id="vizV">your first site</b></div></div>
         </div>
       </div>
     </section>
 
     <section aria-label="Key numbers">
-      <ul class="stats">
-        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-pulse"/></svg>Health score</p><b>82</b><small class="up">▲ 4 since last crawl</small></li>
-        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-page"/></svg>Pages crawled</p><b>1,248</b><small>of 1,300 found</small></li>
-        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-alert"/></svg>Critical issues</p><b>14</b><small class="up">▼ 6 fixed</small></li>
-        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-broken"/></svg>Broken links</p><b>37</b><small class="dn">▲ 5 new</small></li>
-        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-link"/></svg>Backlinks</p><b>5,495</b><small class="up">▲ 128 this month</small></li>
-        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-globe"/></svg>Ref. domains</p><b>312</b><small class="up">▲ 9 this month</small></li>
-        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-key"/></svg>Keywords tracked</p><b>186</b><small>41 in top 10</small></li>
-        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-ai"/></svg>AI citations</p><b>23</b><small class="up">▲ 3 this week</small></li>
+      <ul class="stats nodata">
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-pulse"/></svg>Health score</p><b>—</b><small>After first audit</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-page"/></svg>Pages crawled</p><b>—</b><small>After first audit</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-alert"/></svg>Critical issues</p><b>—</b><small>After first audit</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-broken"/></svg>Broken links</p><b>—</b><small>After first audit</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-link"/></svg>Backlinks</p><b>—</b><small>Needs a backlink source</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-globe"/></svg>Ref. domains</p><b>—</b><small>Needs a backlink source</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-key"/></svg>Keywords tracked</p><b>0</b><small>None added yet</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-ai"/></svg>AI citations</p><b>—</b><small>After first check</small></li>
       </ul>
     </section>
 
@@ -320,35 +341,30 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
       <section class="panel" aria-labelledby="feedH">
         <div class="panel-h">
           <span class="ic" aria-hidden="true"><svg class="i"><use href="#i-bell"/></svg></span>
-          <div><h2 id="feedH">Latest updates</h2><p>What Scoutly found on your sites</p></div>
-          <button class="btn sm" type="button" data-soon="Full activity log">View all →</button>
+          <div><h2 id="feedH">Latest updates</h2><p>What Scoutly finds on your sites</p></div>
         </div>
-        <ol class="feed">
-          <li><span class="dot t-ok" aria-hidden="true"></span><div><p>Crawl finished for <b>yourwebsite.com</b>: 1,248 pages checked <span class="sv ok">Done</span></p><time><svg class="i" style="width:12px;height:12px"><use href="#i-clock"/></svg>12 minutes ago</time></div></li>
-          <li><span class="dot t-cr" aria-hidden="true"></span><div><p><b>5 new broken links</b> on /blog/seo-checklist and 2 other pages <span class="sv cr">Critical</span></p><time><svg class="i" style="width:12px;height:12px"><use href="#i-clock"/></svg>12 minutes ago</time></div></li>
-          <li><span class="dot t-in" aria-hidden="true"></span><div><p>New backlink from <b>searchweekly.example</b> (DR 64) to your pricing page</p><time><svg class="i" style="width:12px;height:12px"><use href="#i-clock"/></svg>2 hours ago</time></div></li>
-          <li><span class="dot t-ok" aria-hidden="true"></span><div><p><b>“seo audit tool”</b> moved up from position 14 to 8 <span class="sv ok">▲ 6</span></p><time><svg class="i" style="width:12px;height:12px"><use href="#i-clock"/></svg>5 hours ago</time></div></li>
-          <li><span class="dot t-in" aria-hidden="true"></span><div><p>Your guide <b>“What is GEO?”</b> was cited in an AI answer for “generative engine optimization”</p><time><svg class="i" style="width:12px;height:12px"><use href="#i-clock"/></svg>Yesterday</time></div></li>
-          <li><span class="dot t-wr" aria-hidden="true"></span><div><p>LCP on mobile rose to <b>3.1 s</b> on the homepage <span class="sv wr">Warning</span></p><time><svg class="i" style="width:12px;height:12px"><use href="#i-clock"/></svg>Yesterday</time></div></li>
-          <li><span class="dot t-cr" aria-hidden="true"></span><div><p>Lost backlink from <b>marketingdaily.example</b>: the page now returns 404</p><time><svg class="i" style="width:12px;height:12px"><use href="#i-clock"/></svg>2 days ago</time></div></li>
-          <li><span class="dot t-ok" aria-hidden="true"></span><div><p>6 missing meta descriptions marked as fixed</p><time><svg class="i" style="width:12px;height:12px"><use href="#i-clock"/></svg>3 days ago</time></div></li>
-        </ol>
+        <ol class="feed" id="feed" hidden></ol>
+        <div class="empty" id="feedEmpty">
+          <span class="empty-i" aria-hidden="true"><svg class="i"><use href="#i-bell"/></svg></span>
+          <h3>No activity yet</h3>
+          <p>Finished crawls, new issues, won or lost backlinks and AI citations will show up here as Scoutly finds them.</p>
+        </div>
       </section>
 
       <section class="panel" aria-labelledby="healthH">
         <div class="panel-h">
           <span class="ic" aria-hidden="true"><svg class="i"><use href="#i-pulse"/></svg></span>
-          <div><h2 id="healthH">Site health</h2><p>yourwebsite.com · by area</p></div>
+          <div><h2 id="healthH">Site health</h2><p id="healthSite">By area · no website yet</p></div>
         </div>
-        <div class="score"><div class="ring" style="--v:82"><b>82</b></div><p><strong>Good, with fixes to make</strong>Performance and AI readiness pull the score down most. Fix the critical issues first.</p></div>
-        <ul class="bars" id="bars">
-          <li><span>Crawlability</span><div class="bar"><i data-v="96"></i></div><em>96%</em></li>
-          <li><span>Indexability</span><div class="bar"><i data-v="91"></i></div><em>91%</em></li>
-          <li><span>Internal links</span><div class="bar"><i data-v="84"></i></div><em>84%</em></li>
-          <li><span>On-page SEO</span><div class="bar"><i data-v="78"></i></div><em>78%</em></li>
-          <li><span>Structured data</span><div class="bar"><i data-v="72"></i></div><em>72%</em></li>
-          <li><span>Performance</span><div class="bar"><i data-v="64"></i></div><em>64%</em></li>
-          <li><span>AI readiness</span><div class="bar"><i data-v="58"></i></div><em>58%</em></li>
+        <div class="score"><div class="ring" style="--v:0"><b>—</b></div><p><strong>No score yet</strong>After your first audit, Scoutly scores your site across the seven areas below.</p></div>
+        <ul class="bars ghost">
+          <li><span>Crawlability</span><div class="bar"></div><em>—</em></li>
+          <li><span>Indexability</span><div class="bar"></div><em>—</em></li>
+          <li><span>Internal links</span><div class="bar"></div><em>—</em></li>
+          <li><span>On-page SEO</span><div class="bar"></div><em>—</em></li>
+          <li><span>Structured data</span><div class="bar"></div><em>—</em></li>
+          <li><span>Performance</span><div class="bar"></div><em>—</em></li>
+          <li><span>AI readiness</span><div class="bar"></div><em>—</em></li>
         </ul>
       </section>
     </div>
@@ -358,37 +374,26 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
         <div class="panel-h">
           <span class="ic" aria-hidden="true"><svg class="i"><use href="#i-alert"/></svg></span>
           <div><h2 id="issH">Fix these first</h2><p>Sorted by impact</p></div>
-          <button class="btn sm" type="button" data-soon="Full issue list">All issues →</button>
         </div>
-        <div class="tbl"><table>
-          <thead><tr><th>Issue</th><th>Severity</th><th class="n">Pages</th></tr></thead>
-          <tbody>
-            <tr><td>Broken internal links</td><td><span class="sv cr">Critical</span></td><td class="n">37</td></tr>
-            <tr><td>Pages blocked by noindex in sitemap</td><td><span class="sv cr">Critical</span></td><td class="n">9</td></tr>
-            <tr><td>Slow LCP on mobile (&gt; 2.5 s)</td><td><span class="sv wr">Warning</span></td><td class="n">64</td></tr>
-            <tr><td>Missing meta descriptions</td><td><span class="sv wr">Warning</span></td><td class="n">22</td></tr>
-            <tr><td>Images without alt text</td><td><span class="sv in">Notice</span></td><td class="n">118</td></tr>
-            <tr><td>No FAQ or HowTo structured data</td><td><span class="sv in">Notice</span></td><td class="n">31</td></tr>
-          </tbody>
-        </table></div>
+        <div class="empty">
+          <span class="empty-i" aria-hidden="true"><svg class="i"><use href="#i-audit"/></svg></span>
+          <h3>Nothing to fix yet</h3>
+          <p>Once your first audit runs, the issues with the biggest impact land here, each with a plain-English fix.</p>
+          <button class="btn sm" type="button" data-add>Add your website</button>
+        </div>
       </section>
 
       <section class="panel" aria-labelledby="kwH">
         <div class="panel-h">
           <span class="ic" aria-hidden="true"><svg class="i"><use href="#i-key"/></svg></span>
-          <div><h2 id="kwH">Keyword movers</h2><p>Last 7 days · Google, India</p></div>
+          <div><h2 id="kwH">Keyword tracking</h2><p>Positions over time</p></div>
         </div>
-        <div class="tbl"><table>
-          <thead><tr><th>Keyword</th><th class="n">Position</th><th class="n">Change</th></tr></thead>
-          <tbody>
-            <tr><td>seo audit tool</td><td class="n">8</td><td class="n up">▲ 6</td></tr>
-            <tr><td>free backlink checker</td><td class="n">12</td><td class="n up">▲ 3</td></tr>
-            <tr><td>broken link checker</td><td class="n">5</td><td class="n up">▲ 1</td></tr>
-            <tr><td>what is geo seo</td><td class="n">3</td><td class="n">–</td></tr>
-            <tr><td>ai search visibility</td><td class="n">17</td><td class="n dn">▼ 4</td></tr>
-          </tbody>
-        </table></div>
-        <p class="panel-n">Sample rankings. Live tracking needs a connected rank data source.</p>
+        <div class="empty">
+          <span class="empty-i" aria-hidden="true"><svg class="i"><use href="#i-key"/></svg></span>
+          <h3>No keywords tracked</h3>
+          <p>Add the searches you want to rank for, and Scoutly will track where your pages appear.</p>
+          <button class="btn sm" type="button" data-soon="Keyword tracking">Add keywords</button>
+        </div>
       </section>
     </div>
   </main>
@@ -404,27 +409,46 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
   $('first').textContent=user.name.split(' ')[0];
   $('av').textContent=user.name.split(/\s+/).map(function(w){return w[0]}).join('').slice(0,2).toUpperCase();
 
-  /* greeting + live clock */
+  /* live clock */
   function pad(n){return ('0'+n).slice(-2)}
   function tick(){var d=new Date(),h=d.getHours(),h12=h%12||12;
     $('clock').innerHTML=pad(h12)+':'+pad(d.getMinutes())+':'+pad(d.getSeconds())+'<small>'+(h<12?'AM':'PM')+'</small>';
-    $('date').textContent=d.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short',year:'numeric'});
-    $('greet').textContent=(h<5?'Working late':h<12?'Good morning':h<17?'Good afternoon':'Good evening')+','}
+    $('date').textContent=d.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short',year:'numeric'})}
   tick();setInterval(tick,1000);
 
-  /* health bars fill in on load */
-  requestAnimationFrame(function(){[].forEach.call($('bars').querySelectorAll('i'),function(i){var v=+i.dataset.v;i.style.width=v+'%';if(v<70)i.className='l';else if(v<85)i.className='m'})});
-
   var toast=$('toast'),tt;
-  function say(m){toast.textContent=m;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('on')},2600)}
+  function say(m){toast.textContent=m;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('on')},3200)}
   document.addEventListener('click',function(e){var a=e.target.closest('[data-soon]');if(!a)return;e.preventDefault();say(a.dataset.soon+' opens when audits go live.');closeNav()});
 
-  [].forEach.call(document.querySelectorAll('[data-fill]'),function(b){b.addEventListener('click',function(){$('scanUrl').value=b.textContent;$('scanUrl').focus()})});
+  /* adding a website: nothing is crawled yet (early access), so the page only records the site and queues the audit */
+  function focusAdd(){closeNav();scrollTo({top:0,behavior:'smooth'});setTimeout(function(){$('scanUrl').focus()},250)}
+  $('projB').addEventListener('click',focusAdd);
+  [].forEach.call(document.querySelectorAll('[data-add]'),function(b){b.addEventListener('click',focusAdd)});
+
+  function applySite(site){
+    document.body.classList.add('has-site');
+    $('statusT').textContent=site+' · audit queued';$('projT').textContent=site;
+    $('stepT').lastChild.textContent='Setup · step 3 of 3';$('barSite').textContent=site;
+    $('heroSub').innerHTML='<b>'+site.replace(/[<>&"]/g,'')+'</b> is added and its first audit is queued. Audits run once accounts open, and the results will fill this dashboard.';
+    $('s2').className='done';$('s2t').textContent=site;$('s3').className='now';$('s3t').textContent='Queued · runs when accounts open';
+    $('vizTag').textContent='SCOUT · QUEUED';$('vizK').textContent='First audit';$('vizV').textContent='Queued';
+    $('healthSite').textContent='By area · '+site;
+    var f=$('feed');f.hidden=false;$('feedEmpty').hidden=true;f.innerHTML='';
+    var li=document.createElement('li');
+    li.innerHTML='<span class="dot t-in" aria-hidden="true"></span><div><p>You added <b></b>. Its first audit is queued. <span class="sv in">Queued</span></p><time><svg class="i" style="width:12px;height:12px"><use href="#i-clock"/></svg>Just now</time></div>';
+    li.querySelector('b').textContent=site;f.appendChild(li);
+  }
+  var saved=null;try{saved=sessionStorage.getItem('scoutly.site')}catch(_){}
+  if(saved)applySite(saved);
+
   $('scan').addEventListener('submit',function(e){e.preventDefault();var v=$('scanUrl').value.trim();
     if(!/^(https?:\/\/)?[\w-]+(\.[\w-]+)+(\/.*)?$/i.test(v)){say('Enter a website address, like example.com.');$('scanUrl').focus();return}
-    say('Audit queued for '+v.replace(/^https?:\/\//i,'')+'. Live crawling starts when accounts open.');$('scanUrl').value=''});
+    var site=v.replace(/^https?:\/\//i,'').replace(/\/+$/,'').toLowerCase();
+    try{sessionStorage.setItem('scoutly.site',site)}catch(_){}
+    applySite(site);$('scanUrl').value='';
+    say(site+' added. Its first audit is queued and runs once accounts open.')});
 
-  $('logout').addEventListener('click',function(e){e.preventDefault();try{sessionStorage.removeItem('scoutly.user')}catch(_){}location.href='login.html?mode=login'});
+  $('logout').addEventListener('click',function(e){e.preventDefault();try{sessionStorage.removeItem('scoutly.user');sessionStorage.removeItem('scoutly.site')}catch(_){}location.href='login.html?mode=login'});
 
   /* mobile sidebar */
   var b=$('menuB');
