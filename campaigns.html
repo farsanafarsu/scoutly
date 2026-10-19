@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SEO Campaigns — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<script>
+/* demo gate: no demo login in this tab → back to the login page */
+(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+/* campaigns page */
+.ph{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
+.ph h1{margin-top:14px;font:500 clamp(28px,3vw,44px)/1 var(--D);text-transform:uppercase;letter-spacing:.01em}
+.ph .desc{margin-top:10px;max-width:560px;font:400 13px/1.7 var(--M);color:var(--sl)}
+.ph-act{display:flex;flex-wrap:wrap;gap:10px}
+.tools{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:26px}
+.search{position:relative;flex:1;min-width:240px;max-width:560px}
+.search svg{position:absolute;left:14px;top:50%;margin-top:-9px;color:var(--mu)}
+.search input{width:100%;height:46px;padding:0 14px 0 42px;border:1px solid var(--ln);border-radius:3px;background:var(--card);color:var(--ink);font:400 14px/1 var(--M);transition:border-color .2s,box-shadow .2s}
+.search input:focus{outline:0;border-color:var(--b);box-shadow:0 0 0 3px rgba(47,91,255,.12)}
+.search input:disabled{opacity:.55;cursor:not-allowed}
+.count{font:500 11px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
+.seg{display:flex;border:1px solid var(--ln);background:var(--card)}
+.seg button{height:34px;padding:0 12px;border:0;background:none;font:600 10px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--sl);cursor:pointer}.seg button+button{border-left:1px solid var(--ln)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+
+/* empty state */
+.zero{position:relative;overflow:hidden;margin-top:22px;padding:56px 28px 44px;text-align:center;background:var(--card);border:1px solid var(--ln);box-shadow:0 40px 80px -60px rgba(10,26,74,.5)}
+.zero:before{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(var(--ln) 1px,transparent 1px),linear-gradient(90deg,var(--ln) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(50% 60% at 50% 30%,#000,transparent 80%);mask-image:radial-gradient(50% 60% at 50% 30%,#000,transparent 80%);opacity:.7}
+.zero>*{position:relative}
+.zero-i{position:relative;display:grid;place-items:center;width:84px;height:84px;margin:0 auto;border:1px dashed rgba(47,91,255,.5);background:rgba(47,91,255,.06);color:var(--b)}
+.zero-i svg{width:34px;height:34px}
+.zero-i .c{position:absolute;width:14px;height:14px;border:1.5px solid var(--ink)}.zero-i .tl{left:-8px;top:-8px;border-right:0;border-bottom:0}.zero-i .tr{right:-8px;top:-8px;border-left:0;border-bottom:0}.zero-i .bl{left:-8px;bottom:-8px;border-right:0;border-top:0}.zero-i .br{right:-8px;bottom:-8px;border-left:0;border-top:0}
+.zero h2{margin-top:24px;font:500 clamp(22px,2.2vw,30px)/1.1 var(--D);text-transform:uppercase;letter-spacing:.02em}
+.zero>p{max-width:480px;margin:10px auto 0;font:400 13px/1.75 var(--M);color:var(--sl)}
+.zero .btn{margin-top:24px}
+.how{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:820px;margin:40px auto 0;border-top:1px solid var(--ln);text-align:left;counter-reset:h}
+.how li{counter-increment:h;padding:18px 18px 0}.how li+li{border-left:1px solid var(--ln)}
+.how li:before{content:"0" counter(h);display:block;font:500 22px/1 var(--D);color:var(--b)}
+.how b{display:block;margin-top:10px;font:500 13px/1.3 var(--D);letter-spacing:.04em;text-transform:uppercase}
+.how span{display:block;margin-top:6px;font:400 12px/1.65 var(--M);color:var(--sl)}
+
+/* campaign cards */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;margin-top:22px}
+.card{display:flex;flex-direction:column;min-width:0;background:var(--card);border:1px solid var(--ln);box-shadow:0 30px 60px -50px rgba(10,26,74,.55);transition:transform .25s,box-shadow .25s,border-color .25s}
+.card:hover{transform:translateY(-2px);border-color:rgba(47,91,255,.35);box-shadow:0 40px 70px -45px rgba(47,91,255,.5)}
+.card-h{position:relative;overflow:hidden;display:flex;align-items:center;gap:10px;padding:14px 16px;background:linear-gradient(100deg,#050a1f,#0b1a52 60%,#15349e);color:#fff}
+.card-h:after{content:"";position:absolute;inset:0;pointer-events:none;background-image:linear-gradient(rgba(127,160,255,.1) 1px,transparent 1px),linear-gradient(90deg,rgba(127,160,255,.1) 1px,transparent 1px);background-size:22px 22px;-webkit-mask-image:linear-gradient(90deg,transparent 40%,#000);mask-image:linear-gradient(90deg,transparent 40%,#000)}
+.card-h svg{position:relative;z-index:1;color:var(--sky)}
+.card-h h3{position:relative;z-index:1;flex:1;min-width:0;font:500 15px/1.25 var(--D);letter-spacing:.03em;text-transform:uppercase;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st{position:relative;z-index:1;flex:none;display:inline-flex;align-items:center;gap:6px;padding:4px 7px;font:600 9.5px/1 var(--M);letter-spacing:.1em;text-transform:uppercase;border:1px solid}
+.st i{width:6px;height:6px;background:currentColor}
+.st.on{color:#3ddba5;border-color:rgba(61,219,165,.5);background:rgba(61,219,165,.1)}.st.off{color:#ffc35c;border-color:rgba(255,195,92,.5);background:rgba(255,195,92,.1)}
+.card-b{flex:1;display:grid;gap:10px;padding:16px}
+.row{display:flex;align-items:center;gap:8px;min-width:0;font:400 13px/1.4 var(--M);color:var(--sl)}
+.row svg{width:15px;height:15px;color:var(--mu)}
+.row b{font:600 14px/1.3 Geist,sans-serif;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.row .sp{margin-left:auto}
+.pill{display:inline-flex;align-items:center;gap:6px;max-width:100%;padding:5px 9px;border:1px solid;font:500 11.5px/1 var(--M);white-space:nowrap}
+.pill.bl{flex:none;color:var(--b);border-color:rgba(47,91,255,.35);background:rgba(47,91,255,.06)}
+.pill.url{color:var(--ok);border-color:rgba(23,166,115,.4);background:rgba(23,166,115,.06);overflow:hidden;text-overflow:ellipsis;transition:background .2s}.pill.url:hover{background:rgba(23,166,115,.14)}
+.pill.url span{overflow:hidden;text-overflow:ellipsis}
+.pill svg{width:13px;height:13px;flex:none;color:currentColor}
+.meta{display:flex;flex-wrap:wrap;gap:6px 16px}
+.card-f{display:flex;align-items:center;gap:8px;padding:12px 16px;border-top:1px solid var(--ln)}
+.card-f .by{flex:1;min-width:0;font:400 11px/1.4 var(--M);color:var(--mu);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.btn.ic{width:34px;padding:0}.btn.ic svg{width:15px;height:15px}
+.btn.ic.del:hover{background:var(--cr);border-color:var(--cr)}
+.card-f .btn{color:var(--sl);border-color:var(--ln)}.card-f .btn:hover{color:#fff}
+.card-f .btn.au{color:var(--b);border-color:rgba(47,91,255,.4)}.card-f .btn.au:hover{background:var(--b);border-color:var(--b);color:#fff}
+.nores{grid-column:1/-1}
+
+/* create / edit dialog */
+.dlg{width:min(560px,calc(100% - 32px));max-height:calc(100% - 32px);padding:0;border:0;background:transparent;color:var(--ink)}
+.dlg::backdrop{background:rgba(5,10,31,.6);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.dlg-c{position:relative;background:var(--card);border:1px solid var(--ln);box-shadow:0 40px 100px -30px rgba(5,10,31,.6)}
+.dlg-h{display:flex;align-items:center;gap:14px;padding:18px 22px;background:var(--nv);color:#fff}
+.dlg-h h2{flex:1;font:500 18px/1.2 var(--D);letter-spacing:.04em;text-transform:uppercase}
+.dlg-h .x{display:grid;place-items:center;width:34px;height:34px;border:1px solid rgba(255,255,255,.2);background:none;color:#fff;cursor:pointer}.dlg-h .x:hover{background:rgba(255,255,255,.1)}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;padding:20px 22px 6px}
+.f{display:grid;gap:6px;align-content:start}.f.w{grid-column:1/-1}
+.f label{font:500 10.5px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--sl)}.f label i{font-style:normal;color:var(--cr)}
+.f input,.f select{width:100%;height:44px;padding:0 12px;border:1px solid var(--ln);border-radius:3px;background:#fff;color:var(--ink);font:400 14px/1 var(--M)}
+.f input:focus,.f select:focus{outline:0;border-color:var(--b);box-shadow:0 0 0 3px rgba(47,91,255,.12)}
+.f input[aria-invalid="true"]{border-color:var(--cr)}
+.f .err{min-height:16px;font:500 11px/1.4 var(--M);color:var(--cr)}
+.dlg-f{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px 20px}
+
+@media(max-width:700px){.how{grid-template-columns:1fr}.how li+li{border-left:0;border-top:1px solid var(--ln)}.how li{padding:16px 4px 0}.fg{grid-template-columns:1fr}.ph-act{width:100%}.ph-act .btn{flex:1}}
+@media(max-width:400px){.grid{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-dash" viewBox="0 0 24 24"><path d="M4 4h7v7H4zM13 4h7v4h-7zM13 10h7v10h-7zM4 13h7v7H4z"/></symbol>
+  <symbol id="i-proj" viewBox="0 0 24 24"><path d="M3 6h7l2 2h9v11H3z"/></symbol>
+  <symbol id="i-rep" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM9 12h7M9 16h7M9 8h3"/></symbol>
+  <symbol id="i-audit" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6"/><path d="M16 16l5 5M8.5 11l2 2 3.5-4"/></symbol>
+  <symbol id="i-link" viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.6 0l3-3a4 4 0 0 0-5.6-5.6l-1 1M14 10a4 4 0 0 0-5.6 0l-3 3a4 4 0 0 0 5.6 5.6l1-1"/></symbol>
+  <symbol id="i-broken" viewBox="0 0 24 24"><path d="M9 15l-2 2a3 3 0 0 1-4-4l2-2M15 9l2-2a3 3 0 0 1 4 4l-2 2M4 4l3 3M17 17l3 3M9 3v3M3 9h3M15 21v-3M21 15h-3"/></symbol>
+  <symbol id="i-speed" viewBox="0 0 24 24"><path d="M4 18a8 8 0 1 1 16 0M12 18l4-6"/></symbol>
+  <symbol id="i-key" viewBox="0 0 24 24"><circle cx="8" cy="15" r="4"/><path d="M11 12l9-9M16 7l3 3M14 9l2 2"/></symbol>
+  <symbol id="i-comp" viewBox="0 0 24 24"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></symbol>
+  <symbol id="i-ai" viewBox="0 0 24 24"><path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8zM19 16l.8 2.2L22 19l-2.2.8L19 22l-.8-2.2L16 19l2.2-.8z"/></symbol>
+  <symbol id="i-geo" viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4zM8 9h8M8 12h5"/></symbol>
+  <symbol id="i-set" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M4.9 19.1L7 17M17 7l2.1-2.1"/></symbol>
+  <symbol id="i-out" viewBox="0 0 24 24"><path d="M14 4H5v16h9M10 12h11M17 8l4 4-4 4"/></symbol>
+  <symbol id="i-bell" viewBox="0 0 24 24"><path d="M6 17V11a6 6 0 0 1 12 0v6l2 2H4zM10 21h4"/></symbol>
+  <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><path d="M4 6h16v14H4zM4 10h16M8 3v5M16 3v5"/></symbol>
+  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 2"/></symbol>
+  <symbol id="i-page" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6zM14 3v5h5"/></symbol>
+  <symbol id="i-alert" viewBox="0 0 24 24"><path d="M12 3l10 18H2zM12 10v5M12 17.5v.5"/></symbol>
+  <symbol id="i-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></symbol>
+  <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M2 12h5l2-5 4 10 2-5h7"/></symbol>
+  <symbol id="i-down" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></symbol>
+  <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></symbol>
+  <symbol id="i-rocket" viewBox="0 0 24 24"><path d="M14 4c3-1 6-1 6-1s0 3-1 6l-6 6-4-4zM9 11l-4 1-2 3 4 1M13 15l-1 4-3 2-1-4M14.5 9.5h.01M6 18l-2 2"/></symbol>
+  <symbol id="i-pin" viewBox="0 0 24 24"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/></symbol>
+  <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+  <symbol id="i-edit" viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16zM13 7l4 4"/></symbol>
+  <symbol id="i-trash" viewBox="0 0 24 24"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13M10 11v6M14 11v6"/></symbol>
+  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></symbol>
+  <symbol id="i-build" viewBox="0 0 24 24"><path d="M5 21V4h10v17M15 9h4v12M3 21h18M8 8h4M8 12h4M8 16h4"/></symbol>
+  <symbol id="i-x" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></symbol>
+</svg>
+
+<aside class="side" id="side" aria-label="Workspace">
+  <div class="side-logo"><a class="logo" href="./" aria-label="Scoutly home"><img src="assets/scoutly-mark.webp" alt="" width="30" height="30"><span>Scoutly</span></a></div>
+  <nav class="side-nav" aria-label="Dashboard">
+    <a href="dashboard.html"><svg class="i"><use href="#i-dash"/></svg>Dashboard</a>
+    <a href="#" data-soon="Projects"><svg class="i"><use href="#i-proj"/></svg>Projects</a>
+    <a href="#" data-soon="Reports"><svg class="i"><use href="#i-rep"/></svg>Reports</a>
+    <h2>SEO Services</h2>
+    <a href="#" data-soon="SEO Dashboard"><svg class="i"><use href="#i-search"/></svg>SEO Dashboard</a>
+    <a href="campaigns.html" aria-current="page"><svg class="i"><use href="#i-rocket"/></svg>SEO Campaigns</a>
+    <a href="#" data-soon="Backlinks"><svg class="i"><use href="#i-link"/></svg>Backlink</a>
+    <a href="#" data-soon="Local SEO"><svg class="i"><use href="#i-pin"/></svg>Local SEO</a>
+    <h2>Site audit</h2>
+    <a href="#" data-soon="Site audit"><svg class="i"><use href="#i-audit"/></svg>Site audit</a>
+    <a href="#" data-soon="Broken links"><svg class="i"><use href="#i-broken"/></svg>Broken links</a>
+    <a href="#" data-soon="Core Web Vitals"><svg class="i"><use href="#i-speed"/></svg>Core Web Vitals</a>
+    <h2>Research</h2>
+    <a href="#" data-soon="Keyword research"><svg class="i"><use href="#i-key"/></svg>Keywords</a>
+    <a href="#" data-soon="Competitor analysis"><svg class="i"><use href="#i-comp"/></svg>Competitors</a>
+    <h2>AI visibility</h2>
+    <a href="#" data-soon="AI search visibility"><svg class="i"><use href="#i-ai"/></svg>AI search<em>Beta</em></a>
+    <a href="#" data-soon="AEO and GEO"><svg class="i"><use href="#i-geo"/></svg>AEO · GEO</a>
+    <h2>Account</h2>
+    <a href="#" data-soon="Settings"><svg class="i"><use href="#i-set"/></svg>Settings</a>
+    <a href="#" id="logout"><svg class="i"><use href="#i-out"/></svg>Log out</a>
+  </nav>
+  <p class="side-foot">Early access · v0.1</p>
+</aside>
+<div class="scrim" id="scrim"></div>
+
+<div class="main">
+  <header class="top">
+    <button class="icon-b menu-b" id="menuB" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="side"><svg class="i"><use href="#i-menu"/></svg></button>
+    <span class="status" id="status"><i aria-hidden="true"></i><span id="statusT">No website yet</span></span>
+    <button class="proj" type="button" id="projB"><span id="projT">+ Add a website</span></button>
+    <div class="top-r">
+      <button class="icon-b" type="button" aria-label="Alerts" data-soon="Alerts"><svg class="i"><use href="#i-bell"/></svg></button>
+      <div class="who"><span class="av" id="av" aria-hidden="true">FN</span><div><b id="whoName">Farsana N</b><small id="whoMail"></small></div></div>
+    </div>
+  </header>
+  <main class="page">
+    <div class="ph">
+      <div>
+        <p class="lbl">SEO Services</p>
+        <h1>SEO Campaigns</h1>
+        <p class="desc">Each campaign pairs a target keyword with a location and a landing page, so you can audit that page and track the backlinks pointing to it.</p>
+      </div>
+      <div class="ph-act">
+        <button class="btn" type="button" data-soon="External audit"><svg class="i"><use href="#i-search"/></svg>External audit</button>
+        <button class="btn p" type="button" data-new><svg class="i"><use href="#i-plus"/></svg>Create campaign</button>
+      </div>
+    </div>
+
+    <div class="tools">
+      <label class="search"><span class="sr-only">Search campaigns</span><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Search campaigns…" autocomplete="off"></label>
+      <div class="seg" role="group" aria-label="Filter by status">
+        <button type="button" data-f="all" aria-pressed="true">All</button><button type="button" data-f="Active" aria-pressed="false">Active</button><button type="button" data-f="Paused" aria-pressed="false">Paused</button>
+      </div>
+      <span class="count" id="count" aria-live="polite">0 campaigns</span>
+    </div>
+
+    <section class="zero" id="zero" aria-labelledby="zeroH">
+      <div class="zero-i" aria-hidden="true"><i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i><svg class="i"><use href="#i-rocket"/></svg></div>
+      <h2 id="zeroH">No campaigns added yet</h2>
+      <p>Create your first campaign to start tracking a keyword in a location, like “SEO audit tool in Kochi”, against the page you want to rank.</p>
+      <button class="btn p" type="button" data-new><svg class="i"><use href="#i-plus"/></svg>Create your first campaign</button>
+      <ol class="how">
+        <li><b>Pick a target</b><span>A keyword and the city or region you want to be found in.</span></li>
+        <li><b>Add the landing page</b><span>The URL on your site that should rank for it.</span></li>
+        <li><b>Audit and build</b><span>Run an audit on that page and track the backlinks you earn.</span></li>
+      </ol>
+    </section>
+
+    <div class="grid" id="grid" hidden></div>
+  </main>
+</div>
+
+<dialog class="dlg" id="dlg" aria-labelledby="dlgH">
+  <form class="dlg-c" id="form" method="dialog" novalidate>
+    <div class="dlg-h"><h2 id="dlgH">Create campaign</h2><button class="x" type="button" id="dlgX" aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></div>
+    <div class="fg">
+      <div class="f w"><label for="fName">Campaign / target keyword <i>*</i></label><input id="fName" placeholder="e.g. PRP treatment in Trivandrum" autocomplete="off"><p class="err" id="fNameE"></p></div>
+      <div class="f"><label for="fBrand">Brand or client <i>*</i></label><input id="fBrand" placeholder="e.g. Serene Derma" autocomplete="organization"><p class="err" id="fBrandE"></p></div>
+      <div class="f"><label for="fLoc">Location</label><input id="fLoc" placeholder="e.g. Trivandrum" autocomplete="off"><p class="err"></p></div>
+      <div class="f w"><label for="fUrl">Landing page URL <i>*</i></label><input id="fUrl" inputmode="url" autocapitalize="off" spellcheck="false" placeholder="https://yourwebsite.com/page"><p class="err" id="fUrlE"></p></div>
+      <div class="f"><label for="fEnd">End date</label><input id="fEnd" type="date"><p class="err"></p></div>
+      <div class="f"><label for="fSt">Status</label><select id="fSt"><option>Active</option><option>Paused</option></select><p class="err"></p></div>
+    </div>
+    <div class="dlg-f"><button class="btn" type="button" id="dlgC">Cancel</button><button class="btn p" type="submit" id="dlgS">Create campaign</button></div>
+  </form>
+</dialog>
+
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  /* campaigns live in this tab's sessionStorage until accounts and a backend exist */
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,KEY='scoutly.campaigns';
+  var list=[];try{list=JSON.parse(S.read(KEY)||'[]')||[]}catch(_){list=[]}
+  var filter='all',editing=null;
+  function save(){S.write(KEY,JSON.stringify(list))}
+  function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+  function icon(id){var s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('class','i');s.setAttribute('aria-hidden','true');var u=document.createElementNS('http://www.w3.org/2000/svg','use');u.setAttribute('href','#'+id);s.appendChild(u);return s}
+  function fmt(d){if(!d)return '';var x=new Date(d+(d.length===10?'T00:00':''));return isNaN(x)?d:x.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}
+  function norm(u){u=u.trim();return /^https?:\/\//i.test(u)?u:'https://'+u}
+
+  function card(c){
+    var a=el('article','card');
+    var h=el('div','card-h');h.appendChild(icon('i-target'));h.appendChild(el('h3',null,c.name)).title=c.name;
+    var st=el('span','st '+(c.status==='Active'?'on':'off'));st.appendChild(el('i'));st.appendChild(document.createTextNode(c.status));h.appendChild(st);a.appendChild(h);
+    var b=el('div','card-b');
+    var r1=el('div','row');r1.appendChild(icon('i-build'));r1.appendChild(el('b',null,c.brand));var bl=el('span','pill bl sp');bl.appendChild(icon('i-link'));bl.appendChild(document.createTextNode((c.backlinks||0)+' backlinks'));r1.appendChild(bl);b.appendChild(r1);
+    var m=el('div','meta');
+    if(c.loc){var r2=el('span','row');r2.appendChild(icon('i-pin'));r2.appendChild(document.createTextNode(c.loc));m.appendChild(r2)}
+    if(c.end){var r3=el('span','row');r3.appendChild(icon('i-cal'));r3.appendChild(document.createTextNode('Ends '+fmt(c.end)));m.appendChild(r3)}
+    if(m.childNodes.length)b.appendChild(m);
+    var u=el('a','pill url');u.href=c.url;u.target='_blank';u.rel='noopener noreferrer';u.title=c.url;u.appendChild(icon('i-link'));u.appendChild(el('span',null,c.url.replace(/^https?:\/\//i,'')));
+    var r4=el('div','row');r4.appendChild(u);b.appendChild(r4);a.appendChild(b);
+    var f=el('div','card-f');
+    var au=el('button','btn sm au');au.type='button';au.appendChild(icon('i-audit'));au.appendChild(document.createTextNode('Audit'));au.onclick=function(){S.say('Audit queued for '+c.url.replace(/^https?:\/\//i,'')+'. It runs once accounts open.')};
+    f.appendChild(au);
+    f.appendChild(el('span','by',c.owner+' · '+fmt(c.created)));
+    var ed=el('button','btn sm ic');ed.type='button';ed.setAttribute('aria-label','Edit '+c.name);ed.appendChild(icon('i-edit'));ed.onclick=function(){open(c)};f.appendChild(ed);
+    var dl=el('button','btn sm ic del');dl.type='button';dl.setAttribute('aria-label','Delete '+c.name);dl.appendChild(icon('i-trash'));dl.onclick=function(){if(confirm('Delete the campaign "'+c.name+'"?')){list=list.filter(function(x){return x.id!==c.id});save();render();S.say('Campaign deleted.')}};f.appendChild(dl);
+    a.appendChild(f);return a;
+  }
+
+  function render(){
+    var q=$('q').value.trim().toLowerCase(),g=$('grid');
+    var shown=list.filter(function(c){return (filter==='all'||c.status===filter)&&(!q||[c.name,c.brand,c.loc,c.url].join(' ').toLowerCase().indexOf(q)>-1)});
+    $('zero').hidden=list.length>0;g.hidden=list.length===0;
+    $('q').disabled=list.length===0;
+    g.innerHTML='';
+    shown.forEach(function(c){g.appendChild(card(c))});
+    if(list.length&&!shown.length){var n=el('div','panel empty nores');n.appendChild(el('h3',null,'No matching campaigns'));n.appendChild(el('p',null,q?'Nothing matches “'+$('q').value.trim()+'”. Try another keyword, brand or location.':'No campaigns have this status.'));g.appendChild(n)}
+    $('count').textContent=(shown.length===list.length?list.length:shown.length+' of '+list.length)+' campaign'+(list.length===1?'':'s');
+  }
+
+  /* dialog */
+  var dlg=$('dlg'),F={name:$('fName'),brand:$('fBrand'),loc:$('fLoc'),url:$('fUrl'),end:$('fEnd'),status:$('fSt')};
+  function clearErr(){['fName','fBrand','fUrl'].forEach(function(i){$(i).removeAttribute('aria-invalid');$(i+'E').textContent=''})}
+  function open(c){
+    editing=c||null;clearErr();
+    F.name.value=c?c.name:'';F.brand.value=c?c.brand:'';F.loc.value=c?c.loc:'';F.url.value=c?c.url:(S.read('scoutly.site')?'https://'+S.read('scoutly.site')+'/':'');F.end.value=c?c.end:'';F.status.value=c?c.status:'Active';
+    $('dlgH').textContent=c?'Edit campaign':'Create campaign';$('dlgS').textContent=c?'Save changes':'Create campaign';
+    if(dlg.showModal)dlg.showModal();else dlg.setAttribute('open','');
+    setTimeout(function(){F.name.focus()},30);
+  }
+  function close(){if(dlg.close)dlg.close();else dlg.removeAttribute('open')}
+  [].forEach.call(document.querySelectorAll('[data-new]'),function(b){b.addEventListener('click',function(){open()})});
+  $('dlgX').onclick=close;$('dlgC').onclick=close;
+  dlg.addEventListener('click',function(e){if(e.target===dlg)close()});
+  function bad(i,m){$(i).setAttribute('aria-invalid','true');$(i+'E').textContent=m;return false}
+  $('form').addEventListener('submit',function(e){e.preventDefault();clearErr();var ok=true;
+    if(!F.name.value.trim())ok=bad('fName','Give the campaign a name or target keyword.');
+    if(!F.brand.value.trim())ok=bad('fBrand','Add the brand or client.')&&ok;
+    var u=F.url.value.trim();
+    if(!u)ok=bad('fUrl','Add the page you want to rank.')&&ok;
+    else if(!/^(https?:\/\/)?[\w-]+(\.[\w-]+)+(\/\S*)?$/i.test(u))ok=bad('fUrl','That doesn’t look like a web address.')&&ok;
+    if(!ok){var f=document.querySelector('.dlg [aria-invalid="true"]');if(f)f.focus();return}
+    var data={name:F.name.value.trim(),brand:F.brand.value.trim(),loc:F.loc.value.trim(),url:norm(u),end:F.end.value,status:F.status.value};
+    if(editing){for(var k in data)editing[k]=data[k];S.say('Campaign updated.')}
+    else{data.id=Date.now().toString(36);data.owner=S.user.name;var n=new Date();data.created=n.getFullYear()+'-'+('0'+(n.getMonth()+1)).slice(-2)+'-'+('0'+n.getDate()).slice(-2);data.backlinks=0;list.unshift(data);S.say('Campaign created.')}
+    save();close();render();
+  });
+
+  $('q').addEventListener('input',render);
+  [].forEach.call(document.querySelectorAll('[data-f]'),function(b){b.addEventListener('click',function(){
+    filter=b.dataset.f;[].forEach.call(document.querySelectorAll('[data-f]'),function(x){x.setAttribute('aria-pressed',x===b)});render()})});
+  render();
+})();
+</script>
+</body>
+</html>
