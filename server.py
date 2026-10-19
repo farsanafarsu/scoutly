@@ -31,9 +31,12 @@ from urllib.parse import parse_qs, quote, urljoin, urlparse, urlunparse
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
 ROOT = os.path.dirname(os.path.abspath(__file__))
-UA = "Mozilla/5.0 (compatible; ScoutlyBot/0.1; +https://scoutly.example/about/)"
+# Many sites (Amazon, Cloudflare-protected shops) refuse or stall unknown bots, so pages are
+# requested like a normal Chrome browser. robots.txt rules are still read for ScoutlyBot and "*".
+UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
 BOT = "ScoutlyBot"
 TIMEOUT = 12
+PAGE_TIMEOUT = 25   # the start page gets longer: slow sites are exactly the ones worth auditing
 MAX_BYTES = 4 * 1024 * 1024
 MAX_PAGES = 25          # pages crawled per audit, including the start page
 MAX_DEPTH = 3
@@ -76,24 +79,45 @@ class _NoRedirect(HTTPRedirectHandler):
 _opener = build_opener(_NoRedirect)
 
 
-def fetch(url, method="GET", max_hops=6, want_body=True):
+def to_ascii_url(url):
+    """Percent-encode non-ASCII paths and IDNA-encode hosts (urllib can't send raw Unicode URLs)."""
+    p = urlparse(url)
+    host = p.hostname or ""
+    try:
+        host = host.encode("idna").decode("ascii")
+    except UnicodeError:
+        pass
+    netloc = host + (f":{p.port}" if p.port else "")
+    if p.username:
+        netloc = p.username + "@" + netloc
+    return urlunparse((p.scheme, netloc, quote(p.path, safe="/%:@!$&'()*+,;=-._~"),
+                       p.params, quote(p.query, safe="=&%+/:,;@!$'()*-._~?"), ""))
+
+
+BLOCK_MARKERS = re.compile(r"captcha|cf-chl|challenge-platform|just a moment\.\.\.|attention required|access denied|robot check|"
+                           r"automated access|are you a robot|verify you are human|unusual traffic|request unsuccessful|incapsula|perimeterx|px-captcha", re.I)
+
+
+def fetch(url, method="GET", max_hops=6, want_body=True, timeout=TIMEOUT):
     """Fetch a URL following redirects by hand, so every hop is checked and recorded."""
     chain = []
     started = time.perf_counter()
     for _ in range(max_hops):
+        url = to_ascii_url(url)
         p = urlparse(url)
         if p.scheme not in ("http", "https") or not p.hostname:
             raise AuditError("Only http and https web addresses can be audited.")
         safe_host(p.hostname)
         req = Request(url, method=method, headers={
             "User-Agent": UA,
-            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
             "Accept-Encoding": "gzip, deflate",
-            "Accept-Language": "en",
+            "Accept-Language": "en-US,en;q=0.9",
+            "Upgrade-Insecure-Requests": "1",
         })
         t0 = time.perf_counter()
         try:
-            resp = _opener.open(req, timeout=TIMEOUT)
+            resp = _opener.open(req, timeout=timeout)
             status = resp.status
         except HTTPError as e:
             resp = e
@@ -342,11 +366,11 @@ def run_audit(raw_url, keyword=""):
 
     # 1. the page itself
     try:
-        res = fetch(raw_url)
+        res = fetch(raw_url, timeout=PAGE_TIMEOUT)
     except AuditError as e:
-        if raw_url.startswith("https://"):
+        if raw_url.startswith("https://") and "timed out" not in str(e):
             try:
-                res = fetch("http://" + raw_url[8:])
+                res = fetch("http://" + raw_url[8:], timeout=PAGE_TIMEOUT)
             except AuditError:
                 raise e
         else:
@@ -359,6 +383,16 @@ def run_audit(raw_url, keyword=""):
     text = decode(res) if is_html else ""
     P = parse(text)
     hdr = res["headers"]
+    # a CAPTCHA or bot-protection page isn't the site: stop rather than score the block page.
+    # Visible text only for 200 responses, because normal pages often load reCAPTCHA scripts.
+    visible = (P.title or "") + " " + P.body_text[:3000]
+    blocked_status = res["status"] in (202, 403, 429, 503)
+    if (len(P.words) < 150 and BLOCK_MARKERS.search(visible)) \
+            or (blocked_status and BLOCK_MARKERS.search(visible + " " + text[:20000])) \
+            or (blocked_status and len(P.words) < 30):  # e.g. Amazon's empty 202 JavaScript challenge
+        raise AuditError(f"{fp.hostname} answered with a bot check (CAPTCHA or “access denied” page) instead of the real page, "
+                         "so an audit would only describe that block page. If this is your site, allow the audit in your firewall or bot "
+                         "protection (Cloudflare, Akamai, etc.) and try again.")
 
     with ThreadPoolExecutor(max_workers=8) as pool:
         robots_f = pool.submit(lambda: _try(fetch, origin + "/robots.txt"))
@@ -1109,8 +1143,8 @@ class Handler(SimpleHTTPRequestHandler):
                 return self._json(400, {"error": "Add a website address to audit."})
             try:
                 return self._json(200, run_audit(target, (q.get("kw") or [""])[0]))
-            except AuditError as e:
-                return self._json(422, {"error": str(e)})
+            except AuditError as e:  # an expected outcome (site blocked, unknown domain), so not an HTTP error
+                return self._json(200, {"error": str(e)})
             except Exception as e:  # keep the server alive and tell the page what happened
                 return self._json(500, {"error": f"The audit failed unexpectedly: {e.__class__.__name__}"})
         if u.path == "/api/pagespeed":

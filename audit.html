@@ -355,7 +355,10 @@ td.u{max-width:420px;overflow-wrap:anywhere}td.n{text-align:right;white-space:no
     {id:'perf',name:'Speed & security',icon:'i-speed',w:12},
     {id:'schema',name:'Structured data & social',icon:'i-dash',w:7},
     {id:'ai',name:'AI search readiness',icon:'i-ai',w:6}];
-  var CREDIT={critical:0,warning:.4,notice:.75},SEVORD={critical:0,warning:1,notice:2};
+  /* every area starts at 100 and loses points per issue; issues on many pages cost more,
+     and each critical issue also lowers the overall score directly */
+  var DED={critical:45,warning:22,notice:7},CRIT_PENALTY=10,SEVORD={critical:0,warning:1,notice:2};
+  function spread(n){return n>=10?1.6:n>=3?1.3:1}
   var data=null,psi=null,psiChecks=[],view='issues',timer=null,t0=0;
 
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
@@ -367,8 +370,9 @@ td.u{max-width:420px;overflow-wrap:anywhere}td.n{text-align:right;white-space:no
   function isIssue(c){return c.status==='fail'||c.status==='warn'}
 
   /* ---------- scoring */
-  function catScore(id){var w=0,g=0;allChecks().forEach(function(c){if(c.cat!==id||c.status==='info'||!c.weight)return;w+=c.weight;g+=c.weight*(c.status==='pass'?1:CREDIT[c.sev]||0)});return w?Math.round(g/w*100):null}
-  function overall(){var w=0,g=0;CATS.forEach(function(k){var s=catScore(k.id);if(s!=null){w+=k.w;g+=k.w*s}});return w?Math.round(g/w):0}
+  function catScore(id){var any=false,ded=0;allChecks().forEach(function(c){if(c.cat!==id||c.status==='info'||!c.weight)return;any=true;if(isIssue(c))ded+=DED[c.sev]*spread(c.count||1)});return any?Math.max(0,Math.round(100-ded)):null}
+  function overall(){var w=0,g=0;CATS.forEach(function(k){var s=catScore(k.id);if(s!=null){w+=k.w;g+=k.w*s}});if(!w)return 0;
+    var crit=allChecks().filter(function(c){return isIssue(c)&&c.sev==='critical'&&c.weight}).length;return Math.max(0,Math.round(g/w-CRIT_PENALTY*crit))}
   function counts(){var r={critical:0,warning:0,notice:0,pass:0};allChecks().forEach(function(c){if(isIssue(c))r[c.sev]++;else if(c.status==='pass')r.pass++});return r}
   function grade(s){return s>=90?'Excellent':s>=75?'Good, with fixes to make':s>=50?'Needs work':'Poor: fix the critical issues first'}
 
@@ -393,13 +397,14 @@ td.u{max-width:420px;overflow-wrap:anywhere}td.n{text-align:right;white-space:no
     fetch('/api/audit'+q).then(function(r){
       return r.text().then(function(t){var j=null;try{j=JSON.parse(t)}catch(_){}
         if(!j)throw new Error(r.status===404||r.status===501?'The audit server isn’t running. Start it from the project folder with: python server.py':'The audit server sent an unexpected response.');
-        if(!r.ok)throw new Error(j.error||'The audit failed.');return j})
+        if(!r.ok||j.error)throw new Error(j.error||'The audit failed.');return j})
     }).then(function(j){
       data=j;progress(false);$('progBar').style.width='100%';stepEls.forEach(function(li){li.className='ok'});
       setTimeout(function(){$('prog').hidden=true;$('report').hidden=false;render();runPsi(j.finalUrl)},250);
       store();
     }).catch(function(e){
-      progress(false);$('prog').hidden=true;$('idle').hidden=!!data;if(data)$('report').hidden=false;
+      /* never leave the previous site's report on screen under a new site's error */
+      data=null;psi=null;psiChecks=[];progress(false);$('prog').hidden=true;$('report').hidden=true;$('idle').hidden=false;
       $('runErr').textContent=e.message||'Couldn’t reach the audit server. Is python server.py running?';
     }).then(function(){$('go').disabled=false});
   }
@@ -411,8 +416,8 @@ td.u{max-width:420px;overflow-wrap:anywhere}td.n{text-align:right;white-space:no
     var ctl=window.AbortController?new AbortController():null,to=setTimeout(function(){ctl&&ctl.abort()},90000);
     fetch('/api/pagespeed?url='+encodeURIComponent(url),ctl?{signal:ctl.signal}:{})
       .then(function(r){return r.json().then(function(j){if(!r.ok||j.error){var e=new Error((j.error&&j.error.message)||('HTTP '+r.status));e.status=j.scoutlyStatus||r.status;e.hasKey=j.scoutlyHasKey;throw e}return j})})
-      .then(function(j){clearTimeout(to);psi=parsePsi(j);psiChecks=psiToChecks(psi);renderVitals();renderSummary();renderCats();renderFindings();store()})
-      .catch(function(e){clearTimeout(to);var m=String(e&&e.message||e);
+      .then(function(j){clearTimeout(to);if(!data||data.finalUrl!==url)return;psi=parsePsi(j);psiChecks=psiToChecks(psi);renderVitals();renderSummary();renderCats();renderFindings();store()})
+      .catch(function(e){clearTimeout(to);if(!data||data.finalUrl!==url)return;var m=String(e&&e.message||e);
         var quota=e&&e.status===429||/quota/i.test(m);
         $('vit').innerHTML='<p class="vit-wait">'+icon('i-alert')+'<span>'+(quota&&!e.hasKey?'Google’s shared PageSpeed quota is used up for today. Add your own free API key to get Core Web Vitals every time: create one at <a href="https://developers.google.com/speed/docs/insights/v5/get-started" target="_blank" rel="noopener noreferrer" style="color:var(--b);text-decoration:underline">developers.google.com</a>, set it as <code>PAGESPEED_API_KEY</code>, then restart <code>python server.py</code>.':quota?'Your PageSpeed API key has hit its quota. Try again later.':'PageSpeed Insights didn’t return results'+(m?': '+esc(m.slice(0,160)):'')+'.')+' Until then, speed scores use the server checks only.</span></p>';
         $('psiRetry').hidden=false});
