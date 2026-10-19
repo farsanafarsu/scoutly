@@ -1,0 +1,2 @@
+# scoutly
+seo platform
