@@ -193,7 +193,7 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
     <a href="#" data-soon="Backlinks"><svg class="i"><use href="#i-link"/></svg>Backlink</a>
     <a href="#" data-soon="Local SEO"><svg class="i"><use href="#i-pin"/></svg>Local SEO</a>
     <h2>Site audit</h2>
-    <a href="#" data-soon="Site audit"><svg class="i"><use href="#i-audit"/></svg>Site audit</a>
+    <a href="audit.html"><svg class="i"><use href="#i-audit"/></svg>Site audit</a>
     <a href="#" data-soon="Broken links"><svg class="i"><use href="#i-broken"/></svg>Broken links</a>
     <a href="#" data-soon="Core Web Vitals"><svg class="i"><use href="#i-speed"/></svg>Core Web Vitals</a>
     <h2>Research</h2>
@@ -264,10 +264,10 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
 
     <section aria-label="Key numbers">
       <ul class="stats nodata">
-        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-pulse"/></svg>Health score</p><b>—</b><small>After first audit</small></li>
-        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-page"/></svg>Pages crawled</p><b>—</b><small>After first audit</small></li>
-        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-alert"/></svg>Critical issues</p><b>—</b><small>After first audit</small></li>
-        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-broken"/></svg>Broken links</p><b>—</b><small>After first audit</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-pulse"/></svg>Health score</p><b id="stHealth">—</b><small id="stHealthS">After first audit</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-page"/></svg>Pages crawled</p><b id="stPages">—</b><small id="stPagesS">After first audit</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-alert"/></svg>Critical issues</p><b id="stCrit">—</b><small id="stCritS">After first audit</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-broken"/></svg>Broken links</p><b id="stBroken">—</b><small id="stBrokenS">After first audit</small></li>
         <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-link"/></svg>Backlinks</p><b>—</b><small>Needs a backlink source</small></li>
         <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-globe"/></svg>Ref. domains</p><b>—</b><small>Needs a backlink source</small></li>
         <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-key"/></svg>Keywords tracked</p><b>0</b><small>None added yet</small></li>
@@ -294,15 +294,16 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
           <span class="ic" aria-hidden="true"><svg class="i"><use href="#i-pulse"/></svg></span>
           <div><h2 id="healthH">Site health</h2><p id="healthSite">By area · no website yet</p></div>
         </div>
-        <div class="score"><div class="ring" style="--v:0"><b>—</b></div><p><strong>No score yet</strong>After your first audit, Scoutly scores your site across the seven areas below.</p></div>
-        <ul class="bars ghost">
-          <li><span>Crawlability</span><div class="bar"></div><em>—</em></li>
-          <li><span>Indexability</span><div class="bar"></div><em>—</em></li>
-          <li><span>Internal links</span><div class="bar"></div><em>—</em></li>
-          <li><span>On-page SEO</span><div class="bar"></div><em>—</em></li>
-          <li><span>Structured data</span><div class="bar"></div><em>—</em></li>
-          <li><span>Performance</span><div class="bar"></div><em>—</em></li>
-          <li><span>AI readiness</span><div class="bar"></div><em>—</em></li>
+        <div class="score"><div class="ring" id="ring" style="--v:0"><b id="ringB">—</b></div><p><strong id="scoreT">No score yet</strong><span id="scoreP">After your first audit, Scoutly scores your site across the eight areas below.</span></p></div>
+        <ul class="bars ghost" id="bars">
+          <li data-cat="crawl"><span>Crawlability &amp; indexing</span><div class="bar"><i></i></div><em>—</em></li>
+          <li data-cat="onpage"><span>On-page SEO</span><div class="bar"><i></i></div><em>—</em></li>
+          <li data-cat="content"><span>Content &amp; keywords</span><div class="bar"><i></i></div><em>—</em></li>
+          <li data-cat="links"><span>Links &amp; redirects</span><div class="bar"><i></i></div><em>—</em></li>
+          <li data-cat="internal"><span>Internal linking</span><div class="bar"><i></i></div><em>—</em></li>
+          <li data-cat="perf"><span>Speed &amp; security</span><div class="bar"><i></i></div><em>—</em></li>
+          <li data-cat="schema"><span>Structured data</span><div class="bar"><i></i></div><em>—</em></li>
+          <li data-cat="ai"><span>AI readiness</span><div class="bar"><i></i></div><em>—</em></li>
         </ul>
       </section>
     </div>
@@ -311,9 +312,10 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
       <section class="panel" aria-labelledby="issH">
         <div class="panel-h">
           <span class="ic" aria-hidden="true"><svg class="i"><use href="#i-alert"/></svg></span>
-          <div><h2 id="issH">Fix these first</h2><p>Sorted by impact</p></div>
+          <div><h2 id="issH">Fix these first</h2><p>Sorted by impact</p></div><a class="btn sm" id="issAll" href="audit.html" hidden>Full report →</a>
         </div>
-        <div class="empty">
+        <div class="tbl" id="issT" hidden></div>
+        <div class="empty" id="issEmpty">
           <span class="empty-i" aria-hidden="true"><svg class="i"><use href="#i-audit"/></svg></span>
           <h3>Nothing to fix yet</h3>
           <p>Once your first audit runs, the issues with the biggest impact land here, each with a plain-English fix.</p>
@@ -356,17 +358,53 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
   $('projB').addEventListener('click',focusAdd);
   [].forEach.call(document.querySelectorAll('[data-add]'),function(b){b.addEventListener('click',focusAdd)});
 
+  function host(u){try{return new URL(/^https?:/i.test(u)?u:'https://'+u).hostname.replace(/^www\./,'')}catch(_){return u}}
+  function ago(iso){var m=Math.round((Date.now()-new Date(iso))/60000);return m<1?'Just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':new Date(iso).toLocaleDateString()}
+  function feedItem(cls,html,when){var li=document.createElement('li');li.innerHTML='<span class="dot '+cls+'" aria-hidden="true"></span><div><p>'+html+'</p><time><svg class="i" style="width:12px;height:12px"><use href="#i-clock"/></svg>'+when+'</time></div>';return li}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
   function applySite(site){
     S.showSite(site);
-    $('stepT').lastChild.textContent='Setup · step 3 of 3';$('barSite').textContent=site;
-    $('heroSub').innerHTML='<b>'+site.replace(/[<>&"]/g,'')+'</b> is added and its first audit is queued. Audits run once accounts open, and the results will fill this dashboard.';
-    $('s2').className='done';$('s2t').textContent=site;$('s3').className='now';$('s3t').textContent='Queued · runs when accounts open';
-    $('vizTag').textContent='SCOUT · QUEUED';$('vizK').textContent='First audit';$('vizV').textContent='Queued';
-    $('healthSite').textContent='By area · '+site;
+    var la=null;try{la=(JSON.parse(S.read('scoutly.audits')||'{}')||{})[host(site)]||null}catch(_){}
+    var auditHref='audit.html?url='+encodeURIComponent(site);
+    $('barSite').textContent=site;$('healthSite').textContent='By area · '+site;
+    $('s2').className='done';$('s2t').textContent=site;
     var f=$('feed');f.hidden=false;$('feedEmpty').hidden=true;f.innerHTML='';
-    var li=document.createElement('li');
-    li.innerHTML='<span class="dot t-in" aria-hidden="true"></span><div><p>You added <b></b>. Its first audit is queued. <span class="sv in">Queued</span></p><time><svg class="i" style="width:12px;height:12px"><use href="#i-clock"/></svg>Just now</time></div>';
-    li.querySelector('b').textContent=site;f.appendChild(li);
+    if(!la){
+      $('stepT').lastChild.textContent='Setup · step 3 of 3';
+      $('heroSub').innerHTML='<b>'+esc(site)+'</b> is added. Run its first audit to fill this dashboard with real findings from your pages.';
+      $('s3').className='now';$('s3t').innerHTML='<a href="'+auditHref+'" style="color:inherit;text-decoration:underline">Run it now →</a>';
+      $('vizTag').textContent='SCOUT · READY';$('vizK').textContent='First audit';$('vizV').textContent='Not run yet';
+      f.appendChild(feedItem('t-in','You added <b>'+esc(site)+'</b>. <a href="'+auditHref+'" style="color:var(--b);text-decoration:underline">Run its first audit</a>.','Just now'));
+      return;
+    }
+    document.body.classList.add('audited');
+    var full='audit.html?url='+encodeURIComponent(la.url)+(la.keyword?'&kw='+encodeURIComponent(la.keyword):'');
+    $('stepT').lastChild.textContent='Setup complete';
+    $('heroSub').innerHTML='<b>'+esc(site)+'</b> scored <b>'+la.score+'/100</b> in its last audit, with '+la.critical+' critical issue'+(la.critical===1?'':'s')+' and '+la.warning+' warning'+(la.warning===1?'':'s')+'. <a href="'+full+'" style="color:var(--sky);text-decoration:underline">Open the full report</a>.';
+    $('s3').className='done';$('s3t').textContent='Score '+la.score+'/100';
+    $('vizTag').textContent='SCOUT · AUDITED';$('vizK').textContent='Last audit · '+ago(la.at);$('vizV').textContent=la.score+' / 100';
+    document.querySelector('.chipc.a b').textContent=la.score;document.querySelector('.chipc.a .mini').style.setProperty('--v',la.score);
+    $('stHealth').textContent=la.score;$('stHealthS').textContent=ago(la.at);
+    $('stPages').textContent=la.pages;$('stPagesS').textContent='In the last audit';
+    $('stCrit').textContent=la.critical;$('stCritS').textContent=la.warning+' warnings · '+la.notice+' notices';
+    $('stBroken').textContent=la.broken;$('stBrokenS').textContent=la.broken?'Fix these first':'None found';
+    document.querySelector('.stats').classList.remove('nodata');
+    var r=$('ring');r.style.setProperty('--v',la.score);$('ringB').textContent=la.score;
+    $('scoreT').textContent=la.score>=90?'Excellent':la.score>=75?'Good, with fixes to make':la.score>=50?'Needs work':'Poor';
+    var cats=la.cats||{},low=Object.keys(cats).filter(function(k){return cats[k]!=null}).sort(function(a,b){return cats[a]-cats[b]})[0];
+    var names={crawl:'Crawlability',onpage:'On-page SEO',content:'Content',links:'Links',internal:'Internal linking',perf:'Speed & security',schema:'Structured data',ai:'AI readiness'};
+    $('scoreP').textContent=low?names[low]+' pulls the score down most ('+cats[low]+'/100). Start with the critical issues.':'';
+    $('bars').classList.remove('ghost');
+    [].forEach.call($('bars').children,function(li){var v=cats[li.dataset.cat],i=li.querySelector('i');
+      li.querySelector('em').textContent=v==null?'—':v+'%';if(v!=null){i.style.width=v+'%';i.className=v<60?'l':v<85?'m':''}});
+    if(la.issues&&la.issues.length){
+      $('issEmpty').hidden=true;$('issT').hidden=false;$('issAll').hidden=false;$('issAll').href=full;
+      $('issT').innerHTML='<table><thead><tr><th>Issue</th><th>Severity</th><th class="n">Count</th></tr></thead><tbody>'+la.issues.map(function(x){var c={critical:'cr',warning:'wr',notice:'in'}[x.s];return '<tr><td>'+esc(x.t)+'</td><td><span class="sv '+c+'">'+x.s+'</span></td><td class="n">'+x.n+'</td></tr>'}).join('')+'</tbody></table>';
+    }else{$('issEmpty').querySelector('h3').textContent='Nothing to fix';$('issEmpty').querySelector('p').textContent='The last audit found no issues. Nice work.';$('issEmpty').querySelector('.btn').hidden=true}
+    f.appendChild(feedItem(la.critical?'t-cr':la.warning?'t-wr':'t-ok','Audit finished for <b>'+esc(host(la.url))+'</b>: score '+la.score+'/100, '+la.critical+' critical, '+la.warning+' warnings across '+la.pages+' pages. <a href="'+full+'" style="color:var(--b);text-decoration:underline">View report</a>',ago(la.at)));
+    if(la.broken)f.appendChild(feedItem('t-cr','<b>'+la.broken+' broken link'+(la.broken===1?'':'s')+'</b> found <span class="sv cr">Fix</span>',ago(la.at)));
+    f.appendChild(feedItem('t-in','You added <b>'+esc(site)+'</b>.','Earlier'));
   }
   var saved=S.read('scoutly.site');
   if(saved)applySite(saved);
@@ -375,8 +413,8 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
     if(!/^(https?:\/\/)?[\w-]+(\.[\w-]+)+(\/.*)?$/i.test(v)){say('Enter a website address, like example.com.');$('scanUrl').focus();return}
     var site=v.replace(/^https?:\/\//i,'').replace(/\/+$/,'').toLowerCase();
     S.write('scoutly.site',site);
-    applySite(site);$('scanUrl').value='';
-    say(site+' added. Its first audit is queued and runs once accounts open.')});
+    say('Starting the audit for '+site+'…');
+    location.href='audit.html?url='+encodeURIComponent(site)});
 })();
 </script>
 </body>

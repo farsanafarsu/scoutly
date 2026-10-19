@@ -29,7 +29,7 @@
   /* website status chip in the top bar */
   function showSite(site){
     if(!site)return;document.body.classList.add('has-site');
-    if($('statusT'))$('statusT').textContent=site+' · audit queued';
+    if($('statusT'))$('statusT').textContent=site;
     if($('projT'))$('projT').textContent=site;
   }
   showSite(read('scoutly.site'));
@@ -37,7 +37,7 @@
   if($('projB')&&!$('scanUrl'))$('projB').addEventListener('click',function(){location.href='dashboard.html'});
 
   if($('logout'))$('logout').addEventListener('click',function(e){e.preventDefault();
-    try{['scoutly.user','scoutly.site','scoutly.campaigns'].forEach(function(k){sessionStorage.removeItem(k)})}catch(_){}
+    try{['scoutly.user','scoutly.site','scoutly.campaigns','scoutly.audits'].forEach(function(k){sessionStorage.removeItem(k)})}catch(_){}
     location.href='login.html?mode=login'});
 
   window.Scoutly={user:user,say:say,closeNav:closeNav,read:read,write:write,showSite:showSite};

@@ -93,6 +93,8 @@
 .f input[aria-invalid="true"]{border-color:var(--cr)}
 .f .err{min-height:16px;font:500 11px/1.4 var(--M);color:var(--cr)}
 .dlg-f{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px 20px}
+.ext-d{padding:18px 22px 0;font:400 13px/1.6 var(--M);color:var(--sl)}
+.f .hint{margin-top:-10px;margin-bottom:6px;font:400 11px/1.4 var(--M);color:var(--mu)}
 
 @media(max-width:700px){.how{grid-template-columns:1fr}.how li+li{border-left:0;border-top:1px solid var(--ln)}.how li{padding:16px 4px 0}.fg{grid-template-columns:1fr}.ph-act{width:100%}.ph-act .btn{flex:1}}
 @media(max-width:400px){.grid{grid-template-columns:minmax(0,1fr)}}
@@ -145,7 +147,7 @@
     <a href="#" data-soon="Backlinks"><svg class="i"><use href="#i-link"/></svg>Backlink</a>
     <a href="#" data-soon="Local SEO"><svg class="i"><use href="#i-pin"/></svg>Local SEO</a>
     <h2>Site audit</h2>
-    <a href="#" data-soon="Site audit"><svg class="i"><use href="#i-audit"/></svg>Site audit</a>
+    <a href="audit.html"><svg class="i"><use href="#i-audit"/></svg>Site audit</a>
     <a href="#" data-soon="Broken links"><svg class="i"><use href="#i-broken"/></svg>Broken links</a>
     <a href="#" data-soon="Core Web Vitals"><svg class="i"><use href="#i-speed"/></svg>Core Web Vitals</a>
     <h2>Research</h2>
@@ -180,7 +182,7 @@
         <p class="desc">Each campaign pairs a target keyword with a location and a landing page, so you can audit that page and track the backlinks pointing to it.</p>
       </div>
       <div class="ph-act">
-        <button class="btn" type="button" data-soon="External audit"><svg class="i"><use href="#i-search"/></svg>External audit</button>
+        <button class="btn" type="button" id="extB"><svg class="i"><use href="#i-search"/></svg>External audit</button>
         <button class="btn p" type="button" data-new><svg class="i"><use href="#i-plus"/></svg>Create campaign</button>
       </div>
     </div>
@@ -224,6 +226,18 @@
   </form>
 </dialog>
 
+<dialog class="dlg" id="ext" aria-labelledby="extH">
+  <form class="dlg-c" id="extF" method="dialog" novalidate>
+    <div class="dlg-h"><svg class="i" aria-hidden="true" style="color:var(--sky)"><use href="#i-search"/></svg><h2 id="extH">External SEO audit</h2><button class="x" type="button" id="extX" aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></div>
+    <p class="ext-d">Run a full SEO audit on any URL. No campaign needed.</p>
+    <div class="fg">
+      <div class="f w"><label for="eUrl">Page URL <i>*</i></label><input id="eUrl" inputmode="url" autocapitalize="off" spellcheck="false" placeholder="e.g. https://example.com/page"><p class="err" id="eUrlE"></p><small class="hint">The page to audit. https:// is added if you leave it out.</small></div>
+      <div class="f w"><label for="eKw">Primary keyword</label><input id="eKw" autocomplete="off" placeholder="e.g. best marketing agency"><small class="hint">Optional. Used for keyword checks in the title, meta description and headings.</small></div>
+    </div>
+    <div class="dlg-f"><button class="btn" type="button" id="extC">Cancel</button><button class="btn p" type="submit"><svg class="i"><use href="#i-search"/></svg>Run audit</button></div>
+  </form>
+</dialog>
+
 <script src="assets/app.js"></script>
 <script>
 (function(){
@@ -250,7 +264,7 @@
     var u=el('a','pill url');u.href=c.url;u.target='_blank';u.rel='noopener noreferrer';u.title=c.url;u.appendChild(icon('i-link'));u.appendChild(el('span',null,c.url.replace(/^https?:\/\//i,'')));
     var r4=el('div','row');r4.appendChild(u);b.appendChild(r4);a.appendChild(b);
     var f=el('div','card-f');
-    var au=el('button','btn sm au');au.type='button';au.appendChild(icon('i-audit'));au.appendChild(document.createTextNode('Audit'));au.onclick=function(){S.say('Audit queued for '+c.url.replace(/^https?:\/\//i,'')+'. It runs once accounts open.')};
+    var au=el('button','btn sm au');au.type='button';au.appendChild(icon('i-audit'));au.appendChild(document.createTextNode('Audit'));au.onclick=function(){location.href='audit.html?url='+encodeURIComponent(c.url)+'&kw='+encodeURIComponent(c.name)};
     f.appendChild(au);
     f.appendChild(el('span','by',c.owner+' · '+fmt(c.created)));
     var ed=el('button','btn sm ic');ed.type='button';ed.setAttribute('aria-label','Edit '+c.name);ed.appendChild(icon('i-edit'));ed.onclick=function(){open(c)};f.appendChild(ed);
@@ -296,6 +310,16 @@
     else{data.id=Date.now().toString(36);data.owner=S.user.name;var n=new Date();data.created=n.getFullYear()+'-'+('0'+(n.getMonth()+1)).slice(-2)+'-'+('0'+n.getDate()).slice(-2);data.backlinks=0;list.unshift(data);S.say('Campaign created.')}
     save();close();render();
   });
+
+  /* external audit: any URL, straight to the audit report */
+  var ext=$('ext');
+  function closeExt(){if(ext.close)ext.close();else ext.removeAttribute('open')}
+  $('extB').onclick=function(){$('eUrl').value=S.read('scoutly.site')||'';$('eKw').value='';$('eUrl').removeAttribute('aria-invalid');$('eUrlE').textContent='';
+    if(ext.showModal)ext.showModal();else ext.setAttribute('open','');setTimeout(function(){$('eUrl').focus()},30)};
+  $('extX').onclick=closeExt;$('extC').onclick=closeExt;ext.addEventListener('click',function(e){if(e.target===ext)closeExt()});
+  $('extF').addEventListener('submit',function(e){e.preventDefault();var u=$('eUrl').value.trim();
+    if(!/^(https?:\/\/)?[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?$/i.test(u)){$('eUrl').setAttribute('aria-invalid','true');$('eUrlE').textContent=u?'That doesn’t look like a web address.':'Add the page you want to audit.';$('eUrl').focus();return}
+    location.href='audit.html?url='+encodeURIComponent(u)+($('eKw').value.trim()?'&kw='+encodeURIComponent($('eKw').value.trim()):'')});
 
   $('q').addEventListener('input',render);
   [].forEach.call(document.querySelectorAll('[data-f]'),function(b){b.addEventListener('click',function(){
