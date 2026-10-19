@@ -463,3 +463,176 @@ def backlink_audit(target, sources):
     with ThreadPoolExecutor(max_workers=10) as pool:
         rows = list(pool.map(lambda s: check_backlink(s, target), sources))
     return {"target": target, "count": len(rows), "rows": rows}
+
+
+# ------------------------------------------------------------------ AI search readiness (AEO / GEO)
+
+from html.parser import HTMLParser
+from urllib import robotparser
+from urllib.request import Request, build_opener
+
+# who each AI crawler works for, and whether blocking it hides you from live AI answers ("search") or only from training
+AI_CRAWLERS = [
+    ("OAI-SearchBot", "OpenAI", "ChatGPT search results", "search"),
+    ("ChatGPT-User", "OpenAI", "ChatGPT opening a page a user asked about", "search"),
+    ("GPTBot", "OpenAI", "Training future OpenAI models", "training"),
+    ("Claude-SearchBot", "Anthropic", "Claude search results", "search"),
+    ("Claude-User", "Anthropic", "Claude opening a page a user asked about", "search"),
+    ("ClaudeBot", "Anthropic", "Training future Claude models", "training"),
+    ("PerplexityBot", "Perplexity", "Perplexity answers and search index", "search"),
+    ("Perplexity-User", "Perplexity", "Perplexity opening a page a user asked about", "search"),
+    ("Googlebot", "Google", "Google Search, AI Overviews and AI Mode", "search"),
+    ("Google-Extended", "Google", "Using your content in Gemini and model training", "training"),
+    ("Bingbot", "Microsoft", "Bing and Copilot (ChatGPT search also leans on Bing)", "search"),
+    ("Applebot-Extended", "Apple", "Apple Intelligence training", "training"),
+    ("Meta-ExternalAgent", "Meta", "Meta AI training", "training"),
+    ("CCBot", "Common Crawl", "Open web dataset many AI models train on", "training"),
+    ("Bytespider", "ByteDance", "ByteDance / Doubao AI training", "training"),
+    ("Amazonbot", "Amazon", "Alexa and Amazon AI answers", "search"),
+]
+# real user-agent strings, used to see whether a firewall (e.g. Cloudflare "block AI bots") turns the crawler away
+LIVE_UA = {
+    "OAI-SearchBot": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; OAI-SearchBot/1.0; +https://openai.com/searchbot",
+    "GPTBot": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko); compatible; GPTBot/1.1; +https://openai.com/gptbot",
+    "ClaudeBot": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; ClaudeBot/1.0; +claudebot@anthropic.com)",
+    "PerplexityBot": "Mozilla/5.0 AppleWebKit/537.36 (KHTML, like Gecko; compatible; PerplexityBot/1.0; +https://perplexity.ai/perplexitybot)",
+}
+
+
+def _ua_status(url, ua):
+    """HTTP status a crawler with this user agent gets (first hop only, body not read)."""
+    p = urlparse(url)
+    safe_host(p.hostname)
+    try:
+        r = build_opener().open(Request(url, method="GET", headers={"User-Agent": ua, "Accept": "text/html"}), timeout=12)
+        code = r.status
+        r.close()
+        return code
+    except Exception as e:  # HTTPError carries a code; anything else means the request was refused or timed out
+        return getattr(e, "code", 0)
+
+
+def ai_ready(target):
+    if not target.strip():
+        raise AuditError("Enter your website.")
+    url = target.strip() if re.match(r"^https?://", target.strip(), re.I) else "https://" + target.strip()
+    pg = page(url)
+    final = pg["finalUrl"]
+    fp = urlparse(final)
+    origin = f"{fp.scheme}://{fp.netloc}"
+    with ThreadPoolExecutor(max_workers=8) as pool:
+        f_robots = pool.submit(_try, fetch, origin + "/robots.txt")
+        f_llms = pool.submit(_try, fetch, origin + "/llms.txt")
+        f_full = pool.submit(_try, fetch, origin + "/llms-full.txt", "GET", 4, False)
+        f_live = {name: pool.submit(_ua_status, final, ua) for name, ua in LIVE_UA.items()}
+        robots, llms, full = f_robots.result(), f_llms.result(), f_full.result()
+        live = {k: f.result() for k, f in f_live.items()}
+    rtxt = decode(robots) if robots and robots["status"] == 200 else ""
+    rp = robotparser.RobotFileParser()
+    rp.parse(rtxt.splitlines())
+    crawlers = []
+    for name, owner, purpose, kind in AI_CRAWLERS:
+        allowed = rp.can_fetch(name, final) if rtxt else True
+        explicit = bool(re.search(r"(?im)^\s*user-agent:\s*" + re.escape(name) + r"\s*$", rtxt))
+        crawlers.append({"bot": name, "owner": owner, "purpose": purpose, "kind": kind, "allowed": allowed,
+                         "explicit": explicit, "live": live.get(name)})
+    llms_txt = decode(llms) if llms and llms["status"] == 200 and b"<html" not in llms["body"][:500].lower() else ""
+    title = re.search(r"(?m)^#\s+(.+)$", llms_txt) if llms_txt else None
+    return {
+        "url": final, "robots": bool(rtxt), "crawlers": crawlers, "liveBrowser": pg["status"],
+        "llms": {"exists": bool(llms_txt), "title": title.group(1) if title else None,
+                 "links": len(re.findall(r"\]\(https?://", llms_txt)), "bytes": len(llms_txt), "full": bool(full and full["status"] == 200)},
+        "page": {"title": pg["title"], "description": pg["description"], "words": pg["words"], "schema": pg["schema"],
+                 "noindex": pg["noindex"], "readability": pg["readability"], "lang": pg["lang"]},
+    }
+
+
+class _Blocks(HTMLParser):
+    """The page as an ordered list of headings, paragraphs and list items (for answer extraction)."""
+    SKIP = ("script", "style", "noscript", "svg", "nav", "footer", "header", "form")
+
+    def __init__(self):
+        super().__init__(convert_charrefs=True)
+        self.blocks, self.cur, self.skip, self.tables, self.lists, self.links, self.times = [], None, 0, 0, 0, [], []
+
+    def handle_starttag(self, tag, attrs):
+        a = dict(attrs)
+        if tag in self.SKIP:
+            self.skip += 1
+        elif tag in ("h1", "h2", "h3", "h4", "p", "li", "dt", "dd", "summary") and not self.skip:
+            self.cur = [tag, []]
+        elif tag == "table":
+            self.tables += 1
+        elif tag in ("ul", "ol"):
+            self.lists += 1
+        elif tag == "a" and a.get("href"):
+            self.links.append(a["href"])
+        elif tag == "time" and a.get("datetime"):
+            self.times.append(a["datetime"])
+
+    def handle_endtag(self, tag):
+        if tag in self.SKIP:
+            self.skip = max(0, self.skip - 1)
+        elif self.cur and tag == self.cur[0]:
+            t = " ".join("".join(self.cur[1]).split())
+            if t:
+                self.blocks.append((tag, t))
+            self.cur = None
+
+    def handle_data(self, d):
+        if self.cur is not None and not self.skip:
+            self.cur[1].append(d)
+
+
+QUESTION_HEAD = re.compile(r"\?$|^(how|what|why|when|where|who|which|can|does|do|is|are|should|will|could)\b", re.I)
+
+
+def aeo(url, question=""):
+    if not url.strip():
+        raise AuditError("Enter a page URL.")
+    if not re.match(r"^https?://", url.strip(), re.I):
+        url = "https://" + url.strip()
+    res = fetch_page(url, timeout=25)
+    html = decode(res) if "html" in res["headers"].get("content-type", "") else ""
+    b = _Blocks()
+    try:
+        b.feed(html)
+    except Exception:
+        pass
+    pg = page(url)  # shared signals: schema, words, readability, title
+    pairs = []
+    for i, (tag, text) in enumerate(b.blocks):
+        if tag in ("h2", "h3", "h4", "summary", "dt") and QUESTION_HEAD.search(text) and len(text) < 160:
+            ans = []
+            for tag2, t2 in b.blocks[i + 1:]:
+                if tag2 in ("h1", "h2", "h3", "h4", "summary", "dt"):
+                    break
+                ans.append(t2)
+                if len(" ".join(ans).split()) > 120:
+                    break
+            if ans:
+                pairs.append({"q": text, "a": " ".join(ans)[:900], "firstWords": len(ans[0].split()), "first": ans[0][:400]})
+    paras = [t for tg, t in b.blocks if tg == "p"]
+    intro = " ".join(paras[:2])
+    final = res["url"]
+    outbound = set()
+    for h in b.links:
+        u = _abs(h, final)
+        if u and not same_site(u, final):
+            outbound.add(urlparse(u).hostname)
+    mod = re.search(r'"dateModified"\s*:\s*"([^"]+)"', html) or re.search(r'article:modified_time"\s+content="([^"]+)"', html)
+    pub = re.search(r'"datePublished"\s*:\s*"([^"]+)"', html) or re.search(r'article:published_time"\s+content="([^"]+)"', html)
+    author = re.search(r'"author"\s*:\s*(?:\[\s*)?\{[^}]*?"name"\s*:\s*"([^"]+)"', html) or re.search(r'<meta[^>]+name="author"[^>]+content="([^"]+)"', html)
+    stats = len(re.findall(r"\b\d+(?:[.,]\d+)?\s?(?:%|percent|per cent|million|billion|crore|lakh)", pg["text"], re.I))
+    q_terms = [w for w in re.findall(r"[a-z0-9]+", question.lower()) if w not in STOP and len(w) > 2]
+    heads = [t for tg, t in b.blocks if tg in ("h1", "h2", "h3")]
+    return {
+        "url": final, "status": res["status"], "title": pg["title"], "words": pg["words"], "readability": pg["readability"],
+        "schema": pg["schema"], "pairs": pairs[:30], "questionHeadings": len(pairs), "lists": b.lists, "tables": b.tables,
+        "intro": intro[:600], "introWords": len(intro.split()), "outboundDomains": sorted(x for x in outbound if x)[:40], "stats": stats,
+        "modified": mod.group(1) if mod else None, "published": pub.group(1) if pub else None,
+        "author": author.group(1) if author else None, "question": question.strip() or None,
+        "qInHeading": bool(q_terms) and any(all(w in h.lower() for w in q_terms) for h in heads),
+        "qInIntro": bool(q_terms) and all(w in intro.lower() for w in q_terms),
+        "paragraphs": len(paras), "longParagraphs": len([p for p in paras if len(p.split()) > 120]),
+    }
