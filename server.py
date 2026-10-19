@@ -1141,10 +1141,13 @@ class Handler(SimpleHTTPRequestHandler):
                 body = json.loads(e.read())
             except Exception:
                 body = {"error": {"message": f"HTTP {e.code}"}}
+            # answer 200 and put Google's status in the body: a quota limit is an expected outcome,
+            # not a broken request, so the browser shouldn't log it as a failed resource
             body["scoutlyHasKey"] = bool(PSI_KEY)
-            return self._json(e.code, body)
+            body["scoutlyStatus"] = e.code
+            return self._json(200, body)
         except Exception as e:
-            return self._json(504, {"error": {"message": f"PageSpeed Insights didn't respond ({e.__class__.__name__})"}, "scoutlyHasKey": bool(PSI_KEY)})
+            return self._json(200, {"error": {"message": f"PageSpeed Insights didn't respond ({e.__class__.__name__})"}, "scoutlyStatus": 504, "scoutlyHasKey": bool(PSI_KEY)})
 
     def log_message(self, fmt, *args):
         msg = fmt % args

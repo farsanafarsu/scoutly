@@ -410,7 +410,7 @@ td.u{max-width:420px;overflow-wrap:anywhere}td.n{text-align:right;white-space:no
     $('vit').innerHTML='<p class="vit-wait"><span class="spin" aria-hidden="true"></span>Running a mobile Lighthouse test with PageSpeed Insights. This usually takes 15–40 seconds…</p>';
     var ctl=window.AbortController?new AbortController():null,to=setTimeout(function(){ctl&&ctl.abort()},90000);
     fetch('/api/pagespeed?url='+encodeURIComponent(url),ctl?{signal:ctl.signal}:{})
-      .then(function(r){return r.json().then(function(j){if(!r.ok){var e=new Error((j.error&&j.error.message)||('HTTP '+r.status));e.status=r.status;e.hasKey=j.scoutlyHasKey;throw e}return j})})
+      .then(function(r){return r.json().then(function(j){if(!r.ok||j.error){var e=new Error((j.error&&j.error.message)||('HTTP '+r.status));e.status=j.scoutlyStatus||r.status;e.hasKey=j.scoutlyHasKey;throw e}return j})})
       .then(function(j){clearTimeout(to);psi=parsePsi(j);psiChecks=psiToChecks(psi);renderVitals();renderSummary();renderCats();renderFindings();store()})
       .catch(function(e){clearTimeout(to);var m=String(e&&e.message||e);
         var quota=e&&e.status===429||/quota/i.test(m);
