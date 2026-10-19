@@ -230,11 +230,24 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul{margin:0}ul{padding:0;list-st
   }
   ['site','email','pw'].forEach(function(id){$(id).addEventListener('blur',function(){if($(id).getAttribute('aria-invalid'))check()})});
 
-  /* Accounts are not connected yet: nothing entered here leaves the browser. */
+  /* Accounts are not connected yet: nothing entered here leaves the browser.
+     One demo account opens the dashboard. This is a front-end check only, not real security:
+     anyone can read this file, so never reuse a real password here. */
+  var DEMO={email:'farsanafarsu404@gmail.com',name:'Farsana N',hash:'84b976e5c52a593ea6f97048404fb47b5d66110cc7bf8cb9e6c0de6927b72472'};
+  function sha256(s){return crypto.subtle.digest('SHA-256',new TextEncoder().encode(s)).then(function(b){return [].map.call(new Uint8Array(b),function(x){return ('0'+x.toString(16)).slice(-2)}).join('')})}
   function show(msg){var n=$('note');n.textContent=msg;n.classList.add('on')}
   $('form').addEventListener('submit',function(e){e.preventDefault();if(!check())return;
-    var b=$('go');b.classList.add('busy');b.disabled=true;
-    setTimeout(function(){b.classList.remove('busy');b.disabled=false;show('This is a preview build, so accounts aren’t live yet. Nothing you entered was sent anywhere.')},900)});
+    var b=$('go');b.classList.add('busy');b.disabled=true;$('note').classList.remove('on');
+    var done=function(f){setTimeout(function(){b.classList.remove('busy');b.disabled=false;f()},700)};
+    if(mode!=='login'){done(function(){show('This is a preview build, so accounts aren’t live yet. Nothing you entered was sent anywhere.')});return}
+    var em=$('email').value.trim().toLowerCase();
+    sha256($('pw').value).then(function(h){
+      if(em===DEMO.email&&h===DEMO.hash){
+        try{sessionStorage.setItem('scoutly.user',JSON.stringify({email:DEMO.email,name:DEMO.name}))}catch(_){}
+        location.href='dashboard.html';
+      }else done(function(){fail('pw','Email or password is incorrect.');$('pw').focus()});
+    },function(){done(function(){show('Your browser blocked the secure login check. Open the site over https or localhost.')})});
+  });
   $('sso').onclick=function(){show('Google sign-in isn’t connected in this preview build yet.')};
   $('forgot').onclick=function(e){e.preventDefault();show('Password reset isn’t connected in this preview build yet.')};
 })();
