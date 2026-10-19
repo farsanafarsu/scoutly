@@ -68,24 +68,59 @@ svg.i{width:18px;height:18px;flex:none;fill:none;stroke:currentColor;stroke-widt
 .demo-n{display:flex;align-items:center;gap:10px;margin-bottom:18px;padding:10px 14px;border:1px solid rgba(245,165,36,.5);border-left:3px solid var(--wa);background:rgba(245,165,36,.08);font:400 12px/1.6 var(--M);color:#7a4d06}
 
 /* welcome banner */
-.hero{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end;min-height:260px;padding:30px 32px;background:var(--nv);color:#fff;border:1px solid rgba(255,255,255,.06)}
-.hero:before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(50% 70% at 80% 10%,rgba(47,91,255,.42),transparent 70%),radial-gradient(40% 60% at 10% 100%,rgba(90,200,250,.16),transparent 70%)}
-.hero:after{content:"";position:absolute;left:-20%;right:-20%;bottom:-20%;height:70%;z-index:-1;background-image:linear-gradient(rgba(127,160,255,.14) 1px,transparent 1px),linear-gradient(90deg,rgba(127,160,255,.14) 1px,transparent 1px);background-size:70px 70px;transform:perspective(600px) rotateX(62deg);transform-origin:50% 100%;-webkit-mask-image:linear-gradient(to top,#000,transparent 80%);mask-image:linear-gradient(to top,#000,transparent 80%)}
-.hero h1{margin-top:14px;font:500 clamp(26px,3vw,44px)/1 var(--D);text-transform:uppercase;letter-spacing:.01em}
-.hero h1 #first{color:var(--sky)}
-.hero-row{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;margin-top:24px;border:1px solid rgba(255,255,255,.14);background:rgba(11,20,51,.7);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);max-width:760px}
-.hero-row>div{padding:18px 20px}
-.hero-row>div+div{border-left:1px solid rgba(255,255,255,.1)}
-.k{font:600 10px/1 var(--M);letter-spacing:.16em;text-transform:uppercase;color:rgba(214,224,255,.55)}
-.scan{display:flex;gap:6px;margin-top:10px}
-.scan input{width:230px;max-width:100%;height:44px;padding:0 12px;border:1px solid rgba(255,255,255,.16);border-radius:3px;background:rgba(255,255,255,.06);color:#fff;font:400 13.5px/1 var(--M)}.scan input::placeholder{color:rgba(214,224,255,.45)}.scan input:focus{outline:0;border-color:var(--sky)}
-.clock{margin-top:8px;font:500 clamp(30px,3.2vw,46px)/1 var(--D);letter-spacing:.02em}.clock small{margin-left:6px;font-size:.4em;color:rgba(214,224,255,.6)}
-.date{display:flex;align-items:center;gap:8px;margin-top:10px;font:400 12.5px/1 var(--M);color:rgba(214,224,255,.7)}
-.hero-m{position:relative;align-self:center;width:230px;aspect-ratio:1;display:grid;place-items:center;background:radial-gradient(circle,rgba(47,91,255,.35),transparent 62%)}
-.hero-m img{width:78%;height:auto;filter:drop-shadow(0 26px 34px rgba(47,91,255,.45));animation:float 5s ease-in-out infinite}
-.hero-m .c{position:absolute;width:26px;height:26px;border:1.5px solid rgba(255,255,255,.7)}.hero-m .tl{left:0;top:0;border-right:0;border-bottom:0}.hero-m .tr{right:0;top:0;border-left:0;border-bottom:0}.hero-m .bl{left:0;bottom:0;border-right:0;border-top:0}.hero-m .br{right:0;bottom:0;border-left:0;border-top:0}
-.hero-m p{position:absolute;right:34px;bottom:8px;font:500 9.5px/1 var(--M);letter-spacing:.14em;color:var(--sky)}
-@keyframes float{50%{transform:translateY(-10px) rotate(1.5deg)}}
+.hero{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,.7fr);grid-template-rows:auto 1fr;background:#040817;color:#fff;border:1px solid rgba(127,160,255,.16);box-shadow:0 50px 90px -50px rgba(47,91,255,.55)}
+.hero:before{content:"";position:absolute;inset:0;z-index:-2;background:radial-gradient(42% 75% at 82% 45%,rgba(47,91,255,.5),transparent 70%),radial-gradient(30% 50% at 92% 95%,rgba(90,200,250,.22),transparent 70%),radial-gradient(40% 70% at 0% 110%,rgba(122,92,255,.2),transparent 70%)}
+.hero:after{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(127,160,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(127,160,255,.07) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(80% 90% at 70% 40%,#000,transparent 75%);mask-image:radial-gradient(80% 90% at 70% 40%,#000,transparent 75%)}
+.hero-edge{position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(90,200,250,.8) 35%,rgba(47,91,255,.9) 65%,transparent)}
+/* status strip */
+.hero-bar{grid-column:1/-1;display:flex;align-items:center;gap:18px;padding:12px 28px;border-bottom:1px solid rgba(255,255,255,.07);font:500 10.5px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:rgba(214,224,255,.55)}
+.hero-bar .live{display:inline-flex;align-items:center;gap:8px;color:#9ff0cf}.hero-bar .live i{width:6px;height:6px;background:#3ddba5;box-shadow:0 0 10px #3ddba5;animation:blink 1.6s steps(1) infinite}
+.hero-bar .sep{width:1px;height:12px;background:rgba(255,255,255,.14)}
+.hero-bar .when{margin-left:auto;display:inline-flex;align-items:center;gap:12px;color:rgba(214,224,255,.7)}
+.clock{font:500 13px/1 var(--D);letter-spacing:.08em;color:#fff}.clock small{margin-left:4px;font:500 10px/1 var(--M);color:var(--sky)}
+/* left column */
+.hero-main{padding:30px 28px 28px}
+.hero h1{margin-top:16px;font:500 clamp(30px,3.4vw,52px)/.98 var(--D);text-transform:uppercase;letter-spacing:.005em}
+.hero h1>span{display:block}.hero h1 .l2{position:relative;padding-left:1.3em}
+.hero h1 .l2:before{content:"";position:absolute;left:.08em;top:.5em;width:1em;height:max(2px,.055em);background:var(--sky)}
+.hero h1 #first{background:linear-gradient(92deg,#fff 0%,#9db6ff 40%,#5ac8fa 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-sub{margin-top:14px;max-width:520px;font:400 13px/1.7 var(--M);color:rgba(214,224,255,.68)}.hero-sub b{color:#fff;font-weight:600}
+/* command bar */
+.cmd{position:relative;display:flex;align-items:center;gap:0;max-width:640px;margin-top:24px;padding:6px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:border-color .25s,box-shadow .25s}
+.cmd:focus-within{border-color:rgba(90,200,250,.7);box-shadow:0 0 0 4px rgba(90,200,250,.12),0 20px 50px -20px rgba(47,91,255,.7)}
+.cmd>svg{margin:0 4px 0 12px;color:var(--sky)}
+.cmd .pre{padding-left:6px;font:400 14px/1 var(--M);color:rgba(214,224,255,.4)}
+.cmd input{flex:1;min-width:0;height:48px;padding:0 10px 0 2px;border:0;background:none;color:#fff;font:400 14px/1 var(--M)}.cmd input::placeholder{color:rgba(214,224,255,.4)}.cmd input:focus{outline:0}
+.cmd .btn{height:48px;padding:0 22px}
+.cmd .btn:hover{background:#fff;border-color:#fff;color:var(--nv)}
+.recent{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:12px;font:500 10px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:rgba(214,224,255,.45)}
+.recent button{height:26px;padding:0 10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);font:400 11.5px/1 var(--M);letter-spacing:.02em;text-transform:none;color:rgba(214,224,255,.8);cursor:pointer;transition:border-color .2s,color .2s}.recent button:hover{border-color:var(--sky);color:#fff}
+/* today's focus */
+.focus{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:640px;margin-top:22px;border-top:1px solid rgba(255,255,255,.08)}
+.focus a{display:block;padding:14px 16px 2px 0;transition:color .2s}.focus a+a{padding-left:16px;border-left:1px solid rgba(255,255,255,.08)}
+.focus b{display:flex;align-items:baseline;gap:8px;font:500 24px/1 var(--D)}
+.focus b i{width:7px;height:7px;flex:none;align-self:center}
+.focus span{display:block;margin-top:6px;font:400 11.5px/1.4 var(--M);color:rgba(214,224,255,.6);transition:color .2s}
+.focus a:hover span{color:#fff}
+.f-cr{background:var(--cr);box-shadow:0 0 10px var(--cr)}.f-wr{background:var(--wa);box-shadow:0 0 10px var(--wa)}.f-ok{background:#3ddba5;box-shadow:0 0 10px #3ddba5}
+/* radar visual */
+.hero-viz{position:relative;display:grid;place-items:center;padding:20px 28px 24px;border-left:1px solid rgba(255,255,255,.06)}
+.radar{position:relative;width:min(320px,100%);aspect-ratio:1}
+.radar .rr{position:absolute;border:1px solid rgba(90,200,250,.34);border-radius:50%}
+.radar .r1{inset:0}.radar .r2{inset:16%}.radar .r3{inset:32%;border-style:dashed;animation:spin 40s linear infinite}
+.radar .x{position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(transparent,rgba(90,200,250,.22),transparent)}.radar .y{position:absolute;top:50%;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(90,200,250,.22),transparent)}
+.radar .sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(90,200,250,.38),rgba(90,200,250,0) 70deg,transparent 360deg);animation:spin 5s linear infinite}
+.radar .blip{position:absolute;width:6px;height:6px;margin:-3px;background:var(--sky);box-shadow:0 0 0 0 rgba(90,200,250,.6);animation:ping 2.4s ease-out infinite}
+.radar .blip.cr{background:var(--cr);animation-delay:-.8s}.radar .blip.wr{background:var(--wa);animation-delay:-1.6s}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(90,200,250,.55)}70%,100%{box-shadow:0 0 0 12px rgba(90,200,250,0)}}
+.radar img{position:absolute;left:50%;top:50%;width:56%;height:auto;margin:-31% 0 0 -28%;filter:drop-shadow(0 24px 30px rgba(47,91,255,.55));animation:float 5s ease-in-out infinite}
+.chipc{position:absolute;display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(8,14,40,.78);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 20px 40px -20px rgba(0,0,0,.7);white-space:nowrap}
+.chipc small{display:block;font:500 9.5px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:rgba(214,224,255,.55)}
+.chipc b{display:block;margin-top:5px;font:500 18px/1 var(--D)}.chipc b em{margin-left:6px;font:600 10.5px/1 var(--M);font-style:normal;color:#3ddba5}
+.chipc.a{left:-6px;top:14%}.chipc.b{right:-10px;bottom:10%}
+.mini{--v:82;width:34px;height:34px;flex:none;display:grid;place-items:center;background:conic-gradient(var(--sky) calc(var(--v)*1%),rgba(255,255,255,.1) 0);-webkit-mask:radial-gradient(circle,transparent 11px,#000 12px);mask:radial-gradient(circle,transparent 11px,#000 12px);border-radius:50%}
+.hero-viz .tag{position:absolute;right:28px;top:20px;font:500 9.5px/1 var(--M);letter-spacing:.16em;color:var(--sky);opacity:.8}
+@keyframes float{50%{transform:translateY(-8px) rotate(1.5deg)}}
 
 /* stat tiles */
 .stats{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));margin-top:22px;border-top:1px solid var(--ln);border-left:1px solid var(--ln)}
@@ -144,7 +179,7 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 
 @media(max-width:1380px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
-@media(max-width:1100px){.cols{grid-template-columns:minmax(0,1fr)}.hero-m{display:none}.hero{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:1100px){.cols{grid-template-columns:minmax(0,1fr)}.hero{grid-template-columns:minmax(0,1fr)}.hero-viz{display:none}}
 @media(max-width:960px){
   .side{transform:translateX(-100%)}.nav-open .side{transform:none;box-shadow:30px 0 60px -20px rgba(5,10,31,.4)}
   .nav-open .scrim{display:block;position:fixed;inset:0;z-index:35;background:rgba(5,10,31,.45)}
@@ -154,8 +189,9 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
 @media(max-width:640px){
   .who div,.status span{display:none}.status{padding:0 10px}
   .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
-  .hero{padding:22px 18px}.hero-row>div{width:100%}.hero-row>div+div{border-left:0;border-top:1px solid rgba(255,255,255,.1)}
-  .scan input{flex:1;width:auto;min-width:0}
+  .hero-bar{padding:12px 18px;gap:12px}.hero-bar .when>span:not(.clock){display:none}.hero-bar>.sep,.hero-bar>.sep+span{display:none}.hero-main{padding:24px 18px 22px}
+  .cmd{flex-wrap:wrap}.cmd .pre{display:none}.cmd .btn{width:100%;margin-top:6px}
+  .focus b{font-size:20px}.focus a{padding-right:8px}.focus a+a{padding-left:10px}
   .bars li{grid-template-columns:minmax(0,110px) minmax(0,1fr) 40px;gap:10px}
 }
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
@@ -227,29 +263,43 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
     <p class="demo-n" role="note">Demo workspace: every number on this page is sample data. Live audits start when accounts open.</p>
 
     <section class="hero" aria-labelledby="hi">
-      <div>
+      <span class="hero-edge" aria-hidden="true"></span>
+      <div class="hero-bar">
+        <span class="live"><i aria-hidden="true"></i>Monitoring</span><span class="sep" aria-hidden="true"></span><span>yourwebsite.com</span>
+        <span class="when"><span id="date"></span><span class="sep" aria-hidden="true"></span><span class="clock" id="clock">--:--:--</span></span>
+      </div>
+
+      <div class="hero-main">
         <p class="lbl lt">SEO · AEO · GEO workspace</p>
-        <h1 id="hi"><span id="greet">Welcome back</span>, <span id="first">Farsana</span></h1>
-        <div class="hero-row">
-          <div>
-            <p class="k">Run a new audit</p>
-            <form class="scan" id="scan" novalidate>
-              <label class="sr-only" for="scanUrl">Website URL</label>
-              <input id="scanUrl" placeholder="yourwebsite.com" inputmode="url" autocapitalize="off" spellcheck="false">
-              <button class="btn p" type="submit">Scan <span aria-hidden="true">→</span></button>
-            </form>
-          </div>
-          <div>
-            <p class="k">Current time</p>
-            <p class="clock" id="clock" aria-live="off">--:--:--</p>
-            <p class="date"><svg class="i" style="width:14px;height:14px"><use href="#i-cal"/></svg><span id="date"></span></p>
-          </div>
+        <h1 id="hi"><span id="greet">Welcome back,</span> <span class="l2" id="first">Farsana</span></h1>
+        <p class="hero-sub">Since your last visit Scoutly found <b>3 things worth your time</b>. Start with the critical ones, or run a fresh audit below.</p>
+
+        <form class="cmd" id="scan" novalidate>
+          <svg class="i" aria-hidden="true"><use href="#i-globe"/></svg>
+          <span class="pre" aria-hidden="true">https://</span>
+          <label class="sr-only" for="scanUrl">Website URL</label>
+          <input id="scanUrl" placeholder="yourwebsite.com" inputmode="url" autocapitalize="off" spellcheck="false" autocomplete="url">
+          <button class="btn p" type="submit">Run audit <span aria-hidden="true">→</span></button>
+        </form>
+        <div class="recent"><span>Recent</span><button type="button" data-fill>yourwebsite.com</button><button type="button" data-fill>blog.yourwebsite.com</button><button type="button" data-fill>shop.example</button></div>
+
+        <div class="focus" aria-label="Today's focus">
+          <a href="#issH"><b><i class="f-cr" aria-hidden="true"></i>5</b><span>New broken links</span></a>
+          <a href="#issH"><b><i class="f-wr" aria-hidden="true"></i>3.1s</b><span>Mobile LCP on homepage</span></a>
+          <a href="#feedH"><b><i class="f-ok" aria-hidden="true"></i>+1</b><span>New AI citation</span></a>
         </div>
       </div>
-      <div class="hero-m" aria-hidden="true">
-        <i class="c tl"></i><i class="c tr"></i><i class="c bl"></i><i class="c br"></i>
-        <img src="assets/scoutly.webp" alt="" width="180" height="194">
-        <p>SCOUT · READY</p>
+
+      <div class="hero-viz" aria-hidden="true">
+        <p class="tag">SCOUT · SCANNING</p>
+        <div class="radar">
+          <span class="rr r1"></span><span class="rr r2"></span><span class="rr r3"></span><span class="x"></span><span class="y"></span>
+          <span class="sweep"></span>
+          <span class="blip" style="left:22%;top:30%"></span><span class="blip cr" style="left:80%;top:26%"></span><span class="blip wr" style="left:74%;top:78%"></span><span class="blip" style="left:28%;top:74%"></span>
+          <img src="assets/scoutly.webp" alt="" width="180" height="194">
+          <div class="chipc a"><span class="mini" style="--v:82"></span><div><small>Health</small><b>82<em>▲ 4</em></b></div></div>
+          <div class="chipc b"><div><small>Last crawl · 12 min ago</small><b>1,248 pages</b></div></div>
+        </div>
       </div>
     </section>
 
@@ -358,8 +408,8 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
   function pad(n){return ('0'+n).slice(-2)}
   function tick(){var d=new Date(),h=d.getHours(),h12=h%12||12;
     $('clock').innerHTML=pad(h12)+':'+pad(d.getMinutes())+':'+pad(d.getSeconds())+'<small>'+(h<12?'AM':'PM')+'</small>';
-    $('date').textContent=d.toLocaleDateString(undefined,{weekday:'long',year:'numeric',month:'long',day:'numeric'});
-    $('greet').textContent=h<5?'Working late':h<12?'Good morning':h<17?'Good afternoon':'Good evening'}
+    $('date').textContent=d.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short',year:'numeric'});
+    $('greet').textContent=(h<5?'Working late':h<12?'Good morning':h<17?'Good afternoon':'Good evening')+','}
   tick();setInterval(tick,1000);
 
   /* health bars fill in on load */
@@ -369,6 +419,7 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
   function say(m){toast.textContent=m;toast.classList.add('on');clearTimeout(tt);tt=setTimeout(function(){toast.classList.remove('on')},2600)}
   document.addEventListener('click',function(e){var a=e.target.closest('[data-soon]');if(!a)return;e.preventDefault();say(a.dataset.soon+' opens when audits go live.');closeNav()});
 
+  [].forEach.call(document.querySelectorAll('[data-fill]'),function(b){b.addEventListener('click',function(){$('scanUrl').value=b.textContent;$('scanUrl').focus()})});
   $('scan').addEventListener('submit',function(e){e.preventDefault();var v=$('scanUrl').value.trim();
     if(!/^(https?:\/\/)?[\w-]+(\.[\w-]+)+(\/.*)?$/i.test(v)){say('Enter a website address, like example.com.');$('scanUrl').focus();return}
     say('Audit queued for '+v.replace(/^https?:\/\//i,'')+'. Live crawling starts when accounts open.');$('scanUrl').value=''});
