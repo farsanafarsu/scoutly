@@ -1130,7 +1130,30 @@ TOOL_ROUTES = {
     "/api/domain": lambda q: _tools().domain(q.get("d", "")),
     "/api/intent": lambda q: {"items": [{"kw": k, "intent": _tools().intent(k)} for k in
                                         [" ".join(x.lower().split()) for x in q.get("q", "").split("\n")][:500] if k]},
+    "/api/ai-ready": lambda q: _tools().ai_ready(q.get("url", "")),
+    "/api/aeo": lambda q: _tools().aeo(q.get("url", ""), q.get("q", "")),
+    # optional DataForSEO data (provider.py). run=1 calls the API; without it only the cache answers.
+    "/api/provider/status": lambda q: _provider().status(q.get("refresh") == "1"),
+    "/api/provider/usage": lambda q: _provider().usage(),
+    "/api/provider/serp": lambda q: _provider().serp(q.get("q", ""), q.get("gl", "us"), q.get("run") == "1"),
+    "/api/provider/organic": lambda q: _provider().organic(q.get("d", ""), q.get("gl", "us"), q.get("run") == "1"),
+    "/api/provider/traffic": lambda q: _provider().traffic(q.get("d", ""), q.get("gl", "us"), q.get("run") == "1"),
+    "/api/provider/backlinks": lambda q: _provider().backlinks(q.get("d", ""), q.get("run") == "1"),
+    "/api/provider/gap": lambda q: _provider().backlink_gap(q.get("you", ""), [c for c in q.get("c", "").split(",") if c.strip()],
+                                                            q.get("mode", "partial"), q.get("run") == "1"),
 }
+
+POST_ROUTES = {
+    "/api/backlinks": lambda b: _tools().backlink_audit(str(b.get("target") or ""), [str(s) for s in b.get("sources") or []]),
+    "/api/provider/keywords": lambda b: _provider().keyword_metrics([str(k) for k in b.get("keywords") or []][:5000],
+                                                                    str(b.get("gl") or "us"), bool(b.get("run"))),
+    "/api/provider/clear-cache": lambda b: _provider().clear_cache(),
+}
+
+
+def _provider():
+    import provider
+    return provider
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -1154,13 +1177,13 @@ class Handler(SimpleHTTPRequestHandler):
         try:
             return self._json(200, fn())
         except AuditError as e:
-            return self._json(200, {"error": str(e)})
+            return self._json(200, {"error": str(e), **getattr(e, "extra", {})})
         except Exception as e:
             return self._json(500, {"error": f"The tool failed unexpectedly: {e.__class__.__name__}"})
 
     def do_POST(self):
         u = urlparse(self.path)
-        if u.path != "/api/backlinks":
+        if u.path not in POST_ROUTES:
             self.send_error(404)
             return
         length = min(int(self.headers.get("Content-Length") or 0), 1_000_000)
@@ -1168,8 +1191,9 @@ class Handler(SimpleHTTPRequestHandler):
             body = json.loads(self.rfile.read(length) or b"{}")
         except ValueError:
             return self._json(400, {"error": "Send JSON."})
-        import tools
-        return self._tool(lambda: tools.backlink_audit(str(body.get("target") or ""), [str(s) for s in body.get("sources") or []]))
+        if not isinstance(body, dict):
+            return self._json(400, {"error": "Send a JSON object."})
+        return self._tool(lambda: POST_ROUTES[u.path](body))
 
     def do_GET(self):
         u = urlparse(self.path)
@@ -1230,7 +1254,12 @@ class Handler(SimpleHTTPRequestHandler):
 
 
 if __name__ == "__main__":
+    # tools.py and provider.py do `from server import ...`; without this they would load a second copy
+    # of this file, and their AuditErrors wouldn't be caught by the handler here
+    sys.modules.setdefault("server", sys.modules[__name__])
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
     print(f"Scoutly running at http://localhost:{port}  (audit API: /api/audit?url=example.com)")
     print("PageSpeed Insights: " + ("using your API key" if PSI_KEY else "no PAGESPEED_API_KEY set, using Google's shared quota"))
+    print("DataForSEO: " + ("credentials found (checked on first use)" if os.environ.get("DATAFORSEO_LOGIN") and os.environ.get("DATAFORSEO_PASSWORD")
+                            else "not connected, set DATAFORSEO_LOGIN and DATAFORSEO_PASSWORD to turn on volume, rankings and backlinks"))
     ThreadingHTTPServer(("", port), Handler).serve_forever()

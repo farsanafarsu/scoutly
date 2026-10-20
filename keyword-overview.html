@@ -14,6 +14,7 @@
 <style>
 .big-int{display:flex;align-items:center;gap:10px;margin-top:10px}.big-int .int{width:30px;height:30px;font-size:13px}.kpi .big-int b{margin:0;font-size:17px;white-space:nowrap}
 .list li{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--ln);font:400 13px/1.4 var(--M)}.list li:last-child{border-bottom:0}
+.list li .src{white-space:nowrap}
 .list li a{flex:1;min-width:0;color:var(--ink);overflow-wrap:anywhere}.list li a:hover{color:var(--b)}
 .panel-f{display:flex;justify-content:flex-end;padding:12px 20px;border-top:1px solid var(--ln)}
 .legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px;font:400 11.5px/1.4 var(--M);color:var(--sl)}.legend span{display:inline-flex;align-items:center;gap:6px}
@@ -42,9 +43,10 @@
         <div class="kpi"><small><svg class="i"><use href="#i-target"/></svg>Intent</small><div class="big-int" id="intent"></div><span id="intentT"></span></div>
         <div class="kpi"><small><svg class="i"><use href="#i-wand"/></svg>Keyword variations</small><b id="nVar">0</b><span>From Google Autocomplete</span></div>
         <div class="kpi"><small><svg class="i"><use href="#i-alert"/></svg>Questions</small><b id="nQ">0</b><span>Phrased as questions</span></div>
-        <div class="kpi lockd"><small><svg class="i"><use href="#i-lock"/></svg>Search volume</small><b>—</b><span>Needs a data provider</span></div>
-        <div class="kpi lockd"><small><svg class="i"><use href="#i-lock"/></svg>Keyword difficulty</small><b>—</b><span>Needs a data provider</span></div>
+        <div class="kpi lockd" id="kVol"><small><svg class="i"><use href="#i-lock"/></svg>Search volume</small><b>—</b><span>Needs a data provider</span></div>
+        <div class="kpi lockd" id="kKd"><small><svg class="i"><use href="#i-lock"/></svg>Keyword difficulty</small><b>—</b><span>Needs a data provider</span></div>
       </div>
+      <div id="pay" hidden></div>
       <div class="legend"><span><i class="int I">I</i>Informational</span><span><i class="int N">N</i>Navigational</span><span><i class="int C">C</i>Commercial</span><span><i class="int T">T</i>Transactional</span></div>
 
       <div class="cols2">
@@ -53,6 +55,8 @@
         <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-alert"/></svg></span><div><h2>Questions</h2><p>What people ask about it</p></div></div>
           <ul class="list pad" id="qs"></ul></section>
       </div>
+      <section class="panel" id="serpP" style="margin-top:20px" hidden><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-target"/></svg></span><div><h2>Google top 10</h2><p id="serpT"></p></div></div>
+        <div class="dt-wrap"><table class="dt"><thead><tr><th class="n">#</th><th>Page</th><th>Domain</th></tr></thead><tbody id="serp"></tbody></table></div></section>
       <div class="cols2">
         <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-vs"/></svg></span><div><h2>Comparisons</h2><p>“vs” and “or” searches</p></div></div>
           <ul class="list pad" id="cmp"></ul></section>
@@ -68,30 +72,52 @@
 (function(){
   var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,data=null;
   var INT={I:['Informational','Looking for information or an answer.'],N:['Navigational','Looking for a specific site or page.'],C:['Commercial','Researching options before choosing.'],T:['Transactional','Ready to act: buy, book or sign up.']};
-  function li(k){return '<li><i class="int '+k.intent+'" title="'+INT[k.intent][0]+'">'+k.intent+'</i><a href="keyword-overview.html?q='+encodeURIComponent(k.kw)+'&gl='+$('gl').value+'">'+esc(k.kw)+'</a></li>'}
+  var M={};  /* DataForSEO metrics per keyword, when a provider is connected */
+  function li(k){var m=M[k.kw];return '<li><i class="int '+k.intent+'" title="'+INT[k.intent][0]+'">'+k.intent+'</i><a href="keyword-overview.html?q='+encodeURIComponent(k.kw)+'&gl='+$('gl').value+'">'+esc(k.kw)+'</a>'+(m?'<span class="src" title="Monthly searches">'+S.fmt(m.vol)+'</span>'+S.kdTag(m.kd):'')+'</li>'}
+  function kpi(id,icon,label,val,sub){$(id).className='kpi';$(id).innerHTML='<small><svg class="i"><use href="#i-'+icon+'"/></svg>'+label+'</small><b>'+val+'</b><span>'+sub+'</span>'}
+  function lockKpis(){['kVol','kKd'].forEach(function(id,i){$(id).className='kpi lockd';$(id).innerHTML='<small><svg class="i"><use href="#i-lock"/></svg>'+(i?'Keyword difficulty':'Search volume')+'</small><b>—</b><span>Needs a data provider</span>'})}
+  function lists(d){
+    var vars=d.keywords.filter(function(k){return k.kw!==d.seed}),qs=d.keywords.filter(function(k){return k.question}),cmp=d.keywords.filter(function(k){return /\b(vs|versus|or)\b/.test(k.kw)});
+    $('vars').innerHTML=vars.slice(0,10).map(li).join('')||empty('No variations found.');
+    $('qs').innerHTML=qs.slice(0,10).map(li).join('')||empty('No questions found for this keyword.');
+    $('cmp').innerHTML=cmp.slice(0,10).map(li).join('')||empty('No comparison searches found.');
+  }
+  /* volume + KD for the seed and every suggestion go out in one batch (2 calls); the top 10 is 1 more */
+  function paidData(d,gl){
+    S.provider().then(function(st){if(!st.ok)return;
+      S.paid($('pay'),function(run){return Promise.all([S.post('/api/provider/keywords',{keywords:d.keywords.map(function(k){return k.kw}),gl:gl,run:run}),S.api('/api/provider/serp?q='+encodeURIComponent(d.seed)+'&gl='+gl+(run?'&run=1':''))])
+        .then(function(r){return {kw:r[0],serp:r[1],calls:r[0].calls+r[1].calls,missing:r[0].missing,cached:r[0].cached,partial:1,needsRun:r[1].needsRun||r[0].missing>0}})},function(r){
+        if(data!==d)return;
+        M=r.kw.items;var m=M[d.seed];
+        if(m){kpi('kVol','pulse','Search volume',S.fmt(m.vol),'Monthly Google searches'+(m.cpc!=null?' · CPC $'+S.fmt(m.cpc,2):''));
+          kpi('kKd','target','Keyword difficulty',m.kd==null?'—':m.kd+' /100',m.kd==null?'Not enough data':m.kd<30?'Easy to rank for':m.kd<60?'Possible with good content and links':'Hard: strong sites rank here')}
+        lists(d);
+        if(r.serp.items){$('serpP').hidden=false;$('serpT').textContent='Live organic results'+(r.serp.fetchedAt?' · fetched '+S.ago(r.serp.fetchedAt):'')+(r.serp.features&&r.serp.features.length?' · also on the page: '+r.serp.features.join(', ').replace(/_/g,' '):'');
+          $('serp').innerHTML=r.serp.items.map(function(i){return '<tr><td class="n">'+i.pos+'</td><td class="u"><a href="'+esc(i.url)+'" target="_blank" rel="noopener noreferrer">'+esc(i.title||i.url)+'</a></td><td><a href="domain-overview.html?d='+encodeURIComponent(i.domain||'')+'">'+esc(i.domain)+'</a></td></tr>'}).join('')||'<tr><td colspan="3" class="meta-note">No organic results.</td></tr>'}
+      },'volume, difficulty and top 10');
+    });
+  }
   function empty(t){return '<li><span class="meta-note">'+t+'</span></li>'}
   function run(q){
     $('err').textContent='';if(!q.trim()){$('err').textContent='Enter a keyword.';return}
     history.replaceState(null,'','?q='+encodeURIComponent(q)+'&gl='+$('gl').value);
-    $('out').hidden=true;$('load').hidden=false;
+    $('out').hidden=true;$('load').hidden=false;$('serpP').hidden=true;$('pay').hidden=true;lockKpis();
     S.api('/api/keywords?q='+encodeURIComponent(q)+'&gl='+$('gl').value).then(function(d){
       data=d;var seed=d.keywords.find(function(k){return k.kw===d.seed})||{intent:'I'};
       $('intent').innerHTML='<i class="int '+seed.intent+'">'+seed.intent+'</i><b>'+INT[seed.intent][0]+'</b>';$('intentT').textContent=INT[seed.intent][1];
-      var vars=d.keywords.filter(function(k){return k.kw!==d.seed}),qs=d.keywords.filter(function(k){return k.question}),cmp=d.keywords.filter(function(k){return /\b(vs|versus|or)\b/.test(k.kw)});
+      var vars=d.keywords.filter(function(k){return k.kw!==d.seed}),qs=d.keywords.filter(function(k){return k.question});
       $('nVar').textContent=vars.length;$('nQ').textContent=qs.length;$('varP').textContent='Top '+Math.min(10,vars.length)+' of '+vars.length;
-      $('vars').innerHTML=vars.slice(0,10).map(li).join('')||empty('No variations found.');
-      $('qs').innerHTML=qs.slice(0,10).map(li).join('')||empty('No questions found for this keyword.');
-      $('cmp').innerHTML=cmp.slice(0,10).map(li).join('')||empty('No comparison searches found.');
+      M={};lists(d);
       var e=encodeURIComponent(d.seed);
       $('ext').innerHTML=[['https://www.google.com/search?q='+e+'&gl='+$('gl').value,'See who ranks now (Google results)'],['https://trends.google.com/trends/explore?q='+e+'&geo='+$('gl').value.toUpperCase(),'Interest over time (Google Trends)'],['https://ads.google.com/aw/keywordplanner/home','Search volume ranges (Google Keyword Planner, free with an Ads account)']]
         .map(function(x){return '<li><svg class="i" style="width:15px;height:15px;color:var(--b)"><use href="#i-globe"/></svg><a href="'+x[0]+'" target="_blank" rel="noopener noreferrer">'+x[1]+'</a></li>'}).join('');
       $('toMagic').href='keyword-magic.html?q='+e+'&gl='+$('gl').value;
-      $('load').hidden=true;$('out').hidden=false;
+      $('load').hidden=true;$('out').hidden=false;paidData(d,$('gl').value);
     }).catch(function(e){$('load').hidden=true;$('err').textContent=e.message});
   }
   $('f').addEventListener('submit',function(e){e.preventDefault();run($('q').value)});
   $('save').onclick=function(){if(!data)return;var seed=data.keywords.find(function(k){return k.kw===data.seed})||{kw:data.seed,intent:'I'};
-    var n=S.addToList('My keywords',[{kw:seed.kw,intent:seed.intent,added:new Date().toISOString()}]);S.say(n?'Added to “My keywords”.':'Already in “My keywords”.')};
+    var n=S.addToList('My keywords',[{kw:seed.kw,intent:seed.intent,gl:$('gl').value,added:new Date().toISOString()}]);S.say(n?'Added to “My keywords”.':'Already in “My keywords”.')};
   if(S.qs('gl'))$('gl').value=S.qs('gl');
   if(S.qs('q')){$('q').value=S.qs('q');run(S.qs('q'))}else $('q').focus();
 })();

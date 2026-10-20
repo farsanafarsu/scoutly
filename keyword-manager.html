@@ -45,7 +45,8 @@
 <script src="assets/app.js"></script>
 <script>
 (function(){
-  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,cur=null;
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,cur=null,M={},GL=S.read('scoutly.kmGl')||'',live=false;
+  S.provider().then(function(st){live=!!st.ok;if(live)render()});
   var INT={I:'Informational',N:'Navigational',C:'Commercial',T:'Transactional'};
   function mix(items){var c={I:0,N:0,C:0,T:0};items.forEach(function(k){c[k.intent]=(c[k.intent]||0)+1});var n=items.length||1;
     return '<span class="mix" aria-hidden="true">'+['I','N','C','T'].map(function(k){return c[k]?'<i class="'+k+'" style="width:'+(c[k]/n*100)+'%"></i>':''}).join('')+'</span>'}
@@ -57,16 +58,28 @@
     var l=L[cur],c={I:0,N:0,C:0,T:0};l.items.forEach(function(k){c[k.intent]++});
     $('detail').innerHTML='<div class="panel-h"><span class="ic"><svg class="i"><use href="#i-list"/></svg></span><div><h2>'+esc(cur)+'</h2><p>'+l.items.length+' keywords · created '+new Date(l.created).toLocaleDateString()+'</p></div><span style="margin-left:auto;display:flex;gap:8px"><button class="btn sm" type="button" id="ren">Rename</button><button class="btn sm" type="button" id="exp"><svg class="i"><use href="#i-dl"/></svg>CSV</button><button class="btn sm" type="button" id="del"><svg class="i"><use href="#i-trash"/></svg>Delete</button></span></div>'+
       '<div class="pad">'+mix(l.items)+'<div class="legend meta-note" style="margin-top:8px">'+['I','N','C','T'].map(function(k){return INT[k]+' '+c[k]}).join(' · ')+'</div></div>'+
-      '<div class="dt-wrap"><table class="dt"><thead><tr><th>Keyword</th><th>Intent</th><th>Added</th><th class="n">Volume</th><th></th></tr></thead><tbody>'+
-      (l.items.map(function(k,i){return '<tr><td><a href="keyword-overview.html?q='+encodeURIComponent(k.kw)+'">'+esc(k.kw)+'</a></td><td><i class="int '+k.intent+'" title="'+INT[k.intent]+'">'+k.intent+'</i></td><td>'+(k.added?new Date(k.added).toLocaleDateString():'')+'</td><td class="n" style="color:var(--mu)">—</td><td class="n"><button class="rm" type="button" data-i="'+i+'" aria-label="Remove '+esc(k.kw)+'"><svg class="i"><use href="#i-x"/></svg></button></td></tr>'}).join('')||'<tr><td colspan="5" class="meta-note">This list is empty. Paste keywords below.</td></tr>')+
+      (live?'<div class="toolbar"><span class="sel-n">Volume, KD and CPC from DataForSEO for</span><select id="kmGl" aria-label="Country"><option value="">each keyword’s country (or US)</option><option value="in">India</option><option value="us">United States</option><option value="gb">United Kingdom</option><option value="ae">UAE</option><option value="au">Australia</option><option value="ca">Canada</option><option value="sg">Singapore</option></select></div><div id="pay" hidden style="margin:0;border-width:0 0 1px"></div>':'')+
+      '<div class="dt-wrap"><table class="dt"><thead><tr><th>Keyword</th><th>Intent</th><th>Added</th><th class="n">Volume</th><th class="n">KD</th><th class="n">CPC</th><th></th></tr></thead><tbody>'+
+      (l.items.map(function(k,i){return '<tr><td><a href="keyword-overview.html?q='+encodeURIComponent(k.kw)+'">'+esc(k.kw)+'</a></td><td><i class="int '+k.intent+'" title="'+INT[k.intent]+'">'+k.intent+'</i></td><td>'+(k.added?new Date(k.added).toLocaleDateString():'')+'</td><td class="n"'+(m(k)?'>'+S.fmt(m(k).vol):' style="color:var(--mu)">—')+'</td><td class="n">'+(m(k)?S.kdTag(m(k).kd):'<span style="color:var(--mu)">—</span>')+'</td><td class="n"'+(m(k)&&m(k).cpc!=null?'>$'+S.fmt(m(k).cpc,2):' style="color:var(--mu)">—')+'</td><td class="n"><button class="rm" type="button" data-i="'+i+'" aria-label="Remove '+esc(k.kw)+'"><svg class="i"><use href="#i-x"/></svg></button></td></tr>'}).join('')||'<tr><td colspan="7" class="meta-note">This list is empty. Paste keywords below.</td></tr>')+
       '</tbody></table></div><div class="addbox"><textarea id="paste" placeholder="Paste keywords, one per line"></textarea><button class="btn sm p" type="button" id="addk"><svg class="i"><use href="#i-plus"/></svg>Add keywords</button></div>';
     $('ren').onclick=function(){var n=prompt('New name for “'+cur+'”',cur);if(!n||!n.trim()||n.trim()===cur)return;var L2=S.lists();if(L2[n.trim()])return S.say('A list with that name exists.');L2[n.trim()]=L2[cur];delete L2[cur];S.saveLists(L2);cur=n.trim();render()};
     $('del').onclick=function(){if(!confirm('Delete the list “'+cur+'”?'))return;var L2=S.lists();delete L2[cur];S.saveLists(L2);cur=null;render();S.say('List deleted.')};
-    $('exp').onclick=function(){S.csv([['Keyword','Intent','Added']].concat(l.items.map(function(k){return [k.kw,INT[k.intent],k.added||'']})),'scoutly-'+cur.replace(/\W+/g,'-')+'.csv')};
+    if(live){$('kmGl').value=GL;$('kmGl').onchange=function(){GL=this.value;S.write('scoutly.kmGl',GL);render()};lookup(l)}
+    $('exp').onclick=function(){S.csv([['Keyword','Intent','Added','Volume','KD','CPC']].concat(l.items.map(function(k){var x=m(k)||{};return [k.kw,INT[k.intent],k.added||'',x.vol,x.kd,x.cpc]})),'scoutly-'+cur.replace(/\W+/g,'-')+'.csv')};
     $('addk').onclick=function(){var raw=$('paste').value.split(/\n|,/).map(function(s){return s.trim()}).filter(Boolean);if(!raw.length)return;
       this.disabled=true;S.api('/api/intent?q='+encodeURIComponent(raw.join('\n'))).then(function(d){
         var n=S.addToList(cur,d.items.map(function(k){return {kw:k.kw,intent:k.intent,added:new Date().toISOString()}}));render();S.say(n+' keyword'+(n===1?'':'s')+' added.')})
         .catch(function(e){S.say(e.message);$('addk').disabled=false})};
+  }
+  function gl(k){return GL||k.gl||'us'}
+  function m(k){return M[gl(k)+'|'+k.kw]}
+  /* one batched lookup per country in the list; cached keywords cost nothing */
+  function lookup(l){
+    var by={};l.items.forEach(function(k){(by[gl(k)]=by[gl(k)]||[]).push(k.kw)});var gls=Object.keys(by);if(!gls.length)return;
+    var list=cur;
+    S.paid($('pay'),function(run){return Promise.all(gls.map(function(g){return S.post('/api/provider/keywords',{keywords:by[g],gl:g,run:run})})).then(function(rs){
+      var o={calls:0,missing:0,cached:0,items:{}};rs.forEach(function(r,i){o.calls+=r.calls;o.missing+=r.missing;o.cached+=r.cached;Object.keys(r.items).forEach(function(kw){o.items[gls[i]+'|'+kw]=r.items[kw]})});return o})},
+      function(o){var before=Object.keys(M).length;Object.keys(o.items).forEach(function(k){M[k]=o.items[k]});if(cur===list&&Object.keys(M).length!==before)render()},'volume, KD and CPC for this list');
   }
   $('lists').addEventListener('click',function(e){var b=e.target.closest('[data-n]');if(b){cur=b.dataset.n;render()}});
   $('detail').addEventListener('click',function(e){var b=e.target.closest('.rm');if(!b)return;var L=S.lists();L[cur].items.splice(+b.dataset.i,1);S.saveLists(L);render()});

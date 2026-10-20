@@ -44,13 +44,13 @@
   <nav class="crumbs" aria-label="Breadcrumb"><ol><li><a href="../">Home</a></li><li aria-current="page">Broken Link Checker</li></ol></nav>
   <p class="eye"><i></i>Broken link checker</p>
   <h1>Broken link checker for 404 errors, redirect chains and dead ends</h1>
-  <p class="intro">Broken links send visitors and crawlers to pages that no longer exist. Scoutly’s broken link checker is designed to crawl your site, test the links it finds, and show exactly where each problem is: the page containing the link, the URL it points to, the response it got, and what to do about it.</p>
+  <p class="intro">Broken links send visitors and crawlers to pages that no longer exist. Scoutly’s broken link checker crawls your site, tests the links it finds, and show exactly where each problem is: the page containing the link, the URL it points to, the response it got, and what to do about it.</p>
   <form class="scan" id="scan" action="../login.html" method="get" data-scan data-msg="scanMsg" novalidate>
   <label class="sr-only" for="scanSite">Enter your website URL</label>
   <input id="scanSite" name="site" type="text" inputmode="url" autocomplete="url" autocapitalize="off" spellcheck="false" placeholder="Enter your website URL" aria-describedby="scanMsg">
   <button class="btn p" type="submit">Find Broken Links</button>
 </form><p class="msg" id="scanMsg" role="status" aria-live="polite"></p>
-  <div class="status"><span class="chip">In development</span><p>The link checker is part of the website SEO audit, which isn’t open to the public yet. Link results will only appear after a real crawl of your site.</p></div>
+  <div class="status"><span class="chip ok">Live</span><p>Link checks run in every website SEO audit: up to 120 internal and external links from up to 25 crawled pages. Broken links pointing to your site from other websites need backlink data, which isn’t available yet.</p></div>
 </div><div class="ph-art" aria-hidden="true"><img src="../assets/scoutly.webp" alt="" width="300" height="322"></div></div></header>
 
 <section class="sec " id="what-it-detects" aria-labelledby="what-it-detects-h"><div class="w">
@@ -70,7 +70,7 @@
   <p class="kick">What each result shows</p>
   <h2 id="results-h">Every broken link comes with its source and a next step</h2>
   
-  <div class="split" style="margin-top:40px"><div class="prose"><p>Knowing that a 404 exists is only half the job. You also need to know where the link is so you can fix it. When the data is available, each result is designed to show:</p>
+  <div class="split" style="margin-top:40px"><div class="prose"><p>Knowing that a 404 exists is only half the job. You also need to know where the link is so you can fix it. When the data is available, each result shows:</p>
         <ul><li><b>Source page:</b> the page that contains the link.</li><li><b>Destination URL:</b> where the link points.</li><li><b>Detected status:</b> the HTTP status code, redirect path or connection error.</li><li><b>Anchor text:</b> the clickable text, so the link is easy to find on the page.</li><li><b>Recommended next step:</b> update, redirect, restore or remove.</li></ul>
         <p>Some fields depend on what the server returns. A link that times out, for example, has no status code to report.</p></div><div><figure class="mock" style="margin:0"><figcaption class="mock-top"><b>Broken links</b><span class="chip in">Example</span></figcaption><div class="mock-scroll"><table><thead><tr><th scope="col">Source page</th><th scope="col">Destination</th><th scope="col">Status</th><th scope="col">Next step</th></tr></thead><tbody><tr><td><code>/blog/seo-basics</code></td><td><code>/guides/old-checklist</code></td><td><span class="chip cr">404</span></td><td>Update the link to the new guide</td></tr><tr><td><code>/</code></td><td><code>/pricing</code></td><td><span class="chip wr">3 redirects</span></td><td>Link straight to the final URL</td></tr><tr><td><code>/resources</code></td><td><code>partner.example/tools</code></td><td><span class="chip cr">Timed out</span></td><td>Re-test, then remove or replace</td></tr></tbody></table></div><p class="mock-note">Illustrative example with fictional data, not a real audit result.</p></figure></div></div>
 </div></section>
@@ -122,7 +122,7 @@
 <nav aria-labelledby="f-platform"><h2 id="f-platform">Platform</h2><ul><li><a href="../website-seo-audit/">Website SEO Audit</a></li><li><a href="../backlink-checker/">Backlink Explorer</a></li><li><a href="../broken-link-checker/">Broken Link Checker</a></li><li><a href="../keyword-research/">Keyword Research</a></li><li><a href="../competitor-analysis/">Competitor Analysis</a></li><li><a href="../ai-search-visibility/">AI Search Visibility</a></li><li><a href="../aeo-geo/">AEO & GEO</a></li></ul></nav>
 <nav aria-labelledby="f-resources"><h2 id="f-resources">Resources</h2><ul><li><a href="../seo-glossary/">SEO glossary</a></li><li><a href="../website-seo-audit/#what-it-checks">Technical SEO checks</a></li><li><a href="../backlink-checker/#link-building">Link-building guidance</a></li><li><a href="../#faq">FAQ</a></li></ul></nav>
 <nav aria-labelledby="f-company"><h2 id="f-company">Company</h2><ul><li><a href="../about/">About Scoutly</a></li><li><a href="../about/#product-status">Product status</a></li><li><a href="../about/#data-sources">Data sources</a></li><li><a href="../login.html?mode=login">Log in</a></li></ul></nav>
-</div><div class="lgl"><p>© 2026 Scoutly. All rights reserved.</p><p>Scoutly is in early access. Product visuals on this site are illustrative examples, not real audit data.</p></div></div></footer>
+</div><div class="lgl"><p>© 2026 Scoutly. All rights reserved.</p><p>Scoutly is in early access. Example findings and screenshots on these pages use fictional data; real audit results only appear in the app after a crawl.</p></div></div></footer>
 <script src="../assets/site.js" defer></script>
 </body>
 </html>

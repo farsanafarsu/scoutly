@@ -125,7 +125,7 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul{margin:0}ul{padding:0;list-st
           <li><span class="st" aria-hidden="true"></span>Measure Core Web Vitals</li>
           <li><span class="st" aria-hidden="true"></span>Build your fix list</li>
         </ul>
-        <p class="pane-n">These are the steps a Scoutly audit is designed to run on your site.</p>
+        <p class="pane-n">These are the steps a Scoutly audit runs on your site.</p>
       </div>
     </div>
     <div class="brand-foot"><span>Planned integrations</span><b>Google Search Console</b><b>PageSpeed Insights</b><b>Bing Webmaster Tools</b></div>
@@ -166,7 +166,7 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul{margin:0}ul{padding:0;list-st
         <button class="btn p go" type="submit" id="go"><span class="sp" aria-hidden="true"></span><span id="goLabel">Create account and start audit</span> <span aria-hidden="true">→</span></button>
         <p class="note" id="note" role="status"></p>
       </form>
-      <p class="legal" id="legal">Scoutly is in early access. Nothing you enter here is sent anywhere yet.</p>
+      <p class="legal" id="legal">Accounts aren’t open yet, so nothing you enter on this form is sent anywhere.</p>
     </div>
   </main>
 </div>
@@ -181,7 +181,7 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul{margin:0}ul{padding:0;list-st
 
   function head(a,b){return '<span>'+a+'</span><span class="l2">'+b+'</span>'}
   var pitchUp=head('Your first audit','is one step away.');
-  var pUp='Set up your account and the website you want to audit. Scoutly is in early access: audits will run once accounts open, and every finding comes with a plain-English explanation.';
+  var pUp='Set up your account and the website you want to audit. Accounts aren’t open to the public yet, but the audit is real: it crawls up to 25 pages of your site, and every finding comes with a plain-English explanation.';
   if(site){$('site').value=site;$('prevUrl').textContent=site;pitchUp=head('Let’s audit',esc(site))}
 
   function setMode(m){

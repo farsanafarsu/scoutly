@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backlink Analytics — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">Link building</p>
+      <h1>Backlink Analytics</h1>
+      <p class="desc">Who links to any domain: total backlinks and referring domains, the strongest linking sites, anchor texts, follow vs nofollow and link types. Data from the DataForSEO Backlinks index; authority (rank) is on a 0–100 scale.</p>
+    </div>
+    <div class="loading" id="gate"><span class="spin"></span>Checking the data provider…</div>
+    <form class="qbar" id="f" novalidate hidden>
+      <div class="qf"><label for="d">Domain</label><input id="d" placeholder="e.g. competitor.com" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+      <button class="btn p" type="submit"><svg class="i"><use href="#i-search"/></svg>Analyze</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div id="pay" hidden></div>
+
+    <div id="out" hidden>
+      <div class="kpis" id="kpis"></div>
+      <div class="cols2">
+        <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-link"/></svg></span><div><h2>Link types</h2><p>How the backlinks are placed</p></div></div><ul class="bars-h pad" id="types"></ul></section>
+        <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-globe"/></svg></span><div><h2>Top-level domains</h2><p>Where the links come from</p></div></div><ul class="bars-h pad" id="tlds"></ul></section>
+      </div>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-build"/></svg></span><div><h2>Referring domains</h2><p id="rdP">Strongest 100 by authority</p></div><button class="btn sm" type="button" id="expD"><svg class="i"><use href="#i-dl"/></svg>Export CSV</button></div>
+        <div class="dt-wrap"><table class="dt"><thead><tr><th>Domain</th><th class="n">Authority</th><th class="n">Backlinks</th><th class="n">Spam score</th><th class="n">First seen</th></tr></thead><tbody id="doms"></tbody></table></div></section>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-pen"/></svg></span><div><h2>Anchor texts</h2><p>Most used 100</p></div><button class="btn sm" type="button" id="expA"><svg class="i"><use href="#i-dl"/></svg>Export CSV</button></div>
+        <div class="dt-wrap" style="max-height:440px"><table class="dt"><thead><tr><th>Anchor</th><th class="n">Backlinks</th><th class="n">Referring domains</th><th class="n">First seen</th></tr></thead><tbody id="anch"></tbody></table></div></section>
+      <p class="meta-note" style="margin-top:12px" id="src"></p>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,fmt=S.fmt,data=null;
+  function kpi(icon,label,val,sub){return '<div class="kpi"><small><svg class="i"><use href="#i-'+icon+'"/></svg>'+label+'</small><b>'+val+'</b><span>'+sub+'</span></div>'}
+  function bars(obj){var ks=Object.keys(obj||{}).filter(function(k){return obj[k]}).sort(function(a,b){return obj[b]-obj[a]}).slice(0,8),max=ks.length?obj[ks[0]]:1;
+    return ks.map(function(k){return '<li><span>'+esc(k)+'</span><i style="width:'+(obj[k]/max*100)+'%"></i><em>'+fmt(obj[k])+'</em></li>'}).join('')||'<li class="meta-note">No data.</li>'}
+  function spam(v){return v==null?'—':'<span class="tag '+(v<30?'ok':v<60?'wr':'bad')+'">'+v+'</span>'}
+  function show(d){
+    data=d;var s=d.summary,follow=s.backlinks!=null&&s.nofollow!=null?Math.round((1-s.nofollow/(s.backlinks||1))*100):null;
+    $('kpis').innerHTML=kpi('star','Authority',s.rank==null?'—':s.rank+' /100','DataForSEO domain rank')+kpi('link','Backlinks',fmt(s.backlinks),fmt(s.broken)+' broken')+
+      kpi('build','Referring domains',fmt(s.domains),fmt(s.mainDomains)+' main domains · '+fmt(s.ips)+' IPs')+kpi('check','Follow links',follow==null?'—':follow+'%',fmt(s.nofollow)+' nofollow')+
+      kpi('alert','Spam score',s.spam==null?'—':s.spam,'Average for the backlinks (lower is better)');
+    $('types').innerHTML=bars(s.types);$('tlds').innerHTML=bars(s.tlds);
+    $('doms').innerHTML=d.domains.map(function(x){return '<tr><td><a href="?d='+encodeURIComponent(x.domain)+'">'+esc(x.domain)+'</a></td><td class="n">'+fmt(x.rank)+'</td><td class="n">'+fmt(x.backlinks)+'</td><td class="n">'+spam(x.spam)+'</td><td class="n">'+esc(x.firstSeen)+'</td></tr>'}).join('')||'<tr><td colspan="5" class="meta-note">No referring domains found.</td></tr>';
+    $('anch').innerHTML=d.anchors.map(function(x){return '<tr><td class="u">'+(x.anchor?esc(x.anchor):'<span class="meta-note">(empty or image link)</span>')+'</td><td class="n">'+fmt(x.backlinks)+'</td><td class="n">'+fmt(x.domains)+'</td><td class="n">'+esc(x.firstSeen)+'</td></tr>'}).join('')||'<tr><td colspan="4" class="meta-note">No anchors found.</td></tr>';
+    $('rdP').textContent='Strongest '+d.domains.length+' of '+fmt(s.domains)+' by authority';
+    $('src').textContent='DataForSEO Backlinks · live links only · '+(d.cached?'from cache, ':'')+'fetched '+S.ago(d.fetchedAt)+'. Cached for 24 hours.';
+    $('out').hidden=false;
+  }
+  function run(){
+    var d=$('d').value.trim();$('err').textContent='';$('out').hidden=true;
+    if(!d){$('err').textContent='Enter a domain.';return}
+    history.replaceState(null,'','?d='+encodeURIComponent(d));
+    S.paid($('pay'),function(r){return S.api('/api/provider/backlinks?d='+encodeURIComponent(d)+(r?'&run=1':''))},show,'backlinks for '+d);
+  }
+  $('f').addEventListener('submit',function(e){e.preventDefault();run()});
+  $('expD').onclick=function(){if(!data)return;S.csv([['Referring domain','Authority','Backlinks','Spam score','First seen']].concat(data.domains.map(function(x){return [x.domain,x.rank,x.backlinks,x.spam,x.firstSeen]})),'scoutly-referring-domains-'+data.domain.replace(/\W+/g,'-')+'.csv')};
+  $('expA').onclick=function(){if(!data)return;S.csv([['Anchor','Backlinks','Referring domains','First seen']].concat(data.anchors.map(function(x){return [x.anchor,x.backlinks,x.domains,x.firstSeen]})),'scoutly-anchors-'+data.domain.replace(/\W+/g,'-')+'.csv')};
+  S.provider().then(function(st){
+    if(!st.ok){location.replace('locked.html?tool=backlinks');return}
+    $('gate').hidden=true;$('f').hidden=false;
+    $('d').value=S.qs('d')||S.read('scoutly.site')||'';
+    if(S.qs('d'))run();else $('d').focus();
+  });
+})();
+</script>
+</body>
+</html>

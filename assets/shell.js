@@ -51,7 +51,7 @@
   };
   var sprite='<svg width="0" height="0" style="position:absolute" aria-hidden="true">'+Object.keys(I).map(function(k){return '<symbol id="i-'+k+'" viewBox="0 0 24 24">'+I[k]+'</symbol>'}).join('')+'</svg>';
 
-  /* Semrush-style SEO toolkit. lock: needs a paid data provider (opens locked.html). soon: not built yet. */
+  /* Semrush-style SEO toolkit. lock: needs a paid data provider (the page shows locked.html without one). soon: not built yet. */
   var NAV=[
     ['SEO Services',[
       ['dashboard.html','search','SEO Dashboard'],
@@ -61,16 +61,16 @@
     ['Competitive research',[
       ['domain-overview.html','globe','Domain Overview'],
       ['domain-vs-domain.html','vs','Domain vs Domain'],
-      ['locked.html?tool=organic','chart','Organic Research','lock'],
-      ['locked.html?tool=traffic','trend','Traffic Analytics','lock']]],
+      ['organic-research.html','chart','Organic Research','lock'],
+      ['traffic-analytics.html','trend','Traffic Analytics','lock']]],
     ['Keyword research',[
       ['keyword-overview.html','key','Keyword Overview'],
       ['keyword-magic.html','wand','Keyword Magic Tool'],
       ['keyword-gap.html','gap','Keyword Gap'],
       ['keyword-manager.html','list','Keyword Manager']]],
     ['Link building',[
-      ['locked.html?tool=backlinks','link','Backlink Analytics','lock'],
-      ['locked.html?tool=backlink-gap','gap','Backlink Gap','lock']]],
+      ['backlink-analytics.html','link','Backlink Analytics','lock'],
+      ['backlink-gap.html','gap','Backlink Gap','lock']]],
     ['On-page & tech SEO',[
       ['audit.html','audit','Site Audit'],
       ['onpage-checker.html','check','On-Page SEO Checker'],
@@ -79,13 +79,16 @@
     ['Rank tracking',[
       ['position-tracking.html','target','Position Tracking']]],
     ['AI visibility',[
-      ['#','ai','AI search','soon','AI search visibility'],
-      ['#','geo','AEO · GEO','soon','AEO and GEO']]],
+      ['ai-search.html','ai','AI Search Visibility'],
+      ['aeo-checker.html','geo','AEO · GEO Checker']]],
     ['Account',[
-      ['#','rep','Reports','soon','Reports'],
-      ['#','set','Settings','soon','Settings']]]
+      ['reports.html','rep','Reports'],
+      ['settings.html','set','Settings']]]
   ];
   var here=location.pathname.split('/').pop()||'dashboard.html',q=location.search;
+  /* locked.html stands in for a provider tool when no provider is connected; highlight that tool */
+  var LOCKED={organic:'organic-research.html',traffic:'traffic-analytics.html',backlinks:'backlink-analytics.html','backlink-gap':'backlink-gap.html'};
+  if(here==='locked.html'){var lt=(q.match(/tool=([\w-]+)/)||[])[1];here=LOCKED[lt]||LOCKED.organic;q=''}
   function isCurrent(href){var h=href.split('?');return h[0]===here&&(!h[1]||q.indexOf(h[1])>-1)}
   var nav=NAV.map(function(g){return '<h2>'+g[0]+'</h2>'+g[1].map(function(it){
     var attrs=it[3]==='soon'?' data-soon="'+it[4]+'"':'',badge=it[3]==='lock'?'<em title="Needs a data provider">API</em>':it[3]==='soon'?'<em>Soon</em>':'';
@@ -100,4 +103,11 @@
     '<div class="top-r"><button class="icon-b" type="button" aria-label="Alerts" data-soon="Alerts"><svg class="i"><use href="#i-bell"/></svg></button>'+
     '<div class="who"><span class="av" id="av" aria-hidden="true">FN</span><div><b id="whoName">Farsana N</b><small id="whoMail"></small></div></div></div></header>';
   window.Shell={top:function(){document.currentScript.insertAdjacentHTML('beforebegin',TOP)}};
+
+  /* default country from Settings (localStorage scoutly.prefs.gl) for any tool with a #gl picker, unless the URL sets one */
+  document.addEventListener('DOMContentLoaded',function(){
+    var sel=document.getElementById('gl'),gl=null;if(!sel||/[?&]gl=/.test(location.search))return;
+    try{gl=(JSON.parse(localStorage.getItem('scoutly.prefs')||'{}')||{}).gl}catch(_){}
+    if(gl&&[].some.call(sel.options,function(o){return o.value===gl}))sel.value=gl;
+  });
 })();

@@ -55,7 +55,7 @@ a{color:inherit;text-decoration:none}h1,h2,h3,h4,p,ul,ol,dl,dd{margin:0}ul,ol{pa
 .msg{min-height:22px;margin-top:8px;font:500 13px/1.5 "Geist Mono",ui-monospace,monospace;color:#9fe0ff}.msg.err{color:#ffb1b3}
 .light .msg{color:var(--b2)}.light .msg.err{color:#b42328}
 .status{display:flex;gap:12px;align-items:flex-start;max-width:640px;margin-top:18px;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);font-size:14px;line-height:1.6;color:var(--tx2)}.status b{color:#fff;font-weight:600}
-.status .chip{background:rgba(245,165,36,.16);color:#ffd28a;margin-top:1px}
+.status .chip{background:rgba(245,165,36,.16);color:#ffd28a;margin-top:1px}.status .chip.ok{background:rgba(52,199,123,.18);color:#8ff0bf}
 @media(max-width:860px){.ph{padding:132px 0 56px}.ph-g{grid-template-columns:1fr;gap:28px}.ph-art{display:none}}
 @media(max-width:520px){.scan{flex-direction:column;align-items:stretch;padding:8px}.scan input{padding:0 8px}.scan .btn{width:100%}}
 

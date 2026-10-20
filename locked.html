@@ -28,14 +28,14 @@
   <script>Shell.top()</script>
   <main class="page">
     <div class="ph"><p class="lbl" id="grp">Competitive research</p><h1 id="h">—</h1><p class="desc" id="desc"></p></div>
-    <div class="lockbox"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg><div><h3>Needs a paid data provider</h3><p id="why"></p></div></div>
+    <div class="lockbox"><svg class="i" aria-hidden="true"><use href="#i-lock"/></svg><div><h3>Needs a paid data provider</h3><p id="why"></p><div class="provline" id="prov"><i></i><span>Checking the data provider…</span></div></div></div>
     <div class="cols2">
       <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-list"/></svg></span><div><h2>What it will show</h2><p>Once a provider is connected</p></div></div><ul class="feat pad" id="feat"></ul></section>
       <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-check"/></svg></span><div><h2>Free alternatives now</h2><p>Real data you can use today</p></div></div><div class="alt pad" id="alt"></div></section>
     </div>
     <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-globe"/></svg></span><div><h2>Data providers that can power it</h2><p>You'd create the account; Scoutly would call its API</p></div></div>
       <div class="pad"><table class="prov"><thead><tr><th>Provider</th><th>How you pay</th><th>Covers</th></tr></thead><tbody>
-        <tr><td>DataForSEO</td><td>Pay as you go, from about $50 credit</td><td>Keyword volume and difficulty, SERP rankings, domain traffic estimates, backlinks</td></tr>
+        <tr><td>DataForSEO <span class="tag ok">Supported</span></td><td>Pay as you go, from about $50 credit</td><td>Keyword volume and difficulty, SERP rankings, domain traffic estimates, backlinks. <a href="settings.html" style="color:var(--b)">How to connect it</a></td></tr>
         <tr><td>Semrush API</td><td>Semrush Business plan plus API units</td><td>The same data Semrush shows in its own tools</td></tr>
         <tr><td>Ahrefs API</td><td>Ahrefs Enterprise plan</td><td>Backlinks, referring domains, organic keywords and traffic</td></tr>
         <tr><td>Moz API</td><td>Monthly plans with a free tier</td><td>Domain Authority, links, keyword metrics</td></tr>
@@ -64,7 +64,14 @@
       f:['Referring domains that link to competitors but not to you','Domains linking to all of your competitors (best prospects)','Authority and link counts for each prospect','Export prospects for outreach'],
       a:[['backlink-audit.html','link','Backlink Audit','Check a list of links: live, nofollow, risky.'],['keyword-gap.html','gap','Keyword Gap','See which topics competitors cover that you don’t.']]}
   };
+  var PAGE={organic:'organic-research.html',traffic:'traffic-analytics.html',backlinks:'backlink-analytics.html','backlink-gap':'backlink-gap.html'};
   var t=T[S.qs('tool')]||T.organic;
+  /* with a working provider this page isn't needed: go to the real tool */
+  S.provider().then(function(st){
+    if(st.ok){location.replace(PAGE[S.qs('tool')]||PAGE.organic);return}
+    $('prov').className='provline'+(st.configured?' bad':'');
+    $('prov').innerHTML='<i></i><span>'+(st.configured?'<b>DataForSEO isn’t working:</b> '+esc(st.message):'<b>DataForSEO: not connected.</b> Set <code>DATAFORSEO_LOGIN</code> and <code>DATAFORSEO_PASSWORD</code> and restart <code>python server.py</code>.')+' <a href="settings.html" style="color:var(--b);text-decoration:underline">Settings</a></span>';
+  });
   document.title=t.h+' — Scoutly';$('grp').textContent=t.g;$('h').textContent=t.h;$('desc').textContent=t.d;$('why').textContent=t.why;
   $('feat').innerHTML=t.f.map(function(x){return '<li>'+esc(x)+'</li>'}).join('');
   $('alt').innerHTML=t.a.map(function(x){var ext=/^https?:/.test(x[0]);return '<a href="'+x[0]+'"'+(ext?' target="_blank" rel="noopener noreferrer"':'')+'><svg class="i"><use href="#i-'+x[1]+'"/></svg><div><b>'+esc(x[2])+'</b><span>'+esc(x[3])+'</span></div></a>'}).join('');

@@ -42,6 +42,7 @@
     <p class="qerr" id="err" role="alert"></p>
     <div class="loading" id="load" hidden><span class="spin"></span>Asking Google for suggestions (about 70 queries)…</div>
 
+    <div id="pay" hidden></div>
     <div class="mg" id="out" hidden>
       <aside class="groups" aria-label="Keyword groups"><h3>Groups</h3><div id="groups"></div></aside>
       <div class="res">
@@ -60,8 +61,8 @@
             <button class="btn sm" type="button" id="add"><svg class="i"><use href="#i-plus"/></svg>Add to list</button>
             <button class="btn sm" type="button" id="exp"><svg class="i"><use href="#i-dl"/></svg>Export CSV</button>
           </div>
-          <div class="dt-wrap"><table class="dt"><thead><tr><th style="width:34px"></th><th class="sortable" data-s="kw">Keyword</th><th class="sortable" data-s="intent">Intent</th><th class="sortable n" data-s="words">Words</th><th>Found via</th><th class="n">Volume</th></tr></thead><tbody id="rows"></tbody></table></div>
-          <p class="meta-note pad">Volume needs a paid keyword data provider. Order follows Google's own ranking of suggestions, which roughly reflects popularity.</p>
+          <div class="dt-wrap"><table class="dt"><thead><tr><th style="width:34px"></th><th class="sortable" data-s="kw">Keyword</th><th class="sortable" data-s="intent">Intent</th><th class="sortable n" data-s="words">Words</th><th>Found via</th><th class="n sortable" data-s="vol">Volume</th><th class="n sortable" data-s="kd">KD</th><th class="n sortable" data-s="cpc">CPC</th></tr></thead><tbody id="rows"></tbody></table></div>
+          <p class="meta-note pad" id="volNote">Volume, keyword difficulty (KD) and CPC need a paid keyword data provider. Order follows Google's own ranking of suggestions, which roughly reflects popularity.</p>
         </section>
       </div>
     </div>
@@ -78,13 +79,13 @@
     var r=data.keywords.filter(function(k){var w=' '+k.kw+' ';
       return (!group||w.indexOf(' '+group+' ')>-1)&&(type==='all'||(type==='q'&&k.question)||(type==='local'&&k.local))&&(!fi||k.intent===fi)&&k.words>=fw&&
         inc.every(function(x){return k.kw.indexOf(x)>-1})&&!exc.some(function(x){return k.kw.indexOf(x)>-1})});
-    if(sort)r=r.slice().sort(function(a,b){return (a[sort]>b[sort]?1:a[sort]<b[sort]?-1:0)*dir});
+    if(sort)r=r.slice().sort(function(a,b){var x=a[sort],y=b[sort];if(x==null)x=-1;if(y==null)y=-1;return (x>y?1:x<y?-1:0)*dir});
     return r;
   }
   function render(){
     var r=shown();
     $('count').textContent=r.length+' of '+data.count+' keywords';
-    $('rows').innerHTML=r.map(function(k){return '<tr><td><input type="checkbox" data-k="'+esc(k.kw)+'"'+(sel[k.kw]?' checked':'')+' aria-label="Select '+esc(k.kw)+'"></td><td><span class="kw-c"><a href="keyword-overview.html?q='+encodeURIComponent(k.kw)+'&gl='+$('gl').value+'">'+esc(k.kw)+'</a>'+(k.question?'<span class="tag in">?</span>':'')+(k.local?'<span class="tag wr">local</span>':'')+'</span></td><td><i class="int '+k.intent+'" title="'+INT[k.intent]+'">'+k.intent+'</i></td><td class="n">'+k.words+'</td><td><span class="tag">'+esc(k.src)+'</span></td><td class="n" style="color:var(--mu)">—</td></tr>'}).join('')||'<tr><td colspan="6" class="meta-note">No keywords match these filters.</td></tr>';
+    $('rows').innerHTML=r.map(function(k){return '<tr><td><input type="checkbox" data-k="'+esc(k.kw)+'"'+(sel[k.kw]?' checked':'')+' aria-label="Select '+esc(k.kw)+'"></td><td><span class="kw-c"><a href="keyword-overview.html?q='+encodeURIComponent(k.kw)+'&gl='+$('gl').value+'">'+esc(k.kw)+'</a>'+(k.question?'<span class="tag in">?</span>':'')+(k.local?'<span class="tag wr">local</span>':'')+'</span></td><td><i class="int '+k.intent+'" title="'+INT[k.intent]+'">'+k.intent+'</i></td><td class="n">'+k.words+'</td><td><span class="tag">'+esc(k.src)+'</span></td>'+(k.m?'<td class="n">'+S.fmt(k.vol)+'</td><td class="n">'+S.kdTag(k.kd)+'</td><td class="n">'+(k.cpc==null?'—':'$'+S.fmt(k.cpc,2))+'</td>':'<td class="n" style="color:var(--mu)">—</td><td class="n" style="color:var(--mu)">—</td><td class="n" style="color:var(--mu)">—</td>')+'</tr>'}).join('')||'<tr><td colspan="8" class="meta-note">No keywords match these filters.</td></tr>';
     $('all').checked=r.length&&r.every(function(k){return sel[k.kw]});
     var n=Object.keys(sel).length;$('selN').textContent=n?n+' selected':'';
   }
@@ -95,8 +96,19 @@
     $('err').textContent='';if(!q.trim()){$('err').textContent='Enter a seed keyword.';return}
     history.replaceState(null,'','?q='+encodeURIComponent(q)+'&gl='+$('gl').value);
     $('out').hidden=true;$('load').hidden=false;sel={};group='';
-    S.api('/api/keywords?q='+encodeURIComponent(q)+'&gl='+$('gl').value).then(function(d){data=d;renderGroups();render();$('load').hidden=true;$('out').hidden=false})
+    $('pay').hidden=true;var gl=$('gl').value;
+    S.api('/api/keywords?q='+encodeURIComponent(q)+'&gl='+gl).then(function(d){data=d;renderGroups();render();$('load').hidden=true;$('out').hidden=false;metrics(d,gl)})
       .catch(function(e){$('load').hidden=true;$('err').textContent=e.message});
+  }
+  /* every suggestion's volume, KD and CPC in one batched lookup (2 DataForSEO calls per 1,000 keywords) */
+  function metrics(d,gl){
+    S.provider().then(function(st){if(!st.ok)return;
+      S.paid($('pay'),function(run){return S.post('/api/provider/keywords',{keywords:d.keywords.map(function(k){return k.kw}),gl:gl,run:run})},function(r){
+        if(data!==d)return;
+        d.keywords.forEach(function(k){var m=r.items[k.kw];if(m){k.m=1;k.vol=m.vol;k.kd=m.kd;k.cpc=m.cpc}});
+        $('volNote').textContent='Volume is average monthly Google searches, KD is keyword difficulty (0–100) and CPC the average cost per click, from DataForSEO for this country.'+(r.missing?' '+r.missing+' keywords still need a lookup.':'')+(r.skipped?' '+r.skipped+' with symbols Google Ads won’t accept were skipped.':'');
+        render()},'volume, KD and CPC for '+d.keywords.length+' keywords');
+    });
   }
   $('f').addEventListener('submit',function(e){e.preventDefault();run($('q').value)});
   $('groups').addEventListener('click',function(e){var b=e.target.closest('[data-g]');if(!b)return;group=b.dataset.g;renderGroups();render()});
@@ -108,9 +120,9 @@
   function picked(){var s=Object.keys(sel);return (s.length?data.keywords.filter(function(k){return sel[k.kw]}):shown())}
   $('add').onclick=function(){if(!data)return;var ks=picked();if(!ks.length)return S.say('Nothing to add.');
     var names=Object.keys(S.lists()),name=prompt('Add '+ks.length+' keyword'+(ks.length>1?'s':'')+' to which list?'+(names.length?' Existing: '+names.join(', '):''),names[0]||data.seed);
-    if(!name)return;var n=S.addToList(name.trim(),ks.map(function(k){return {kw:k.kw,intent:k.intent,added:new Date().toISOString(),seed:data.seed}}));
+    if(!name)return;var n=S.addToList(name.trim(),ks.map(function(k){return {kw:k.kw,intent:k.intent,gl:$('gl').value,added:new Date().toISOString(),seed:data.seed}}));
     S.say(n+' added to “'+name.trim()+'”.'+(n<ks.length?' '+(ks.length-n)+' were already there.':''));sel={};render()};
-  $('exp').onclick=function(){if(!data)return;var ks=picked();S.csv([['Keyword','Intent','Words','Question','Found via']].concat(ks.map(function(k){return [k.kw,INT[k.intent],k.words,k.question?'yes':'',k.src]})),'scoutly-keywords-'+data.seed.replace(/\W+/g,'-')+'.csv')};
+  $('exp').onclick=function(){if(!data)return;var ks=picked();S.csv([['Keyword','Intent','Words','Question','Found via','Volume','KD','CPC']].concat(ks.map(function(k){return [k.kw,INT[k.intent],k.words,k.question?'yes':'',k.src,k.vol,k.kd,k.cpc]})),'scoutly-keywords-'+data.seed.replace(/\W+/g,'-')+'.csv')};
   if(S.qs('gl'))$('gl').value=S.qs('gl');
   if(S.qs('q')){$('q').value=S.qs('q');run(S.qs('q'))}else $('q').focus();
 })();
