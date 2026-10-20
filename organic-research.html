@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Organic Research — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.chg{font:500 10.5px/1 var(--M);margin-left:6px}.chg.up{color:var(--ok)}.chg.dn{color:var(--cr)}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">Competitive research</p>
+      <h1>Organic Research</h1>
+      <p class="desc">The keywords any domain ranks for in Google, its positions, estimated monthly search traffic from each keyword, its top pages and the competitors that rank for the same terms. Data from DataForSEO Labs; traffic is an estimate from rankings and search volume, not measured visits.</p>
+    </div>
+    <div class="loading" id="gate"><span class="spin"></span>Checking the data provider…</div>
+    <form class="qbar" id="f" novalidate hidden>
+      <div class="qf"><label for="d">Domain</label><input id="d" placeholder="e.g. competitor.com" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+      <div class="qf sm"><label for="gl">Country</label><select id="gl"><option value="in">India</option><option value="us">United States</option><option value="gb">United Kingdom</option><option value="ae">UAE</option><option value="au">Australia</option><option value="ca">Canada</option><option value="sg">Singapore</option></select></div>
+      <button class="btn p" type="submit"><svg class="i"><use href="#i-search"/></svg>Analyze</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div id="pay" hidden></div>
+
+    <div id="out" hidden>
+      <div class="kpis" id="kpis"></div>
+      <div class="cols2">
+        <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-target"/></svg></span><div><h2>Positions</h2><p>Keywords in each range of Google results</p></div></div><ul class="bars-h pad" id="pos"></ul></section>
+        <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-vs"/></svg></span><div><h2>Competitors</h2><p>Domains ranking for the same keywords</p></div></div>
+          <div class="dt-wrap" style="max-height:340px"><table class="dt"><thead><tr><th>Domain</th><th class="n">Common keywords</th><th class="n">Their keywords</th><th class="n">Their traffic</th></tr></thead><tbody id="comp"></tbody></table></div></section>
+      </div>
+      <section class="panel" style="margin-top:20px">
+        <div class="panel-h"><span class="ic"><svg class="i"><use href="#i-key"/></svg></span><div><h2>Top organic keywords</h2><p id="kwP"></p></div><button class="btn sm" type="button" id="exp"><svg class="i"><use href="#i-dl"/></svg>Export CSV</button></div>
+        <div class="dt-wrap"><table class="dt"><thead><tr><th class="sortable" data-s="kw">Keyword</th><th>Intent</th><th class="n sortable" data-s="pos">Position</th><th class="n sortable" data-s="vol">Volume</th><th class="n sortable" data-s="kd">KD</th><th class="n sortable" data-s="cpc">CPC</th><th class="n sortable" data-s="traffic">Traffic</th><th>URL</th></tr></thead><tbody id="kws"></tbody></table></div>
+      </section>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-page"/></svg></span><div><h2>Top pages</h2><p>By estimated traffic from the keywords above</p></div></div>
+        <div class="dt-wrap" style="max-height:420px"><table class="dt"><thead><tr><th>Page</th><th class="n">Keywords</th><th class="n">Traffic</th></tr></thead><tbody id="pages"></tbody></table></div></section>
+      <p class="meta-note" style="margin-top:12px" id="src"></p>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,fmt=S.fmt,data=null,sort='traffic',dir=-1;
+  var INT={I:'Informational',N:'Navigational',C:'Commercial',T:'Transactional'};
+  function kpi(icon,label,val,sub){return '<div class="kpi"><small><svg class="i"><use href="#i-'+icon+'"/></svg>'+label+'</small><b>'+val+'</b><span>'+sub+'</span></div>'}
+  function rows(){
+    var r=data.keywords.slice().sort(function(a,b){var x=a[sort],y=b[sort];if(x==null)x=-1;if(y==null)y=-1;return (x>y?1:x<y?-1:0)*dir});
+    $('kws').innerHTML=r.map(function(k){
+      var ch=k.isNew?'<span class="chg up">new</span>':k.prev&&k.pos&&k.prev!==k.pos?'<span class="chg '+(k.prev>k.pos?'up':'dn')+'">'+(k.prev>k.pos?'▲':'▼')+Math.abs(k.prev-k.pos)+'</span>':'';
+      return '<tr><td><a href="keyword-overview.html?q='+encodeURIComponent(k.kw)+'&gl='+$('gl').value+'">'+esc(k.kw)+'</a></td><td>'+(k.intent&&INT[k.intent]?'<i class="int '+k.intent+'" title="'+INT[k.intent]+'">'+k.intent+'</i>':'')+'</td><td class="n">'+(k.pos||'—')+ch+'</td><td class="n">'+fmt(k.vol)+'</td><td class="n">'+S.kdTag(k.kd)+'</td><td class="n">'+(k.cpc==null?'—':'$'+fmt(k.cpc,2))+'</td><td class="n">'+fmt(k.traffic)+'</td><td class="u"><a href="'+esc(k.url)+'" target="_blank" rel="noopener noreferrer">'+esc((k.url||'').replace(/^https?:\/\/[^/]+/,'')||'/')+'</a></td></tr>'}).join('')||'<tr><td colspan="8" class="meta-note">No ranking keywords found for this domain in this country.</td></tr>';
+  }
+  function show(d){
+    data=d;var m=d.metrics,top3=(m.pos['1']||0)+(m.pos['2-3']||0);
+    $('kpis').innerHTML=kpi('key','Organic keywords',fmt(m.keywords),'Ranking in Google’s top 100')+kpi('trend','Est. traffic',fmt(m.traffic),'Monthly visits from search')+
+      kpi('chart','Traffic value',m.value==null?'—':'$'+fmt(m.value),'What the traffic would cost in ads')+kpi('target','Top 3 positions',fmt(top3),'Keywords in positions 1–3')+
+      kpi('pulse','Changes',(m.new!=null?'+'+fmt(m.new):'—'),fmt(m.up)+' up · '+fmt(m.down)+' down · '+fmt(m.lost)+' lost');
+    var max=Math.max.apply(null,Object.keys(m.pos).map(function(k){return m.pos[k]||0}).concat(1));
+    $('pos').innerHTML=Object.keys(m.pos).map(function(k){return '<li><span>Positions '+k+'</span><i style="width:'+((m.pos[k]||0)/max*100)+'%"></i><em>'+fmt(m.pos[k])+'</em></li>'}).join('');
+    $('comp').innerHTML=d.competitors.map(function(c){return '<tr><td><a href="?d='+encodeURIComponent(c.domain)+'&gl='+$('gl').value+'">'+esc(c.domain)+'</a></td><td class="n">'+fmt(c.common)+'</td><td class="n">'+fmt(c.keywords)+'</td><td class="n">'+fmt(c.traffic)+'</td></tr>'}).join('')||'<tr><td colspan="4" class="meta-note">No competitors found.</td></tr>';
+    $('pages').innerHTML=d.pages.map(function(p){return '<tr><td class="u"><a href="'+esc(p.url)+'" target="_blank" rel="noopener noreferrer">'+esc(p.url)+'</a></td><td class="n">'+fmt(p.keywords)+'</td><td class="n">'+fmt(p.traffic)+'</td></tr>'}).join('')||'<tr><td colspan="3" class="meta-note">No pages found.</td></tr>';
+    $('kwP').textContent='Top '+d.keywords.length+' of '+fmt(d.total)+' by estimated traffic';
+    $('src').textContent='DataForSEO Labs · '+(d.cached?'from cache, ':'')+'fetched '+S.ago(d.fetchedAt)+'. Cached for 24 hours.';
+    rows();$('out').hidden=false;
+  }
+  function run(){
+    var d=$('d').value.trim(),gl=$('gl').value;$('err').textContent='';$('out').hidden=true;
+    if(!d){$('err').textContent='Enter a domain.';return}
+    history.replaceState(null,'','?d='+encodeURIComponent(d)+'&gl='+gl);
+    S.paid($('pay'),function(r){return S.api('/api/provider/organic?d='+encodeURIComponent(d)+'&gl='+gl+(r?'&run=1':''))},show,'organic keywords for '+d);
+  }
+  $('f').addEventListener('submit',function(e){e.preventDefault();run()});
+  document.querySelector('#kws').closest('table').querySelector('thead').addEventListener('click',function(e){var th=e.target.closest('[data-s]');if(!th||!data)return;dir=sort===th.dataset.s?-dir:(th.dataset.s==='kw'||th.dataset.s==='pos'?1:-1);sort=th.dataset.s;rows()});
+  $('exp').onclick=function(){if(!data)return;S.csv([['Keyword','Intent','Position','Previous','Volume','KD','CPC','Traffic','URL']].concat(data.keywords.map(function(k){return [k.kw,INT[k.intent]||'',k.pos,k.prev,k.vol,k.kd,k.cpc,k.traffic,k.url]})),'scoutly-organic-'+data.domain.replace(/\W+/g,'-')+'.csv')};
+  S.provider().then(function(st){
+    if(!st.ok){location.replace('locked.html?tool=organic');return}
+    $('gate').hidden=true;$('f').hidden=false;
+    if(S.qs('gl'))$('gl').value=S.qs('gl');
+    $('d').value=S.qs('d')||S.read('scoutly.site')||'';
+    if(S.qs('d'))run();else $('d').focus();
+  });
+})();
+</script>
+</body>
+</html>

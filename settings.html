@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.facts dl,.facts{display:grid}.kv{display:grid;grid-template-columns:180px minmax(0,1fr);gap:4px 16px;font:400 12.5px/1.6 var(--M)}.kv dt{color:var(--mu)}.kv dd{margin:0;overflow-wrap:anywhere}
+pre{margin:8px 0 0;padding:12px 14px;background:var(--nv);color:#dfe6ff;font:400 12px/1.6 var(--M);overflow:auto}
+.steps li{padding:10px 0;border-bottom:1px solid var(--ln);font:400 12.5px/1.6 var(--M);color:var(--sl)}.steps li:last-child{border-bottom:0}.steps b{color:var(--ink)}
+.acts{display:flex;flex-wrap:wrap;gap:10px;padding:0 20px 18px}
+.form{display:grid;gap:14px;justify-items:start}.form .qf{width:100%}.form .qf input[readonly]{background:var(--bg2);color:var(--sl)}.form .qerr{margin:0}
+.data-n{padding:16px 20px 12px;font:400 12.5px/1.6 var(--M);color:var(--sl)}
+@media(max-width:640px){.kv{grid-template-columns:minmax(0,1fr)}}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">Account</p>
+      <h1>Settings</h1>
+      <p class="desc">Your profile, defaults for the tools and the data Scoutly keeps in this browser. Connect a data provider to light up search volume, keyword difficulty, Google rankings, traffic estimates and backlinks; everything else keeps working on free data without one.</p>
+    </div>
+    <div class="cols2">
+      <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-edit"/></svg></span><div><h2>Profile</h2><p>Shown in the top bar</p></div></div>
+        <form class="pad form" id="profF" novalidate>
+          <div class="qf"><label for="pName">Display name</label><input id="pName" autocomplete="name" maxlength="60"></div>
+          <div class="qf"><label for="pMail">Email</label><input id="pMail" readonly aria-readonly="true"></div>
+          <button class="btn sm p" type="submit">Save profile</button>
+        </form>
+      </section>
+      <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-target"/></svg></span><div><h2>Defaults</h2><p>Pre-filled in the tools</p></div></div>
+        <form class="pad form" id="defF" novalidate>
+          <div class="qf"><label for="dSite">Default website</label><input id="dSite" placeholder="yoursite.com" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+          <div class="qf"><label for="dGl">Default country for keyword tools</label><select id="dGl"><option value="">None (each tool's own default)</option><option value="in">India</option><option value="us">United States</option><option value="gb">United Kingdom</option><option value="ae">UAE</option><option value="au">Australia</option><option value="ca">Canada</option><option value="sg">Singapore</option></select></div>
+          <p class="qerr" id="defE" role="alert"></p>
+          <button class="btn sm p" type="submit">Save defaults</button>
+        </form>
+      </section>
+    </div>
+    <div class="cols2">
+      <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-pulse"/></svg></span><div><h2>Data provider</h2><p>DataForSEO, pay as you go</p></div></div>
+        <div class="pad"><div class="provline" id="line"><i></i><span>Checking…</span></div></div>
+        <dl class="kv pad" id="kv"></dl>
+        <div class="acts"><button class="btn sm" type="button" id="recheck">Check connection again</button><button class="btn sm" type="button" id="clear"><svg class="i"><use href="#i-trash"/></svg>Clear cache</button></div>
+      </section>
+      <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-key"/></svg></span><div><h2>How to connect</h2><p>Credentials stay on your computer, in the server</p></div></div>
+        <ol class="steps pad">
+          <li><b>1. Create an account</b> at <a class="mono" style="color:var(--b)" href="https://app.dataforseo.com/register" target="_blank" rel="noopener noreferrer">dataforseo.com</a> and add credit (DataForSEO bills per request).</li>
+          <li><b>2. Copy your API login and password</b> from the dashboard’s API Access page. The API password is not your account password.</li>
+          <li><b>3. Start Scoutly with them</b> (PowerShell):<pre>$env:DATAFORSEO_LOGIN = "you@example.com"
+$env:DATAFORSEO_PASSWORD = "your-api-password"
+python server.py</pre>or in bash: <pre>DATAFORSEO_LOGIN=you@example.com DATAFORSEO_PASSWORD=your-api-password python server.py</pre></li>
+          <li><b>4. Reload this page.</b> The tools marked API in the sidebar turn green when the connection works.</li>
+        </ol>
+      </section>
+    </div>
+    <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-list"/></svg></span><div><h2>What each lookup costs</h2><p>API calls per run; every result is cached for 24 hours, so repeats are free</p></div></div>
+      <div class="dt-wrap"><table class="dt"><thead><tr><th>Tool</th><th>DataForSEO APIs</th><th class="n">Calls per run</th></tr></thead><tbody>
+        <tr><td>Keyword Overview</td><td>Keywords Data (volume, CPC) · Labs (difficulty) · SERP (top 10)</td><td class="n">3</td></tr>
+        <tr><td>Keyword Magic Tool, Keyword Manager</td><td>Keywords Data · Labs, batched up to 1,000 keywords</td><td class="n">2 per 1,000 new keywords</td></tr>
+        <tr><td>Organic Research</td><td>Labs ranked keywords · competitors</td><td class="n">2</td></tr>
+        <tr><td>Traffic Analytics</td><td>Labs domain overview · history · top pages</td><td class="n">3</td></tr>
+        <tr><td>Backlink Analytics</td><td>Backlinks summary · referring domains · anchors</td><td class="n">3</td></tr>
+        <tr><td>Backlink Gap</td><td>Backlinks domain intersection</td><td class="n">1</td></tr>
+      </tbody></table></div>
+      <p class="panel-n">Scoutly always shows the number of calls and asks before spending. The dollar amounts above are what DataForSEO reported for the calls made from this computer.</p>
+    </section>
+    <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-dl"/></svg></span><div><h2>Your data</h2><p>Everything Scoutly keeps in this browser</p></div></div>
+      <p class="data-n" id="dataN"></p>
+      <div class="acts"><button class="btn sm" type="button" id="expAll"><svg class="i"><use href="#i-dl"/></svg>Export all</button><button class="btn sm" type="button" id="clrAll"><svg class="i"><use href="#i-trash"/></svg>Clear all data</button></div>
+      <p class="panel-n">Clearing keeps you logged in. Cached DataForSEO results live on the server; use Clear cache above for those.</p>
+    </section>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc;
+  function render(st,u){
+    var line=$('line');line.className='provline '+(st.ok?'ok':st.configured?'bad':'');
+    line.innerHTML='<i></i><span>'+(st.ok?'<b>Connected</b> to DataForSEO':st.configured?'<b>Not working:</b> '+esc(st.message):'<b>Not connected.</b> Set <code>DATAFORSEO_LOGIN</code> and <code>DATAFORSEO_PASSWORD</code>, then restart <code>python server.py</code>.')+'</span>';
+    var rows=[['Status',st.ok?'Live data on':'Free data only ("Needs a data provider" where paid data would go)']];
+    if(st.login)rows.push(['API login',st.login]);
+    if(st.balance!=null)rows.push(['Balance','$'+S.fmt(st.balance,2)]);
+    if(u){rows.push(['Calls made',S.fmt(u.calls)+(u.since?' since '+u.since:'')]);rows.push(['Reported cost','$'+S.fmt(u.cost||0,4)]);rows.push(['Cached results',S.fmt(u.cachedResponses)+' (kept '+u.cacheHours+' h, keywords count one each)'])}
+    $('kv').innerHTML=rows.map(function(r){return '<dt>'+r[0]+'</dt><dd>'+esc(r[1])+'</dd>'}).join('');
+  }
+  function load(refresh){
+    $('line').innerHTML='<span class="spin"></span><span>Checking…</span>';
+    Promise.all([S.api('/api/provider/status'+(refresh?'?refresh=1':'')),S.api('/api/provider/usage').catch(function(){return null})])
+      .then(function(r){render(r[0],r[1])}).catch(function(e){render({ok:false,configured:false,message:e.message},null);$('line').querySelector('span').textContent=e.message});
+  }
+  $('recheck').onclick=function(){load(true)};
+  $('clear').onclick=function(){if(!confirm('Clear cached DataForSEO results? The next lookups will be billed again.'))return;
+    S.post('/api/provider/clear-cache',{}).then(function(r){S.say(r.removed+' cached response'+(r.removed===1?'':'s')+' removed.');load(false)}).catch(function(e){S.say(e.message)})};
+  load(false);
+
+  /* profile: display name in sessionStorage scoutly.user (email kept as is) */
+  var user=S.user;$('pName').value=user.name||'';$('pMail').value=user.email||'';$('pMail').placeholder=user.email?'':'Not set';
+  $('profF').addEventListener('submit',function(e){e.preventDefault();var n=$('pName').value.trim();if(!n){S.say('Enter a display name.');$('pName').focus();return}
+    user.name=n;S.write('scoutly.user',JSON.stringify(user));
+    $('whoName').textContent=n;$('av').textContent=n.split(/\s+/).map(function(w){return w[0]}).join('').slice(0,2).toUpperCase();S.say('Profile saved.')});
+
+  /* defaults: website in sessionStorage scoutly.site, country in localStorage scoutly.prefs ({gl}) */
+  function prefs(){try{return JSON.parse(localStorage.getItem('scoutly.prefs')||'{}')||{}}catch(_){return {}}}
+  $('dSite').value=S.read('scoutly.site')||'';$('dGl').value=prefs().gl||'';
+  $('defF').addEventListener('submit',function(e){e.preventDefault();$('defE').textContent='';
+    var v=$('dSite').value.trim();
+    if(v&&!/^(https?:\/\/)?[\w-]+(\.[\w-]+)+(\/.*)?$/i.test(v)){$('defE').textContent='Enter a website address, like example.com.';$('dSite').focus();return}
+    var site=v.replace(/^https?:\/\//i,'').replace(/\/+$/,'').toLowerCase();
+    try{if(site)sessionStorage.setItem('scoutly.site',site);else sessionStorage.removeItem('scoutly.site')}catch(_){}
+    var p=prefs();if($('dGl').value)p.gl=$('dGl').value;else delete p.gl;try{localStorage.setItem('scoutly.prefs',JSON.stringify(p))}catch(_){}
+    $('dSite').value=site;if(site)S.showSite(site);else{document.body.classList.remove('has-site');$('statusT').textContent='No website yet';$('projT').textContent='+ Add a website'}
+    S.say('Defaults saved.')});
+
+  /* your data: every scoutly.* key in localStorage and sessionStorage */
+  function keys(store){var out=[];try{for(var i=0;i<store.length;i++){var k=store.key(i);if(k&&k.indexOf('scoutly.')===0)out.push(k)}}catch(_){}return out}
+  function dump(store){var o={};keys(store).forEach(function(k){var v=store.getItem(k);try{o[k]=JSON.parse(v)}catch(_){o[k]=v}});return o}
+  function count(){var l=keys(localStorage).length,s=keys(sessionStorage).length,L=S.lists(),n=Object.keys(L).reduce(function(a,k){return a+(L[k].items||[]).length},0);
+    $('dataN').textContent=(l+s)+' item'+(l+s===1?'':'s')+' saved: '+l+' in this browser (keyword lists: '+Object.keys(L).length+', '+n+' keywords; preferences) and '+s+' for this tab only (login, website, campaigns, audits).'}
+  count();
+  $('expAll').onclick=function(){
+    var data={app:'Scoutly',exported:new Date().toISOString(),localStorage:dump(localStorage),sessionStorage:dump(sessionStorage)};
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'}));a.download='scoutly-data-'+new Date().toISOString().slice(0,10)+'.json';
+    document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500);S.say('Exported.')};
+  $('clrAll').onclick=function(){
+    if(!confirm('Clear all Scoutly data in this browser: keyword lists, campaigns, audits, default website and preferences? You stay logged in. This can’t be undone; export first if you want a copy.'))return;
+    try{keys(localStorage).forEach(function(k){localStorage.removeItem(k)})}catch(_){}
+    try{keys(sessionStorage).forEach(function(k){if(k!=='scoutly.user')sessionStorage.removeItem(k)})}catch(_){}
+    $('dSite').value='';$('dGl').value='';document.body.classList.remove('has-site');$('statusT').textContent='No website yet';$('projT').textContent='+ Add a website';
+    count();S.say('All Scoutly data cleared.')};
+})();
+</script>
+</body>
+</html>

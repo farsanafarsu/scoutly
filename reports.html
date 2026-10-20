@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reports — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.rp{display:grid;grid-template-columns:300px minmax(0,1fr);gap:20px;margin-top:20px;align-items:start}
+.opts{background:var(--card);border:1px solid var(--ln);padding:16px;display:grid;gap:12px;position:sticky;top:84px}
+.opts h3{font:600 10px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
+.opts .qf{flex:none}
+.secs label{display:flex;gap:8px;align-items:center;padding:6px 0;font:400 13px/1.3 Geist,sans-serif}.secs input{accent-color:var(--b)}
+.secs em{margin-left:auto;font:400 11px/1 var(--M);font-style:normal;color:var(--mu)}
+.paper{background:#fff;border:1px solid var(--ln);box-shadow:0 30px 60px -40px rgba(10,26,74,.4);padding:44px 48px;color:#0a1230;min-width:0}
+.paper .cover{display:flex;justify-content:space-between;gap:20px;padding-bottom:22px;border-bottom:3px solid #0a1230}
+.paper .cover h1{font:500 30px/1.1 var(--D);text-transform:uppercase;letter-spacing:.01em}
+.paper .cover p{margin-top:8px;font:400 12.5px/1.6 var(--M);color:#4a5675}
+.paper .brand{display:flex;align-items:center;gap:8px;font:600 13px/1 var(--D);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}.paper .brand img{width:24px;height:24px}
+.paper h2{margin-top:30px;padding-bottom:8px;border-bottom:1px solid #d9deea;font:500 17px/1.2 var(--D);letter-spacing:.04em;text-transform:uppercase}
+.paper p.n{margin-top:10px;font:400 13.5px/1.7 Geist,sans-serif;white-space:pre-wrap}
+.paper .kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:14px}
+.paper .kp div{padding:12px;border:1px solid #d9deea}.paper .kp small{display:block;font:600 9px/1.3 var(--M);letter-spacing:.12em;text-transform:uppercase;color:#7d88a3}.paper .kp b{display:block;margin-top:6px;font:500 22px/1 var(--D)}
+.paper table{width:100%;margin-top:12px;border-collapse:collapse;font:400 12px/1.45 var(--M)}
+.paper th{padding:7px 8px;text-align:left;font:600 9.5px/1 var(--M);letter-spacing:.1em;text-transform:uppercase;color:#7d88a3;border-bottom:1px solid #d9deea}
+.paper td{padding:7px 8px;border-bottom:1px solid #eef1f7;vertical-align:top;overflow-wrap:anywhere}.paper td.n,.paper th.n{text-align:right}
+.paper .bar{display:grid;grid-template-columns:170px 1fr 40px;gap:10px;align-items:center;margin-top:6px;font:400 12px/1.3 var(--M)}.paper .bar i{display:block;height:8px;background:#eef1f7}.paper .bar i b{display:block;height:100%}
+.paper .foot{margin-top:34px;padding-top:12px;border-top:1px solid #d9deea;font:400 10.5px/1.5 var(--M);color:#7d88a3}
+.paper .none{margin-top:10px;font:400 12.5px/1.6 var(--M);color:#7d88a3}
+@media(max-width:1000px){.rp{grid-template-columns:minmax(0,1fr)}.opts{position:static}.paper{padding:26px 20px}}
+@media print{.side,.top,.scrim,.ph,.opts,.toast{display:none!important}.main{margin-left:0}.page{padding:0}.rp{display:block;margin:0}.paper{border:0;box-shadow:none;padding:0}body:after{display:none}body{background:#fff}
+  .paper h2{break-after:avoid}.paper table,.paper .kp{break-inside:avoid}}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">Account</p>
+      <h1>Reports</h1>
+      <p class="desc">Turn your audits, rankings, campaigns, keyword lists and AI visibility checks into a clean client report. Pick the sections, add your summary, then print it or save it as PDF.</p>
+    </div>
+    <div class="rp">
+      <aside class="opts">
+        <h3>Report</h3>
+        <div class="qf"><label for="title">Title</label><input id="title" value="SEO performance report"></div>
+        <div class="qf"><label for="client">Prepared for</label><input id="client" placeholder="Client or company name"></div>
+        <div class="qf"><label for="site">Website</label><select id="site"></select></div>
+        <div class="qf"><label for="notes">Summary and next steps</label><textarea id="notes" placeholder="What changed this month, what you fixed, what’s next…"></textarea></div>
+        <h3>Sections</h3><div class="secs" id="secs"></div>
+        <button class="btn p" type="button" id="print"><svg class="i"><use href="#i-dl"/></svg>Print / save as PDF</button>
+        <button class="btn" type="button" id="html"><svg class="i"><use href="#i-page"/></svg>Download HTML</button>
+      </aside>
+      <article class="paper" id="paper"></article>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,KEY='scoutly.reportPrefs';
+  function J(store,k,d){try{return JSON.parse(store.getItem(k)||'null')||d}catch(_){return d}}
+  var audits=J(sessionStorage,'scoutly.audits',{}),ranks=J(localStorage,'scoutly.ranks',{snaps:[]}),lists=J(localStorage,'scoutly.kwlists',{}),camps=J(sessionStorage,'scoutly.campaigns',[]),ai=J(localStorage,'scoutly.aivis',{prompts:[],marks:{}});
+  var CATN={crawl:'Crawlability & indexing',onpage:'On-page SEO',content:'Content & keywords',links:'Links & redirects',internal:'Internal linking',perf:'Speed & security',schema:'Structured data',ai:'AI readiness'};
+  var SECS=[['audit','Site audit',Object.keys(audits).length],['ranks','Rankings',ranks.snaps.length],['camps','Campaigns',camps.length],['kw','Keyword lists',Object.keys(lists).length],['ai','AI visibility',ai.prompts.length]];
+  var prefs=J(localStorage,KEY,{});
+  $('secs').innerHTML=SECS.map(function(s){var on=prefs.secs?prefs.secs.indexOf(s[0])>-1:s[2]>0;return '<label><input type="checkbox" value="'+s[0]+'"'+(on?' checked':'')+(s[2]?'':' disabled')+'>'+s[1]+'<em>'+(s[2]?s[2]+' saved':'no data yet')+'</em></label>'}).join('');
+  var hosts=Object.keys(audits),site=S.read('scoutly.site');if(site){site=site.replace(/^www\./,'');if(hosts.indexOf(site)<0)hosts.unshift(site)}
+  $('site').innerHTML=hosts.map(function(h){return '<option>'+esc(h)+'</option>'}).join('')||'<option value="">No website yet</option>';
+  if(prefs.client)$('client').value=prefs.client;if(prefs.title)$('title').value=prefs.title;if(prefs.notes)$('notes').value=prefs.notes;
+  function bar(label,v){var c=v>=85?'#17a673':v>=60?'#f5a524':'#e5484d';return '<div class="bar"><span>'+esc(label)+'</span><i><b style="width:'+v+'%;background:'+c+'"></b></i><span>'+v+'</span></div>'}
+  function kp(items){return '<div class="kp">'+items.map(function(x){return '<div><small>'+esc(x[0])+'</small><b>'+esc(x[1])+'</b></div>'}).join('')+'</div>'}
+  function render(){
+    var on=[].map.call(document.querySelectorAll('#secs input:checked'),function(i){return i.value}),h=$('site').value,a=audits[h],out='';
+    try{localStorage.setItem(KEY,JSON.stringify({secs:on,client:$('client').value,title:$('title').value,notes:$('notes').value}))}catch(_){}
+    out+='<div class="cover"><div><h1>'+esc($('title').value||'SEO report')+'</h1><p>'+(($('client').value?'Prepared for '+esc($('client').value)+' · ':'')+(h?esc(h)+' · ':''))+new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})+'</p><p>Prepared by '+esc(S.user.name)+'</p></div><span class="brand"><img src="assets/scoutly-mark.webp" alt="">Scoutly</span></div>';
+    if($('notes').value.trim())out+='<h2>Summary</h2><p class="n">'+esc($('notes').value.trim())+'</p>';
+    if(on.indexOf('audit')>-1){out+='<h2>Site audit</h2>';
+      if(a){out+=kp([['Health score',a.score+'/100'],['Critical',a.critical],['Warnings',a.warning],['Notices',a.notice],['Pages crawled',a.pages],['Broken links',a.broken]])+'<p class="none">Audited '+new Date(a.at).toLocaleString()+' · '+esc(a.url)+'</p>';
+        if(a.cats)out+='<div style="margin-top:12px">'+Object.keys(CATN).filter(function(k){return a.cats[k]!=null}).map(function(k){return bar(CATN[k],a.cats[k])}).join('')+'</div>';
+        if(a.issues&&a.issues.length)out+='<table><thead><tr><th>Top issues</th><th>Severity</th><th class="n">Count</th></tr></thead><tbody>'+a.issues.map(function(i){return '<tr><td>'+esc(i.t)+'</td><td>'+esc(i.s)+'</td><td class="n">'+i.n+'</td></tr>'}).join('')+'</tbody></table>'}
+      else out+='<p class="none">No audit saved for this website in this browser tab. Run one in Site Audit first.</p>'}
+    if(on.indexOf('ranks')>-1&&ranks.snaps.length){var s=ranks.snaps[ranks.snaps.length-1],p=ranks.snaps.length>1?ranks.snaps[ranks.snaps.length-2]:null,rows=s.queries||s.pages||[],pm={};
+      if(p)(p.queries||p.pages||[]).forEach(function(r){pm[r.key]=r.pos});
+      var cl=rows.reduce(function(x,r){return x+r.clicks},0),im=rows.reduce(function(x,r){return x+r.impr},0),ap=im?rows.reduce(function(x,r){return x+r.pos*r.impr},0)/im:0;
+      out+='<h2>Rankings (Google Search Console)</h2>'+kp([['Avg. position',ap?ap.toFixed(1):'—'],['Clicks',cl.toLocaleString()],['Impressions',im.toLocaleString()],['Top 10',rows.filter(function(r){return Math.round(r.pos)<=10}).length]])+
+        '<p class="none">Snapshot '+s.date+(p?', compared with '+p.date:'')+'.</p><table><thead><tr><th>'+(s.queries?'Query':'Page')+'</th><th class="n">Position</th><th class="n">Change</th><th class="n">Clicks</th><th class="n">Impressions</th></tr></thead><tbody>'+
+        rows.slice().sort(function(x,y){return y.clicks-x.clicks||y.impr-x.impr}).slice(0,20).map(function(r){var d=pm[r.key]!=null?Math.round((pm[r.key]-r.pos)*10)/10:null;return '<tr><td>'+esc(r.key)+'</td><td class="n">'+r.pos+'</td><td class="n">'+(d==null?'':d>0?'▲ '+d:d<0?'▼ '+(-d):'–')+'</td><td class="n">'+r.clicks+'</td><td class="n">'+r.impr+'</td></tr>'}).join('')+'</tbody></table>'}
+    if(on.indexOf('camps')>-1&&camps.length)out+='<h2>Campaigns</h2><table><thead><tr><th>Campaign</th><th>Brand</th><th>Location</th><th>Status</th><th>Landing page</th></tr></thead><tbody>'+camps.map(function(c){return '<tr><td>'+esc(c.name)+'</td><td>'+esc(c.brand)+'</td><td>'+esc(c.loc||'')+'</td><td>'+esc(c.status)+'</td><td>'+esc(c.url)+'</td></tr>'}).join('')+'</tbody></table>';
+    if(on.indexOf('kw')>-1&&Object.keys(lists).length)Object.keys(lists).forEach(function(n){var it=lists[n].items;out+='<h2>Keywords: '+esc(n)+'</h2><table><thead><tr><th>Keyword</th><th>Intent</th></tr></thead><tbody>'+it.slice(0,40).map(function(k){return '<tr><td>'+esc(k.kw)+'</td><td>'+({I:'Informational',N:'Navigational',C:'Commercial',T:'Transactional'}[k.intent]||'')+'</td></tr>'}).join('')+'</tbody></table>'+(it.length>40?'<p class="none">and '+(it.length-40)+' more</p>':'')});
+    if(on.indexOf('ai')>-1&&ai.prompts.length){var E=[['chatgpt','ChatGPT'],['perplexity','Perplexity'],['google','Google AI'],['copilot','Copilot']],L={m:'Mentioned',c:'Cited',n:'—'},tot=0,hit=0;
+      ai.prompts.forEach(function(p){E.forEach(function(e){var m=ai.marks[p+'||'+e[0]];if(m&&m.v){tot++;if(m.v!=='n')hit++}})});
+      out+='<h2>AI search visibility</h2>'+kp([['Prompts tracked',ai.prompts.length],['Answers checked',tot],['Share of voice',tot?Math.round(hit/tot*100)+'%':'—']])+'<table><thead><tr><th>Prompt</th>'+E.map(function(e){return '<th>'+e[1]+'</th>'}).join('')+'</tr></thead><tbody>'+
+        ai.prompts.map(function(p){return '<tr><td>'+esc(p)+'</td>'+E.map(function(e){var m=ai.marks[p+'||'+e[0]];return '<td>'+(m&&m.v?L[m.v]:'')+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table>'}
+    if(!on.length)out+='<p class="none" style="margin-top:24px">Pick at least one section with data. Run a Site Audit, import rankings in Position Tracking, or save keywords first.</p>';
+    out+='<p class="foot">Generated with Scoutly. Audit and keyword data come from live checks of public pages and Google suggestions; rankings come from Google Search Console exports.</p>';
+    $('paper').innerHTML=out;
+  }
+  ['title','client','notes'].forEach(function(i){$(i).addEventListener('input',render)});$('site').addEventListener('change',render);$('secs').addEventListener('change',render);
+  $('print').onclick=function(){window.print()};
+  $('html').onclick=function(){var css=[].map.call(document.querySelectorAll('style'),function(s){return s.textContent}).join('\n');
+    var doc='<!doctype html><html><head><meta charset="utf-8"><title>'+esc($('title').value)+'</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@500&display=swap"><style>:root{--D:Tektur,Geist,sans-serif;--M:"Geist Mono",monospace}body{margin:0;padding:30px;font-family:Geist,sans-serif}'+css+'</style></head><body><article class="paper">'+$('paper').innerHTML.replace(/src="assets\/scoutly-mark\.webp"/g,'src="" style="display:none"')+'</article></body></html>';
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([doc],{type:'text/html'}));a.download=($('client').value||'seo')+'-report-'+new Date().toISOString().slice(0,10)+'.html';document.body.appendChild(a);a.click();setTimeout(function(){a.remove()},500)};
+  render();
+})();
+</script>
+</body>
+</html>

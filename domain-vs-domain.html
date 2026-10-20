@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Domain vs Domain — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.doms{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;flex:1 1 100%}
+.doms input{height:44px;padding:0 12px;border:1px solid var(--ln);border-radius:3px;font:400 13.5px/1 var(--M);width:100%}
+.doms input:focus{outline:0;border-color:var(--b)}
+.vs td.best{background:rgba(23,166,115,.08);font-weight:600;color:#0d7a54}
+.vs th img{width:16px;height:16px;vertical-align:-3px;margin-right:6px}
+.vs td.k{color:var(--mu);white-space:nowrap}
+.vs .sec td{background:var(--bg2);font:600 10px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:var(--sl)}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">Competitive research</p>
+      <h1>Domain vs Domain</h1>
+      <p class="desc">Put up to five websites side by side and compare what's publicly measurable: domain age, speed, security, sitemap size, technology and SEO basics. The best value in each row is highlighted.</p>
+    </div>
+    <form class="qbar" id="f" novalidate>
+      <div class="doms"><input id="d0" placeholder="Your domain" aria-label="Domain 1" autocapitalize="off" spellcheck="false"><input id="d1" placeholder="Competitor" aria-label="Domain 2" autocapitalize="off" spellcheck="false"><input id="d2" placeholder="Competitor (optional)" aria-label="Domain 3" autocapitalize="off" spellcheck="false"><input id="d3" placeholder="Competitor (optional)" aria-label="Domain 4" autocapitalize="off" spellcheck="false"><input id="d4" placeholder="Competitor (optional)" aria-label="Domain 5" autocapitalize="off" spellcheck="false"></div>
+      <button class="btn p" type="submit"><svg class="i"><use href="#i-vs"/></svg>Compare</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div class="loading" id="load" hidden><span class="spin"></span>Checking each domain…</div>
+    <section class="panel" id="out" hidden>
+      <div class="dt-wrap"><table class="dt vs"><thead id="th"></thead><tbody id="tb"></tbody></table></div>
+      <p class="meta-note pad">Organic traffic, keywords and backlinks need a paid data provider, so they aren't compared here.</p>
+    </section>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc;
+  /* [label, value(x), better: 'hi'|'lo'|null, format] */
+  var ROWS=[['Site'],
+    ['HTTP status',function(x){return x.status},null],['Response time',function(x){return x.ms},'lo',function(v){return v+' ms'}],['HTTPS',function(x){return x.https?1:0},'hi',function(v){return v?'Yes':'No'}],
+    ['Homepage words',function(x){return x.words},'hi'],['Internal links on homepage',function(x){return x.internalLinks},'hi'],
+    ['SEO basics'],
+    ['Sitemap URLs',function(x){return x.sitemap?x.sitemap.urls:0},'hi',function(v,x){return x.sitemap?v+(x.sitemap.index?' files':''):'None'}],['robots.txt',function(x){return x.robots?1:0},'hi',function(v){return v?'Yes':'No'}],
+    ['llms.txt',function(x){return x.llms?1:0},'hi',function(v){return v?'Yes':'No'}],['Schema types',function(x){return x.schema.length},'hi',function(v,x){return v?esc(x.schema.slice(0,4).join(', '))+(v>4?' +'+(v-4):''):'None'}],
+    ['Trust'],
+    ['Domain age',function(x){return x.ageYears},'hi',function(v){return v==null?'—':v+' yrs'}],['SSL days left',function(x){return x.ssl&&x.ssl.valid?x.ssl.daysLeft:null},null,function(v){return v==null?'—':v}],
+    ['Registrar',function(x){return x.registration&&x.registration.registrar},null,function(v){return esc(v||'—')}],['SPF email record',function(x){return x.dns.spf?1:0},'hi',function(v){return v?'Yes':'No'}],
+    ['Social profiles',function(x){return Object.keys(x.socials).length},'hi',function(v,x){return v?esc(Object.keys(x.socials).join(', ')):'None'}],
+    ['Stack'],
+    ['Technologies',function(x){return x.tech.length},null,function(v,x){return esc(x.tech.join(', ')||'—')}],['Server',function(x){return x.server},null,function(v){return esc(v||'—')}],['Email provider',function(x){return x.dns.mail},null,function(v){return esc(v||'—')}]];
+  $('f').addEventListener('submit',function(e){e.preventDefault();$('err').textContent='';
+    var ds=[0,1,2,3,4].map(function(i){return $('d'+i).value.trim().replace(/^https?:\/\//i,'').split('/')[0]}).filter(Boolean);
+    if(ds.length<2){$('err').textContent='Add at least two domains.';return}
+    history.replaceState(null,'','?'+ds.map(function(d,i){return 'd'+i+'='+encodeURIComponent(d)}).join('&'));
+    $('out').hidden=true;$('load').hidden=false;
+    Promise.all(ds.map(function(d){return S.api('/api/domain?d='+encodeURIComponent(d)).catch(function(err){return {error:err.message,domain:d}})})).then(function(xs){
+      $('th').innerHTML='<tr><th></th>'+xs.map(function(x){return '<th><img src="https://www.google.com/s2/favicons?sz=32&domain='+encodeURIComponent(x.domain)+'" alt="">'+esc(x.domain)+'</th>'}).join('')+'</tr>';
+      var ok=xs.filter(function(x){return !x.error});
+      $('tb').innerHTML=(xs.some(function(x){return x.error})?'<tr><td class="k">Errors</td>'+xs.map(function(x){return '<td>'+(x.error?'<span class="tag bad">'+esc(x.error.slice(0,80))+'</span>':'')+'</td>'}).join('')+'</tr>':'')+
+        ROWS.map(function(r){if(r.length===1)return '<tr class="sec"><td colspan="'+(xs.length+1)+'">'+r[0]+'</td></tr>';
+          var vals=xs.map(function(x){return x.error?null:r[1](x)}),nums=vals.filter(function(v){return typeof v==='number'});
+          var best=r[2]&&nums.length>1?(r[2]==='hi'?Math.max:Math.min).apply(null,nums):null,uniq=nums.filter(function(v){return v===best}).length<nums.length;
+          return '<tr><td class="k">'+r[0]+'</td>'+xs.map(function(x,i){if(x.error)return '<td>—</td>';var v=vals[i];return '<td'+(best!=null&&uniq&&v===best?' class="best"':'')+'>'+(r[3]?r[3](v,x):esc(v))+'</td>'}).join('')+'</tr>'}).join('');
+      $('load').hidden=true;$('out').hidden=false;
+    });
+  });
+  [0,1,2,3,4].forEach(function(i){if(S.qs('d'+i))$('d'+i).value=S.qs('d'+i)});
+  if(S.qs('d')&&!S.qs('d0'))$('d0').value=S.qs('d');
+  if(S.qs('d0')&&S.qs('d1'))$('f').requestSubmit();else ($('d0').value?$('d1'):$('d0')).focus();
+})();
+</script>
+</body>
+</html>

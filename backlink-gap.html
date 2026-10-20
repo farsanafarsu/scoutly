@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backlink Gap — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">Link building</p>
+      <h1>Backlink Gap</h1>
+      <p class="desc">Sites that link to your competitors but not to you, so you know where to pitch next. Domains linking to several competitors come first: they already link out in your niche. Data from the DataForSEO Backlinks index.</p>
+    </div>
+    <div class="loading" id="gate"><span class="spin"></span>Checking the data provider…</div>
+    <form class="qbar" id="f" novalidate hidden>
+      <div class="qf"><label for="you">Your domain</label><input id="you" placeholder="yoursite.com" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+      <div class="qf"><label for="c">Competitors (up to 4, comma separated)</label><input id="c" placeholder="rival-one.com, rival-two.com" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+      <div class="qf sm"><label for="mode">Show domains linking to</label><select id="mode"><option value="partial">Any competitor</option><option value="all">Every competitor</option></select></div>
+      <button class="btn p" type="submit"><svg class="i"><use href="#i-gap"/></svg>Find prospects</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div id="pay" hidden></div>
+
+    <div id="out" hidden>
+      <div class="kpis" id="kpis"></div>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-gap"/></svg></span><div><h2>Link prospects</h2><p id="gapP"></p></div><button class="btn sm" type="button" id="exp"><svg class="i"><use href="#i-dl"/></svg>Export CSV</button></div>
+        <div class="dt-wrap"><table class="dt"><thead id="head"></thead><tbody id="rows"></tbody></table></div></section>
+      <p class="meta-note" style="margin-top:12px" id="src"></p>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,fmt=S.fmt,data=null;
+  function kpi(icon,label,val,sub){return '<div class="kpi"><small><svg class="i"><use href="#i-'+icon+'"/></svg>'+label+'</small><b>'+val+'</b><span>'+sub+'</span></div>'}
+  function show(d){
+    data=d;var multi=d.items.filter(function(x){return x.count>1}).length,strong=d.items.filter(function(x){return (x.rank||0)>=50}).length;
+    $('kpis').innerHTML=kpi('gap','Prospects',fmt(d.total),'Link to '+(d.mode==='all'?'every competitor':'a competitor')+', not to '+esc(d.you))+
+      kpi('vs','Link to 2+ competitors',d.competitors.length>1?fmt(multi):'—','In the top '+d.items.length+' shown')+kpi('star','Authority 50+',fmt(strong),'Strong sites in the top '+d.items.length);
+    $('head').innerHTML='<tr><th>Referring domain</th><th class="n">Authority</th><th class="n">Spam score</th>'+d.competitors.map(function(c){return '<th class="n" title="Backlinks to '+esc(c)+'">'+esc(c)+'</th>'}).join('')+'</tr>';
+    $('rows').innerHTML=d.items.map(function(x){return '<tr><td><a href="backlink-analytics.html?d='+encodeURIComponent(x.domain||'')+'">'+esc(x.domain)+'</a></td><td class="n">'+fmt(x.rank)+'</td><td class="n">'+(x.spam==null?'—':x.spam)+'</td>'+
+      d.competitors.map(function(c){var l=x.links[c];return '<td class="n">'+(l?fmt(l.backlinks):'<span style="color:var(--mu)">—</span>')+'</td>'}).join('')+'</tr>'}).join('')||'<tr><td colspan="'+(3+d.competitors.length)+'" class="meta-note">No gap found: every domain linking to these competitors also links to you, or none were found.</td></tr>';
+    $('gapP').textContent='Top '+d.items.length+' of '+fmt(d.total)+', most-shared and strongest first';
+    $('src').textContent='DataForSEO Backlinks domain intersection · '+(d.cached?'from cache, ':'')+'fetched '+S.ago(d.fetchedAt)+'. Cached for 24 hours.';
+    $('out').hidden=false;
+  }
+  function run(){
+    var you=$('you').value.trim(),c=$('c').value.split(/[\s,]+/).filter(Boolean),mode=$('mode').value;$('err').textContent='';$('out').hidden=true;
+    if(!you){$('err').textContent='Enter your domain.';return}if(!c.length){$('err').textContent='Add at least one competitor.';return}
+    if(c.length>4){$('err').textContent='Up to 4 competitors; only the first 4 are used.';c=c.slice(0,4)}
+    var q='you='+encodeURIComponent(you)+'&c='+encodeURIComponent(c.join(','))+'&mode='+mode;
+    history.replaceState(null,'','?'+q);
+    S.paid($('pay'),function(r){return S.api('/api/provider/gap?'+q+(r?'&run=1':''))},show,'backlink prospects');
+  }
+  $('f').addEventListener('submit',function(e){e.preventDefault();run()});
+  $('exp').onclick=function(){if(!data)return;S.csv([['Referring domain','Authority','Spam score'].concat(data.competitors.map(function(c){return 'Backlinks to '+c}))].concat(data.items.map(function(x){return [x.domain,x.rank,x.spam].concat(data.competitors.map(function(c){return x.links[c]?x.links[c].backlinks:''}))})),'scoutly-backlink-gap-'+data.you.replace(/\W+/g,'-')+'.csv')};
+  S.provider().then(function(st){
+    if(!st.ok){location.replace('locked.html?tool=backlink-gap');return}
+    $('gate').hidden=true;$('f').hidden=false;
+    $('you').value=S.qs('you')||S.read('scoutly.site')||'';$('c').value=S.qs('c').split(',').join(', ');if(S.qs('mode'))$('mode').value=S.qs('mode');
+    if(S.qs('you')&&S.qs('c'))run();else $(S.qs('you')||$('you').value?'c':'you').focus();
+  });
+})();
+</script>
+</body>
+</html>

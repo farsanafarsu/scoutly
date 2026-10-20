@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<script>
+/* demo gate: no demo login in this tab → back to the login page */
+(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+/* dashboard page */
+
+/* welcome banner */
+.hero{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,.7fr);grid-template-rows:auto 1fr;background:#040817;color:#fff;border:1px solid rgba(127,160,255,.16);box-shadow:0 50px 90px -50px rgba(47,91,255,.55)}
+.hero:before{content:"";position:absolute;inset:0;z-index:-2;background:radial-gradient(42% 75% at 82% 45%,rgba(47,91,255,.5),transparent 70%),radial-gradient(30% 50% at 92% 95%,rgba(90,200,250,.22),transparent 70%),radial-gradient(40% 70% at 0% 110%,rgba(122,92,255,.2),transparent 70%)}
+.hero:after{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(127,160,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(127,160,255,.07) 1px,transparent 1px);background-size:44px 44px;-webkit-mask-image:radial-gradient(80% 90% at 70% 40%,#000,transparent 75%);mask-image:radial-gradient(80% 90% at 70% 40%,#000,transparent 75%)}
+.hero-edge{position:absolute;left:0;right:0;top:0;height:1px;background:linear-gradient(90deg,transparent,rgba(90,200,250,.8) 35%,rgba(47,91,255,.9) 65%,transparent)}
+/* status strip */
+.hero-bar{grid-column:1/-1;display:flex;align-items:center;gap:18px;padding:12px 28px;border-bottom:1px solid rgba(255,255,255,.07);font:500 10.5px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:rgba(214,224,255,.55)}
+.hero-bar .live{display:inline-flex;align-items:center;gap:8px;color:#9ff0cf}.hero-bar .live i{width:6px;height:6px;background:#3ddba5;box-shadow:0 0 10px #3ddba5;animation:blink 1.6s steps(1) infinite}
+.hero-bar .sep{width:1px;height:12px;background:rgba(255,255,255,.14)}
+.hero-bar .when{margin-left:auto;display:inline-flex;align-items:center;gap:12px;color:rgba(214,224,255,.7)}
+.clock{font:500 13px/1 var(--D);letter-spacing:.08em;color:#fff}.clock small{margin-left:4px;font:500 10px/1 var(--M);color:var(--sky)}
+/* left column */
+.hero-main{padding:30px 28px 28px}
+.hero h1{margin-top:16px;font:500 clamp(30px,3.4vw,52px)/.98 var(--D);text-transform:uppercase;letter-spacing:.005em}
+.hero h1>span{display:block}.hero h1 .l2{position:relative;padding-left:1.3em}
+.hero h1 .l2:before{content:"";position:absolute;left:.08em;top:.5em;width:1em;height:max(2px,.055em);background:var(--sky)}
+.hero h1 #first{background:linear-gradient(92deg,#fff 0%,#9db6ff 40%,#5ac8fa 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero-sub{margin-top:14px;max-width:520px;font:400 13px/1.7 var(--M);color:rgba(214,224,255,.68)}.hero-sub b{color:#fff;font-weight:600}
+/* command bar */
+.cmd{position:relative;display:flex;align-items:center;gap:0;max-width:640px;margin-top:24px;padding:6px;background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.03));border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);transition:border-color .25s,box-shadow .25s}
+.cmd:focus-within{border-color:rgba(90,200,250,.7);box-shadow:0 0 0 4px rgba(90,200,250,.12),0 20px 50px -20px rgba(47,91,255,.7)}
+.cmd>svg{margin:0 4px 0 12px;color:var(--sky)}
+.cmd .pre{padding-left:6px;font:400 14px/1 var(--M);color:rgba(214,224,255,.4)}
+.cmd input{flex:1;min-width:0;height:48px;padding:0 10px 0 2px;border:0;background:none;color:#fff;font:400 14px/1 var(--M)}.cmd input::placeholder{color:rgba(214,224,255,.4)}.cmd input:focus{outline:0}
+.cmd .btn{height:48px;padding:0 22px}
+.cmd .btn:hover{background:#fff;border-color:#fff;color:var(--nv)}
+.recent{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:12px;font:500 10px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:rgba(214,224,255,.45)}
+.recent button{height:26px;padding:0 10px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);font:400 11.5px/1 var(--M);letter-spacing:.02em;text-transform:none;color:rgba(214,224,255,.8);cursor:pointer;transition:border-color .2s,color .2s}.recent button:hover{border-color:var(--sky);color:#fff}
+/* today's focus */
+.focus{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:640px;margin-top:22px;border-top:1px solid rgba(255,255,255,.08)}
+.focus a{display:block;padding:14px 16px 2px 0;transition:color .2s}.focus a+a{padding-left:16px;border-left:1px solid rgba(255,255,255,.08)}
+.focus b{display:flex;align-items:baseline;gap:8px;font:500 24px/1 var(--D)}
+.focus b i{width:7px;height:7px;flex:none;align-self:center}
+.focus span{display:block;margin-top:6px;font:400 11.5px/1.4 var(--M);color:rgba(214,224,255,.6);transition:color .2s}
+.focus a:hover span{color:#fff}
+.f-cr{background:var(--cr);box-shadow:0 0 10px var(--cr)}.f-wr{background:var(--wa);box-shadow:0 0 10px var(--wa)}.f-ok{background:#3ddba5;box-shadow:0 0 10px #3ddba5}
+/* radar visual */
+.hero-viz{position:relative;display:grid;place-items:center;padding:20px 28px 24px;border-left:1px solid rgba(255,255,255,.06)}
+.radar{position:relative;width:min(320px,100%);aspect-ratio:1}
+.radar .rr{position:absolute;border:1px solid rgba(90,200,250,.34);border-radius:50%}
+.radar .r1{inset:0}.radar .r2{inset:16%}.radar .r3{inset:32%;border-style:dashed;animation:spin 40s linear infinite}
+.radar .x{position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(transparent,rgba(90,200,250,.22),transparent)}.radar .y{position:absolute;top:50%;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(90,200,250,.22),transparent)}
+.radar .sweep{position:absolute;inset:0;border-radius:50%;background:conic-gradient(from 0deg,rgba(90,200,250,.38),rgba(90,200,250,0) 70deg,transparent 360deg);animation:spin 5s linear infinite}
+.radar .blip{position:absolute;width:6px;height:6px;margin:-3px;background:var(--sky);box-shadow:0 0 0 0 rgba(90,200,250,.6);animation:ping 2.4s ease-out infinite}
+.radar .blip.cr{background:var(--cr);animation-delay:-.8s}.radar .blip.wr{background:var(--wa);animation-delay:-1.6s}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(90,200,250,.55)}70%,100%{box-shadow:0 0 0 12px rgba(90,200,250,0)}}
+.radar img{position:absolute;left:50%;top:50%;width:56%;height:auto;margin:-31% 0 0 -28%;filter:drop-shadow(0 24px 30px rgba(47,91,255,.55));animation:float 5s ease-in-out infinite}
+.chipc{position:absolute;display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(8,14,40,.78);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 20px 40px -20px rgba(0,0,0,.7);white-space:nowrap}
+.chipc small{display:block;font:500 9.5px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:rgba(214,224,255,.55)}
+.chipc b{display:block;margin-top:5px;font:500 18px/1 var(--D)}.chipc b em{margin-left:6px;font:600 10.5px/1 var(--M);font-style:normal;color:#3ddba5}
+.chipc.a{left:-6px;top:14%}.chipc.b{right:-10px;bottom:10%}
+.mini{--v:82;width:34px;height:34px;flex:none;display:grid;place-items:center;background:conic-gradient(var(--sky) calc(var(--v)*1%),rgba(255,255,255,.1) 0);-webkit-mask:radial-gradient(circle,transparent 11px,#000 12px);mask:radial-gradient(circle,transparent 11px,#000 12px);border-radius:50%}
+.hero-viz .tag{position:absolute;right:28px;top:20px;font:500 9.5px/1 var(--M);letter-spacing:.16em;color:var(--sky);opacity:.8}
+@keyframes float{50%{transform:translateY(-8px) rotate(1.5deg)}}
+
+/* stat tiles */
+.stats{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));margin-top:22px;border-top:1px solid var(--ln);border-left:1px solid var(--ln)}
+.stat{position:relative;padding:16px 16px 14px;background:rgba(248,249,252,.6);border-right:1px solid var(--ln);border-bottom:1px solid var(--ln);transition:background .3s}
+.stat:before{content:"";position:absolute;left:-1px;right:-1px;top:-1px;height:2px;background:var(--b);transform:scaleX(0);transform-origin:left;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
+.stat:hover{background:#fff}.stat:hover:before{transform:scaleX(1)}
+.stat-h{display:flex;align-items:center;gap:8px;font:600 9.5px/1.3 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
+.stat-h svg{color:var(--b);width:16px;height:16px}
+.stat b{display:block;margin-top:12px;font:500 28px/1 var(--D);letter-spacing:.01em}
+.stat small{display:block;margin-top:8px;font:500 11px/1.3 var(--M);color:var(--mu)}
+.up{color:var(--ok)!important}.dn{color:var(--cr)!important}
+
+.cols{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:20px;margin-top:22px}
+
+/* activity timeline */
+.feed{max-height:430px;overflow-y:auto;padding:8px 20px}
+.feed li{position:relative;display:grid;grid-template-columns:22px minmax(0,1fr);gap:14px;padding:14px 0}
+.feed li:before{content:"";position:absolute;left:10px;top:30px;bottom:-14px;width:1px;background:var(--ln)}.feed li:last-child:before{display:none}
+.dot{position:relative;z-index:1;width:22px;height:22px;display:grid;place-items:center;margin-top:1px;border:1.5px solid currentColor;background:var(--card)}
+.dot:after{content:"";width:6px;height:6px;background:currentColor}
+.feed p{font-size:14.5px;line-height:1.5}.feed p b{font-weight:600}
+.feed time{display:flex;align-items:center;gap:6px;margin-top:4px;font:400 11.5px/1 var(--M);color:var(--mu)}
+.t-ok{color:var(--ok)}.t-cr{color:var(--cr)}.t-wr{color:var(--wa)}.t-in{color:var(--b)}
+
+/* health bars */
+.bars{padding:10px 20px 16px}
+.bars li{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr) 46px;gap:14px;align-items:center;padding:10px 0;border-bottom:1px solid var(--ln)}.bars li:last-child{border-bottom:0}
+.bars span{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar{height:8px;background:var(--bg2)}.bar i{display:block;height:100%;width:0;background:var(--ok);transition:width 1.1s cubic-bezier(.2,.8,.2,1)}
+.bar i.m{background:var(--wa)}.bar i.l{background:var(--cr)}
+.bars em{font:500 12px/1 var(--M);font-style:normal;text-align:right;color:var(--sl)}
+.score{display:flex;align-items:center;gap:18px;padding:18px 20px 6px}
+.ring{--v:82;position:relative;width:96px;height:96px;flex:none;background:conic-gradient(var(--b) calc(var(--v)*1%),var(--bg2) 0);display:grid;place-items:center}
+.ring:before{content:"";position:absolute;inset:9px;background:var(--card)}
+.ring b{position:relative;font:500 30px/1 var(--D)}
+.score p{font:400 12.5px/1.7 var(--M);color:var(--sl)}.score p strong{display:block;margin-bottom:4px;font:500 15px/1.2 var(--D);letter-spacing:.04em;text-transform:uppercase;color:var(--ink)}
+
+/* tables */
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font:400 13px/1.45 var(--M)}
+th{padding:11px 20px;text-align:left;white-space:nowrap;font:500 10px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu);border-bottom:1px solid var(--ln)}
+td{padding:12px 20px;border-bottom:1px solid var(--ln)}tr:last-child td{border-bottom:0}
+td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
+
+
+/* first-login (empty) states */
+.hero-bar .live.setup{color:#ffd48a}.hero-bar .live.setup i{background:var(--wa);box-shadow:0 0 10px var(--wa)}
+.has-site .hero-bar .live.setup{color:#9fc4ff}.has-site .hero-bar .live.setup i{background:var(--sky);box-shadow:0 0 10px var(--sky)}
+.recent span{letter-spacing:.04em;text-transform:none;font-size:11.5px}
+.setup-steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));max-width:640px;margin-top:24px;border-top:1px solid rgba(255,255,255,.08);counter-reset:s}
+.setup-steps li{counter-increment:s;display:flex;gap:12px;padding:16px 14px 2px 0}.setup-steps li+li{padding-left:16px;border-left:1px solid rgba(255,255,255,.08)}
+.setup-steps i{position:relative;flex:none;display:grid;place-items:center;width:24px;height:24px;border:1.5px solid rgba(255,255,255,.25);font:600 11px/1 var(--M);font-style:normal;color:rgba(214,224,255,.6)}
+.setup-steps i:before{content:counter(s)}
+.setup-steps .done i{border-color:#3ddba5;background:#3ddba5;color:var(--nv)}.setup-steps .done i:before{content:"✓"}
+.setup-steps .now i{border-color:var(--sky);color:var(--sky);box-shadow:0 0 0 4px rgba(90,200,250,.14)}
+.setup-steps b{display:block;font:500 13px/1.3 var(--D);letter-spacing:.04em;text-transform:uppercase;color:rgba(214,224,255,.6)}
+.setup-steps .done b,.setup-steps .now b{color:#fff}
+.setup-steps span{display:block;margin-top:4px;font:400 11px/1.4 var(--M);color:rgba(214,224,255,.5);overflow-wrap:anywhere}.setup-steps .now span{color:var(--sky)}
+.stats.nodata b{color:#b4bccd}.stats.nodata small{color:var(--mu)}
+.bars.ghost span{color:var(--mu)}.bars.ghost .bar{background:repeating-linear-gradient(90deg,var(--bg2) 0 6px,transparent 6px 9px)}.bars.ghost em{color:#b4bccd}
+.ring b{color:var(--ink)}
+@media(max-width:640px){.setup-steps{grid-template-columns:1fr}.setup-steps li+li{padding-left:0;border-left:0;border-top:1px solid rgba(255,255,255,.06)}.setup-steps li{padding:12px 0}}
+@media(max-width:1380px){.stats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:1100px){.cols{grid-template-columns:minmax(0,1fr)}.hero{grid-template-columns:minmax(0,1fr)}.hero-viz{display:none}}
+@media(max-width:640px){
+  .stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .hero-bar{padding:12px 18px;gap:12px}.hero-bar .when>span:not(.clock){display:none}.hero-bar>.sep,.hero-bar>.sep+span{display:none}.hero-main{padding:24px 18px 22px}
+  .cmd{flex-wrap:wrap}.cmd .pre{display:none}.cmd .btn{width:100%;margin-top:6px}
+  .focus b{font-size:20px}.focus a{padding-right:8px}.focus a+a{padding-left:10px}
+  .bars li{grid-template-columns:minmax(0,110px) minmax(0,1fr) 40px;gap:10px}
+}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+
+<div class="main">
+  <script>Shell.top()</script>
+
+  <main class="page">
+    <section class="hero" aria-labelledby="hi">
+      <span class="hero-edge" aria-hidden="true"></span>
+      <div class="hero-bar">
+        <span class="live setup" id="stepT"><i aria-hidden="true"></i>Setup · step 2 of 3</span><span class="sep" aria-hidden="true"></span><span id="barSite">No website connected</span>
+        <span class="when"><span id="date"></span><span class="sep" aria-hidden="true"></span><span class="clock" id="clock">--:--:--</span></span>
+      </div>
+
+      <div class="hero-main">
+        <p class="lbl lt">Your workspace is ready</p>
+        <h1 id="hi"><span>Welcome,</span> <span class="l2" id="first">Farsana</span></h1>
+        <p class="hero-sub" id="heroSub">Add the website you want Scoutly to watch. Your first audit fills this dashboard with <b>real findings from your own pages</b>.</p>
+
+        <form class="cmd" id="scan" novalidate>
+          <svg class="i" aria-hidden="true"><use href="#i-globe"/></svg>
+          <span class="pre" aria-hidden="true">https://</span>
+          <label class="sr-only" for="scanUrl">Website URL</label>
+          <input id="scanUrl" placeholder="yourwebsite.com" inputmode="url" autocapitalize="off" spellcheck="false" autocomplete="url">
+          <button class="btn p" type="submit">Add &amp; audit <span aria-hidden="true">→</span></button>
+        </form>
+        <p class="recent" id="scanHint"><span>Scoutly only reads public pages. Nothing on your site is changed.</span></p>
+
+        <ol class="setup-steps" aria-label="Get set up">
+          <li class="done"><i aria-hidden="true"></i><div><b>Create your account</b><span>Done</span></div></li>
+          <li class="now" id="s2"><i aria-hidden="true"></i><div><b>Add your website</b><span id="s2t">Enter it above</span></div></li>
+          <li id="s3"><i aria-hidden="true"></i><div><b>Run your first audit</b><span id="s3t">Starts after step 2</span></div></li>
+        </ol>
+      </div>
+
+      <div class="hero-viz" aria-hidden="true">
+        <p class="tag" id="vizTag">SCOUT · STANDING BY</p>
+        <div class="radar">
+          <span class="rr r1"></span><span class="rr r2"></span><span class="rr r3"></span><span class="x"></span><span class="y"></span>
+          <span class="sweep"></span>
+          <img src="assets/scoutly.webp" alt="" width="180" height="194">
+          <div class="chipc a"><span class="mini" style="--v:0"></span><div><small>Health</small><b>—</b></div></div>
+          <div class="chipc b"><div><small id="vizK">Waiting for</small><b id="vizV">your first site</b></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section aria-label="Key numbers">
+      <ul class="stats nodata">
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-pulse"/></svg>Health score</p><b id="stHealth">—</b><small id="stHealthS">After first audit</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-page"/></svg>Pages crawled</p><b id="stPages">—</b><small id="stPagesS">After first audit</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-alert"/></svg>Critical issues</p><b id="stCrit">—</b><small id="stCritS">After first audit</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-broken"/></svg>Broken links</p><b id="stBroken">—</b><small id="stBrokenS">After first audit</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-link"/></svg>Backlinks</p><b>—</b><small>Needs a backlink source</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-globe"/></svg>Ref. domains</p><b>—</b><small>Needs a backlink source</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-key"/></svg>Keywords tracked</p><b>0</b><small>None added yet</small></li>
+        <li class="stat"><p class="stat-h"><svg class="i"><use href="#i-ai"/></svg>AI citations</p><b>—</b><small>After first check</small></li>
+      </ul>
+    </section>
+
+    <div class="cols">
+      <section class="panel" aria-labelledby="feedH">
+        <div class="panel-h">
+          <span class="ic" aria-hidden="true"><svg class="i"><use href="#i-bell"/></svg></span>
+          <div><h2 id="feedH">Latest updates</h2><p>What Scoutly finds on your sites</p></div>
+        </div>
+        <ol class="feed" id="feed" hidden></ol>
+        <div class="empty" id="feedEmpty">
+          <span class="empty-i" aria-hidden="true"><svg class="i"><use href="#i-bell"/></svg></span>
+          <h3>No activity yet</h3>
+          <p>Finished crawls, new issues, won or lost backlinks and AI citations will show up here as Scoutly finds them.</p>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="healthH">
+        <div class="panel-h">
+          <span class="ic" aria-hidden="true"><svg class="i"><use href="#i-pulse"/></svg></span>
+          <div><h2 id="healthH">Site health</h2><p id="healthSite">By area · no website yet</p></div>
+        </div>
+        <div class="score"><div class="ring" id="ring" style="--v:0"><b id="ringB">—</b></div><p><strong id="scoreT">No score yet</strong><span id="scoreP">After your first audit, Scoutly scores your site across the eight areas below.</span></p></div>
+        <ul class="bars ghost" id="bars">
+          <li data-cat="crawl"><span>Crawlability &amp; indexing</span><div class="bar"><i></i></div><em>—</em></li>
+          <li data-cat="onpage"><span>On-page SEO</span><div class="bar"><i></i></div><em>—</em></li>
+          <li data-cat="content"><span>Content &amp; keywords</span><div class="bar"><i></i></div><em>—</em></li>
+          <li data-cat="links"><span>Links &amp; redirects</span><div class="bar"><i></i></div><em>—</em></li>
+          <li data-cat="internal"><span>Internal linking</span><div class="bar"><i></i></div><em>—</em></li>
+          <li data-cat="perf"><span>Speed &amp; security</span><div class="bar"><i></i></div><em>—</em></li>
+          <li data-cat="schema"><span>Structured data</span><div class="bar"><i></i></div><em>—</em></li>
+          <li data-cat="ai"><span>AI readiness</span><div class="bar"><i></i></div><em>—</em></li>
+        </ul>
+      </section>
+    </div>
+
+    <div class="cols">
+      <section class="panel" aria-labelledby="issH">
+        <div class="panel-h">
+          <span class="ic" aria-hidden="true"><svg class="i"><use href="#i-alert"/></svg></span>
+          <div><h2 id="issH">Fix these first</h2><p>Sorted by impact</p></div><a class="btn sm" id="issAll" href="audit.html" hidden>Full report →</a>
+        </div>
+        <div class="tbl" id="issT" hidden></div>
+        <div class="empty" id="issEmpty">
+          <span class="empty-i" aria-hidden="true"><svg class="i"><use href="#i-audit"/></svg></span>
+          <h3>Nothing to fix yet</h3>
+          <p>Once your first audit runs, the issues with the biggest impact land here, each with a plain-English fix.</p>
+          <button class="btn sm" type="button" data-add>Add your website</button>
+        </div>
+      </section>
+
+      <section class="panel" aria-labelledby="kwH">
+        <div class="panel-h">
+          <span class="ic" aria-hidden="true"><svg class="i"><use href="#i-key"/></svg></span>
+          <div><h2 id="kwH">Keyword tracking</h2><p>Positions over time</p></div>
+        </div>
+        <div class="empty">
+          <span class="empty-i" aria-hidden="true"><svg class="i"><use href="#i-key"/></svg></span>
+          <h3>No keywords tracked</h3>
+          <p>Add the searches you want to rank for, and Scoutly will track where your pages appear.</p>
+          <button class="btn sm" type="button" data-soon="Keyword tracking">Add keywords</button>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,say=S.say;
+  $('first').textContent=S.user.name.split(' ')[0];
+
+  /* live clock */
+  function pad(n){return ('0'+n).slice(-2)}
+  function tick(){var d=new Date(),h=d.getHours(),h12=h%12||12;
+    $('clock').innerHTML=pad(h12)+':'+pad(d.getMinutes())+':'+pad(d.getSeconds())+'<small>'+(h<12?'AM':'PM')+'</small>';
+    $('date').textContent=d.toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short',year:'numeric'})}
+  tick();setInterval(tick,1000);
+
+  /* adding a website: nothing is crawled yet (early access), so the page only records the site and queues the audit */
+  function focusAdd(){S.closeNav();scrollTo({top:0,behavior:'smooth'});setTimeout(function(){$('scanUrl').focus()},250)}
+  $('projB').addEventListener('click',focusAdd);
+  [].forEach.call(document.querySelectorAll('[data-add]'),function(b){b.addEventListener('click',focusAdd)});
+
+  function host(u){try{return new URL(/^https?:/i.test(u)?u:'https://'+u).hostname.replace(/^www\./,'')}catch(_){return u}}
+  function ago(iso){var m=Math.round((Date.now()-new Date(iso))/60000);return m<1?'Just now':m<60?m+' min ago':m<1440?Math.round(m/60)+' h ago':new Date(iso).toLocaleDateString()}
+  function feedItem(cls,html,when){var li=document.createElement('li');li.innerHTML='<span class="dot '+cls+'" aria-hidden="true"></span><div><p>'+html+'</p><time><svg class="i" style="width:12px;height:12px"><use href="#i-clock"/></svg>'+when+'</time></div>';return li}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+
+  function applySite(site){
+    S.showSite(site);
+    var la=null;try{la=(JSON.parse(S.read('scoutly.audits')||'{}')||{})[host(site)]||null}catch(_){}
+    var auditHref='audit.html?url='+encodeURIComponent(site);
+    $('barSite').textContent=site;$('healthSite').textContent='By area · '+site;
+    $('s2').className='done';$('s2t').textContent=site;
+    var f=$('feed');f.hidden=false;$('feedEmpty').hidden=true;f.innerHTML='';
+    if(!la){
+      $('stepT').lastChild.textContent='Setup · step 3 of 3';
+      $('heroSub').innerHTML='<b>'+esc(site)+'</b> is added. Run its first audit to fill this dashboard with real findings from your pages.';
+      $('s3').className='now';$('s3t').innerHTML='<a href="'+auditHref+'" style="color:inherit;text-decoration:underline">Run it now →</a>';
+      $('vizTag').textContent='SCOUT · READY';$('vizK').textContent='First audit';$('vizV').textContent='Not run yet';
+      f.appendChild(feedItem('t-in','You added <b>'+esc(site)+'</b>. <a href="'+auditHref+'" style="color:var(--b);text-decoration:underline">Run its first audit</a>.','Just now'));
+      return;
+    }
+    document.body.classList.add('audited');
+    var full='audit.html?url='+encodeURIComponent(la.url)+(la.keyword?'&kw='+encodeURIComponent(la.keyword):'');
+    $('stepT').lastChild.textContent='Setup complete';
+    $('heroSub').innerHTML='<b>'+esc(site)+'</b> scored <b>'+la.score+'/100</b> in its last audit, with '+la.critical+' critical issue'+(la.critical===1?'':'s')+' and '+la.warning+' warning'+(la.warning===1?'':'s')+'. <a href="'+full+'" style="color:var(--sky);text-decoration:underline">Open the full report</a>.';
+    $('s3').className='done';$('s3t').textContent='Score '+la.score+'/100';
+    $('vizTag').textContent='SCOUT · AUDITED';$('vizK').textContent='Last audit · '+ago(la.at);$('vizV').textContent=la.score+' / 100';
+    document.querySelector('.chipc.a b').textContent=la.score;document.querySelector('.chipc.a .mini').style.setProperty('--v',la.score);
+    $('stHealth').textContent=la.score;$('stHealthS').textContent=ago(la.at);
+    $('stPages').textContent=la.pages;$('stPagesS').textContent='In the last audit';
+    $('stCrit').textContent=la.critical;$('stCritS').textContent=la.warning+' warnings · '+la.notice+' notices';
+    $('stBroken').textContent=la.broken;$('stBrokenS').textContent=la.broken?'Fix these first':'None found';
+    document.querySelector('.stats').classList.remove('nodata');
+    var r=$('ring');r.style.setProperty('--v',la.score);$('ringB').textContent=la.score;
+    $('scoreT').textContent=la.score>=90?'Excellent':la.score>=75?'Good, with fixes to make':la.score>=50?'Needs work':'Poor';
+    var cats=la.cats||{},low=Object.keys(cats).filter(function(k){return cats[k]!=null}).sort(function(a,b){return cats[a]-cats[b]})[0];
+    var names={crawl:'Crawlability',onpage:'On-page SEO',content:'Content',links:'Links',internal:'Internal linking',perf:'Speed & security',schema:'Structured data',ai:'AI readiness'};
+    $('scoreP').textContent=low?names[low]+' pulls the score down most ('+cats[low]+'/100). Start with the critical issues.':'';
+    $('bars').classList.remove('ghost');
+    [].forEach.call($('bars').children,function(li){var v=cats[li.dataset.cat],i=li.querySelector('i');
+      li.querySelector('em').textContent=v==null?'—':v+'%';if(v!=null){i.style.width=v+'%';i.className=v<60?'l':v<85?'m':''}});
+    if(la.issues&&la.issues.length){
+      $('issEmpty').hidden=true;$('issT').hidden=false;$('issAll').hidden=false;$('issAll').href=full;
+      $('issT').innerHTML='<table><thead><tr><th>Issue</th><th>Severity</th><th class="n">Count</th></tr></thead><tbody>'+la.issues.map(function(x){var c={critical:'cr',warning:'wr',notice:'in'}[x.s];return '<tr><td>'+esc(x.t)+'</td><td><span class="sv '+c+'">'+x.s+'</span></td><td class="n">'+x.n+'</td></tr>'}).join('')+'</tbody></table>';
+    }else{$('issEmpty').querySelector('h3').textContent='Nothing to fix';$('issEmpty').querySelector('p').textContent='The last audit found no issues. Nice work.';$('issEmpty').querySelector('.btn').hidden=true}
+    f.appendChild(feedItem(la.critical?'t-cr':la.warning?'t-wr':'t-ok','Audit finished for <b>'+esc(host(la.url))+'</b>: score '+la.score+'/100, '+la.critical+' critical, '+la.warning+' warnings across '+la.pages+' pages. <a href="'+full+'" style="color:var(--b);text-decoration:underline">View report</a>',ago(la.at)));
+    if(la.broken)f.appendChild(feedItem('t-cr','<b>'+la.broken+' broken link'+(la.broken===1?'':'s')+'</b> found <span class="sv cr">Fix</span>',ago(la.at)));
+    f.appendChild(feedItem('t-in','You added <b>'+esc(site)+'</b>.','Earlier'));
+  }
+  var saved=S.read('scoutly.site');
+  if(saved)applySite(saved);
+
+  $('scan').addEventListener('submit',function(e){e.preventDefault();var v=$('scanUrl').value.trim();
+    if(!/^(https?:\/\/)?[\w-]+(\.[\w-]+)+(\/.*)?$/i.test(v)){say('Enter a website address, like example.com.');$('scanUrl').focus();return}
+    var site=v.replace(/^https?:\/\//i,'').replace(/\/+$/,'').toLowerCase();
+    S.write('scoutly.site',site);
+    say('Starting the audit for '+site+'…');
+    location.href='audit.html?url='+encodeURIComponent(site)});
+})();
+</script>
+</body>
+</html>

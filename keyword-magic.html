@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Keyword Magic Tool — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.mg{display:grid;grid-template-columns:220px minmax(0,1fr);gap:20px;margin-top:20px}
+.groups{background:var(--card);border:1px solid var(--ln);align-self:start;position:sticky;top:84px;max-height:calc(100vh - 110px);overflow:auto}
+.groups h3{padding:12px 14px;border-bottom:1px solid var(--ln);font:600 10px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
+.groups button{display:flex;justify-content:space-between;width:100%;padding:8px 14px;border:0;border-bottom:1px solid var(--ln);background:none;font:400 12.5px/1.3 var(--M);color:var(--ink);cursor:pointer;text-align:left}
+.groups button:hover{background:#fff}.groups button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.groups button span{color:var(--mu)}.groups button[aria-pressed="true"] span{color:rgba(255,255,255,.7)}
+.res{min-width:0}.res .panel{margin-top:0}
+.kw-c{display:flex;align-items:center;gap:8px}.kw-c a{color:var(--ink)}.kw-c a:hover{color:var(--b)}
+.sel-n{font:500 11px/1 var(--M);color:var(--mu)}
+@media(max-width:900px){.mg{grid-template-columns:minmax(0,1fr)}.groups{position:static;max-height:220px}}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">Keyword research</p>
+      <h1>Keyword Magic Tool</h1>
+      <p class="desc">Start from one seed keyword and get every related search Google suggests: a–z expansions, questions, prepositions and modifiers. Group, filter, pick the ones you want and save them to the Keyword Manager or export them.</p>
+    </div>
+    <form class="qbar" id="f" novalidate>
+      <div class="qf"><label for="q">Seed keyword</label><input id="q" placeholder="e.g. seo audit" autocomplete="off"></div>
+      <div class="qf sm"><label for="gl">Country</label><select id="gl"><option value="in">India</option><option value="us">United States</option><option value="gb">United Kingdom</option><option value="ae">UAE</option><option value="au">Australia</option><option value="ca">Canada</option><option value="sg">Singapore</option></select></div>
+      <button class="btn p" type="submit"><svg class="i"><use href="#i-wand"/></svg>Find keywords</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div class="loading" id="load" hidden><span class="spin"></span>Asking Google for suggestions (about 70 queries)…</div>
+
+    <div id="pay" hidden></div>
+    <div class="mg" id="out" hidden>
+      <aside class="groups" aria-label="Keyword groups"><h3>Groups</h3><div id="groups"></div></aside>
+      <div class="res">
+        <section class="panel">
+          <div class="toolbar">
+            <div class="seg" role="group" aria-label="Type" id="seg"><button type="button" data-t="all" aria-pressed="true">All</button><button type="button" data-t="q" aria-pressed="false">Questions</button><button type="button" data-t="local" aria-pressed="false">Local</button></div>
+            <select id="fInt" aria-label="Intent"><option value="">Any intent</option><option value="I">Informational</option><option value="N">Navigational</option><option value="C">Commercial</option><option value="T">Transactional</option></select>
+            <select id="fWords" aria-label="Words"><option value="0">Any length</option><option value="2">2+ words</option><option value="3">3+ words</option><option value="4">4+ words (long tail)</option></select>
+            <input type="search" id="fInc" placeholder="Include words…" aria-label="Include words">
+            <input type="search" id="fExc" placeholder="Exclude words…" aria-label="Exclude words">
+            <span class="grow"></span>
+            <span class="sel-n" id="count"></span>
+          </div>
+          <div class="toolbar">
+            <label class="sel-n"><input type="checkbox" id="all"> Select all shown</label><span class="sel-n" id="selN"></span><span class="grow"></span>
+            <button class="btn sm" type="button" id="add"><svg class="i"><use href="#i-plus"/></svg>Add to list</button>
+            <button class="btn sm" type="button" id="exp"><svg class="i"><use href="#i-dl"/></svg>Export CSV</button>
+          </div>
+          <div class="dt-wrap"><table class="dt"><thead><tr><th style="width:34px"></th><th class="sortable" data-s="kw">Keyword</th><th class="sortable" data-s="intent">Intent</th><th class="sortable n" data-s="words">Words</th><th>Found via</th><th class="n sortable" data-s="vol">Volume</th><th class="n sortable" data-s="kd">KD</th><th class="n sortable" data-s="cpc">CPC</th></tr></thead><tbody id="rows"></tbody></table></div>
+          <p class="meta-note pad" id="volNote">Volume, keyword difficulty (KD) and CPC need a paid keyword data provider. Order follows Google's own ranking of suggestions, which roughly reflects popularity.</p>
+        </section>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc;
+  var data=null,group='',type='all',sort=null,dir=1,sel={};
+  var INT={I:'Informational',N:'Navigational',C:'Commercial',T:'Transactional'};
+  function shown(){
+    var inc=$('fInc').value.toLowerCase().split(/[,\s]+/).filter(Boolean),exc=$('fExc').value.toLowerCase().split(/[,\s]+/).filter(Boolean),fi=$('fInt').value,fw=+$('fWords').value;
+    var r=data.keywords.filter(function(k){var w=' '+k.kw+' ';
+      return (!group||w.indexOf(' '+group+' ')>-1)&&(type==='all'||(type==='q'&&k.question)||(type==='local'&&k.local))&&(!fi||k.intent===fi)&&k.words>=fw&&
+        inc.every(function(x){return k.kw.indexOf(x)>-1})&&!exc.some(function(x){return k.kw.indexOf(x)>-1})});
+    if(sort)r=r.slice().sort(function(a,b){var x=a[sort],y=b[sort];if(x==null)x=-1;if(y==null)y=-1;return (x>y?1:x<y?-1:0)*dir});
+    return r;
+  }
+  function render(){
+    var r=shown();
+    $('count').textContent=r.length+' of '+data.count+' keywords';
+    $('rows').innerHTML=r.map(function(k){return '<tr><td><input type="checkbox" data-k="'+esc(k.kw)+'"'+(sel[k.kw]?' checked':'')+' aria-label="Select '+esc(k.kw)+'"></td><td><span class="kw-c"><a href="keyword-overview.html?q='+encodeURIComponent(k.kw)+'&gl='+$('gl').value+'">'+esc(k.kw)+'</a>'+(k.question?'<span class="tag in">?</span>':'')+(k.local?'<span class="tag wr">local</span>':'')+'</span></td><td><i class="int '+k.intent+'" title="'+INT[k.intent]+'">'+k.intent+'</i></td><td class="n">'+k.words+'</td><td><span class="tag">'+esc(k.src)+'</span></td>'+(k.m?'<td class="n">'+S.fmt(k.vol)+'</td><td class="n">'+S.kdTag(k.kd)+'</td><td class="n">'+(k.cpc==null?'—':'$'+S.fmt(k.cpc,2))+'</td>':'<td class="n" style="color:var(--mu)">—</td><td class="n" style="color:var(--mu)">—</td><td class="n" style="color:var(--mu)">—</td>')+'</tr>'}).join('')||'<tr><td colspan="8" class="meta-note">No keywords match these filters.</td></tr>';
+    $('all').checked=r.length&&r.every(function(k){return sel[k.kw]});
+    var n=Object.keys(sel).length;$('selN').textContent=n?n+' selected':'';
+  }
+  function renderGroups(){
+    $('groups').innerHTML='<button type="button" data-g="" aria-pressed="'+(!group)+'">All keywords<span>'+data.count+'</span></button>'+data.groups.map(function(g){return '<button type="button" data-g="'+esc(g.term)+'" aria-pressed="'+(group===g.term)+'">'+esc(g.term)+'<span>'+g.count+'</span></button>'}).join('');
+  }
+  function run(q){
+    $('err').textContent='';if(!q.trim()){$('err').textContent='Enter a seed keyword.';return}
+    history.replaceState(null,'','?q='+encodeURIComponent(q)+'&gl='+$('gl').value);
+    $('out').hidden=true;$('load').hidden=false;sel={};group='';
+    $('pay').hidden=true;var gl=$('gl').value;
+    S.api('/api/keywords?q='+encodeURIComponent(q)+'&gl='+gl).then(function(d){data=d;renderGroups();render();$('load').hidden=true;$('out').hidden=false;metrics(d,gl)})
+      .catch(function(e){$('load').hidden=true;$('err').textContent=e.message});
+  }
+  /* every suggestion's volume, KD and CPC in one batched lookup (2 DataForSEO calls per 1,000 keywords) */
+  function metrics(d,gl){
+    S.provider().then(function(st){if(!st.ok)return;
+      S.paid($('pay'),function(run){return S.post('/api/provider/keywords',{keywords:d.keywords.map(function(k){return k.kw}),gl:gl,run:run})},function(r){
+        if(data!==d)return;
+        d.keywords.forEach(function(k){var m=r.items[k.kw];if(m){k.m=1;k.vol=m.vol;k.kd=m.kd;k.cpc=m.cpc}});
+        $('volNote').textContent='Volume is average monthly Google searches, KD is keyword difficulty (0–100) and CPC the average cost per click, from DataForSEO for this country.'+(r.missing?' '+r.missing+' keywords still need a lookup.':'')+(r.skipped?' '+r.skipped+' with symbols Google Ads won’t accept were skipped.':'');
+        render()},'volume, KD and CPC for '+d.keywords.length+' keywords');
+    });
+  }
+  $('f').addEventListener('submit',function(e){e.preventDefault();run($('q').value)});
+  $('groups').addEventListener('click',function(e){var b=e.target.closest('[data-g]');if(!b)return;group=b.dataset.g;renderGroups();render()});
+  $('seg').addEventListener('click',function(e){var b=e.target.closest('[data-t]');if(!b)return;type=b.dataset.t;[].forEach.call($('seg').children,function(x){x.setAttribute('aria-pressed',x===b)});render()});
+  ['fInt','fWords'].forEach(function(i){$(i).addEventListener('change',render)});['fInc','fExc'].forEach(function(i){$(i).addEventListener('input',render)});
+  document.querySelector('.dt thead').addEventListener('click',function(e){var th=e.target.closest('[data-s]');if(!th||!data)return;dir=sort===th.dataset.s?-dir:1;sort=th.dataset.s;render()});
+  $('rows').addEventListener('change',function(e){var c=e.target.closest('[data-k]');if(!c)return;if(c.checked)sel[c.dataset.k]=1;else delete sel[c.dataset.k];render()});
+  $('all').addEventListener('change',function(){var on=this.checked;shown().forEach(function(k){if(on)sel[k.kw]=1;else delete sel[k.kw]});render()});
+  function picked(){var s=Object.keys(sel);return (s.length?data.keywords.filter(function(k){return sel[k.kw]}):shown())}
+  $('add').onclick=function(){if(!data)return;var ks=picked();if(!ks.length)return S.say('Nothing to add.');
+    var names=Object.keys(S.lists()),name=prompt('Add '+ks.length+' keyword'+(ks.length>1?'s':'')+' to which list?'+(names.length?' Existing: '+names.join(', '):''),names[0]||data.seed);
+    if(!name)return;var n=S.addToList(name.trim(),ks.map(function(k){return {kw:k.kw,intent:k.intent,gl:$('gl').value,added:new Date().toISOString(),seed:data.seed}}));
+    S.say(n+' added to “'+name.trim()+'”.'+(n<ks.length?' '+(ks.length-n)+' were already there.':''));sel={};render()};
+  $('exp').onclick=function(){if(!data)return;var ks=picked();S.csv([['Keyword','Intent','Words','Question','Found via','Volume','KD','CPC']].concat(ks.map(function(k){return [k.kw,INT[k.intent],k.words,k.question?'yes':'',k.src,k.vol,k.kd,k.cpc]})),'scoutly-keywords-'+data.seed.replace(/\W+/g,'-')+'.csv')};
+  if(S.qs('gl'))$('gl').value=S.qs('gl');
+  if(S.qs('q')){$('q').value=S.qs('q');run(S.qs('q'))}else $('q').focus();
+})();
+</script>
+</body>
+</html>

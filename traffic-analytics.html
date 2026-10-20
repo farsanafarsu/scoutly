@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Traffic Analytics — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.trend{display:block;width:100%;height:auto}
+.trend .ax{font:400 10px var(--M);fill:var(--mu)}.trend .gl{stroke:var(--ln)}
+.trend .o{fill:none;stroke:var(--b);stroke-width:2}.trend .p{fill:none;stroke:var(--wa);stroke-width:2;stroke-dasharray:4 3}
+.trend circle{fill:var(--b)}
+.legend{display:flex;flex-wrap:wrap;gap:8px 16px;padding:0 20px 14px;font:400 11.5px/1.4 var(--M);color:var(--sl)}.legend i{display:inline-block;width:14px;height:2px;margin-right:6px;vertical-align:middle;background:var(--b)}.legend i.p{background:var(--wa)}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">Competitive research</p>
+      <h1>Traffic Analytics</h1>
+      <p class="desc">Estimated Google search traffic for any domain: organic and paid visits per month, their trend over the last year and the pages that pull in the most. Estimates come from DataForSEO Labs (rankings × search volume × click-through rates). They cover search only, not direct, social or referral visits; for your own site, Google Analytics has the exact totals.</p>
+    </div>
+    <div class="loading" id="gate"><span class="spin"></span>Checking the data provider…</div>
+    <form class="qbar" id="f" novalidate hidden>
+      <div class="qf"><label for="d">Domain</label><input id="d" placeholder="e.g. competitor.com" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+      <div class="qf sm"><label for="gl">Country</label><select id="gl"><option value="in">India</option><option value="us">United States</option><option value="gb">United Kingdom</option><option value="ae">UAE</option><option value="au">Australia</option><option value="ca">Canada</option><option value="sg">Singapore</option></select></div>
+      <button class="btn p" type="submit"><svg class="i"><use href="#i-search"/></svg>Analyze</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div id="pay" hidden></div>
+
+    <div id="out" hidden>
+      <div class="kpis" id="kpis"></div>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-trend"/></svg></span><div><h2>Search traffic trend</h2><p>Estimated monthly visits from Google</p></div></div>
+        <div class="pad" id="chart"></div><div class="legend"><span><i></i>Organic</span><span><i class="p"></i>Paid</span></div></section>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-page"/></svg></span><div><h2>Top pages</h2><p>By estimated organic traffic</p></div><button class="btn sm" type="button" id="exp"><svg class="i"><use href="#i-dl"/></svg>Export CSV</button></div>
+        <div class="dt-wrap"><table class="dt"><thead><tr><th>Page</th><th class="n">Keywords</th><th class="n">Traffic</th><th class="n">Share</th></tr></thead><tbody id="pages"></tbody></table></div></section>
+      <p class="meta-note" style="margin-top:12px" id="src"></p>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,fmt=S.fmt,data=null;
+  function kpi(icon,label,val,sub){return '<div class="kpi"><small><svg class="i"><use href="#i-'+icon+'"/></svg>'+label+'</small><b>'+val+'</b><span>'+sub+'</span></div>'}
+  function chart(t){
+    if(t.length<2)return '<p class="meta-note">Not enough history for a trend yet.</p>';
+    var W=760,H=220,L=48,R=10,T=10,B=26,max=Math.max.apply(null,t.map(function(x){return Math.max(x.organic||0,x.paid||0)}).concat(1));
+    var X=function(i){return L+i*(W-L-R)/(t.length-1)},Y=function(v){return T+(H-T-B)*(1-(v||0)/max)};
+    var line=function(k){return t.map(function(x,i){return (i?'L':'M')+X(i).toFixed(1)+' '+Y(x[k]).toFixed(1)}).join('')};
+    var grid=[0,.5,1].map(function(f){var y=Y(max*f);return '<line class="gl" x1="'+L+'" x2="'+(W-R)+'" y1="'+y+'" y2="'+y+'"/><text class="ax" x="'+(L-6)+'" y="'+(y+3)+'" text-anchor="end">'+fmt(max*f)+'</text>'}).join('');
+    var lab=t.map(function(x,i){return i%Math.ceil(t.length/8)?'':'<text class="ax" x="'+X(i)+'" y="'+(H-8)+'" text-anchor="middle">'+x.month+'</text>'}).join('');
+    var dots=t.map(function(x,i){return '<circle r="3" cx="'+X(i)+'" cy="'+Y(x.organic)+'"><title>'+x.month+': '+fmt(x.organic)+' organic, '+fmt(x.paid)+' paid</title></circle>'}).join('');
+    return '<svg class="trend" viewBox="0 0 '+W+' '+H+'" role="img" aria-label="Estimated monthly search traffic">'+grid+'<path class="p" d="'+line('paid')+'"/><path class="o" d="'+line('organic')+'"/>'+dots+lab+'</svg>';
+  }
+  function show(d){
+    data=d;var o=d.organic,p=d.paid,t=d.trend,first=t[0],last=t[t.length-1];
+    var chg=first&&last&&first.organic?Math.round((last.organic-first.organic)/first.organic*100):null;
+    $('kpis').innerHTML=kpi('trend','Organic traffic',fmt(o.traffic),'Estimated monthly visits from Google')+kpi('chart','Paid traffic',fmt(p.traffic),'From '+fmt(p.keywords)+' ad keywords')+
+      kpi('key','Organic keywords',fmt(o.keywords),'Ranking in the top 100')+kpi('pulse','Traffic value',o.value==null?'—':'$'+fmt(o.value),'Ad cost of the organic traffic')+
+      kpi('cal','12-month change',chg==null?'—':(chg>0?'+':'')+chg+'%',first?'Since '+first.month:'No history');
+    $('chart').innerHTML=chart(t);
+    var tot=d.pages.reduce(function(a,x){return a+(x.traffic||0)},0)||1;
+    $('pages').innerHTML=d.pages.map(function(x){return '<tr><td class="u"><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(x.url)+'</a></td><td class="n">'+fmt(x.keywords)+'</td><td class="n">'+fmt(x.traffic)+'</td><td class="n">'+Math.round((x.traffic||0)/tot*100)+'%</td></tr>'}).join('')||'<tr><td colspan="4" class="meta-note">No pages found.</td></tr>';
+    $('src').textContent='DataForSEO Labs · '+(d.cached?'from cache, ':'')+'fetched '+S.ago(d.fetchedAt)+'. Cached for 24 hours.';
+    $('out').hidden=false;
+  }
+  function run(){
+    var d=$('d').value.trim(),gl=$('gl').value;$('err').textContent='';$('out').hidden=true;
+    if(!d){$('err').textContent='Enter a domain.';return}
+    history.replaceState(null,'','?d='+encodeURIComponent(d)+'&gl='+gl);
+    S.paid($('pay'),function(r){return S.api('/api/provider/traffic?d='+encodeURIComponent(d)+'&gl='+gl+(r?'&run=1':''))},show,'traffic estimates for '+d);
+  }
+  $('f').addEventListener('submit',function(e){e.preventDefault();run()});
+  $('exp').onclick=function(){if(!data)return;S.csv([['Page','Keywords','Traffic']].concat(data.pages.map(function(x){return [x.url,x.keywords,x.traffic]})),'scoutly-traffic-'+data.domain.replace(/\W+/g,'-')+'.csv')};
+  S.provider().then(function(st){
+    if(!st.ok){location.replace('locked.html?tool=traffic');return}
+    $('gate').hidden=true;$('f').hidden=false;
+    if(S.qs('gl'))$('gl').value=S.qs('gl');
+    $('d').value=S.qs('d')||S.read('scoutly.site')||'';
+    if(S.qs('d'))run();else $('d').focus();
+  });
+})();
+</script>
+</body>
+</html>

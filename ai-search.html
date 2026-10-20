@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Search Visibility — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.eng{display:flex;flex-wrap:wrap;gap:6px}
+.eng a{display:inline-flex;align-items:center;gap:6px;height:30px;padding:0 10px;border:1px solid var(--ln);background:#fff;font:600 10px/1 var(--M);letter-spacing:.08em;text-transform:uppercase;color:var(--sl)}
+.eng a:hover{border-color:var(--b);color:var(--b)}
+.mark{display:flex;gap:4px}
+.mark button{height:26px;padding:0 7px;border:1px solid var(--ln);background:#fff;font:600 9.5px/1 var(--M);letter-spacing:.06em;text-transform:uppercase;color:var(--mu);cursor:pointer}
+.mark button[aria-pressed="true"].m{background:var(--ok);border-color:var(--ok);color:#fff}
+.mark button[aria-pressed="true"].c{background:var(--b);border-color:var(--b);color:#fff}
+.mark button[aria-pressed="true"].n{background:var(--cr);border-color:var(--cr);color:#fff}
+.ptable td{vertical-align:middle}
+.eng-h{font:600 10px/1.3 var(--M);letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+.addp{display:flex;gap:8px;padding:12px 16px;border-top:1px solid var(--ln)}.addp input{flex:1;height:36px;padding:0 10px;border:1px solid var(--ln);border-radius:3px;font:400 13px/1 var(--M)}
+.kind{font:600 9.5px/1 var(--M);letter-spacing:.08em;text-transform:uppercase}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">AI visibility</p>
+      <h1>AI Search Visibility</h1>
+      <p class="desc">Two things decide whether ChatGPT, Perplexity, Claude, Gemini and Copilot mention you: whether their crawlers can read your site, and whether your content is what they choose to cite. Scoutly checks the first automatically and helps you track the second prompt by prompt.</p>
+    </div>
+    <form class="qbar" id="f" novalidate>
+      <div class="qf"><label for="site">Your website</label><input id="site" placeholder="yourwebsite.com" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+      <div class="qf"><label for="brand">Brand name</label><input id="brand" placeholder="How people name your business" autocomplete="organization"></div>
+      <div class="qf"><label for="topic">What you offer</label><input id="topic" placeholder="e.g. running shoes" autocomplete="off"></div>
+      <div class="qf sm"><label for="gl">Country</label><select id="gl"><option value="in">India</option><option value="us">United States</option><option value="gb">United Kingdom</option><option value="ae">UAE</option><option value="au">Australia</option><option value="ca">Canada</option><option value="sg">Singapore</option></select></div>
+      <button class="btn p" type="submit"><svg class="i"><use href="#i-ai"/></svg>Check</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div class="loading" id="load" hidden><span class="spin"></span>Testing how each AI crawler sees your site…</div>
+
+    <div id="out" hidden>
+      <div class="kpis" id="kpis"></div>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-globe"/></svg></span><div><h2>Can AI crawlers read your site?</h2><p id="crawlP"></p></div></div>
+        <div class="dt-wrap"><table class="dt"><thead><tr><th>Crawler</th><th>Used for</th><th>Type</th><th>robots.txt</th><th>Live test</th></tr></thead><tbody id="crawl"></tbody></table></div>
+        <p class="meta-note pad">“Search” crawlers fetch pages to answer people right now; blocking them keeps you out of those answers. “Training” crawlers collect data for future models; blocking them is a policy choice and doesn’t stop citations. The live test requests your page as that crawler, which catches firewalls (like Cloudflare’s “block AI bots”) that robots.txt doesn’t show.</p></section>
+
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-ai"/></svg></span><div><h2>Prompt tracker</h2><p>Does each AI assistant mention you for the questions your customers ask?</p></div><span style="margin-left:auto;display:flex;gap:8px"><button class="btn sm" type="button" id="gen"><svg class="i"><use href="#i-wand"/></svg>Suggest prompts</button><button class="btn sm" type="button" id="exp"><svg class="i"><use href="#i-dl"/></svg>CSV</button></span></div>
+        <p class="meta-note pad" style="border-bottom:1px solid var(--ln)">No free API returns AI answers, so this is a guided check: open a prompt in each assistant, read the answer, and mark whether your brand was <b>mentioned</b>, <b>cited</b> (linked as a source) or <b>not</b> there. Scoutly keeps the history in this browser so you can see your share of voice change.</p>
+        <div class="dt-wrap"><table class="dt ptable"><thead><tr><th>Prompt</th><th>Open in</th><th><span class="eng-h">ChatGPT</span></th><th><span class="eng-h">Perplexity</span></th><th><span class="eng-h">Google AI</span></th><th><span class="eng-h">Copilot</span></th><th></th></tr></thead><tbody id="prompts"></tbody></table></div>
+        <div class="addp"><input id="newP" placeholder="Add your own prompt, e.g. best running shoes for flat feet"><button class="btn sm p" type="button" id="addP"><svg class="i"><use href="#i-plus"/></svg>Add</button></div>
+      </section>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-bulb"/></svg></span><div><h2>How to get cited more</h2><p>What AI assistants tend to pick</p></div></div>
+        <ul class="pad" id="tips"></ul></section>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,KEY='scoutly.aivis',st=load(),info=null;
+  var ENG=[['chatgpt','ChatGPT',function(q){return 'https://chatgpt.com/?q='+encodeURIComponent(q)}],['perplexity','Perplexity',function(q){return 'https://www.perplexity.ai/search?q='+encodeURIComponent(q)}],
+           ['google','Google AI',function(q){return 'https://www.google.com/search?udm=50&q='+encodeURIComponent(q)}],['copilot','Copilot',function(q){return 'https://copilot.microsoft.com/?q='+encodeURIComponent(q)}]];
+  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'null')||{prompts:[],marks:{}}}catch(_){return {prompts:[],marks:{}}}}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(_){}}
+  function liveCell(c){if(c.live==null)return '<span class="meta-note">not tested</span>';if(c.live>=200&&c.live<400)return '<span class="tag ok">'+c.live+' allowed</span>';return '<span class="tag bad">'+(c.live||'refused')+' blocked</span>'}
+  function renderCrawl(){
+    var cs=info.crawlers,search=cs.filter(function(c){return c.kind==='search'}),train=cs.filter(function(c){return c.kind==='training'});
+    var sOk=search.filter(function(c){return c.allowed}).length,tOk=train.filter(function(c){return c.allowed}).length,fw=cs.filter(function(c){return c.live!=null&&(c.live<200||c.live>=400)}).length;
+    $('crawlP').textContent=info.url+(info.robots?'':' · no robots.txt (everything allowed)');
+    $('crawl').innerHTML=cs.map(function(c){return '<tr><td><b>'+esc(c.bot)+'</b><div class="meta-note">'+esc(c.owner)+'</div></td><td>'+esc(c.purpose)+'</td><td><span class="kind" style="color:'+(c.kind==='search'?'var(--b)':'var(--mu)')+'">'+c.kind+'</span></td><td>'+(c.allowed?'<span class="tag ok">Allowed</span>':'<span class="tag '+(c.kind==='search'?'bad':'wr')+'">Blocked</span>')+'</td><td>'+liveCell(c)+'</td></tr>'}).join('');
+    var marks=Object.values(st.marks),checked=marks.filter(function(m){return m.v}).length,seen=marks.filter(function(m){return m.v==='m'||m.v==='c'}).length;
+    $('kpis').innerHTML=[['ai','AI search crawlers',sOk+' / '+search.length,'Allowed in robots.txt'],['lock','Firewall blocks',fw,fw?'A firewall turns some AI crawlers away':'No AI crawler was refused'],['book','llms.txt',info.llms.exists?'Yes':'No',info.llms.exists?info.llms.links+' links'+(info.llms.full?' · llms-full.txt too':''):'Optional summary for AI tools'],['star','Share of voice',checked?Math.round(seen/checked*100)+'%':'—',checked?seen+' of '+checked+' answers mention you':'Mark prompts below']]
+      .map(function(k){return '<div class="kpi"><small><svg class="i"><use href="#i-'+(k[0]==='book'?'page':k[0])+'"/></svg>'+k[1]+'</small><b>'+k[2]+'</b><span>'+k[3]+'</span></div>'}).join('');
+    var tips=[];
+    if(sOk<search.length)tips.push('Allow the AI search crawlers that are blocked in robots.txt ('+search.filter(function(c){return !c.allowed}).map(function(c){return c.bot}).join(', ')+'). You can keep training crawlers blocked separately.');
+    if(fw)tips.push('Your firewall or CDN refuses some AI crawlers even though robots.txt may allow them. In Cloudflare, check Security → Bots → “Block AI bots” and AI Crawl Control.');
+    if(!info.llms.exists)tips.push('Add an /llms.txt: a short Markdown summary of who you are with links to your key pages. It’s optional and new, but cheap to add.');
+    if(info.page.words<300)tips.push('Your homepage has little readable text ('+info.page.words+' words). AI assistants quote clear, specific text: what you do, where, for whom, prices and proof.');
+    if(!info.page.schema.some(function(s){return /Organization|LocalBusiness|Business/.test(s)}))tips.push('Add Organization or LocalBusiness structured data with your name, logo, address and sameAs links to your profiles, so AI systems connect your brand to the right entity.');
+    tips.push('Answer the exact questions from the prompt tracker on your site, each under a question heading with a direct 40–60 word answer first. Check pages with the AEO · GEO checker.');
+    tips.push('Get mentioned where assistants look: reviews, directories, “best of” lists, Reddit and industry sites. Third-party mentions drive many AI citations.');
+    $('tips').innerHTML=tips.map(function(t){return '<li style="padding:9px 0;border-bottom:1px solid var(--ln);font:400 13px/1.6 Geist,sans-serif;color:var(--sl)">'+esc(t)+'</li>'}).join('');
+  }
+  function key(p,e){return p+'||'+e}
+  function renderPrompts(){
+    $('prompts').innerHTML=st.prompts.map(function(p,i){return '<tr><td class="u">'+esc(p)+'</td><td><div class="eng">'+ENG.map(function(e){return '<a href="'+e[2](p)+'" target="_blank" rel="noopener noreferrer">'+e[1]+'</a>'}).join('')+'</div></td>'+
+      ENG.map(function(e){var m=st.marks[key(p,e[0])]||{},v=m.v;return '<td><div class="mark" data-p="'+i+'" data-e="'+e[0]+'"><button type="button" class="m" data-v="m" aria-pressed="'+(v==='m')+'" title="Mentioned">Men</button><button type="button" class="c" data-v="c" aria-pressed="'+(v==='c')+'" title="Cited as a source">Cite</button><button type="button" class="n" data-v="n" aria-pressed="'+(v==='n')+'" title="Not mentioned">No</button></div>'+(m.at?'<div class="meta-note">'+new Date(m.at).toLocaleDateString()+'</div>':'')+'</td>'}).join('')+
+      '<td><button class="btn sm ic" type="button" data-del="'+i+'" aria-label="Remove prompt"><svg class="i"><use href="#i-x"/></svg></button></td></tr>'}).join('')||'<tr><td colspan="7" class="meta-note">No prompts yet. Press “Suggest prompts” or add your own.</td></tr>';
+    if(info)renderCrawl();
+  }
+  $('prompts').addEventListener('click',function(e){var d=e.target.closest('[data-del]');if(d){var p=st.prompts[+d.dataset.del];st.prompts.splice(+d.dataset.del,1);ENG.forEach(function(x){delete st.marks[key(p,x[0])]});save();renderPrompts();return}
+    var b=e.target.closest('[data-v]');if(!b)return;var box=b.parentNode,p=st.prompts[+box.dataset.p],k=key(p,box.dataset.e),cur=st.marks[k]||{};
+    st.marks[k]=cur.v===b.dataset.v?{}:{v:b.dataset.v,at:new Date().toISOString()};save();renderPrompts()});
+  function addPrompts(list){var n=0;list.forEach(function(p){p=p.trim();if(p&&st.prompts.indexOf(p)<0){st.prompts.push(p);n++}});save();renderPrompts();return n}
+  $('addP').onclick=function(){if(addPrompts([$('newP').value]))$('newP').value=''};
+  $('newP').addEventListener('keydown',function(e){if(e.key==='Enter'){e.preventDefault();$('addP').click()}});
+  $('gen').onclick=function(){var t=$('topic').value.trim();if(!t)return S.say('Fill in “What you offer” first.');var b=this;b.disabled=true;
+    S.api('/api/keywords?q='+encodeURIComponent(t)+'&gl='+$('gl').value).then(function(d){
+      var ps=['best '+t,'top '+t+' recommendations','which '+t+' should I choose','is '+($('brand').value.trim()||'this brand')+' good for '+t];
+      d.keywords.filter(function(k){return k.question&&k.words>=4}).slice(0,6).forEach(function(k){ps.push(k.kw)});
+      d.keywords.filter(function(k){return /\b(best|vs|near|cheap|top)\b/.test(k.kw)}).slice(0,4).forEach(function(k){ps.push(k.kw)});
+      var n=addPrompts(ps);b.disabled=false;S.say(n+' prompts added.')}).catch(function(e){b.disabled=false;S.say(e.message)})};
+  $('exp').onclick=function(){S.csv([['Prompt'].concat(ENG.map(function(e){return e[1]}))].concat(st.prompts.map(function(p){return [p].concat(ENG.map(function(e){var m=st.marks[key(p,e[0])];return m&&m.v?{m:'Mentioned',c:'Cited',n:'Not mentioned'}[m.v]:''}))})),'scoutly-ai-visibility.csv')};
+  $('f').addEventListener('submit',function(e){e.preventDefault();$('err').textContent='';var s=$('site').value.trim();if(!s){$('err').textContent='Enter your website.';return}
+    st.site=s;st.brand=$('brand').value.trim();st.topic=$('topic').value.trim();save();
+    $('out').hidden=true;$('load').hidden=false;
+    S.api('/api/ai-ready?url='+encodeURIComponent(s)).then(function(d){info=d;renderPrompts();$('load').hidden=true;$('out').hidden=false})
+      .catch(function(err){$('load').hidden=true;$('err').textContent=err.message})});
+  $('site').value=st.site||S.read('scoutly.site')||'';$('brand').value=st.brand||'';$('topic').value=st.topic||'';
+  if(st.prompts.length&&$('site').value)$('f').requestSubmit();
+})();
+</script>
+</body>
+</html>

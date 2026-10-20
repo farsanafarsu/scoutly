@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AEO · GEO Checker — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.ring2{display:grid;place-items:center;width:110px;height:110px;flex:none;border:6px solid currentColor;font:500 38px/1 var(--D)}
+.sumrow{display:flex;align-items:center;gap:20px;margin-top:20px;padding:20px;background:#040817;color:#fff;border:1px solid rgba(127,160,255,.16)}
+.sumrow h2{font:500 22px/1.15 var(--D);text-transform:uppercase;letter-spacing:.02em}.sumrow p{margin-top:6px;font:400 12.5px/1.6 var(--M);color:rgba(214,224,255,.7);overflow-wrap:anywhere}
+.chk li{display:grid;grid-template-columns:22px minmax(0,1fr) auto;gap:10px;padding:12px 18px;border-bottom:1px solid var(--ln)}.chk li:last-child{border-bottom:0}
+.chk svg{width:16px;height:16px;margin-top:2px}.chk .y svg{color:var(--ok)}.chk .n svg{color:var(--cr)}.chk .w svg{color:var(--wa)}
+.chk b{display:block;font:600 14px/1.35 Geist,sans-serif}.chk span{display:block;margin-top:3px;font:400 12px/1.55 var(--M);color:var(--sl)}
+.qa{padding:12px 18px;border-bottom:1px solid var(--ln)}.qa:last-child{border-bottom:0}
+.qa label{display:flex;gap:10px;align-items:flex-start;cursor:pointer}.qa input{margin-top:3px;accent-color:var(--b)}
+.qa b{font:600 14px/1.4 Geist,sans-serif}.qa p{margin-top:4px;font:400 12.5px/1.6 var(--M);color:var(--sl)}
+pre.code{max-height:360px;overflow:auto;margin:0;padding:14px 18px;background:#0b1433;color:#cfe0ff;font:400 12px/1.6 var(--M);white-space:pre-wrap;overflow-wrap:anywhere}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">AI visibility</p>
+      <h1>AEO · GEO Checker</h1>
+      <p class="desc">Answer Engine and Generative Engine Optimization: check whether a page is easy for AI assistants and featured snippets to quote. Scoutly reads the page’s questions and answers, checks the signals answer engines favour, and writes FAQ structured data for you.</p>
+    </div>
+    <form class="qbar" id="f" novalidate>
+      <div class="qf"><label for="url">Page URL</label><input id="url" placeholder="yourwebsite.com/your-page" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+      <div class="qf"><label for="q">Question it should answer (optional)</label><input id="q" placeholder="e.g. how long do running shoes last" autocomplete="off"></div>
+      <button class="btn p" type="submit"><svg class="i"><use href="#i-geo"/></svg>Check page</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div class="loading" id="load" hidden><span class="spin"></span>Reading the page’s questions and answers…</div>
+    <div id="out" hidden>
+      <div class="sumrow"><span class="ring2" id="ring">0</span><div><h2 id="grade"></h2><p id="sumP"></p></div></div>
+      <div class="cols2">
+        <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-check"/></svg></span><div><h2>Answer-engine checks</h2><p>What AI answers and snippets favour</p></div></div><ul class="chk" id="chk"></ul></section>
+        <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-alert"/></svg></span><div><h2>Questions found</h2><p id="qaP"></p></div></div><div id="qa"></div></section>
+      </div>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-page"/></svg></span><div><h2>FAQ structured data</h2><p>Paste into the page’s &lt;head&gt; for the questions you ticked</p></div><button class="btn sm p" type="button" id="copy" style="margin-left:auto"><svg class="i"><use href="#i-check"/></svg>Copy</button></div><pre class="code" id="code"></pre>
+        <p class="meta-note pad">Only mark up questions and answers that are visible on the page. Google shows FAQ rich results mainly for well-known health and government sites, but the markup still helps search engines and AI tools understand your Q&amp;A.</p></section>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,d=null,picked={};
+  function item(s,t,x){var ic=s==='y'?'check':s==='w'?'alert':'x';return {s:s,html:'<li class="'+s+'"><svg class="i"><use href="#i-'+ic+'"/></svg><div><b>'+esc(t)+'</b><span>'+esc(x)+'</span></div></li>'}}
+  function shortAns(a){var s=a.split(/(?<=[.!?])\s+/),out='';for(var i=0;i<s.length&&out.length<280;i++)out+=(out?' ':'')+s[i];return out||a.slice(0,280)}
+  function code(){var qs=d.pairs.filter(function(p,i){return picked[i]});
+    $('code').textContent=qs.length?'<script type="application/ld+json">\n'+JSON.stringify({'@context':'https://schema.org','@type':'FAQPage',mainEntity:qs.map(function(p){return {'@type':'Question',name:p.q,acceptedAnswer:{'@type':'Answer',text:shortAns(p.a)}}})},null,2)+'\n<\/script>':'Tick at least one question above.'}
+  function run(){
+    var c=[],pairs=d.pairs,good=pairs.filter(function(p){return p.firstWords>=20&&p.firstWords<=60}).length;
+    c.push(pairs.length>=3?item('y','Question-style headings',pairs.length+' headings ask a question and are followed by an answer.'):pairs.length?item('w','Few question-style headings','Only '+pairs.length+'. Phrase more subheadings as the questions people ask.'):item('n','No question-style headings','Add H2/H3 headings phrased as questions (How…? What…? Is…?) with the answer right below.'));
+    if(pairs.length)c.push(good/pairs.length>=0.6?item('y','Answers start with a direct reply',good+' of '+pairs.length+' answers open with 20–60 words, the length snippets quote.'):item('w','Make the first answer sentence quotable','Only '+good+' of '+pairs.length+' answers open with a 20–60 word reply. Lead with the answer, then explain.'));
+    if(d.question){c.push(d.qInHeading?item('y','Question matches a heading','A heading covers “'+d.question+'”.'):item('n','No heading matches the question','Add a heading that asks “'+d.question+'” in your customers’ words.'));
+      c.push(d.qInIntro?item('y','Intro addresses the question','The first paragraphs mention the question’s key terms.'):item('w','Intro doesn’t address the question','Answer “'+d.question+'” in the first 2–3 sentences.'))}
+    var faq=d.schema.some(function(s){return /FAQPage|QAPage|HowTo/.test(s)});
+    c.push(faq?item('y','FAQ / HowTo structured data',d.schema.join(', ')+'.'):item(pairs.length>=2?'n':'w','No FAQ structured data',pairs.length>=2?'This page has Q&A content but no FAQPage markup. Use the generator below.':'Add FAQPage markup once the page has questions and answers.'));
+    c.push(d.lists+d.tables>0?item('y','Lists or tables',d.lists+' lists and '+d.tables+' tables make answers easy to extract.'):item('w','No lists or tables','Steps, comparisons and specs work best as lists or tables, which AI answers often copy.'));
+    c.push(d.stats>=3?item('y','Facts and figures',d.stats+' numbers or statistics give answers something concrete to cite.'):item('w','Add facts and figures','Only '+d.stats+' statistics found. Specific numbers, prices and dates make content more citable.'));
+    c.push(d.outboundDomains.length>=2?item('y','Cites sources','Links out to '+d.outboundDomains.length+' other sites, e.g. '+d.outboundDomains.slice(0,3).join(', ')+'.'):item('w','Cite your sources','Link to the studies, official guidance or data you rely on. Generative engines favour well-sourced pages.'));
+    var mod=d.modified||d.published,age=mod?Math.round((Date.now()-new Date(mod))/864e5):null;
+    c.push(age!=null&&age<=365?item('y','Recently updated','Last '+(d.modified?'updated':'published')+' '+new Date(mod).toLocaleDateString()+'.'):age!=null?item('w','Content looks old','Last date '+new Date(mod).toLocaleDateString()+'. Review it and set dateModified when you update.'):item('w','No publish or update date','Show the date and add datePublished / dateModified to the Article markup.'));
+    c.push(d.author?item('y','Author is named',d.author+'.'):item('w','No author named','Name the author or reviewer and link to their bio. It’s a strong trust signal for advice content.'));
+    c.push(d.readability!=null&&d.readability>=50?item('y','Easy to read','Readability '+d.readability+' (Flesch).'):item('w','Hard to read','Readability '+(d.readability==null?'unknown':d.readability)+'. Shorter sentences and plain words are easier to quote.'));
+    c.push(d.longParagraphs<=1?item('y','Short paragraphs','Most paragraphs are under 120 words.'):item('w','Break up long paragraphs',d.longParagraphs+' paragraphs run over 120 words.'));
+    c.push(d.words>=500?item('y','Enough depth',d.words+' words.'):item('w','Thin page','Only '+d.words+' words. Cover the topic fully: related questions, examples, steps.'));
+    var pass=c.filter(function(x){return x.s==='y'}).length,score=Math.round(pass/c.length*100);
+    $('ring').textContent=score;$('ring').style.color=score>=75?'#3ddba5':score>=50?'#f5a524':'#ff6b6f';
+    $('grade').textContent=score>=75?'Ready to be quoted':score>=50?'Partly answer-ready':'Hard for AI to quote';
+    $('sumP').textContent=pass+' of '+c.length+' checks passed · '+d.url;
+    $('chk').innerHTML=c.sort(function(a,b){var o={n:0,w:1,y:2};return o[a.s]-o[b.s]}).map(function(x){return x.html}).join('');
+    $('qaP').textContent=pairs.length?pairs.length+' question'+(pairs.length>1?'s':'')+' with answers. Tick the ones to mark up.':'None found';
+    picked={};pairs.forEach(function(p,i){picked[i]=true});
+    $('qa').innerHTML=pairs.map(function(p,i){return '<div class="qa"><label><input type="checkbox" data-i="'+i+'" checked><span><b>'+esc(p.q)+'</b><p>'+esc(shortAns(p.a))+'</p></span></label></div>'}).join('')||'<p class="pad meta-note">No question headings with answers below them. Add some, then check again.</p>';
+    code();
+  }
+  $('qa').addEventListener('change',function(e){var c=e.target.closest('[data-i]');if(!c)return;picked[+c.dataset.i]=c.checked;code()});
+  $('copy').onclick=function(){var t=$('code').textContent;if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){S.say('Copied.')},function(){S.say('Select the code and copy it manually.')});else S.say('Select the code and copy it manually.')};
+  $('f').addEventListener('submit',function(e){e.preventDefault();$('err').textContent='';var u=$('url').value.trim();if(!u){$('err').textContent='Enter a page URL.';return}
+    history.replaceState(null,'','?url='+encodeURIComponent(u)+($('q').value.trim()?'&q='+encodeURIComponent($('q').value.trim()):''));
+    $('out').hidden=true;$('load').hidden=false;
+    S.api('/api/aeo?url='+encodeURIComponent(u)+'&q='+encodeURIComponent($('q').value.trim())).then(function(x){d=x;run();$('load').hidden=true;$('out').hidden=false})
+      .catch(function(err){$('load').hidden=true;$('err').textContent=err.message})});
+  if(S.qs('url')){$('url').value=S.qs('url');$('q').value=S.qs('q');$('f').requestSubmit()}else $('url').value=S.read('scoutly.site')||'';
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SEO Audit — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<script>
+/* demo gate: no demo login in this tab → back to the login page */
+(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+/* audit page */
+.ph h1{margin-top:14px;font:500 clamp(28px,3vw,44px)/1 var(--D);text-transform:uppercase;letter-spacing:.01em}
+.ph .desc{margin-top:10px;max-width:640px;font:400 13px/1.7 var(--M);color:var(--sl)}
+
+/* run form */
+.run{position:relative;overflow:hidden;isolation:isolate;margin-top:22px;padding:22px;background:#040817;color:#fff;border:1px solid rgba(127,160,255,.16);box-shadow:0 40px 80px -50px rgba(47,91,255,.55)}
+.run:before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(50% 120% at 90% 0%,rgba(47,91,255,.42),transparent 70%),radial-gradient(40% 100% at 0% 100%,rgba(90,200,250,.14),transparent 70%)}
+.run:after{content:"";position:absolute;inset:0;z-index:-1;background-image:linear-gradient(rgba(127,160,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(127,160,255,.07) 1px,transparent 1px);background-size:40px 40px}
+.run form{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr) auto;gap:10px;align-items:end}
+.fld{display:grid;gap:7px}
+.fld label{font:600 10px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:rgba(214,224,255,.6)}.fld label i{font-style:normal;color:#ff9a9d}
+.fld .in{display:flex;align-items:center;height:50px;padding:0 12px;gap:8px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.16);transition:border-color .2s,box-shadow .2s}
+.fld .in:focus-within{border-color:rgba(90,200,250,.7);box-shadow:0 0 0 4px rgba(90,200,250,.12)}
+.fld .in svg{color:var(--sky)}
+.fld input{flex:1;min-width:0;height:100%;border:0;background:none;color:#fff;font:400 14px/1 var(--M)}.fld input::placeholder{color:rgba(214,224,255,.4)}.fld input:focus{outline:0}
+.fld small{font:400 11px/1.4 var(--M);color:rgba(214,224,255,.45)}
+.run .btn.p{height:50px;padding:0 24px}.run .btn.p:hover{background:#fff;border-color:#fff;color:var(--nv)}
+.run .btn.p[disabled]{opacity:.6;cursor:wait}
+.run-err{margin-top:10px;min-height:0;font:500 12px/1.5 var(--M);color:#ff9a9d}
+
+/* idle: what we check */
+.areas{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:22px;border-top:1px solid var(--ln);border-left:1px solid var(--ln)}
+.areas li{padding:18px;border-right:1px solid var(--ln);border-bottom:1px solid var(--ln);background:rgba(248,249,252,.6)}
+.areas svg{color:var(--b)}
+.areas b{display:block;margin-top:12px;font:500 14px/1.25 var(--D);letter-spacing:.04em;text-transform:uppercase}
+.areas span{display:block;margin-top:6px;font:400 12px/1.6 var(--M);color:var(--sl)}
+
+/* running */
+.prog{margin-top:22px;padding:26px;background:var(--card);border:1px solid var(--ln)}
+.prog-h{display:flex;align-items:center;gap:14px}
+.prog-h h2{flex:1;font:500 18px/1.2 var(--D);letter-spacing:.04em;text-transform:uppercase}
+.prog-h .t{font:500 13px/1 var(--M);color:var(--mu)}
+.prog-bar{height:4px;margin-top:16px;background:var(--bg2);overflow:hidden}.prog-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--b),var(--sky));transition:width .6s}
+.steps{display:grid;gap:2px;margin-top:16px}
+.steps li{display:flex;align-items:center;gap:12px;padding:9px 0;font:400 13px/1.4 var(--M);color:var(--mu)}
+.steps i{width:14px;height:14px;flex:none;border:1.5px solid var(--ln)}
+.steps li.cur{color:var(--ink)}.steps li.cur i{border-color:var(--b);animation:blink .6s steps(1) infinite}
+.steps li.ok{color:var(--sl)}.steps li.ok i{border-color:var(--ok);background:linear-gradient(var(--ok),var(--ok)) center/6px 6px no-repeat}
+
+/* summary */
+.sum{position:relative;overflow:hidden;isolation:isolate;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:28px;align-items:center;margin-top:22px;padding:26px 28px;background:#040817;color:#fff;border:1px solid rgba(127,160,255,.16)}
+.sum:before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(40% 120% at 8% 50%,rgba(47,91,255,.4),transparent 70%),radial-gradient(40% 100% at 100% 0%,rgba(90,200,250,.14),transparent 70%)}
+.gauge{position:relative;width:150px;height:150px}
+.gauge svg{width:100%;height:100%;transform:rotate(-90deg)}
+.gauge circle{fill:none;stroke-width:10}.gauge .tr{stroke:rgba(255,255,255,.1)}.gauge .vl{stroke:var(--sky);stroke-linecap:butt;transition:stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1)}
+.gauge b{position:absolute;inset:0;display:grid;place-content:center;text-align:center;font:500 46px/1 var(--D)}
+.gauge b small{display:block;margin-top:4px;font:500 10px/1 var(--M);letter-spacing:.14em;color:rgba(214,224,255,.55)}
+.sum h2{font:500 clamp(20px,2vw,28px)/1.1 var(--D);text-transform:uppercase;letter-spacing:.02em}
+.sum-url{display:inline-flex;align-items:center;gap:8px;max-width:100%;margin-top:8px;font:400 13px/1.4 var(--M);color:var(--sky);overflow-wrap:anywhere}
+.facts{display:flex;flex-wrap:wrap;gap:6px 18px;margin-top:12px;font:400 11.5px/1.4 var(--M);color:rgba(214,224,255,.6)}.facts b{color:#fff;font-weight:600}
+.counts{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.counts button{display:inline-flex;align-items:center;gap:8px;height:34px;padding:0 12px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);color:#fff;font:600 10.5px/1 var(--M);letter-spacing:.1em;text-transform:uppercase;cursor:pointer;transition:border-color .2s,background .2s}
+.counts button:hover{border-color:var(--sky);background:rgba(255,255,255,.08)}
+.counts b{font:500 16px/1 var(--D)}
+.counts i{width:8px;height:8px}
+.k-cr i{background:var(--cr)}.k-wr i{background:var(--wa)}.k-no i{background:var(--sky)}.k-ok i{background:#3ddba5}
+.sum-act{display:grid;gap:8px}
+.sum-act .btn{color:#fff;border-color:rgba(255,255,255,.3)}.sum-act .btn:hover{background:#fff;color:var(--nv)}
+
+/* category tiles */
+.cats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:20px;border-top:1px solid var(--ln);border-left:1px solid var(--ln)}
+.cat{display:block;padding:16px;background:rgba(248,249,252,.6);border-right:1px solid var(--ln);border-bottom:1px solid var(--ln);text-align:left;cursor:pointer;transition:background .2s;border-top:0;border-left:0;font:inherit;color:inherit}
+.cat:hover{background:#fff}
+.cat-h{display:flex;align-items:center;gap:8px;font:600 9.5px/1.3 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}.cat-h svg{width:16px;height:16px;color:var(--b)}
+.cat b{display:block;margin-top:10px;font:500 30px/1 var(--D)}.cat b small{font:500 12px/1 var(--M);color:var(--mu)}
+.cat .bar2{display:block;height:5px;margin-top:10px;background:var(--bg2)}.cat .bar2 i{display:block;height:100%;transition:width 1s}
+.cat p{margin-top:8px;font:400 11px/1.4 var(--M);color:var(--mu)}
+.g-ok{background:var(--ok)}.g-md{background:var(--wa)}.g-lo{background:var(--cr)}
+.c-ok{color:var(--ok)}.c-md{color:#c98400}.c-lo{color:var(--cr)}
+
+/* serp + vitals */
+.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:20px;margin-top:20px}
+.serp{padding:18px 20px 20px}
+.serp-box{padding:16px 18px;background:#fff;border:1px solid var(--ln);font-family:Arial,sans-serif}
+.serp-site{display:flex;align-items:center;gap:10px}.serp-site img{width:26px;height:26px;padding:3px;border-radius:50%;background:#f1f3f4;object-fit:contain}
+.serp-site b{display:block;font:400 14px/1.2 Arial,sans-serif;color:#202124}.serp-site span{display:block;font:400 12px/1.3 Arial,sans-serif;color:#4d5156;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:420px}
+.serp-t{display:block;margin-top:8px;font:400 20px/1.3 Arial,sans-serif;color:#1a0dab;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.serp-d{margin-top:4px;font:400 14px/1.58 Arial,sans-serif;color:#4d5156;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.serp-d.none,.serp-t.none{color:var(--cr);font-style:italic}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));margin-top:14px;border-top:1px solid var(--ln)}
+.kv div{padding:12px 10px 0 0}.kv dt{font:600 9.5px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}.kv dd{margin:6px 0 0;font:500 18px/1 var(--D)}
+.vit{padding:18px 20px 20px}
+.vit-top{display:flex;align-items:center;gap:16px}
+.vit-score{display:grid;place-items:center;width:76px;height:76px;flex:none;border:3px solid currentColor;font:500 28px/1 var(--D)}
+.vit-top p{font:400 12px/1.6 var(--M);color:var(--sl)}
+.mets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}
+.met{padding:12px;border:1px solid var(--ln);background:#fff}
+.met small{display:block;font:600 9.5px/1.3 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
+.met b{display:flex;align-items:baseline;gap:8px;margin-top:6px;font:500 22px/1 var(--D)}.met b em{font:600 9.5px/1 var(--M);font-style:normal;letter-spacing:.1em;text-transform:uppercase}
+.met span{display:block;margin-top:4px;font:400 10.5px/1.3 var(--M);color:var(--mu)}
+.vit-wait{display:flex;align-items:center;gap:12px;padding:18px 0;font:400 12.5px/1.6 var(--M);color:var(--sl)}
+.spin{width:18px;height:18px;flex:none;border:2px solid var(--bg2);border-top-color:var(--b);border-radius:50%;animation:spin .8s linear infinite}
+
+/* findings */
+.fh{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:28px}
+.fh h2{flex:1;font:500 20px/1.2 var(--D);letter-spacing:.04em;text-transform:uppercase}
+.seg{display:flex;flex-wrap:wrap;border:1px solid var(--ln);background:var(--card)}
+.seg button{height:36px;padding:0 12px;border:0;background:none;font:600 10px/1 var(--M);letter-spacing:.1em;text-transform:uppercase;color:var(--sl);cursor:pointer}.seg button+button{border-left:1px solid var(--ln)}
+.seg button[aria-pressed="true"]{background:var(--ink);color:#fff}
+.seg button span{margin-left:4px;opacity:.6}
+.grp{margin-top:16px}
+.grp-h{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--nv);color:#fff;scroll-margin-top:84px}
+.grp-h svg{color:var(--sky)}.grp-h h3{flex:1;font:500 14px/1.2 var(--D);letter-spacing:.06em;text-transform:uppercase}.grp-h span{font:500 11px/1 var(--M);color:rgba(214,224,255,.7)}
+.fd{border:1px solid var(--ln);border-top:0;background:var(--card)}
+.fd summary{display:grid;grid-template-columns:96px minmax(0,1fr) auto;gap:14px;align-items:center;padding:14px 16px;cursor:pointer;list-style:none}
+.fd summary::-webkit-details-marker{display:none}
+.fd summary:hover{background:#fff}
+.fd summary h4{font:600 14.5px/1.35 Geist,sans-serif}
+.fd summary p{margin-top:3px;font:400 12px/1.5 var(--M);color:var(--sl);overflow-wrap:anywhere}
+.fd summary:after{content:"+";display:grid;place-items:center;width:26px;height:26px;border:1px solid var(--ln);font:400 16px/1 var(--M);color:var(--b);transition:transform .25s}
+.fd[open] summary:after{transform:rotate(45deg)}
+.fd.pass summary:after{content:none}.fd.pass summary{cursor:default;grid-template-columns:96px minmax(0,1fr)}
+.sev{display:inline-flex;justify-content:center;padding:5px 6px;font:600 9.5px/1 var(--M);letter-spacing:.08em;text-transform:uppercase;border:1px solid}
+.sev.critical{color:var(--cr);background:rgba(229,72,77,.08)}.sev.warning{color:#b97600;background:rgba(245,165,36,.1)}.sev.notice{color:var(--b);background:rgba(47,91,255,.07)}
+.sev.pass{color:var(--ok);background:rgba(23,166,115,.08)}.sev.info{color:var(--mu);background:rgba(125,136,163,.08)}
+.fd-b{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px 22px;padding:4px 16px 18px 126px}
+.fd-b div{min-width:0}
+.fd-b dt{font:600 9.5px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:var(--b)}
+.fd-b dd{margin:6px 0 0;font:400 13px/1.6 Geist,sans-serif;color:var(--sl)}
+.fd-b code{font:400 12px var(--M);padding:1px 4px;background:var(--bg2)}
+.fd-b .items{grid-column:1/-1}
+.fd-b ul{max-height:220px;overflow:auto;margin-top:6px;border:1px solid var(--ln);background:#fff}
+.fd-b li{padding:7px 10px;border-bottom:1px solid var(--ln);font:400 11.5px/1.5 var(--M);color:var(--sl);overflow-wrap:anywhere}.fd-b li:last-child{border-bottom:0}
+.fd-b .more{color:var(--mu);font-style:italic}
+.none-left{padding:30px 16px;text-align:center;font:400 13px/1.6 var(--M);color:var(--sl);border:1px solid var(--ln);border-top:0;background:var(--card)}
+
+.tbl{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font:400 12.5px/1.45 var(--M)}
+th{padding:10px 16px;text-align:left;white-space:nowrap;font:500 10px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu);border-bottom:1px solid var(--ln)}
+td{padding:10px 16px;border-bottom:1px solid var(--ln);vertical-align:top}tr:last-child td{border-bottom:0}
+td.u{max-width:420px;overflow-wrap:anywhere}td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
+.code{display:inline-block;min-width:38px;padding:3px 6px;text-align:center;font:600 11px/1 var(--M);border:1px solid}
+.code.ok{color:var(--ok)}.code.rd{color:#b97600}.code.er{color:var(--cr)}
+.panel{margin-top:20px}
+
+@media(max-width:1200px){.cats{grid-template-columns:repeat(2,minmax(0,1fr))}.sum{grid-template-columns:auto minmax(0,1fr)}.sum-act{grid-column:1/-1;grid-template-columns:repeat(3,auto);justify-content:start}}
+@media(max-width:1000px){.two{grid-template-columns:minmax(0,1fr)}.areas{grid-template-columns:repeat(2,minmax(0,1fr))}.fd-b{grid-template-columns:minmax(0,1fr);padding-left:16px}}
+@media(max-width:760px){.run form{grid-template-columns:minmax(0,1fr)}.sum{grid-template-columns:minmax(0,1fr);justify-items:start}.gauge{width:120px;height:120px}.gauge b{font-size:36px}
+  .sum-act{grid-template-columns:1fr 1fr}.fd summary{grid-template-columns:minmax(0,1fr) auto}.fd summary .sev{grid-column:1/-1;justify-self:start}.fd.pass summary{grid-template-columns:minmax(0,1fr)}
+  .kv{grid-template-columns:repeat(2,minmax(0,1fr))}.mets{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:520px){.cats,.areas{grid-template-columns:minmax(0,1fr)}.sum-act{grid-template-columns:1fr}}
+
+@media print{
+  .side,.top,.scrim,.run,.fh .seg,.sum-act,.toast,#idle{display:none!important}
+  .main{margin-left:0}.page{padding:0}body:after{display:none}
+  .sum,.grp-h{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  .fd{break-inside:avoid}.fd-b ul{max-height:none}
+}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">Site audit</p>
+      <h1>SEO audit</h1>
+      <p class="desc">Enter any page. Scoutly fetches it, reads robots.txt and your sitemap, crawls up to 25 internal pages, checks every link and scores what it finds, then adds Core Web Vitals from Google PageSpeed Insights.</p>
+    </div>
+
+    <section class="run" aria-label="Run an audit">
+      <form id="form" novalidate>
+        <div class="fld">
+          <label for="url">Page URL <i>*</i></label>
+          <div class="in"><svg class="i" aria-hidden="true"><use href="#i-globe"/></svg><input id="url" inputmode="url" autocapitalize="off" spellcheck="false" autocomplete="url" placeholder="https://example.com/page"></div>
+          <small>The page to audit. https:// is added if you leave it out.</small>
+        </div>
+        <div class="fld">
+          <label for="kw">Primary keyword</label>
+          <div class="in"><svg class="i" aria-hidden="true"><use href="#i-key"/></svg><input id="kw" autocomplete="off" placeholder="e.g. best marketing agency"></div>
+          <small>Optional. Adds keyword checks for title, headings and more.</small>
+        </div>
+        <div class="fld"><label class="sr-only" for="go">Run</label><button class="btn p" id="go" type="submit"><svg class="i"><use href="#i-search"/></svg>Run audit</button><small>&nbsp;</small></div>
+      </form>
+      <p class="run-err" id="runErr" role="alert"></p>
+    </section>
+
+    <section id="idle" aria-label="What the audit checks">
+      <ul class="areas">
+        <li><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><b>Crawlability &amp; indexing</b><span>Status codes, redirects, HTTPS, robots.txt, sitemap, noindex, canonical and hreflang.</span></li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-page"/></svg><b>On-page SEO</b><span>Titles, meta descriptions, headings, viewport, language, URL and duplicates across pages.</span></li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-key"/></svg><b>Content &amp; keywords</b><span>Word count, image alt text, and where your keyword appears on the page.</span></li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-link"/></svg><b>Links &amp; redirects</b><span>Broken internal and external links, redirecting links, anchor text and nofollow.</span></li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-proj"/></svg><b>Internal linking</b><span>Click depth, weakly linked pages and sitemap pages nothing links to.</span></li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-speed"/></svg><b>Speed &amp; security</b><span>Core Web Vitals, response time, compression, render-blocking scripts, images, HSTS.</span></li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-dash"/></svg><b>Structured data &amp; social</b><span>JSON-LD validity and required properties, Open Graph and X cards.</span></li>
+        <li><svg class="i" aria-hidden="true"><use href="#i-ai"/></svg><b>AI search readiness</b><span>AI crawler access, content without JavaScript, answer structure and llms.txt.</span></li>
+      </ul>
+    </section>
+
+    <section class="prog" id="prog" hidden aria-live="polite">
+      <div class="prog-h"><span class="spin" aria-hidden="true"></span><h2 id="progH">Auditing…</h2><span class="t" id="elapsed">0s</span></div>
+      <div class="prog-bar"><i id="progBar"></i></div>
+      <ol class="steps" id="steps">
+        <li><i></i>Fetching the page and following redirects</li>
+        <li><i></i>Reading robots.txt and the XML sitemap</li>
+        <li><i></i>Crawling internal pages</li>
+        <li><i></i>Checking every link for errors</li>
+        <li><i></i>Analysing titles, headings and content</li>
+        <li><i></i>Checking structured data and AI readiness</li>
+        <li><i></i>Scoring the findings</li>
+      </ol>
+    </section>
+
+    <div id="report" hidden>
+      <section class="sum" aria-labelledby="sumH">
+        <div class="gauge" aria-hidden="true"><svg viewBox="0 0 120 120"><circle class="tr" cx="60" cy="60" r="52"/><circle class="vl" id="gv" cx="60" cy="60" r="52" stroke-dasharray="326.7" stroke-dashoffset="326.7"/></svg><b><span id="score">0</span><small>/ 100</small></b></div>
+        <div>
+          <h2 id="sumH">—</h2>
+          <a class="sum-url" id="sumUrl" target="_blank" rel="noopener noreferrer"></a>
+          <div class="facts" id="facts"></div>
+          <div class="counts" id="counts"></div>
+        </div>
+        <div class="sum-act">
+          <button class="btn sm" type="button" id="rerun"><svg class="i"><use href="#i-pulse"/></svg>Re-run</button>
+          <button class="btn sm" type="button" id="dl"><svg class="i"><use href="#i-rep"/></svg>Download JSON</button>
+          <button class="btn sm" type="button" id="pr"><svg class="i"><use href="#i-page"/></svg>Print / PDF</button>
+        </div>
+      </section>
+
+      <div class="cats" id="cats"></div>
+
+      <div class="two">
+        <section class="panel" aria-labelledby="serpH" style="margin-top:0">
+          <div class="panel-h"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-search"/></svg></span><div><h2 id="serpH">Search preview</h2><p>How the page may look in Google</p></div></div>
+          <div class="serp">
+            <div class="serp-box"><div class="serp-site"><img id="sFav" alt="" width="26" height="26"><div><b id="sSite"></b><span id="sPath"></span></div></div><a class="serp-t" id="sTitle" target="_blank" rel="noopener noreferrer"></a><p class="serp-d" id="sDesc"></p></div>
+            <dl class="kv" id="kv"></dl>
+          </div>
+        </section>
+        <section class="panel" aria-labelledby="vitH" style="margin-top:0">
+          <div class="panel-h"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-speed"/></svg></span><div><h2 id="vitH">Core Web Vitals</h2><p>Mobile · Google PageSpeed Insights</p></div><button class="btn sm" type="button" id="psiRetry" hidden>Retry</button></div>
+          <div class="vit" id="vit"></div>
+        </section>
+      </div>
+
+      <div class="fh">
+        <h2>Findings</h2>
+        <div class="seg" role="group" aria-label="Show findings" id="seg"></div>
+      </div>
+      <div id="groups"></div>
+
+      <section class="panel" aria-labelledby="crawlH">
+        <div class="panel-h"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-proj"/></svg></span><div><h2 id="crawlH">Crawled pages</h2><p id="crawlP"></p></div></div>
+        <div class="tbl"><table><thead><tr><th>URL</th><th>Status</th><th>Title</th><th class="n">Depth</th><th class="n">Inlinks</th><th class="n">Words</th><th class="n">Response</th></tr></thead><tbody id="crawlT"></tbody></table></div>
+      </section>
+
+      <section class="panel" aria-labelledby="blH">
+        <div class="panel-h"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-broken"/></svg></span><div><h2 id="blH">Broken links</h2><p id="blP"></p></div></div>
+        <div class="tbl" id="blWrap"><table><thead><tr><th>Link</th><th>Status</th><th>Found on</th><th>Anchor text</th></tr></thead><tbody id="blT"></tbody></table></div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly;
+  var CATS=[
+    {id:'crawl',name:'Crawlability & indexing',icon:'i-search',w:25},
+    {id:'onpage',name:'On-page SEO',icon:'i-page',w:20},
+    {id:'content',name:'Content & keywords',icon:'i-key',w:12},
+    {id:'links',name:'Links & redirects',icon:'i-link',w:13},
+    {id:'internal',name:'Internal linking',icon:'i-proj',w:5},
+    {id:'perf',name:'Speed & security',icon:'i-speed',w:12},
+    {id:'schema',name:'Structured data & social',icon:'i-dash',w:7},
+    {id:'ai',name:'AI search readiness',icon:'i-ai',w:6}];
+  /* every area starts at 100 and loses points per issue; issues on many pages cost more,
+     and each critical issue also lowers the overall score directly */
+  var DED={critical:45,warning:22,notice:7},CRIT_PENALTY=10,SEVORD={critical:0,warning:1,notice:2};
+  function spread(n){return n>=10?1.6:n>=3?1.3:1}
+  var data=null,psi=null,psiChecks=[],view='issues',timer=null,t0=0;
+
+  function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function rich(s){return esc(s).replace(/`([^`]+)`/g,'<code>$1</code>')}
+  function el(h){var d=document.createElement('div');d.innerHTML=h.trim();return d.firstChild}
+  function icon(id){return '<svg class="i" aria-hidden="true"><use href="#'+id+'"/></svg>'}
+  function band(v){return v>=85?'ok':v>=60?'md':'lo'}
+  function allChecks(){return data?data.checks.concat(psiChecks):[]}
+  function isIssue(c){return c.status==='fail'||c.status==='warn'}
+
+  /* ---------- scoring */
+  function catScore(id){var any=false,ded=0;allChecks().forEach(function(c){if(c.cat!==id||c.status==='info'||!c.weight)return;any=true;if(isIssue(c))ded+=DED[c.sev]*spread(c.count||1)});return any?Math.max(0,Math.round(100-ded)):null}
+  function overall(){var w=0,g=0;CATS.forEach(function(k){var s=catScore(k.id);if(s!=null){w+=k.w;g+=k.w*s}});if(!w)return 0;
+    var crit=allChecks().filter(function(c){return isIssue(c)&&c.sev==='critical'&&c.weight}).length;return Math.max(0,Math.round(g/w-CRIT_PENALTY*crit))}
+  function counts(){var r={critical:0,warning:0,notice:0,pass:0};allChecks().forEach(function(c){if(isIssue(c))r[c.sev]++;else if(c.status==='pass')r.pass++});return r}
+  function grade(s){return s>=90?'Excellent':s>=75?'Good, with fixes to make':s>=50?'Needs work':'Poor: fix the critical issues first'}
+
+  /* ---------- running */
+  var stepEls=[].slice.call($('steps').children);
+  function progress(start){
+    clearInterval(timer);
+    if(!start)return;
+    t0=Date.now();stepEls.forEach(function(li){li.className=''});
+    timer=setInterval(function(){var s=(Date.now()-t0)/1000;$('elapsed').textContent=Math.floor(s)+'s';
+      var k=Math.min(stepEls.length-1,Math.floor(s/5));stepEls.forEach(function(li,i){li.className=i<k?'ok':i===k?'cur':''});
+      $('progBar').style.width=Math.min(94,8+s*1.8)+'%'},250);
+  }
+  function run(url,kw){
+    $('runErr').textContent='';
+    if(!/^(https?:\/\/)?[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?$/i.test(url)){$('runErr').textContent='Enter a valid web address, like example.com or https://example.com/page.';$('url').focus();return}
+    var q='?url='+encodeURIComponent(url)+(kw?'&kw='+encodeURIComponent(kw):'');
+    history.replaceState(null,'','audit.html'+q);
+    $('idle').hidden=true;$('report').hidden=true;$('prog').hidden=false;$('progH').textContent='Auditing '+url.replace(/^https?:\/\//i,'')+'…';
+    $('go').disabled=true;progress(true);
+    psi=null;psiChecks=[];
+    fetch('/api/audit'+q).then(function(r){
+      return r.text().then(function(t){var j=null;try{j=JSON.parse(t)}catch(_){}
+        if(!j)throw new Error(r.status===404||r.status===501?'The audit server isn’t running. Start it from the project folder with: python server.py':'The audit server sent an unexpected response.');
+        if(!r.ok||j.error)throw new Error(j.error||'The audit failed.');return j})
+    }).then(function(j){
+      data=j;progress(false);$('progBar').style.width='100%';stepEls.forEach(function(li){li.className='ok'});
+      setTimeout(function(){$('prog').hidden=true;$('report').hidden=false;render();runPsi(j.finalUrl)},250);
+      store();
+    }).catch(function(e){
+      /* never leave the previous site's report on screen under a new site's error */
+      data=null;psi=null;psiChecks=[];progress(false);$('prog').hidden=true;$('report').hidden=true;$('idle').hidden=false;
+      $('runErr').textContent=e.message||'Couldn’t reach the audit server. Is python server.py running?';
+    }).then(function(){$('go').disabled=false});
+  }
+
+  /* ---------- PageSpeed Insights (called straight from the browser) */
+  function runPsi(url){
+    $('psiRetry').hidden=true;
+    $('vit').innerHTML='<p class="vit-wait"><span class="spin" aria-hidden="true"></span>Running a mobile Lighthouse test with PageSpeed Insights. This usually takes 15–40 seconds…</p>';
+    var ctl=window.AbortController?new AbortController():null,to=setTimeout(function(){ctl&&ctl.abort()},90000);
+    fetch('/api/pagespeed?url='+encodeURIComponent(url),ctl?{signal:ctl.signal}:{})
+      .then(function(r){return r.json().then(function(j){if(!r.ok||j.error){var e=new Error((j.error&&j.error.message)||('HTTP '+r.status));e.status=j.scoutlyStatus||r.status;e.hasKey=j.scoutlyHasKey;throw e}return j})})
+      .then(function(j){clearTimeout(to);if(!data||data.finalUrl!==url)return;psi=parsePsi(j);psiChecks=psiToChecks(psi);renderVitals();renderSummary();renderCats();renderFindings();store()})
+      .catch(function(e){clearTimeout(to);if(!data||data.finalUrl!==url)return;var m=String(e&&e.message||e);
+        var quota=e&&e.status===429||/quota/i.test(m);
+        $('vit').innerHTML='<p class="vit-wait">'+icon('i-alert')+'<span>'+(quota&&!e.hasKey?'Google’s shared PageSpeed quota is used up for today. Add your own free API key to get Core Web Vitals every time: create one at <a href="https://developers.google.com/speed/docs/insights/v5/get-started" target="_blank" rel="noopener noreferrer" style="color:var(--b);text-decoration:underline">developers.google.com</a>, set it as <code>PAGESPEED_API_KEY</code>, then restart <code>python server.py</code>.':quota?'Your PageSpeed API key has hit its quota. Try again later.':'PageSpeed Insights didn’t return results'+(m?': '+esc(m.slice(0,160)):'')+'.')+' Until then, speed scores use the server checks only.</span></p>';
+        $('psiRetry').hidden=false});
+  }
+  $('psiRetry').onclick=function(){if(data)runPsi(data.finalUrl)};
+  function parsePsi(j){
+    var lr=j.lighthouseResult||{},a=lr.audits||{},f=(j.loadingExperience&&j.loadingExperience.metrics)||{};
+    function n(k){return a[k]&&a[k].numericValue}
+    return {score:lr.categories&&lr.categories.performance?Math.round(lr.categories.performance.score*100):null,
+      lcp:n('largest-contentful-paint'),cls:n('cumulative-layout-shift'),tbt:n('total-blocking-time'),fcp:n('first-contentful-paint'),si:n('speed-index'),
+      field:{lcp:f.LARGEST_CONTENTFUL_PAINT_MS&&f.LARGEST_CONTENTFUL_PAINT_MS.percentile,inp:f.INTERACTION_TO_NEXT_PAINT&&f.INTERACTION_TO_NEXT_PAINT.percentile,cls:f.CUMULATIVE_LAYOUT_SHIFT_SCORE&&f.CUMULATIVE_LAYOUT_SHIFT_SCORE.percentile/100},
+      hasField:!!(f.LARGEST_CONTENTFUL_PAINT_MS||f.INTERACTION_TO_NEXT_PAINT)};
+  }
+  var TH={lcp:[2500,4000],inp:[200,500],cls:[.1,.25],tbt:[200,600],fcp:[1800,3000]};
+  function rate(k,v){if(v==null)return null;return v<=TH[k][0]?'good':v<=TH[k][1]?'ni':'poor'}
+  function fmtM(k,v){if(v==null)return '—';return k==='cls'?(+v).toFixed(2):v>=1000?(v/1000).toFixed(1)+' s':Math.round(v)+' ms'}
+  function psiToChecks(p){
+    var out=[];function add(id,st,sev,title,det,why,verify,fix){out.push({cat:'perf',id:id,status:st,sev:st==='pass'?null:sev,title:title,detected:det,why:why||'',verify:verify||'Run the URL in PageSpeed Insights (pagespeed.web.dev).',fix:fix||'',items:[],count:0,weight:sev==='critical'?3:sev==='warning'?2:1})}
+    if(p.score!=null){if(p.score>=90)add('psi','pass','warning','Lighthouse performance score is good','Mobile performance score '+p.score+'/100.');
+      else add('psi',p.score<50?'fail':'warn',p.score<50?'warning':'notice','Lighthouse performance score is '+(p.score<50?'poor':'average'),'Mobile performance score '+p.score+'/100.','Slow pages lose visitors and Core Web Vitals are part of Google’s page experience signals.','','Work through the “Opportunities” in PageSpeed Insights, starting with images, unused JavaScript and server response time.')}
+    var lcp=p.field.lcp!=null?p.field.lcp:p.lcp,src=p.field.lcp!=null?'real Chrome users':'lab test';
+    var r=rate('lcp',lcp);if(r)add('lcp',r==='good'?'pass':r==='ni'?'warn':'fail',r==='poor'?'warning':'notice','Largest Contentful Paint '+(r==='good'?'is good':r==='ni'?'needs improvement':'is poor'),'LCP '+fmtM('lcp',lcp)+' ('+src+'). Good is 2.5 s or less.','LCP measures when the main content appears. It’s one of Google’s three Core Web Vitals.','','Compress and properly size the hero image, preload it, cut render-blocking resources and speed up the server.');
+    var cls=p.field.cls!=null?p.field.cls:p.cls;r=rate('cls',cls);if(r)add('cls',r==='good'?'pass':r==='ni'?'warn':'fail',r==='poor'?'warning':'notice','Cumulative Layout Shift '+(r==='good'?'is good':r==='ni'?'needs improvement':'is poor'),'CLS '+fmtM('cls',cls)+'. Good is 0.1 or less.','Layout shift makes content jump while people read or tap.','','Set width and height on images and embeds, reserve space for ads and avoid inserting content above existing content.');
+    if(p.field.inp!=null){r=rate('inp',p.field.inp);add('inp',r==='good'?'pass':r==='ni'?'warn':'fail',r==='poor'?'warning':'notice','Interaction to Next Paint '+(r==='good'?'is good':r==='ni'?'needs improvement':'is poor'),'INP '+fmtM('inp',p.field.inp)+' (real Chrome users). Good is 200 ms or less.','INP measures how quickly the page responds to taps and clicks.','','Break up long JavaScript tasks and reduce third-party scripts.')}
+    else if(p.tbt!=null){r=rate('tbt',p.tbt);add('tbt',r==='good'?'pass':r==='ni'?'warn':'fail',r==='poor'?'warning':'notice','Total Blocking Time '+(r==='good'?'is good':r==='ni'?'needs improvement':'is high'),'TBT '+fmtM('tbt',p.tbt)+' (lab). It stands in for INP when there’s no real-user data.','Long JavaScript tasks block the page from responding to input.','','Defer or remove unused JavaScript and split long tasks.')}
+    return out;
+  }
+
+  /* ---------- render */
+  function render(){renderSummary();renderCats();renderSerp();renderVitals();renderFindings();renderTables()}
+  function renderSummary(){
+    var s=overall(),c=counts();
+    $('score').textContent=s;$('gv').style.stroke=s>=85?'#3ddba5':s>=60?'#f5a524':'#ff6b6f';
+    requestAnimationFrame(function(){$('gv').style.strokeDashoffset=326.7*(1-s/100)});
+    $('sumH').textContent=grade(s);
+    $('sumUrl').href=data.finalUrl;$('sumUrl').innerHTML=icon('i-link')+esc(data.finalUrl);
+    var f=[['Status',data.status],['Response',data.ttfb+' ms'],['Pages crawled',data.crawl.length],['Links checked',data.links.checked],['Audit took',(data.durationMs/1000).toFixed(1)+' s'],['Checked',new Date(data.fetchedAt).toLocaleString()]];
+    if(data.keyword)f.push(['Keyword','“'+data.keyword+'”']);
+    $('facts').innerHTML=f.map(function(x){return '<span>'+esc(x[0])+' <b>'+esc(x[1])+'</b></span>'}).join('');
+    $('counts').innerHTML=[['critical','k-cr','Critical'],['warning','k-wr','Warnings'],['notice','k-no','Notices'],['pass','k-ok','Passed']].map(function(x){return '<button type="button" class="'+x[1]+'" data-v="'+x[0]+'"><i></i><b>'+c[x[0]]+'</b>'+x[2]+'</button>'}).join('');
+  }
+  $('counts').addEventListener('click',function(e){var b=e.target.closest('[data-v]');if(!b)return;setView(b.dataset.v);document.querySelector('.fh').scrollIntoView({behavior:'smooth'})});
+  function renderCats(){
+    $('cats').innerHTML=CATS.map(function(k){var s=catScore(k.id),iss=allChecks().filter(function(c){return c.cat===k.id&&isIssue(c)}).length;
+      if(s==null)return '';
+      return '<button class="cat" type="button" data-cat="'+k.id+'"><span class="cat-h">'+icon(k.icon)+esc(k.name)+'</span><b class="c-'+band(s)+'">'+s+'<small> /100</small></b><span class="bar2"><i class="g-'+band(s)+'" style="width:'+s+'%"></i></span><p>'+(iss?iss+' issue'+(iss>1?'s':'')+' to review':'No issues found')+'</p></button>'}).join('');
+  }
+  $('cats').addEventListener('click',function(e){var b=e.target.closest('[data-cat]');if(!b)return;if(view==='pass')setView('issues');var g=$('g-'+b.dataset.cat);if(g)g.scrollIntoView({behavior:'smooth'})});
+  function renderSerp(){
+    var p=data.page,u=new URL(data.finalUrl);
+    $('sFav').src=p.favicon||'';$('sFav').onerror=function(){this.style.visibility='hidden'};
+    $('sSite').textContent=u.hostname.replace(/^www\./,'');$('sPath').textContent=u.origin+(u.pathname!=='/'?u.pathname.replace(/\//g,' › ').replace(/^ › /,' › '):'');
+    var t=p.title||'No title found';$('sTitle').textContent=t.length>62?t.slice(0,60)+'…':t;$('sTitle').className='serp-t'+(p.title?'':' none');$('sTitle').href=data.finalUrl;
+    var d=p.description||'No meta description: Google will choose text from the page.';$('sDesc').textContent=d.length>160?d.slice(0,157)+'…':d;$('sDesc').className='serp-d'+(p.description?'':' none');
+    var kv=[['Words',p.words],['Images',p.images],['Internal links',p.internalLinks],['External links',p.externalLinks],['Language',p.lang||'—'],['Sitemap URLs',data.sitemap?data.sitemap.urls:'—']];
+    $('kv').innerHTML=kv.map(function(x){return '<div><dt>'+esc(x[0])+'</dt><dd>'+esc(x[1])+'</dd></div>'}).join('');
+  }
+  function renderVitals(){
+    if(!psi)return;
+    var s=psi.score,col=s==null?'var(--mu)':s>=90?'var(--ok)':s>=50?'#c98400':'var(--cr)';
+    var m=[['LCP','Largest Contentful Paint','lcp',psi.field.lcp!=null?psi.field.lcp:psi.lcp,psi.field.lcp!=null],
+           ['INP','Interaction to Next Paint','inp',psi.field.inp,true],
+           ['CLS','Cumulative Layout Shift','cls',psi.field.cls!=null?psi.field.cls:psi.cls,psi.field.cls!=null],
+           ['TBT','Total Blocking Time','tbt',psi.tbt,false],
+           ['FCP','First Contentful Paint','fcp',psi.fcp,false],
+           ['SI','Speed Index (lab)',null,psi.si,false]];
+    var LBL={good:['Good','var(--ok)'],ni:['Needs work','#c98400'],poor:['Poor','var(--cr)']};
+    $('vit').innerHTML='<div class="vit-top"><span class="vit-score" style="color:'+col+'">'+(s==null?'—':s)+'</span><p><b>Mobile performance score.</b> '+(psi.hasField?'LCP, INP and CLS use real Chrome user data (75th percentile); the rest come from a lab test.':'This URL doesn’t have enough Chrome traffic for real-user data, so all values come from a lab test.')+'</p></div><div class="mets">'+
+      m.map(function(x){var r=x[2]?rate(x[2],x[3]):null,l=r?LBL[r]:null;return '<div class="met"><small>'+x[0]+' · '+esc(x[1])+'</small><b>'+(x[3]==null?'—':fmtM(x[2]||'lcp',x[3]))+(l?'<em style="color:'+l[1]+'">'+l[0]+'</em>':'')+'</b><span>'+(x[3]==null?'No real-user data':x[4]?'Real users':'Lab test')+'</span></div>'}).join('')+'</div>';
+  }
+  function setView(v){view=v;renderFindings()}
+  function renderFindings(){
+    var all=allChecks(),c=counts(),issues=all.filter(isIssue).length;
+    var tabs=[['issues','All issues',issues],['critical','Critical',c.critical],['warning','Warnings',c.warning],['notice','Notices',c.notice],['pass','Passed & info',all.length-issues]];
+    $('seg').innerHTML=tabs.map(function(t){return '<button type="button" data-v="'+t[0]+'" aria-pressed="'+(view===t[0])+'">'+t[1]+'<span>'+t[2]+'</span></button>'}).join('');
+    var show=all.filter(function(x){return view==='issues'?isIssue(x):view==='pass'?!isIssue(x):isIssue(x)&&x.sev===view});
+    var html='';
+    CATS.forEach(function(k){
+      var list=show.filter(function(x){return x.cat===k.id}).sort(function(a,b){var ia=isIssue(a),ib=isIssue(b);if(ia!==ib)return ia?-1:1;if(ia)return SEVORD[a.sev]-SEVORD[b.sev];return (a.status==='info')-(b.status==='info')});
+      if(!list.length)return;
+      var s=catScore(k.id);
+      html+='<section class="grp"><div class="grp-h" id="g-'+k.id+'">'+icon(k.icon)+'<h3>'+esc(k.name)+'</h3><span>'+(s==null?'':s+'/100 · ')+list.length+' shown</span></div>'+list.map(finding).join('')+'</section>';
+    });
+    $('groups').innerHTML=html||'<div class="none-left" style="border-top:1px solid var(--ln)">Nothing in this view. '+(view==='issues'?'No issues found.':'')+'</div>';
+  }
+  $('seg').addEventListener('click',function(e){var b=e.target.closest('[data-v]');if(b)setView(b.dataset.v)});
+  function finding(c){
+    var iss=isIssue(c),cls=iss?c.sev:c.status==='info'?'info':'pass',lab=iss?c.sev:c.status==='info'?'info':'passed';
+    var head='<span class="sev '+cls+'">'+lab+'</span><div><h4>'+esc(c.title)+'</h4><p>'+rich(c.detected)+(c.count>1?' <b>('+c.count+')</b>':'')+'</p></div>';
+    var hasBody=c.why||c.verify||c.fix||(c.items&&c.items.length);
+    if(!hasBody)return '<details class="fd pass"><summary tabindex="-1" onclick="return false">'+head+'</summary></details>';
+    var body='<dl class="fd-b">'+(c.why?'<div><dt>Why it matters</dt><dd>'+rich(c.why)+'</dd></div>':'')+(c.verify?'<div><dt>How to verify</dt><dd>'+rich(c.verify)+'</dd></div>':'')+(c.fix?'<div><dt>Suggested action</dt><dd>'+rich(c.fix)+'</dd></div>':'')+
+      (c.items&&c.items.length?'<div class="items"><dt>Affected ('+c.count+')</dt><dd><ul>'+c.items.map(function(i){return '<li>'+esc(i)+'</li>'}).join('')+(c.count>c.items.length?'<li class="more">and '+(c.count-c.items.length)+' more</li>':'')+'</ul></dd></div>':'')+'</dl>';
+    return '<details class="fd"><summary>'+head+'</summary>'+body+'</details>';
+  }
+  function codeCls(s){return s>=200&&s<300?'ok':s>=300&&s<400?'rd':'er'}
+  function renderTables(){
+    var cr=data.crawl;
+    $('crawlP').textContent=cr.length+' page'+(cr.length===1?'':'s')+' · limit '+data.limits.pages+' pages, '+data.limits.depth+' clicks deep, robots.txt respected';
+    $('crawlT').innerHTML=cr.map(function(p){return '<tr><td class="u"><a href="'+esc(p.url)+'" target="_blank" rel="noopener noreferrer">'+esc(p.url.replace(/^https?:\/\//,''))+'</a>'+(p.noindex?' <span class="sev critical">noindex</span>':'')+'</td><td><span class="code '+codeCls(p.status)+'">'+(p.status||'—')+'</span></td><td>'+esc(p.title||'—')+'</td><td class="n">'+p.depth+'</td><td class="n">'+p.inlinks+'</td><td class="n">'+(p.words||0)+'</td><td class="n">'+(p.ms!=null?p.ms+' ms':'—')+'</td></tr>'}).join('');
+    var b=data.links.broken;
+    $('blP').textContent=b.length?b.length+' of '+data.links.checked+' checked links fail'+(data.links.unverified.length?' · '+data.links.unverified.length+' couldn’t be verified (sites that block bots)':''):'None of the '+data.links.checked+' checked links failed'+(data.links.unverified.length?' · '+data.links.unverified.length+' couldn’t be verified':'')+'.';
+    $('blWrap').hidden=!b.length;
+    $('blT').innerHTML=b.map(function(l){return '<tr><td class="u">'+esc(l.url)+'</td><td><span class="code er">'+(l.status||'none')+'</span></td><td class="u">'+esc(l.from.replace(/^https?:\/\//,''))+'</td><td>'+esc(l.anchor||'—')+'</td></tr>'}).join('');
+  }
+
+  /* ---------- saving + actions */
+  function store(){if(!data)return;var c=counts(),cats={};CATS.forEach(function(k){cats[k.id]=catScore(k.id)});
+    var top=allChecks().filter(isIssue).sort(function(x,y){return SEVORD[x.sev]-SEVORD[y.sev]||(y.count||1)-(x.count||1)}).slice(0,6).map(function(x){return {t:x.title,s:x.sev,n:x.count||1}});
+    var all={};try{all=JSON.parse(S.read('scoutly.audits')||'{}')||{}}catch(_){}
+    all[new URL(data.finalUrl).hostname.replace(/^www\./,'')]={url:data.finalUrl,score:overall(),critical:c.critical,warning:c.warning,notice:c.notice,pass:c.pass,pages:data.crawl.length,broken:data.links.broken.length,cats:cats,issues:top,keyword:data.keyword,at:data.fetchedAt};S.write('scoutly.audits',JSON.stringify(all))}
+  $('form').addEventListener('submit',function(e){e.preventDefault();run($('url').value.trim(),$('kw').value.trim())});
+  $('rerun').onclick=function(){if(data)run(data.url,data.keyword||'')};
+  $('dl').onclick=function(){if(!data)return;var out=JSON.parse(JSON.stringify(data));out.pagespeed=psi;out.score=overall();out.checks=allChecks();
+    var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,2)],{type:'application/json'}));
+    a.download='scoutly-audit-'+new URL(data.finalUrl).hostname+'-'+data.fetchedAt.slice(0,10)+'.json';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500)};
+  $('pr').onclick=function(){var prev=view;setView('issues');[].forEach.call(document.querySelectorAll('.fd'),function(d){d.open=true});window.print();setView(prev)};
+
+  /* start from ?url=…&kw=… (campaign Audit buttons, External audit dialog, dashboard) */
+  var q=new URLSearchParams(location.search);
+  if(q.get('url')){$('url').value=q.get('url');$('kw').value=q.get('kw')||'';run(q.get('url'),q.get('kw')||'')}
+  else{var site=S.read('scoutly.site');if(site)$('url').value=site;$('url').focus()}
+})();
+</script>
+</body>
+</html>

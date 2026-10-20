@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Local SEO — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.nap{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;flex:1 1 100%}
+.chk li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;padding:11px 18px;border-bottom:1px solid var(--ln)}.chk li:last-child{border-bottom:0}
+.chk svg{width:16px;height:16px;margin-top:2px}.chk .y svg{color:var(--ok)}.chk .n svg{color:var(--cr)}.chk .w svg{color:var(--wa)}
+.chk b{display:block;font:600 14px/1.35 Geist,sans-serif}.chk span{display:block;margin-top:3px;font:400 12px/1.55 var(--M);color:var(--sl)}
+.gbp li{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--ln);font:400 12.5px/1.55 var(--M);color:var(--sl)}.gbp li:last-child{border-bottom:0}
+.gbp li:before{content:"";width:10px;height:10px;flex:none;margin-top:4px;border:1.5px solid var(--b)}
+.gbp a{color:var(--b);text-decoration:underline}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">SEO Services</p>
+      <h1>Local SEO</h1>
+      <p class="desc">Check that your business name, address and phone (NAP) are correct and consistent on your website and your directory listings, and that your site gives Google the local signals it looks for.</p>
+    </div>
+    <form class="qbar" id="f" novalidate>
+      <div class="nap">
+        <div class="qf"><label for="name">Business name</label><input id="name" placeholder="Your business name" autocomplete="organization"></div>
+        <div class="qf"><label for="phone">Phone</label><input id="phone" placeholder="Your phone number" autocomplete="tel"></div>
+        <div class="qf"><label for="addr">Street address</label><input id="addr" placeholder="Street and building number" autocomplete="street-address"></div>
+        <div class="qf"><label for="city">City</label><input id="city" placeholder="City" autocomplete="address-level2"></div>
+      </div>
+      <div class="qf" style="flex:1 1 100%"><label for="site">Your website (homepage or location page)</label><input id="site" placeholder="yourwebsite.com/contact" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+      <div class="qf" style="flex:1 1 100%"><label for="dirs">Directory listings (optional, one URL per line)</label><textarea id="dirs" placeholder="One listing URL per line, e.g. your Facebook page or a directory profile"></textarea><small>Some directories block automated checks; those are marked “couldn’t check” rather than wrong.</small></div>
+      <button class="btn p" type="submit"><svg class="i"><use href="#i-pin"/></svg>Check local SEO</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div class="loading" id="load" hidden><span class="spin"></span>Reading your website and listings…</div>
+    <div id="out" hidden>
+      <div class="kpis" id="kpis"></div>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-list"/></svg></span><div><h2>NAP consistency</h2><p>Is the same name, address and phone on every page?</p></div></div>
+        <div class="dt-wrap"><table class="dt"><thead><tr><th>Page</th><th>Name</th><th>Phone</th><th>Address</th><th>City</th></tr></thead><tbody id="napT"></tbody></table></div></section>
+      <div class="cols2">
+        <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-globe"/></svg></span><div><h2>Website local signals</h2><p id="siteP"></p></div></div><ul class="chk" id="chk"></ul></section>
+        <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-pin"/></svg></span><div><h2>Google Business Profile</h2><p>Checklist (Google doesn’t let tools read it)</p></div></div>
+          <ul class="gbp pad">
+            <li><span>Claim and verify your profile at <a href="https://business.google.com" target="_blank" rel="noopener noreferrer">business.google.com</a>.</span></li>
+            <li><span>Use exactly the same name, address and phone as your website.</span></li>
+            <li><span>Pick the most specific primary category, then add secondary ones.</span></li>
+            <li><span>Add opening hours, holiday hours, services, and at least 10 real photos.</span></li>
+            <li><span>Ask happy customers for reviews and reply to every review.</span></li>
+            <li><span>Post updates or offers at least monthly.</span></li>
+            <li><span>Link the profile to the matching location page on your website.</span></li>
+          </ul>
+          <div class="pad" style="border-top:1px solid var(--ln)"><a class="btn sm" id="kwLink" href="keyword-magic.html"><svg class="i"><use href="#i-wand"/></svg>Find local keywords</a></div></section>
+      </div>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,KEY='scoutly.local';
+  function digits(s){return (s||'').replace(/\D/g,'')}
+  function norm(s){return (s||'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,' ').trim()}
+  function phoneIn(text,tels,phone){var d=digits(phone).slice(-10);if(d.length<6)return null;var all=digits(text)+' '+tels.map(digits).join(' ');return all.indexOf(d)>-1}
+  function nameIn(text,name){var n=norm(name);if(!n)return null;var t=norm(text);if(t.indexOf(n)>-1)return true;var w=n.split(' ').filter(function(x){return x.length>2});return w.length>1&&w.every(function(x){return t.indexOf(x)>-1})?'partial':false}
+  function addrIn(text,a){var n=norm(a);if(!n)return null;var t=norm(text);if(t.indexOf(n)>-1)return true;var w=n.split(' ').filter(function(x){return x.length>1});var hit=w.filter(function(x){return t.indexOf(x)>-1}).length;return hit===w.length?true:hit>=Math.ceil(w.length/2)?'partial':false}
+  function cell(v){return v===null?'<span class="meta-note">—</span>':v===true?'<span class="tag ok">Found</span>':v==='partial'?'<span class="tag wr">Partly</span>':v==='skip'?'<span class="tag">Couldn’t check</span>':'<span class="tag bad">Missing</span>'}
+  function item(state,title,detail){var ic=state==='y'?'check':state==='w'?'alert':'x';return '<li class="'+state+'"><svg class="i"><use href="#i-'+ic+'"/></svg><div><b>'+esc(title)+'</b><span>'+esc(detail)+'</span></div></li>'}
+  $('f').addEventListener('submit',function(e){e.preventDefault();$('err').textContent='';
+    var v={name:$('name').value.trim(),phone:$('phone').value.trim(),addr:$('addr').value.trim(),city:$('city').value.trim(),site:$('site').value.trim(),dirs:$('dirs').value};
+    if(!v.site){$('err').textContent='Add your website.';return}if(!v.name&&!v.phone){$('err').textContent='Add at least your business name or phone.';return}
+    try{localStorage.setItem(KEY,JSON.stringify(v))}catch(_){}
+    var dirs=v.dirs.split(/\n/).map(function(s){return s.trim()}).filter(Boolean).slice(0,15);
+    $('out').hidden=true;$('load').hidden=false;
+    Promise.all([v.site].concat(dirs).map(function(u,i){return S.api('/api/page?url='+encodeURIComponent(u)).catch(function(err){if(!i)throw err;return {url:u,finalUrl:u,failed:err.message}})})).then(function(ps){
+      var me=ps[0],rows=ps.map(function(p,i){if(p.failed||p.status>=400||(p.words<40))return {p:p,skip:true};var txt=(p.title||'')+' '+p.text+' '+(p.local[0]?[p.local[0].name,p.local[0].address,p.local[0].telephone].join(' '):'');
+        return {p:p,n:nameIn(txt,v.name),ph:phoneIn(txt,p.tel||[],v.phone),a:addrIn(txt,v.addr),c:v.city?norm(txt).indexOf(norm(v.city))>-1:null}});
+      $('napT').innerHTML=rows.map(function(r,i){var u=r.p.finalUrl||r.p.url;return '<tr><td class="u"><a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">'+(i?'':'<b>Your site · </b>')+esc(u.replace(/^https?:\/\/(www\.)?/,'').slice(0,70))+'</a>'+(r.skip?'<div class="meta-note">'+esc(r.p.failed||('Blocked or empty page (HTTP '+r.p.status+')'))+'</div>':'')+'</td>'+
+        (r.skip?'<td>'+cell('skip')+'</td><td>'+cell('skip')+'</td><td>'+cell('skip')+'</td><td>'+cell('skip')+'</td>':'<td>'+cell(r.n)+'</td><td>'+cell(r.ph)+'</td><td>'+cell(r.a)+'</td><td>'+cell(r.c)+'</td>')+'</tr>'}).join('');
+      var checked=rows.filter(function(r){return !r.skip}),consistent=checked.filter(function(r){return r.n!==false&&r.ph!==false&&r.a!==false}).length;
+      // website signals
+      var lb=me.local[0],L=[],titleCity=v.city&&norm((me.title||'')+' '+me.h1.join(' ')).indexOf(norm(v.city))>-1;
+      L.push(lb?item('y','LocalBusiness structured data','Found '+lb.type+(lb.name?' for “'+lb.name+'”':'')+'.'):item('n','No LocalBusiness structured data','Add LocalBusiness (or a more specific type like Dentist or MedicalClinic) JSON-LD with name, address, phone, geo and opening hours.'));
+      if(lb){var miss=[['name',lb.name],['address',lb.address],['telephone',lb.telephone],['geo coordinates',lb.geo],['opening hours',lb.hours]].filter(function(x){return !x[1]}).map(function(x){return x[0]});
+        L.push(miss.length?item('w','Structured data is missing details','Add: '+miss.join(', ')+'.'):item('y','Structured data is complete','Name, address, phone, geo and hours are all set.'));
+        if(v.phone&&lb.telephone&&digits(lb.telephone).slice(-10)!==digits(v.phone).slice(-10))L.push(item('n','Phone in structured data doesn’t match','Schema says '+lb.telephone+'; you entered '+v.phone+'.'));
+        L.push(lb.rating?item('y','Review rating markup','aggregateRating is present.'):item('w','No review rating markup','If you show genuine reviews on the page, mark them up with aggregateRating.'))}
+      L.push(me.tel.length?item('y','Click-to-call phone link',me.tel.join(', ')):item('w','No click-to-call link','Wrap your phone number in a tel: link so mobile visitors can tap to call.'));
+      L.push(me.maps?item('y','Map or directions link','The page links to or embeds Google Maps.'):item('w','No map or directions','Embed a Google Map or link to directions from your profile.'));
+      if(v.city)L.push(titleCity?item('y','City in title or H1','The page targets '+v.city+'.'):item('w','City not in title or H1','Mention '+v.city+' in the title and main heading of your location page.'));
+      L.push(me.viewport?item('y','Mobile friendly viewport','Most local searches happen on phones.'):item('n','No mobile viewport','Most local searches happen on phones; add a viewport tag.'));
+      $('chk').innerHTML=L.join('');$('siteP').textContent=me.finalUrl;
+      var good=(L.join('').match(/class="y"/g)||[]).length,total=L.length;
+      $('kpis').innerHTML=[['list','Listings consistent',checked.length?consistent+' / '+checked.length:'—','Name, phone and address match'],['globe','Website signals',good+' / '+total,'Local checks passed'],['alert','Couldn’t check',rows.length-checked.length,'Blocked or empty pages'],['star','Reviews markup',lb&&lb.rating?'Yes':'No','On your website']]
+        .map(function(k){return '<div class="kpi"><small><svg class="i"><use href="#i-'+k[0]+'"/></svg>'+k[1]+'</small><b>'+k[2]+'</b><span>'+k[3]+'</span></div>'}).join('');
+      var svc=(me.h1[0]||me.title||'').split(/[|–—-]/)[0].trim().split(' ').slice(0,3).join(' ');$('kwLink').href='keyword-magic.html?q='+encodeURIComponent((svc||v.name)+' '+(v.city||'near me'));
+      $('load').hidden=true;$('out').hidden=false;
+    }).catch(function(e){$('load').hidden=true;$('err').textContent=e.message});
+  });
+  try{var v=JSON.parse(localStorage.getItem(KEY)||'null');if(v){['name','phone','addr','city','site','dirs'].forEach(function(k){$(k).value=v[k]||''})}}catch(_){}
+  if(!$('site').value)$('site').value=S.read('scoutly.site')||'';
+})();
+</script>
+</body>
+</html>
