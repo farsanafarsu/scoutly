@@ -24,10 +24,10 @@
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://scoutly.example/#organization", "name": "Scoutly", "url": "https://scoutly.example/", "logo": {"@type": "ImageObject", "url": "https://scoutly.example/assets/apple-touch-icon.png", "width": 180, "height": 180}}, {"@type": "WebSite", "@id": "https://scoutly.example/#website", "name": "Scoutly", "url": "https://scoutly.example/", "inLanguage": "en", "publisher": {"@id": "https://scoutly.example/#organization"}}]}</script>
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is Scoutly?", "acceptedAnswer": {"@type": "Answer", "text": "Scoutly is an SEO and search visibility platform designed to bring website auditing, backlink analysis, broken link detection, keyword research, competitor research, and supported AI search visibility insights into one workspace."}}, {"@type": "Question", "name": "What does an SEO audit tool do?", "acceptedAnswer": {"@type": "Answer", "text": "An SEO audit tool examines a website for technical and on-page issues that may affect crawling, indexability, site structure, content optimization, and user experience. It helps identify problems and organize potential improvements. See what Scoutly’s website SEO audit checks."}}, {"@type": "Question", "name": "Can Scoutly find broken links?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. Every website audit checks up to 120 internal and external links found on the pages it crawls, and reports errors, redirects and links that couldn’t be verified. Results depend on crawl limits, website access, and server responses."}}, {"@type": "Question", "name": "Can Scoutly check backlinks?", "acceptedAnswer": {"@type": "Answer", "text": "Scoutly can analyze backlink information available through its configured data sources. Comprehensive backlink discovery generally requires an external backlink index or provider, and no provider is connected in the current early-access build."}}, {"@type": "Question", "name": "Does Scoutly help with competitor analysis?", "acceptedAnswer": {"@type": "Answer", "text": "Yes. The intended workflow includes comparing available keyword, content, and backlink data to identify opportunities for your website. The depth of analysis depends on the data sources connected."}}, {"@type": "Question", "name": "What are AEO and GEO?", "acceptedAnswer": {"@type": "Answer", "text": "AEO stands for Answer Engine Optimization, while GEO stands for Generative Engine Optimization. Both focus on improving how useful content can be understood and surfaced in answer-oriented and generative search experiences. Read more about AEO and GEO."}}, {"@type": "Question", "name": "Can Scoutly guarantee higher Google rankings?", "acceptedAnswer": {"@type": "Answer", "text": "No SEO platform can guarantee specific rankings. Scoutly can help identify issues and opportunities, but outcomes depend on your website, competition, content, technical implementation, and search engine systems."}}, {"@type": "Question", "name": "Is Scoutly suitable for agencies?", "acceptedAnswer": {"@type": "Answer", "text": "Scoutly is intended to support agency workflows involving multiple website audits, backlink research, competitor analysis, and reporting. Project limits and collaboration features will depend on the plan, and will be published before launch."}}, {"@type": "Question", "name": "Does Scoutly offer a free website audit?", "acceptedAnswer": {"@type": "Answer", "text": "The website audit works today. It fetches the page you enter, reads robots.txt and your XML sitemap, crawls up to 25 internal pages up to three clicks deep, checks up to 120 links, and adds Core Web Vitals from Google PageSpeed Insights. Public accounts aren’t open yet, so audits currently run in the preview workspace. Pricing and any free-tier limits will be published before accounts open."}}, {"@type": "Question", "name": "How often should I audit my website?", "acceptedAnswer": {"@type": "Answer", "text": "Run an audit when launching a new website or making significant changes, and repeat it periodically to detect new technical issues. Websites that change frequently may benefit from scheduled crawls."}}]}</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Sora:wght@400;500;600;700&display=swap">
 <style>
 :root{--bg:#eef1f7;--bg2:#e4e9f2;--card:#f8f9fc;--ink:#0a1230;--sl:#4a5675;--mu:#7d88a3;--ln:rgba(10,26,74,.13);--b:#2f5bff;--b2:#1f45d6;--sky:#5ac8fa;--nv:#050a1f;--nv2:#0a1a4a;--cr:#e5484d;--wa:#f5a524;--ok:#17a673;
-  --D:Tektur,Geist,system-ui,sans-serif;--M:"Geist Mono",ui-monospace,monospace}
+  --D:Sora,Geist,system-ui,sans-serif;--T:Geist,system-ui,"Segoe UI",sans-serif;--M:"Geist Mono",ui-monospace,monospace}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
 body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.65 Geist,system-ui,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;overflow-x:hidden}
 body:after{content:"";position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.07;mix-blend-mode:multiply;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
@@ -40,13 +40,13 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}ul,o
 .lbl{display:inline-flex;align-items:center;gap:8px;padding:5px 8px 5px 9px;background:var(--b);color:#fff;font:600 10.5px/1 var(--M);letter-spacing:.14em;text-transform:uppercase}
 .lbl:after{content:"";width:9px;height:11px;background:repeating-linear-gradient(90deg,currentColor 0 2px,transparent 2px 4px);opacity:.85}
 .lbl.lt{background:transparent;color:var(--sky);border:1px solid rgba(90,200,250,.5)}
-.dh{margin:16px 0 0;font:500 clamp(36px,5.2vw,86px)/.98 var(--D);letter-spacing:.005em;text-transform:uppercase;color:inherit}
+.dh{margin:16px 0 0;font:600 clamp(32px,4.5vw,74px)/1.04 var(--D);letter-spacing:-.025em;text-transform:uppercase;color:inherit}
 .dh>span{display:block}.dh .l2{position:relative;padding-left:1.3em}
 .dh .l2:before{content:"";position:absolute;left:.08em;top:.5em;width:1em;height:max(2px,.055em);background:currentColor}
-.dh.xl{font-size:clamp(32px,4.1vw,70px)}.dh.sm{font-size:clamp(28px,3.3vw,54px)}.dh.xs{font-size:clamp(24px,2.7vw,42px)}
-.tx{font:400 13.5px/1.75 var(--M);color:var(--sl);max-width:440px}.dk .tx{color:rgba(214,224,255,.7)}
+.dh.xl{font-size:clamp(30px,3.6vw,60px)}.dh.sm{font-size:clamp(26px,2.9vw,46px)}.dh.xs{font-size:clamp(22px,2.4vw,36px)}
+.tx{font:400 15px/1.65 var(--T);color:var(--sl);max-width:440px}.dk .tx{color:rgba(214,224,255,.7)}
 .tx.c{margin:18px auto 0;text-align:center}
-.fine{margin-top:16px;font:400 12px/1.7 var(--M);color:var(--mu)}.fine a{color:var(--b);text-decoration:underline;text-underline-offset:3px}.dk .fine{color:rgba(214,224,255,.5)}.dk .fine a{color:var(--sky)}
+.fine{margin-top:16px;font:400 13.5px/1.65 var(--T);color:var(--mu)}.fine a{color:var(--b);text-decoration:underline;text-underline-offset:3px}.dk .fine{color:rgba(214,224,255,.5)}.dk .fine a{color:var(--sky)}
 .copy{margin-top:26px}.copy p{color:var(--sl);max-width:560px}.copy p+p{margin-top:14px}.copy b{color:var(--ink);font-weight:600}.dk .copy p{color:rgba(214,224,255,.74)}.dk .copy b{color:#fff}
 /* buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;height:48px;padding:0 20px;border:1px solid currentColor;border-radius:3px;background:transparent;color:var(--ink);font:600 11.5px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;cursor:pointer;white-space:nowrap;transition:background .25s,color .25s,border-color .25s,transform .25s}
@@ -59,8 +59,8 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}ul,o
 /* header */
 .hd{position:fixed;top:0;left:0;right:0;z-index:50;color:var(--ink);transition:background .35s,color .35s,border-color .35s}
 .hd-in{display:flex;align-items:center;gap:28px;height:68px}
-.hd.s{background:rgba(238,241,247,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 1px 0 var(--ln)}
-.hd.on-dk{color:#fff}.hd.on-dk.s{background:rgba(5,10,31,.72);box-shadow:0 1px 0 rgba(255,255,255,.08)}
+.hd.s{background:rgba(238,241,247,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.hd.on-dk{color:#fff}.hd.on-dk.s{background:rgba(5,10,31,.72)}
 .hd.on-dk .btn.sm:not(.d){color:#fff}.hd.on-dk .btn.d{background:#fff;border-color:#fff;color:var(--nv)}
 .logo{display:flex;align-items:center;gap:9px;font:600 16px/1 var(--D);letter-spacing:.1em;text-transform:uppercase}.logo img{width:30px;height:30px;object-fit:contain}
 .nl{display:flex;align-items:center;margin-left:auto;font:500 11px/1 var(--M);letter-spacing:.12em;text-transform:uppercase}
@@ -91,10 +91,16 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}ul,o
 .sp:hover{background:#fff}.sp:hover:before{transform:scaleX(1)}
 .ix{font:500 11px/1 var(--M);letter-spacing:.14em;color:var(--b)}
 .sp h3{margin-top:auto;padding-top:46px;font:500 21px/1.15 var(--D);letter-spacing:.02em;text-transform:uppercase}
-.sp p{margin-top:12px;font:400 13px/1.7 var(--M);color:var(--sl)}
+.sp p{margin-top:12px;font:400 14.5px/1.65 var(--T);color:var(--sl)}
 .sp a{margin-top:18px;font:600 11px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--b)}
 .dark3 .sp{background:rgba(255,255,255,.02)}.dk .spec{border-color:rgba(255,255,255,.12)}.dk .sp{border-color:rgba(255,255,255,.12)}.dk .sp:hover{background:rgba(255,255,255,.05)}.dk .sp p{color:rgba(214,224,255,.7)}.dk .sp a,.dk .ix{color:var(--sky)}.dk .sp:before{background:var(--sky)}
 .dark3{grid-template-columns:repeat(3,1fr)}
+/* features: cards tilt up into place as you scroll (--e card, --t text, --s scan sweep; all 0..1, set by JS) */
+.js .fx{perspective:1400px}.fx .sp{overflow:hidden}
+.js .fx .sp{opacity:var(--e,1);transform:translateY(calc((1 - var(--e,1))*80px)) rotateX(calc((1 - var(--e,1))*32deg)) scale(calc(.94 + var(--e,1)*.06));transform-origin:50% 100%;will-change:transform,opacity}
+.js .fx .sp>*{opacity:var(--t,1);transform:translateY(calc((1 - var(--t,1))*22px))}
+.js .fx .sp h3{transform:translateY(calc((1 - var(--t,1))*34px))}
+.fx .sp:after{content:"";position:absolute;left:0;right:0;top:-1px;height:2px;background:linear-gradient(90deg,transparent,var(--sky) 40%,var(--b) 60%,transparent);transform:translateX(calc(var(--s,1)*200% - 100%));opacity:var(--so,0);pointer-events:none}
 /* hero scene */
 .hs{position:relative;background:var(--bg)}
 .js .hs{height:430vh}
@@ -108,30 +114,39 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}ul,o
 .hs-tags span:before{content:"";display:inline-block;width:5px;height:5px;margin-right:6px;background:var(--b);vertical-align:1px}
 @keyframes flick{0%,100%{opacity:1}46%{opacity:.25}50%{opacity:1}72%{opacity:.6}}
 .st{position:absolute;left:0;right:0;bottom:0;padding:0 32px clamp(28px,6vh,64px);max-width:1360px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:48px;align-items:end;transition:opacity .45s,transform .6s cubic-bezier(.2,.8,.2,1)}
+.st0{top:0;grid-template-columns:minmax(0,1fr);align-content:center;padding-top:80px}
+.st0 .hs-l{max-width:min(780px,58%)}
+.hs .dh.xl,.st1 .dh{font-size:clamp(28px,2.9vw,46px)}
+.st1{top:0;grid-template-columns:minmax(0,1fr);align-content:center;gap:0;padding-top:80px}
+.st1 .hs-co{max-width:420px;min-height:200px;margin-top:28px}.st1 .co{left:0;right:auto;top:0;bottom:auto;width:100%}
+.hs .note{max-width:560px}
+.hs-lede{margin-top:20px;max-width:540px;font:400 16px/1.6 Geist,sans-serif;color:var(--sl)}.hs-lede b{color:var(--ink);font-weight:600}
+.hs-more{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;margin-top:20px}
+.hs-more>a{font:600 11px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--b);border-bottom:1px solid currentColor;padding-bottom:4px}
 .js .st1{opacity:0;pointer-events:none;transform:translateY(30px)}
 .js .st0.off{opacity:0;pointer-events:none;transform:translateY(-30px)}.js .st1.on{opacity:1;pointer-events:auto;transform:none}
 .dh.xl{margin-top:18px}
 .scan{display:flex;align-items:center;gap:6px;max-width:600px;margin-top:28px;padding:5px;background:rgba(255,255,255,.75);border:1px solid var(--ln);border-radius:4px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:border-color .2s}
 .scan:focus-within{border-color:var(--b)}
-.scan input{flex:1;min-width:0;height:44px;padding:0 12px;border:0;background:none;color:var(--ink);font:400 15px/1 var(--M)}.scan input::placeholder{color:var(--mu)}.scan input:focus{outline:0}
+.scan input{flex:1;min-width:0;height:44px;padding:0 12px;border:0;background:none;color:var(--ink);font:400 16.5px/1 var(--T)}.scan input::placeholder{color:var(--mu)}.scan input:focus{outline:0}
 .scan .btn{height:44px}.scan[aria-busy="true"] .btn{opacity:.7;pointer-events:none}.scan input[aria-invalid="true"]{color:var(--cr)}
 .msg{min-height:20px;margin-top:8px;font:500 12px/1.5 var(--M);color:var(--b)}.msg.err{color:var(--cr)}.dk .msg{color:var(--sky)}.dk .msg.err{color:#ff9a9d}
-.note{font:400 11.5px/1.6 var(--M);color:var(--mu)}
+.note{font:400 13px/1.65 var(--T);color:var(--mu)}
 .hs-sub{font:500 18px/1.35 Geist,sans-serif;letter-spacing:-.01em;margin-bottom:12px}
 .hs-r .btn{margin-top:22px}
-.hs-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:20px}.hs-chips li{padding:6px 9px;border:1px solid var(--ln);background:rgba(255,255,255,.5);font:500 10.5px/1 var(--M);letter-spacing:.08em;text-transform:uppercase;color:var(--sl)}
+.hs-chips{display:flex;flex-wrap:wrap;gap:6px}.hs-chips li{padding:6px 9px;border:1px solid var(--ln);background:rgba(255,255,255,.5);font:500 10.5px/1 var(--M);letter-spacing:.08em;text-transform:uppercase;color:var(--sl)}
 .hs-co{position:relative;align-self:stretch}
 .co{position:absolute;right:0;bottom:0;width:min(360px,100%);padding:18px 20px;background:rgba(248,249,252,.82);border:1px solid var(--ln);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);opacity:0;transform:translateY(16px);transition:opacity .4s,transform .5s cubic-bezier(.2,.8,.2,1);pointer-events:none}
 .co.on{opacity:1;transform:none;pointer-events:auto}
 .co h3{display:flex;align-items:center;gap:9px;font:600 12px/1.2 var(--M);letter-spacing:.12em;text-transform:uppercase}.co h3 i{width:11px;height:11px;border:1.5px solid var(--b)}
-.co p{margin-top:10px;font:400 12.5px/1.7 var(--M);color:var(--sl)}.co a{display:inline-block;margin-top:12px;font:600 10.5px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--b)}
+.co p{margin-top:10px;font:400 14px/1.65 var(--T);color:var(--sl)}.co a{display:inline-block;margin-top:12px;font:600 10.5px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--b)}
 .hs-mark{position:absolute;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:1.5px solid #fff;box-shadow:0 0 0 1px rgba(10,26,74,.25),0 0 24px rgba(90,200,250,.6);opacity:0;transition:opacity .35s;pointer-events:none;z-index:3}
 .hs-mark i{position:absolute;left:50%;top:50%;width:8px;height:8px;margin:-4px;background:#fff;border:2px solid var(--ink)}
 .hs-line{position:absolute;left:0;top:0;height:1px;background:linear-gradient(90deg,#fff,rgba(255,255,255,.4));transform-origin:0 50%;opacity:0;transition:opacity .35s;pointer-events:none;z-index:3}
 .hs-prog{position:absolute;right:32px;top:50%;transform:translateY(-50%);display:grid;gap:12px;font:500 10px/1 var(--M);letter-spacing:.14em;color:var(--mu)}
 .hs-prog span{transition:color .3s}.hs-prog span.on{color:var(--ink)}
 .hs-prog i{position:absolute;left:-12px;top:0;bottom:0;width:1px;background:var(--ln)}.hs-prog b{display:block;width:100%;height:0;background:var(--b)}
-.hs-scroll{position:absolute;left:32px;top:96px;display:flex;align-items:center;gap:10px;font:500 10px/1 var(--M);letter-spacing:.16em;text-transform:uppercase;color:var(--mu);transition:opacity .3s}
+.hs-scroll{position:absolute;left:32px;bottom:28px;display:flex;align-items:center;gap:10px;font:500 10px/1 var(--M);letter-spacing:.16em;text-transform:uppercase;color:var(--mu);transition:opacity .3s}
 .hs-scroll span{width:1px;height:22px;background:linear-gradient(var(--b),transparent);animation:sdrop 1.6s ease-in-out infinite}@keyframes sdrop{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
 /* meet */
 .meet{overflow:hidden}
@@ -140,6 +155,20 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}ul,o
 .scope-k{position:absolute;left:44px;top:10px;font:500 10px/1 var(--M);letter-spacing:.14em;color:var(--sl)}.scope-k.r{left:auto;right:44px;top:auto;bottom:10px;color:var(--b)}
 .scope-m{width:74%;height:auto;filter:drop-shadow(0 30px 40px rgba(47,91,255,.35));animation:float 5s ease-in-out infinite}
 @keyframes float{50%{transform:translateY(-14px) rotate(1.5deg)}}
+.meet .dh{font-size:clamp(26px,2.3vw,38px);max-width:640px}
+.meet-lede{margin-top:22px;max-width:520px;font:400 17px/1.65 var(--T);color:var(--sl)}.meet-lede b{color:var(--ink);font-weight:600}
+.meet-steps{margin-top:28px;max-width:540px;border-top:1px solid var(--ln)}
+.meet-steps li{display:grid;grid-template-columns:48px 1fr;gap:4px 12px;padding:16px 0;border-bottom:1px solid var(--ln);transition:background .3s}
+.meet-steps li:hover{background:linear-gradient(90deg,rgba(47,91,255,.06),transparent)}
+.meet-steps i{grid-row:span 2;padding-top:3px;font:500 12px/1 var(--M);font-style:normal;letter-spacing:.1em;color:var(--b)}
+.meet-steps b{font:600 15px/1.3 var(--D);letter-spacing:.01em;text-transform:uppercase}
+.meet-steps span{font:400 14.5px/1.6 var(--T);color:var(--sl)}
+.meet-acts{display:flex;flex-wrap:wrap;align-items:center;gap:16px 26px;margin-top:32px}
+.meet-link{font:600 11px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--b);border-bottom:1px solid currentColor;padding-bottom:4px}
+.scope-chips li{position:absolute;z-index:2;display:flex;align-items:center;gap:8px;padding:9px 12px;background:rgba(255,255,255,.88);border:1px solid var(--ln);border-radius:6px;box-shadow:0 16px 32px -16px rgba(10,26,74,.4);font:500 11px/1 var(--M);color:var(--ink);white-space:nowrap;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);animation:bob 6s ease-in-out infinite}
+.scope-chips li:before{content:"";width:7px;height:7px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 3px rgba(23,166,115,.15)}.scope-chips .wr:before{background:var(--wa);box-shadow:0 0 0 3px rgba(245,165,36,.18)}
+.scope-chips li:nth-child(1){left:2%;top:24%}.scope-chips li:nth-child(2){right:0;top:16%;animation-delay:-1.5s}.scope-chips li:nth-child(3){right:-2%;bottom:30%;animation-delay:-3s}.scope-chips li:nth-child(4){left:6%;bottom:20%;animation-delay:-4.5s}
+@keyframes bob{50%{transform:translateY(-10px)}}
 .scope-x{position:absolute;inset:16%;border:1px dashed rgba(47,91,255,.35);border-radius:50%;animation:spin 30s linear infinite}@keyframes spin{to{transform:rotate(360deg)}}
 /* tunnel */
 .tn{position:relative;background:var(--bg)}
@@ -173,17 +202,19 @@ code{font:400 12.5px var(--M)}
 .y{color:var(--ok);font-weight:600}.n{color:var(--mu)}.dk .y{color:#3ddba5}
 .pane-n{padding:11px 16px;border-top:1px solid var(--ln);font:400 11px/1.6 var(--M);color:var(--mu)}.dk .pane-n{border-color:rgba(255,255,255,.08);color:rgba(214,224,255,.45)}
 .tgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:0 36px;margin-top:80px}
-.tgrid article{padding:22px 0;border-top:1px solid var(--ln)}.tgrid h3{margin-top:12px;font:500 16px/1.25 var(--D);letter-spacing:.03em;text-transform:uppercase}.tgrid p{margin-top:8px;font:400 13px/1.7 var(--M);color:var(--sl)}
+.tgrid article{padding:22px 0;border-top:1px solid var(--ln)}.tgrid h3{margin-top:12px;font:500 16px/1.25 var(--D);letter-spacing:.03em;text-transform:uppercase}.tgrid p{margin-top:8px;font:400 14.5px/1.65 var(--T);color:var(--sl)}
 /* priorities */
 .pri{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
 .pc{padding:26px;background:var(--card);border:1px solid var(--ln);border-top:3px solid}.pc.cr{border-top-color:var(--cr)}.pc.wr{border-top-color:var(--wa)}.pc.in{border-top-color:var(--b)}
-.pc h3{margin-top:20px;font:500 19px/1.2 var(--D);letter-spacing:.02em;text-transform:uppercase}.pc p{margin-top:10px;font:400 13px/1.7 var(--M);color:var(--sl)}
+.pc h3{margin-top:20px;font:500 19px/1.2 var(--D);letter-spacing:.02em;text-transform:uppercase}.pc p{margin-top:10px;font:400 14.5px/1.65 var(--T);color:var(--sl)}
 .anat{display:grid;grid-template-columns:repeat(4,1fr);margin-top:16px;background:var(--nv);color:#fff;counter-reset:a}
 .anat li{counter-increment:a;padding:24px;border-right:1px solid rgba(255,255,255,.08)}.anat li:last-child{border-right:0}
 .anat li:before{content:"0" counter(a);display:block;margin-bottom:16px;font:500 26px/1 var(--D);color:var(--sky)}
-.anat b{display:block;font:600 12px/1.3 var(--M);letter-spacing:.1em;text-transform:uppercase}.anat span{display:block;margin-top:8px;font:400 12.5px/1.6 var(--M);color:rgba(214,224,255,.65)}
+.anat b{display:block;font:600 12px/1.3 var(--M);letter-spacing:.1em;text-transform:uppercase}.anat span{display:block;margin-top:8px;font:400 14px/1.65 var(--T);color:rgba(214,224,255,.65)}
 /* workspace */
-.ws{position:relative;padding:120px 0 140px;overflow:hidden}
+.ws{position:relative;padding:240px 0 140px;overflow:hidden}
+.ws:before{content:"";position:absolute;left:0;right:0;top:0;height:300px;background:linear-gradient(180deg,var(--bg) 0%,#9aa6c4 30%,#26304f 62%,var(--nv) 100%);pointer-events:none}
+.ws>*{position:relative}
 .mq{display:grid;gap:6px;margin-bottom:90px;white-space:nowrap}
 .mq-r{font:500 clamp(54px,9vw,150px)/1 var(--D);letter-spacing:.02em;color:#fff;will-change:transform}.mq-r.o{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.35)}
 .ws-h{text-align:center}.ws-h .dh{display:inline-block;text-align:left}.ws-h .tx{margin:22px auto 0;text-align:center}
@@ -205,12 +236,12 @@ code{font:400 12.5px var(--M)}
 .hz-h .btn{margin-top:30px}
 .hz-cl{clip-path:inset(-60px -100vw -60px 0)}.hz-track{display:flex;gap:18px;will-change:transform}
 .hc{position:relative;flex:0 0 min(340px,78vw);min-height:420px;display:flex;flex-direction:column;padding:26px;background:#f5f7fb;color:var(--ink);clip-path:polygon(0 0,calc(100% - 26px) 0,100% 26px,100% 100%,0 100%)}
-.hc .ix{color:var(--b)}.hc h3{margin-top:auto;font:500 26px/1.05 var(--D);text-transform:uppercase}.hc p{margin-top:14px;font:400 13px/1.7 var(--M);color:var(--sl)}
+.hc .ix{color:var(--b)}.hc h3{margin-top:auto;font:500 26px/1.05 var(--D);text-transform:uppercase}.hc p{margin-top:14px;font:400 14.5px/1.65 var(--T);color:var(--sl)}
 .hc i{position:absolute;right:20px;bottom:22px;width:28px;height:10px;background:repeating-linear-gradient(90deg,var(--ink) 0 2px,transparent 2px 5px);opacity:.5}
 @media(min-width:961px){.js .hz{height:300vh}.js .hz-pin{position:sticky;top:0;height:100vh;height:100svh;display:flex;align-items:center}}
 /* data rows */
 .rows{border-top:1px solid var(--ln)}.rows li{display:flex;gap:18px;align-items:flex-start;justify-content:space-between;padding:22px 0;border-bottom:1px solid var(--ln)}
-.rows b{font:500 17px/1.2 var(--D);letter-spacing:.03em;text-transform:uppercase}.rows p{margin-top:6px;font:400 13px/1.65 var(--M);color:var(--sl)}
+.rows b{font:500 17px/1.2 var(--D);letter-spacing:.03em;text-transform:uppercase}.rows p{margin-top:6px;font:400 14.5px/1.65 var(--T);color:var(--sl)}
 .rows em{flex:none;font:600 10px/1 var(--M);font-style:normal;letter-spacing:.12em;text-transform:uppercase;padding:6px 8px;border:1px solid}
 .st-d{color:var(--ok)}.st-p{color:var(--b)}.st-r{color:#b97600}
 /* faq */
@@ -219,7 +250,7 @@ code{font:400 12.5px var(--M)}
 .faq summary{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;cursor:pointer;list-style:none}.faq summary::-webkit-details-marker{display:none}
 .faq summary h3{font:500 16px/1.35 var(--D);letter-spacing:.03em;text-transform:uppercase;transition:color .2s}.faq summary:hover h3{color:var(--b)}
 .faq summary:after{content:"+";flex:none;display:grid;place-items:center;width:30px;height:30px;border:1px solid var(--ln);font:400 18px/1 var(--M);color:var(--b);transition:transform .3s}.faq details[open] summary:after{transform:rotate(45deg)}
-.faq .a{padding:0 50px 24px 0;font:400 13.5px/1.8 var(--M);color:var(--sl)}.faq .a a{color:var(--b);text-decoration:underline;text-underline-offset:3px}
+.faq .a{padding:0 50px 24px 0;font:400 15px/1.65 var(--T);color:var(--sl)}.faq .a a{color:var(--b);text-decoration:underline;text-underline-offset:3px}
 /* final */
 .fin{position:relative;padding:140px 0 120px;overflow:hidden;background:linear-gradient(180deg,var(--nv),#0a1a4a)}
 .fin>.w{position:relative}
@@ -227,7 +258,7 @@ code{font:400 12.5px var(--M)}
 .fin .tx{margin-top:22px}.fin .scan{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16)}.fin .scan input{color:#fff}.fin .scan input::placeholder{color:rgba(214,224,255,.45)}
 .cnt{justify-self:end;text-align:right}.cnt-n{display:block;margin-top:14px;font:500 clamp(120px,17vw,260px)/.85 var(--D);letter-spacing:-.02em;color:#fff}.cnt span{display:block;margin-top:10px;font:500 12px/1.5 var(--M);letter-spacing:.1em;text-transform:uppercase;color:rgba(214,224,255,.6)}
 .fin-row{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:90px;padding-top:28px;border-top:1px solid rgba(255,255,255,.12)}
-.fin-row b{font:600 11.5px/1.3 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--sky)}.fin-row p{margin-top:8px;font:400 13px/1.7 var(--M);color:rgba(214,224,255,.65)}
+.fin-row b{font:600 11.5px/1.3 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--sky)}.fin-row p{margin-top:8px;font:400 14.5px/1.65 var(--T);color:rgba(214,224,255,.65)}
 /* footer */
 .ft{position:relative;padding:0 0 32px;background:var(--bg);overflow:hidden}
 .ft-word{position:relative;margin:-.04em 0 -.16em;text-align:center;font:600 clamp(80px,23vw,380px)/.9 var(--D);letter-spacing:-.01em;color:var(--nv);white-space:nowrap;user-select:none}
@@ -236,18 +267,18 @@ code{font:400 12.5px var(--M)}
 .ft-g .tx{margin-top:16px;max-width:300px}
 .ft-g h2{margin-bottom:14px;font:600 11px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
 .ft-g li{padding:4px 0;font-size:14px}.ft-g a:hover{color:var(--b)}
-.ft-b{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;padding:18px 4px 0;font:400 11.5px/1.6 var(--M);color:var(--mu)}
+.ft-b{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;padding:18px 4px 0;font:400 13px/1.65 var(--T);color:var(--mu)}
 /* demo dialog */
 .demo{padding:0;border:0;background:transparent;max-width:min(560px,calc(100% - 32px));width:100%;color:#fff}
 .demo::backdrop{background:rgba(5,10,31,.7);backdrop-filter:blur(6px)}
 .demo-card{position:relative;padding:32px;background:var(--nv);border:1px solid rgba(255,255,255,.14);box-shadow:0 40px 100px -30px rgba(47,91,255,.6)}
 .demo-card .hx-eye{font:600 10.5px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:var(--sky)}.demo-card .hx-eye i{display:none}
-.demo-card h2{margin:14px 0 6px;font:500 30px/1.05 var(--D);text-transform:uppercase}.demo-sub{font:400 13px/1.7 var(--M);color:rgba(214,224,255,.7)}
+.demo-card h2{margin:14px 0 6px;font:500 30px/1.05 var(--D);text-transform:uppercase}.demo-sub{font:400 14.5px/1.65 var(--T);color:rgba(214,224,255,.7)}
 .demo-x{position:absolute;right:14px;top:14px;width:36px;height:36px;border:1px solid rgba(255,255,255,.2);background:none;color:#fff;font-size:20px;cursor:pointer}
 .demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:22px}.demo-grid label{display:grid;gap:6px;font:500 11px/1 var(--M);letter-spacing:.08em;text-transform:uppercase;color:rgba(214,224,255,.7)}
-.demo-grid input,.demo-grid select{height:44px;padding:0 12px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:#fff;font:400 14px var(--M)}.demo-grid select option{color:var(--ink)}
+.demo-grid input,.demo-grid select{height:44px;padding:0 12px;border:1px solid rgba(255,255,255,.18);background:rgba(255,255,255,.05);color:#fff;font:400 15px/1 var(--T)}.demo-grid select option{color:var(--ink)}
 .demo-grid input[aria-invalid="true"]{border-color:var(--cr)}
-.demo-err{min-height:20px;margin-top:10px;font:400 12px var(--M);color:#ff9a9d}.demo-go{width:100%;margin-top:4px}.demo-note{margin-top:12px;font:400 12px/1.6 var(--M);color:var(--sky)}
+.demo-err{min-height:20px;margin-top:10px;font:400 13.5px/1.65 var(--T);color:#ff9a9d}.demo-go{width:100%;margin-top:4px}.demo-note{margin-top:12px;font:400 13.5px/1.65 var(--T);color:var(--sky)}
 /* reveal + scramble */
 .js [data-rv]{opacity:0;transform:translateY(26px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1)}
 .js [data-rv].in{opacity:1;transform:none}
@@ -257,12 +288,12 @@ code{font:400 12.5px var(--M)}
 .scr{position:relative}.scr>.s-r{visibility:hidden}.scr>.s-o{position:absolute;left:0;top:0;right:0;white-space:inherit}
 .l2.scr>.s-o{left:1.3em}
 /* responsive */
-@media(max-width:1060px){.st{grid-template-columns:1fr;gap:20px}.hs-r .tx{display:none}.hs-r{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}.hs-r .btn{margin:0}.hs-sub{margin:0;width:100%}.hs-chips{display:none}.hs-prog{display:none}
+@media(max-width:1060px){.st{grid-template-columns:1fr;gap:20px}.st0,.st1{top:auto;padding-top:0}.st0 .hs-l{max-width:640px}.hs-lede{font-size:15px}.hs-chips{display:none}.hs-prog,.hs-scroll,.hs-tags{display:none}
   .hs-co .co{position:relative;width:auto}.hs-co{min-height:180px}.hs-co .co{position:absolute;left:0;right:0}}
 @media(max-width:960px){.sec{padding:96px 0}.two,.sh,.fin-g,.hz-in{grid-template-columns:minmax(0,1fr)}.sh .tx{justify-self:start}.spec,.dark3,.pri,.tgrid{grid-template-columns:1fr 1fr}.anat{grid-template-columns:1fr 1fr}.anat li{border-bottom:1px solid rgba(255,255,255,.08)}
   .faq-h{position:static}.cnt{justify-self:start;text-align:left}.ft-g{grid-template-columns:1fr 1fr}.dash{grid-template-columns:1fr}.d-side{display:none}.hz-track{overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px}.hc{scroll-snap-align:start}}
-@media(max-width:600px){.spec,.dark3,.pri,.tgrid,.anat,.fin-row,.d-cards{grid-template-columns:1fr}.sp{min-height:0}.sp h3{padding-top:24px}.scan{flex-direction:column;align-items:stretch}.scan .btn{width:100%}.ft-g{grid-template-columns:1fr;padding:26px}.faq .a{padding-right:0}.hs-tags{display:none}.tn-chip{width:46px;height:46px;margin:-23px;font-size:11px}.tn-chip small{display:none}.st{padding:0 18px 24px}.hs-scroll{display:none}}
-@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hs-tags span,.scope-m,.scope-x,.hs-scroll span{animation:none}.js [data-rv]{transition-duration:.01s}}
+@media(max-width:600px){.scope-chips li:nth-child(2n){display:none}.scope-chips li{font-size:10px;padding:7px 9px}.spec,.dark3,.pri,.tgrid,.anat,.fin-row,.d-cards{grid-template-columns:1fr}.sp{min-height:0}.sp h3{padding-top:24px}.scan{flex-direction:column;align-items:stretch}.scan .btn{width:100%}.ft-g{grid-template-columns:1fr;padding:26px}.faq .a{padding-right:0}.hs-tags{display:none}.tn-chip{width:46px;height:46px;margin:-23px;font-size:11px}.tn-chip small{display:none}.st{padding:0 18px 24px}.hs-scroll{display:none}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hs-tags span,.scope-chips li,.scope-m,.scope-x,.hs-scroll span{animation:none}.js [data-rv]{transition-duration:.01s}}
 
 /* without JavaScript: plain stacked layout */
 html:not(.js) .hs-pin{height:auto;min-height:0;padding:120px 0 60px}html:not(.js) .st{position:relative;padding-top:24px}html:not(.js) .hs-co{display:grid;gap:12px}html:not(.js) .co{position:relative;opacity:1;transform:none}
@@ -331,7 +362,7 @@ requestAnimationFrame(frame);
     <div class="hs-grid" aria-hidden="true"></div>
     <canvas id="hsGl" aria-hidden="true"></canvas>
     <img class="hs-fb" src="assets/scoutly.webp" alt="" width="360" height="387" aria-hidden="true">
-    <div class="hs-tags" aria-hidden="true"><span style="left:14%;top:30%">&lt;title&gt; ✓</span><span style="left:27%;top:47%">alt="" ⚠</span><span style="left:63%;top:16%">301 → 200</span><span style="left:81%;top:58%">JSON-LD ✓</span><span style="left:9%;top:62%">/sitemap.xml</span><span style="left:72%;top:36%">cited ✦</span><span style="left:46%;top:22%">noindex?</span></div>
+    <div class="hs-tags" aria-hidden="true"><span style="left:58%;top:24%">&lt;title&gt; ✓</span><span style="left:60%;top:74%">alt="" ⚠</span><span style="left:82%;top:16%">301 → 200</span><span style="left:86%;top:70%">JSON-LD ✓</span><span style="left:73%;top:86%">/sitemap.xml</span><span style="left:88%;top:42%">cited ✦</span><span style="left:66%;top:12%">noindex?</span></div>
     <div class="hs-mark" id="hsMark" aria-hidden="true"><i></i></div>
     <div class="hs-line" id="hsLine" aria-hidden="true"></div>
 
@@ -339,6 +370,7 @@ requestAnimationFrame(frame);
       <div class="hs-l">
         <p class="lbl">SEO · AEO · GEO intelligence</p>
         <h1 class="dh xl" id="heroTitle"><span data-scr>Get found on Google.</span> <span class="l2" data-scr>Get discovered by AI.</span></h1>
+        <p class="hs-lede"><b>One platform for your entire SEO workflow.</b> Audit websites, uncover backlink opportunities, find broken links, research keywords, and understand your brand’s visibility across search engines and AI-powered answers.</p>
         <form class="scan" id="hxForm" action="login.html" method="get" data-scan data-msg="hxMsg" novalidate>
           <label class="sr-only" for="hxSite">Enter your website URL</label>
           <input id="hxSite" name="site" type="text" placeholder="Enter your website URL" autocomplete="url" inputmode="url" autocapitalize="off" spellcheck="false" aria-describedby="hxMsg hxEarly">
@@ -346,12 +378,7 @@ requestAnimationFrame(frame);
         </form>
         <p class="msg" id="hxMsg" role="status" aria-live="polite"></p>
         <p class="note" id="hxEarly">The website audit runs on a real crawl of your site. Public accounts aren’t open yet, so the next step previews account setup.</p>
-      </div>
-      <div class="hs-r">
-        <p class="hs-sub">One platform for your entire SEO workflow.</p>
-        <p class="tx">Audit websites, uncover backlink opportunities, find broken links, research keywords, and understand your brand’s visibility across search engines and AI-powered answers — all in one place.</p>
-        <a class="btn" href="#features">Explore All Features <span aria-hidden="true">→</span></a>
-        <ul class="hs-chips" aria-label="What Scoutly covers"><li>Technical SEO</li><li>Backlink Intelligence</li><li>Keyword Research</li><li>AI Search Visibility</li></ul>
+        <div class="hs-more"><a href="#features">Explore all features →</a><ul class="hs-chips" aria-label="What Scoutly covers"><li>Technical SEO</li><li>Backlinks</li><li>Keywords</li><li>AI search</li></ul></div>
       </div>
     </div>
 
@@ -371,65 +398,47 @@ requestAnimationFrame(frame);
   </div>
 </section>
 
-<!-- 2. PROBLEM -->
-<section class="sec grid-bg" id="potential" aria-labelledby="pvTitle"><div class="w two">
-  <div>
-    <p class="lbl" data-rv>SEO shouldn’t feel like detective work</p>
-    <h2 class="dh sm" id="pvTitle"><span data-scr>Your website has potential.</span> <span class="l2" data-scr>Let’s find what’s holding it back.</span></h2>
-  </div>
-  <div class="copy" data-rv>
-    <p>A website can have great content and still struggle to attract organic traffic. Broken links, technical errors, weak internal linking, missed keyword opportunities, and poor content structure can make it harder for search engines to understand your pages.</p>
-    <p>Meanwhile, the way people discover information is expanding beyond traditional search results.</p>
-    <p>Scoutly brings the data together so you can identify problems, uncover opportunities, and make informed decisions about what to improve next.</p>
-    <ul class="ticks">
-      <li>Find SEO issues before they become bigger problems.</li>
-      <li>Discover backlink and keyword opportunities.</li>
-      <li>Understand your website’s technical health.</li>
-      <li>Evaluate your brand’s visibility across supported AI search experiences.</li>
-    </ul>
-    <a class="btn p" href="website-seo-audit/">Discover What Needs Fixing <span aria-hidden="true">→</span></a>
-  </div>
-</div></section>
-
-<!-- 3. TOOLKIT -->
+<!-- 2. TOOLKIT -->
 <section class="sec" id="features" aria-labelledby="featTitle"><div class="w">
   <div class="sh">
     <div><p class="lbl" data-rv>Your search visibility toolkit</p>
     <h2 class="dh sm" id="featTitle"><span data-scr>Everything you need to improve</span> <span class="l2" data-scr>your website’s discoverability.</span></h2></div>
     <p class="tx" data-rv>From the first website crawl to ongoing backlink analysis, Scoutly helps bring your most important SEO workflows into one place.</p>
   </div>
-  <div class="spec">
-    <article class="sp" data-rv><span class="ix">01 /</span><h3>Website SEO audit</h3><p>Find technical and on-page SEO problems, inspect page metadata, check indexability signals, and review issues that deserve attention.</p><a href="website-seo-audit/">Explore Website Audits →</a></article>
-    <article class="sp" data-rv><span class="ix">02 /</span><h3>Backlink checker</h3><p>Analyze available backlink data, review referring domains, identify potentially lost links, and discover websites that may offer relevant link-building opportunities.</p><a href="backlink-checker/">Explore Backlinks →</a></article>
-    <article class="sp" data-rv><span class="ix">03 /</span><h3>Broken link checker</h3><p>Find broken internal and external links, identify error pages, and prioritize repairs that improve navigation and website maintenance.</p><a href="broken-link-checker/">Find Broken Links →</a></article>
-    <article class="sp" data-rv><span class="ix">04 /</span><h3>Keyword research</h3><p>Discover relevant keyword ideas, investigate search intent, evaluate ranking opportunities, and organize topics for your content strategy.</p><a href="keyword-research/">Explore Keyword Research →</a></article>
-    <article class="sp" data-rv><span class="ix">05 /</span><h3>Competitor SEO analysis</h3><p>Investigate competing websites, compare available keyword data, and identify backlink prospects and content gaps worth exploring.</p><a href="competitor-analysis/">Analyze Competitors →</a></article>
-    <article class="sp" data-rv><span class="ix">06 /</span><h3>AEO and GEO visibility</h3><p>Evaluate content readiness for answer engines and generative search. Track brand mentions and citations where supported data sources make measurement possible.</p><a href="ai-search-visibility/">Explore AI Search Visibility →</a></article>
+  <div class="spec fx">
+    <article class="sp"><span class="ix" data-scr>01 /</span><h3 data-scr>Website SEO audit</h3><p>Find technical and on-page SEO problems, inspect page metadata, check indexability signals, and review issues that deserve attention.</p><a href="website-seo-audit/">Explore Website Audits →</a></article>
+    <article class="sp"><span class="ix" data-scr>02 /</span><h3 data-scr>Backlink checker</h3><p>Analyze available backlink data, review referring domains, identify potentially lost links, and discover websites that may offer relevant link-building opportunities.</p><a href="backlink-checker/">Explore Backlinks →</a></article>
+    <article class="sp"><span class="ix" data-scr>03 /</span><h3 data-scr>Broken link checker</h3><p>Find broken internal and external links, identify error pages, and prioritize repairs that improve navigation and website maintenance.</p><a href="broken-link-checker/">Find Broken Links →</a></article>
+    <article class="sp"><span class="ix" data-scr>04 /</span><h3 data-scr>Keyword research</h3><p>Discover relevant keyword ideas, investigate search intent, evaluate ranking opportunities, and organize topics for your content strategy.</p><a href="keyword-research/">Explore Keyword Research →</a></article>
+    <article class="sp"><span class="ix" data-scr>05 /</span><h3 data-scr>Competitor SEO analysis</h3><p>Investigate competing websites, compare available keyword data, and identify backlink prospects and content gaps worth exploring.</p><a href="competitor-analysis/">Analyze Competitors →</a></article>
+    <article class="sp"><span class="ix" data-scr>06 /</span><h3 data-scr>AEO and GEO visibility</h3><p>Evaluate content readiness for answer engines and generative search. Track brand mentions and citations where supported data sources make measurement possible.</p><a href="ai-search-visibility/">Explore AI Search Visibility →</a></article>
   </div>
   <p class="fine" data-rv>Scoutly is in early access. Each feature page explains how the tool works, what data it relies on and where it stands today. See the <a href="about/#product-status">product status overview</a>.</p>
 </div></section>
 
-<!-- 4. MEET SCOUTLY -->
+<!-- 3. MEET SCOUTLY -->
 <section class="sec meet" id="meet" aria-labelledby="meetTitle"><div class="w two">
   <figure class="scope" data-rv>
     <span class="c tl"></span><span class="c tr"></span><span class="c bl"></span><span class="c br"></span>
     <span class="scope-k">SCOUT_01 · ACTIVE</span><span class="scope-k r">INVESTIGATING</span>
     <img class="scope-m" src="assets/scoutly.webp" alt="Scoutly, a friendly blue explorer mascot wearing a captain’s hat and holding a compass" width="420" height="451" loading="lazy">
     <span class="scope-x" aria-hidden="true"></span>
+    <ul class="scope-chips" aria-hidden="true"><li class="ok">&lt;title&gt; ✓</li><li class="ok">301 → 200</li><li class="wr">alt text missing</li><li class="ok">JSON-LD valid</li></ul>
   </figure>
   <div>
     <p class="lbl" data-rv>Meet your SEO investigation partner</p>
-    <h2 class="dh sm" id="meetTitle"><span data-scr>Hi, I’m Scoutly.</span> <span class="l2" data-scr>Let’s find your next growth opportunity.</span></h2>
-    <div class="copy" data-rv>
-      <p>I explore your website, investigate the signals that matter, and help you understand what to do next.</p>
-      <p>From hidden technical issues to overlooked backlink opportunities, I’ll help you turn scattered SEO data into a clearer action plan.</p>
-      <p><b>No confusing reports. No guessing where to start.</b> Just findings you can investigate, understand, and act on.</p>
-      <a class="btn p" href="#start">Let Scoutly Investigate <span aria-hidden="true">→</span></a>
-    </div>
+    <h2 class="dh" id="meetTitle"><span data-scr>Hi, I’m Scoutly.</span> <span class="l2" data-scr>Let’s find your next growth opportunity.</span></h2>
+    <p class="meet-lede" data-rv>I explore your website, check the signals that matter and turn scattered SEO data into a clear action plan. <b>No confusing reports. No guessing where to start.</b></p>
+    <ol class="meet-steps" data-rv>
+      <li><i>01</i><b>Explore</b><span>Crawl your pages, links, sitemap and robots.txt.</span></li>
+      <li><i>02</i><b>Investigate</b><span>Flag technical, on-page and link issues, with the evidence for each.</span></li>
+      <li><i>03</i><b>Act</b><span>See what to fix first and how to check the fix worked.</span></li>
+    </ol>
+    <div class="meet-acts" data-rv><a class="btn p" href="#start">Let Scoutly Investigate <span aria-hidden="true">→</span></a><a class="meet-link" href="#how">See how it works →</a></div>
   </div>
 </div></section>
 
-<!-- 5. HOW IT WORKS: pinned tunnel -->
+<!-- 4. HOW IT WORKS: pinned tunnel -->
 <section class="tn" id="how" aria-labelledby="howTitle">
   <div class="tn-pin">
     <div class="tn-field" id="tnField" aria-hidden="true"></div>
@@ -442,161 +451,7 @@ requestAnimationFrame(frame);
   </div>
 </section>
 
-<!-- 6. TECHNICAL SEO -->
-<section class="sec grid-bg" id="technical-seo" aria-labelledby="techTitle"><div class="w two top">
-  <div>
-    <p class="lbl" data-rv>Technical SEO made understandable</p>
-    <h2 class="dh sm" id="techTitle"><span data-scr>Find the issues. Understand the impact.</span> <span class="l2" data-scr>Fix what matters.</span></h2>
-    <div class="copy" data-rv><p>A comprehensive website SEO audit helps you understand how your pages are structured and which technical issues may be affecting crawling, indexability, usability, and search performance.</p><p>Findings are presented with issue severity, affected URLs, evidence, an explanation and a suggested fix, so each one can be checked rather than taken on trust.</p></div>
-    <div class="acts" data-rv><a class="btn p" href="#start">Run a Website SEO Audit <span aria-hidden="true">→</span></a><a class="btn" href="website-seo-audit/">What the audit checks</a></div>
-  </div>
-  <figure class="pane" data-rv>
-    <figcaption class="pane-h"><span><i></i><i></i><i></i></span><b>Example finding</b><em class="sv wr">Improvement</em></figcaption>
-    <dl class="pane-dl">
-      <dt>Detected</dt><dd>Internal links point to a redirect chain: <code>/old-guide</code> → <code>/guide</code> → <code>/guides/seo</code></dd>
-      <dt>Affected URLs</dt><dd><code>/blog/seo-basics</code>, <code>/resources</code></dd>
-      <dt>Why it matters</dt><dd>Each extra hop slows visitors down and adds work for crawlers before they reach the content.</dd>
-      <dt>Suggested fix</dt><dd>Update both links to point straight to <code>/guides/seo</code>.</dd>
-    </dl>
-    <p class="pane-n">Illustrative example with fictional URLs, not a real audit result.</p>
-  </figure>
-</div>
-<div class="w"><div class="tgrid">
-  <article data-rv><span class="ix">A</span><h3>Crawlability and indexability</h3><p>Review robots directives, sitemap availability, canonical tags, and indexation signals.</p></article>
-  <article data-rv><span class="ix">B</span><h3>On-page SEO</h3><p>Check page titles, meta descriptions, headings, image alt attributes, and duplicate metadata.</p></article>
-  <article data-rv><span class="ix">C</span><h3>Broken links and redirects</h3><p>Identify HTTP errors, redirect chains, and links pointing to unavailable pages.</p></article>
-  <article data-rv><span class="ix">D</span><h3>Internal linking</h3><p>Discover orphaned pages, weak link connections, and opportunities to improve navigation.</p></article>
-  <article data-rv><span class="ix">E</span><h3>Performance</h3><p>Review Core Web Vitals data and performance opportunities using supported integrations.</p></article>
-  <article data-rv><span class="ix">F</span><h3>Structured data</h3><p>Inspect supported schema markup for errors and missing properties.</p></article>
-</div></div></section>
-
-<!-- 7. BACKLINKS (dark) -->
-<section class="sec dk" id="backlinks" aria-labelledby="blTitle"><div class="w two">
-  <figure class="pane" data-rv>
-    <figcaption class="pane-h"><span><i></i><i></i><i></i></span><b>Competitor link gap</b><em class="sv in">Example</em></figcaption>
-    <div class="pane-s"><table>
-      <thead><tr><th scope="col">Referring domain</th><th scope="col">Comp. A</th><th scope="col">Comp. B</th><th scope="col">You</th></tr></thead>
-      <tbody>
-        <tr><td><code>trade-association.example</code></td><td class="y">✓<span class="sr-only"> yes</span></td><td class="y">✓<span class="sr-only"> yes</span></td><td class="n">—<span class="sr-only"> no</span></td></tr>
-        <tr><td><code>how-to-weekly.example</code></td><td class="y">✓<span class="sr-only"> yes</span></td><td class="y">✓<span class="sr-only"> yes</span></td><td class="n">—<span class="sr-only"> no</span></td></tr>
-        <tr><td><code>regional-news.example</code></td><td class="y">✓<span class="sr-only"> yes</span></td><td class="n">—<span class="sr-only"> no</span></td><td class="y">✓<span class="sr-only"> yes</span></td></tr>
-      </tbody>
-    </table></div>
-    <p class="pane-n">Backlink data comes from an external backlink index, not from crawling your own site. No provider is connected in this early-access build; the rows above are fictional.</p>
-  </figure>
-  <div>
-    <p class="lbl" data-rv>Discover where your authority can grow</p>
-    <h2 class="dh sm" id="blTitle"><span data-scr>Find backlink opportunities</span> <span class="l2" data-scr>your competitors already know about.</span></h2>
-    <div class="copy" data-rv><p>Backlinks can help search engines discover pages and understand relationships between websites. Scoutly helps you investigate your backlink profile and find relevant websites that may offer legitimate link-building opportunities.</p></div>
-    <ul class="ticks" data-rv>
-      <li>Review known referring domains and backlinks.</li>
-      <li>Identify potentially lost or broken backlinks.</li>
-      <li>Compare available backlink profiles against competitors.</li>
-      <li>Find referring websites that link to competitors but not to your domain.</li>
-      <li>Organize relevant prospects for outreach.</li>
-      <li>Monitor changes when fresh data is available.</li>
-    </ul>
-    <div class="acts" data-rv><a class="btn p" href="backlink-checker/">Explore Backlink Opportunities <span aria-hidden="true">→</span></a></div>
-  </div>
-</div></section>
-
-<!-- 8. BROKEN LINKS -->
-<section class="sec" id="broken-links" aria-labelledby="brTitle"><div class="w two">
-  <div>
-    <p class="lbl" data-rv>Keep your website connected</p>
-    <h2 class="dh sm" id="brTitle"><span data-scr>Find broken links before</span> <span class="l2" data-scr>visitors hit a dead end.</span></h2>
-    <div class="copy" data-rv><p>Broken links interrupt navigation, waste crawl opportunities, and create a frustrating user experience. Scoutly helps you identify links that lead nowhere and gives you a clear starting point for fixing them.</p></div>
-    <ul class="ticks" data-rv>
-      <li>Internal links returning 404 and other HTTP errors.</li>
-      <li>External links pointing to unavailable pages.</li>
-      <li>Redirect chains and redirect loops.</li>
-      <li>Pages containing broken outgoing links.</li>
-      <li>Important pages with weak internal link connections.</li>
-    </ul>
-    <p class="fine" data-rv>When the data is available, each result is designed to show the source page, the destination URL, the detected status and a recommended next step.</p>
-    <div class="acts" data-rv><a class="btn p" href="broken-link-checker/">Find Broken Links <span aria-hidden="true">→</span></a></div>
-  </div>
-  <figure class="pane" data-rv>
-    <figcaption class="pane-h"><span><i></i><i></i><i></i></span><b>Broken links</b><em class="sv in">Example</em></figcaption>
-    <div class="pane-s"><table>
-      <thead><tr><th scope="col">Source page</th><th scope="col">Destination</th><th scope="col">Status</th><th scope="col">Next step</th></tr></thead>
-      <tbody>
-        <tr><td><code>/blog/seo-basics</code></td><td><code>/guides/old-checklist</code></td><td><em class="sv cr">404</em></td><td>Update the link</td></tr>
-        <tr><td><code>/</code></td><td><code>/pricing</code></td><td><em class="sv wr">3 redirects</em></td><td>Link to the final URL</td></tr>
-        <tr><td><code>/resources</code></td><td><code>partner.example/tools</code></td><td><em class="sv cr">Timed out</em></td><td>Re-test, then replace</td></tr>
-      </tbody>
-    </table></div>
-    <p class="pane-n">Illustrative example with fictional URLs, not a real audit result.</p>
-  </figure>
-</div></section>
-
-<!-- 9. COMPETITORS -->
-<section class="sec grid-bg" id="competitors" aria-labelledby="coTitle"><div class="w two">
-  <figure class="pane" data-rv>
-    <figcaption class="pane-h"><span><i></i><i></i><i></i></span><b>Topic coverage</b><em class="sv in">Example</em></figcaption>
-    <div class="pane-s"><table>
-      <thead><tr><th scope="col">Topic</th><th scope="col">Comp. A</th><th scope="col">Comp. B</th><th scope="col">You</th></tr></thead>
-      <tbody>
-        <tr><td>Robots.txt basics</td><td class="y">✓<span class="sr-only"> yes</span></td><td class="y">✓<span class="sr-only"> yes</span></td><td class="y">✓<span class="sr-only"> yes</span></td></tr>
-        <tr><td>Fixing redirect chains</td><td class="y">✓<span class="sr-only"> yes</span></td><td class="y">✓<span class="sr-only"> yes</span></td><td class="n">—<span class="sr-only"> no</span></td></tr>
-        <tr><td>Core Web Vitals for WordPress</td><td class="y">✓<span class="sr-only"> yes</span></td><td class="n">—<span class="sr-only"> no</span></td><td class="n">—<span class="sr-only"> no</span></td></tr>
-      </tbody>
-    </table></div>
-    <p class="pane-n">Illustrative example with fictional data, not a real competitor report.</p>
-  </figure>
-  <div>
-    <p class="lbl" data-rv>Learn from the search landscape</p>
-    <h2 class="dh sm" id="coTitle"><span data-scr>Discover the opportunities</span> <span class="l2" data-scr>your competitors are capturing.</span></h2>
-    <div class="copy" data-rv><p>Understanding competing websites can help you find valuable topics, keyword gaps, and relevant backlink prospects. Scoutly helps you investigate:</p></div>
-    <ul class="ticks" data-rv>
-      <li>Which keywords competitors target.</li>
-      <li>Which topics are missing from their content.</li>
-      <li>Which competing pages attract relevant search visibility.</li>
-      <li>Which referring domains link to competitors.</li>
-      <li>Where your website could provide a more useful answer.</li>
-    </ul>
-    <p class="fine" data-rv>Build your strategy around relevant opportunities rather than copying what everyone else is doing.</p>
-    <div class="acts" data-rv><a class="btn p" href="competitor-analysis/">Find Competitor Opportunities <span aria-hidden="true">→</span></a></div>
-  </div>
-</div></section>
-
-<!-- 10. AEO / GEO (dark) -->
-<section class="sec dk" id="ai-search" aria-labelledby="aiTitle"><div class="w">
-  <div class="sh">
-    <div><p class="lbl" data-rv>The next layer of search visibility</p>
-    <h2 class="dh sm" id="aiTitle"><span data-scr>Don’t just optimize for rankings.</span> <span class="l2" data-scr>Optimize for discoverability.</span></h2></div>
-    <p class="tx" data-rv>People increasingly use AI-powered experiences to ask questions, compare solutions, and discover brands. A strong search strategy should consider both conventional organic search and the ways content may be surfaced in AI-generated answers.</p>
-  </div>
-  <div class="spec dark3">
-    <article class="sp" data-rv><span class="ix">AEO</span><h3>Answer engine optimization</h3><p>Structure useful content so that questions are answered clearly, pages are easy to navigate, and relevant facts can be understood by search systems.</p></article>
-    <article class="sp" data-rv><span class="ix">GEO</span><h3>Generative engine optimization</h3><p>Improve content clarity, topical depth, source quality, and entity information to support discoverability in generative search experiences.</p></article>
-    <article class="sp" data-rv><span class="ix">TRK</span><h3>AI search visibility tracking</h3><p>Where supported integrations and measurement methods are available, monitor brand mentions, citations, and changes in how your brand appears in AI-generated answers.</p><a href="ai-search-visibility/">How AI visibility tracking works →</a></article>
-  </div>
-  <div class="acts" data-rv><a class="btn p" href="aeo-geo/">Explore AI Search Readiness <span aria-hidden="true">→</span></a><span class="fine">No tool can guarantee citations or placement in AI-generated answers, and Scoutly doesn’t promise them.</span></div>
-</div></section>
-
-<!-- 11. PRIORITIES -->
-<section class="sec" id="priorities" aria-labelledby="prTitle"><div class="w">
-  <div class="sh">
-    <div><p class="lbl" data-rv>Know what to fix first</p>
-    <h2 class="dh sm" id="prTitle"><span data-scr>Less time reading reports.</span> <span class="l2" data-scr>More time making improvements.</span></h2></div>
-    <p class="tx" data-rv>Not all SEO issues deserve the same priority. Scoutly separates critical problems from routine recommendations and shows the evidence behind each finding.</p>
-  </div>
-  <div class="pri">
-    <article class="pc cr" data-rv><em class="sv cr">Critical issues</em><h3>Problems that can block discovery</h3><p>For example, important pages that are inaccessible or unintentionally blocked from crawling.</p></article>
-    <article class="pc wr" data-rv><em class="sv wr">Improvements</em><h3>Fixes that strengthen your site</h3><p>For example, broken internal links, weak metadata, and missing internal connections.</p></article>
-    <article class="pc in" data-rv><em class="sv in">Optimization opportunities</em><h3>Changes that make good pages better</h3><p>For example, content improvements, expanded keyword coverage, and stronger site structure.</p></article>
-  </div>
-  <ol class="anat" data-rv>
-    <li><b>What was detected</b><span>The exact issue and the URLs it affects.</span></li>
-    <li><b>Why it matters</b><span>How it can affect crawling, indexing or visitors.</span></li>
-    <li><b>How to verify it</b><span>A way to confirm the problem yourself.</span></li>
-    <li><b>What to do next</b><span>A suggested action for whoever makes the fix.</span></li>
-  </ol>
-  <div class="acts" data-rv><a class="btn p" href="website-seo-audit/#prioritization">See How Scoutly Prioritizes Issues <span aria-hidden="true">→</span></a><span class="fine">Severity reflects how directly an issue affects crawling, indexing and usability. It isn’t a prediction of ranking changes.</span></div>
-</div></section>
-
-<!-- 12. WORKSPACE (dark marquee + dashboard) -->
+<!-- 5. WORKSPACE (dark marquee + dashboard) -->
 <section class="ws dk" id="workspace" aria-labelledby="wsTitle">
   <div class="mq" aria-hidden="true"><div class="mq-r" data-dir="1">SCOUTLY ✦ SEO ✦ AEO ✦ GEO ✦ SCOUTLY ✦ SEO ✦ AEO ✦ GEO ✦</div><div class="mq-r o" data-dir="-1">AUDIT — LINKS — KEYWORDS — AI VISIBILITY — AUDIT — LINKS — KEYWORDS —</div></div>
   <div class="w ws-h">
@@ -615,7 +470,7 @@ requestAnimationFrame(frame);
   </div></div>
 </section>
 
-<!-- 13. WHO (horizontal cards) -->
+<!-- 6. WHO (horizontal cards) -->
 <section class="hz dk" id="who" aria-labelledby="whoTitle">
   <div class="hz-pin">
     <div class="w hz-in">
@@ -634,48 +489,13 @@ requestAnimationFrame(frame);
   </div>
 </section>
 
-<!-- 14. DATA SOURCES -->
-<section class="sec grid-bg" id="data" aria-labelledby="dataTitle"><div class="w two">
-  <div>
-    <p class="lbl" data-rv>Integrations and data sources</p>
-    <h2 class="dh sm" id="dataTitle"><span data-scr>Better insights start</span> <span class="l2" data-scr>with reliable data.</span></h2>
-    <div class="copy" data-rv><p>Scoutly is designed to bring multiple sources of SEO intelligence together. Depending on the integrations configured, you’ll be able to connect or use the sources below. Here’s where each one stands today.</p></div>
-    <div class="acts" data-rv><a class="btn" href="about/#data-sources">Explore Data Sources <span aria-hidden="true">→</span></a></div>
-  </div>
-  <div>
-    <ul class="rows" data-rv>
-      <li><div><b>Website crawler</b><p>Scoutly’s own crawler for technical and on-page analysis.</p></div><em class="st-d">In development</em></li>
-      <li><div><b>Your own accounts</b><p>Google Search Console, PageSpeed Insights and Bing Webmaster Tools.</p></div><em class="st-p">Planned</em></li>
-      <li><div><b>External data providers</b><p>Keyword and backlink data, optional and paid, with a cost estimate before each lookup.</p></div><em class="st-p">Planned</em></li>
-      <li><div><b>AI search measurement</b><p>Supported sources for tracking mentions and citations in AI-generated answers.</p></div><em class="st-r">Researching</em></li>
-    </ul>
-    <p class="fine" data-rv>No integrations are live in this early-access build. Names are listed to explain the product design and don’t imply a partnership or endorsement.</p>
-  </div>
-</div></section>
-
-<!-- 15. WHY -->
-<section class="sec" id="why-scoutly" aria-labelledby="whyTitle"><div class="w">
-  <div class="sh">
-    <div><p class="lbl" data-rv>Why Scoutly</p>
-    <h2 class="dh sm" id="whyTitle"><span data-scr>SEO insights without</span> <span class="l2" data-scr>the unnecessary complexity.</span></h2></div>
-  </div>
-  <div class="spec">
-    <article class="sp" data-rv><span class="ix">01 /</span><h3>One connected workflow</h3><p>Bring audits, backlink research, broken link detection, and keyword analysis into a more organized process.</p></article>
-    <article class="sp" data-rv><span class="ix">02 /</span><h3>Clear explanations</h3><p>Understand what an issue means instead of trying to interpret a wall of technical data.</p></article>
-    <article class="sp" data-rv><span class="ix">03 /</span><h3>Actionable recommendations</h3><p>Move from identifying a problem to understanding the next step.</p></article>
-    <article class="sp" data-rv><span class="ix">04 /</span><h3>Flexible research</h3><p>Investigate your own website and compare it with relevant competitors using the data available.</p></article>
-    <article class="sp" data-rv><span class="ix">05 /</span><h3>A broader search perspective</h3><p>Consider traditional search visibility alongside emerging AI discovery experiences.</p></article>
-    <article class="sp" data-rv><span class="ix">06 /</span><h3>Built to grow with you</h3><p>Start with essential audits and expand your workflow as your website portfolio and SEO needs grow.</p></article>
-  </div>
-</div></section>
-
-<!-- 16. FAQ -->
+<!-- 7. FAQ -->
 <section class="sec grid-bg" id="faq" aria-labelledby="faqTitle"><div class="w two top">
   <div class="faq-h"><p class="lbl" data-rv>FAQ</p><h2 class="dh sm" id="faqTitle"><span data-scr>Frequently asked questions</span> <span class="l2" data-scr>about Scoutly and SEO.</span></h2><p class="fine" data-rv>New to the terms? See the <a href="seo-glossary/">SEO glossary</a>.</p></div>
   <div class="faq" data-rv><details><summary><h3>What is Scoutly?</h3></summary><div class="a"><p>Scoutly is an SEO and search visibility platform designed to bring website auditing, backlink analysis, broken link detection, keyword research, competitor research, and supported AI search visibility insights into one workspace.</p></div></details><details><summary><h3>What does an SEO audit tool do?</h3></summary><div class="a"><p>An SEO audit tool examines a website for technical and on-page issues that may affect crawling, indexability, site structure, content optimization, and user experience. It helps identify problems and organize potential improvements. See <a href="website-seo-audit/">what Scoutly’s website SEO audit checks</a>.</p></div></details><details><summary><h3>Can Scoutly find broken links?</h3></summary><div class="a"><p>Yes. Every website audit checks up to 120 internal and external links found on the pages it crawls, and reports errors, redirects and links that couldn’t be verified. Results depend on crawl limits, website access, and server responses.</p></div></details><details><summary><h3>Can Scoutly check backlinks?</h3></summary><div class="a"><p>Scoutly can analyze backlink information available through its configured data sources. Comprehensive backlink discovery generally requires an external backlink index or provider, and no provider is connected in the current early-access build.</p></div></details><details><summary><h3>Does Scoutly help with competitor analysis?</h3></summary><div class="a"><p>Yes. The intended workflow includes comparing available keyword, content, and backlink data to identify opportunities for your website. The depth of analysis depends on the data sources connected.</p></div></details><details><summary><h3>What are AEO and GEO?</h3></summary><div class="a"><p>AEO stands for Answer Engine Optimization, while GEO stands for Generative Engine Optimization. Both focus on improving how useful content can be understood and surfaced in answer-oriented and generative search experiences. Read more about <a href="aeo-geo/">AEO and GEO</a>.</p></div></details><details><summary><h3>Can Scoutly guarantee higher Google rankings?</h3></summary><div class="a"><p>No SEO platform can guarantee specific rankings. Scoutly can help identify issues and opportunities, but outcomes depend on your website, competition, content, technical implementation, and search engine systems.</p></div></details><details><summary><h3>Is Scoutly suitable for agencies?</h3></summary><div class="a"><p>Scoutly is intended to support agency workflows involving multiple website audits, backlink research, competitor analysis, and reporting. Project limits and collaboration features will depend on the plan, and will be published before launch.</p></div></details><details><summary><h3>Does Scoutly offer a free website audit?</h3></summary><div class="a"><p>The website audit works today. It fetches the page you enter, reads robots.txt and your XML sitemap, crawls up to 25 internal pages up to three clicks deep, checks up to 120 links, and adds Core Web Vitals from Google PageSpeed Insights. Public accounts aren’t open yet, so audits currently run in the preview workspace. Pricing and any free-tier limits will be published before accounts open.</p></div></details><details><summary><h3>How often should I audit my website?</h3></summary><div class="a"><p>Run an audit when launching a new website or making significant changes, and repeat it periodically to detect new technical issues. Websites that change frequently may benefit from scheduled crawls.</p></div></details></div>
 </div></section>
 
-<!-- 17. FINAL CTA -->
+<!-- 8. FINAL CTA -->
 <section class="fin dk" id="start" aria-labelledby="ctaTitle"><div class="w">
   <div class="fin-g">
     <div>
@@ -822,7 +642,7 @@ try{
       t.position.copy(a.p).lerp(b.p,e);if(!RM)t.position.y+=Math.sin(clock*1.1+i*.7)*.05;
       qa.copy(a.q).slerp(b.q,e);t.quaternion.copy(qa);t.scale.set(a.s+(b.s-a.s)*e,1,1);
       var hi=(i===HI[s]&&L<.05)?1:0,ed=t.userData.ed.material;ed.opacity+=(hi-ed.opacity)*.15;t.material.emissive.setRGB(.05*hi,.12*hi,.35*hi)}
-    var GP=[[2.7,.55,.74],[2.1,.55,.84],[1.7,.75,.86],[2.4,1.0,.7]][s],gx=mob?0:GP[0],gy=mob?2.0:GP[1],gs=mob?GP[2]*.62:GP[2];
+    var GP=[[3.35,.35,.6],[2.1,.55,.84],[1.7,.75,.86],[2.4,1.0,.7]][s],gx=mob?0:GP[0],gy=mob?2.45:GP[1],gs=mob?GP[2]*.62:GP[2];
     grp.position.x+=(gx-grp.position.x)*.06;grp.position.y+=(gy-grp.position.y)*.06;grp.scale.setScalar(grp.scale.x+(gs-grp.scale.x)*.08);
     grp.rotation.y=mx*.35+(RM?0:Math.sin(clock*.25)*.08);grp.rotation.x=my*.18;
     R.render(sc,cam);
@@ -830,7 +650,7 @@ try{
     var h=HI[s],co=cos[s-1];
     if(h>=0&&co&&L<.05&&innerWidth>1060){tiles[h].getWorldPosition(va);va.project(cam);
       var X=(va.x+1)/2*cv.clientWidth,Y=(1-va.y)/2*cv.clientHeight;mark.style.transform='translate('+X.toFixed(1)+'px,'+Y.toFixed(1)+'px)';mark.style.opacity=1;
-      var cr=co.getBoundingClientRect(),pr=hs.querySelector('.hs-pin').getBoundingClientRect(),tx=cr.left-pr.left,ty=cr.top-pr.top+22,dx=tx-X,dy=ty-Y,len=Math.hypot(dx,dy);
+      var cr=co.getBoundingClientRect(),pr=hs.querySelector('.hs-pin').getBoundingClientRect(),tx=cr.right-pr.left,ty=cr.top-pr.top+22,dx=tx-X,dy=ty-Y,len=Math.hypot(dx,dy);
       line.style.width=len.toFixed(1)+'px';line.style.transform='translate('+X.toFixed(1)+'px,'+Y.toFixed(1)+'px) rotate('+Math.atan2(dy,dx)+'rad)';line.style.opacity=.9}
     else{mark.style.opacity=0;line.style.opacity=0}};
   (function loop(now){requestAnimationFrame(loop);if(vis)G(now||0)})(0);
@@ -861,11 +681,18 @@ function workspace(){var r=ws.getBoundingClientRect(),vh=innerHeight;if(r.bottom
 var hz=$('who'),track=$('hzTrack');
 function horizontal(){if(innerWidth<961){track.style.transform='';return}var p=prog(hz),max=track.scrollWidth-track.clientWidth;track.style.transform='translate3d('+(-max*ss(.05,.92,p)).toFixed(1)+'px,0,0)'}
 
+/* ---------- 5. features: cards tilt up column by column as they scroll in ---------- */
+var fxCards=q('.fx .sp');
+function features(){var vh=innerHeight,cols=Math.max(1,getComputedStyle(fxCards[0].parentNode).gridTemplateColumns.split(' ').length);
+  fxCards.forEach(function(c,i){var r=c.getBoundingClientRect(),raw=(vh*.98-r.top)/(vh*.4)-(i%cols)*.12;
+    var s=clamp((raw-.55)/.6,0,1),st=c.style;st.setProperty('--e',RM?1:ss(0,1,raw).toFixed(3));st.setProperty('--t',RM?1:ss(.35,1.05,raw).toFixed(3));
+    st.setProperty('--s',s.toFixed(3));st.setProperty('--so',RM?0:Math.sin(s*Math.PI).toFixed(3))})}
+
 /* drive everything from scroll */
 var queued=false;
 function frame(){queued=false;hdTheme();
   var hp=prog(hs);heroStage(hp);if(window.__heroP)window.__heroP(hp);
-  if(tnVis||tstage<0)tunnel(prog(tn));workspace();horizontal()}
+  if(tnVis||tstage<0)tunnel(prog(tn));workspace();horizontal();if(fxCards.length)features()}
 function req(){if(!queued){queued=true;requestAnimationFrame(frame)}}
 addEventListener('scroll',req,{passive:true});addEventListener('resize',req);
 if(!RM)(function idle(){requestAnimationFrame(idle);if(tnVis){drift+=.0006;tunnel(prog(tn))}})();
