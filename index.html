@@ -96,8 +96,11 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}ul,o
 .dark3 .sp{background:rgba(255,255,255,.02)}.dk .spec{border-color:rgba(255,255,255,.12)}.dk .sp{border-color:rgba(255,255,255,.12)}.dk .sp:hover{background:rgba(255,255,255,.05)}.dk .sp p{color:rgba(214,224,255,.7)}.dk .sp a,.dk .ix{color:var(--sky)}.dk .sp:before{background:var(--sky)}
 .dark3{grid-template-columns:repeat(3,1fr)}
 /* features: cards tilt up into place as you scroll (--e card, --t text, --s scan sweep; all 0..1, set by JS) */
-.js .fx{perspective:1400px}.fx .sp{overflow:hidden}
-.js .fx .sp{opacity:var(--e,1);transform:translateY(calc((1 - var(--e,1))*80px)) rotateX(calc((1 - var(--e,1))*32deg)) scale(calc(.94 + var(--e,1)*.06));transform-origin:50% 100%;will-change:transform,opacity}
+/* separate floating blocks; columns drift up and down against each other as you scroll (--py, px) */
+.spec.fx{position:relative;gap:18px;border:0;padding:40px 0}
+.fx .sp{overflow:hidden;border:1px solid var(--ln);border-radius:6px;background:rgba(248,249,252,.72);box-shadow:0 30px 60px -40px rgba(10,26,74,.35);transition:background .35s,box-shadow .35s}
+.fx .sp:hover{background:#fff;box-shadow:0 36px 70px -36px rgba(47,91,255,.4)}
+.js .fx .sp{opacity:var(--e,1);transform:translate3d(0,calc((1 - var(--e,1))*90px + var(--py,0px)),0) scale(calc(.95 + var(--e,1)*.05));will-change:transform,opacity}
 .js .fx .sp>*{opacity:var(--t,1);transform:translateY(calc((1 - var(--t,1))*22px))}
 .js .fx .sp h3{transform:translateY(calc((1 - var(--t,1))*34px))}
 .fx .sp:after{content:"";position:absolute;left:0;right:0;top:-1px;height:2px;background:linear-gradient(90deg,transparent,var(--sky) 40%,var(--b) 60%,transparent);transform:translateX(calc(var(--s,1)*200% - 100%));opacity:var(--so,0);pointer-events:none}
@@ -215,20 +218,50 @@ code{font:400 12.5px var(--M)}
 .ws{position:relative;padding:240px 0 140px;overflow:hidden}
 .ws:before{content:"";position:absolute;left:0;right:0;top:0;height:300px;background:linear-gradient(180deg,var(--bg) 0%,#9aa6c4 30%,#26304f 62%,var(--nv) 100%);pointer-events:none}
 .ws>*{position:relative}
+#faq{padding-top:260px}
+#faq:after{content:"";position:absolute;left:0;right:0;top:0;height:280px;background:linear-gradient(180deg,var(--nv) 0%,#26304f 34%,#9aa6c4 68%,var(--bg) 100%);pointer-events:none}
+#faq>*{z-index:1}
 .mq{display:grid;gap:6px;margin-bottom:90px;white-space:nowrap}
 .mq-r{font:500 clamp(54px,9vw,150px)/1 var(--D);letter-spacing:.02em;color:#fff;will-change:transform}.mq-r.o{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.35)}
-.ws-h{text-align:center}.ws-h .dh{display:inline-block;text-align:left}.ws-h .tx{margin:22px auto 0;text-align:center}
-.dash-wrap{perspective:1600px;margin-top:70px;padding:0 32px}
-.dash{display:grid;grid-template-columns:200px 1fr;max-width:1100px;margin:0 auto;border:1px solid rgba(255,255,255,.14);background:linear-gradient(180deg,#0c1638,#070e27);box-shadow:0 80px 140px -50px rgba(47,91,255,.6);transform-origin:50% 0;font-family:var(--M)}
-.d-side{display:grid;align-content:start;gap:4px;padding:20px 14px;border-right:1px solid rgba(255,255,255,.08);font-size:12px;color:rgba(214,224,255,.55)}
-.d-side span{padding:9px 10px}.d-side .on{background:rgba(47,91,255,.22);color:#fff;border-left:2px solid var(--sky)}
-.d-logo{display:flex;align-items:center;gap:8px;margin-bottom:14px;font:600 13px var(--D);letter-spacing:.1em;text-transform:uppercase;color:#fff}
-.d-main{padding:22px;display:grid;gap:16px}
-.d-top{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:rgba(214,224,255,.5)}.d-top b{font:500 18px var(--D);color:#fff}
-.d-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.d-cards div{padding:16px;border:1px solid rgba(255,255,255,.1);background:rgba(255,255,255,.03)}
-.d-cards i{display:block;height:6px;margin-top:16px;background:rgba(255,255,255,.08)}.d-cards i:after{content:"";display:block;height:100%;width:var(--w);background:linear-gradient(90deg,var(--b),var(--sky))}
-.d-chart{position:relative;height:150px;border:1px solid rgba(255,255,255,.1);background:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px) 0 0/100% 30px}.d-chart svg{position:absolute;inset:14px 0 0;width:100%;height:calc(100% - 14px)}.d-chart span{position:absolute;left:12px;top:10px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(214,224,255,.5)}
-.d-list{display:grid;gap:6px}.d-list div{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid rgba(255,255,255,.08);font-size:12.5px;color:rgba(214,224,255,.75)}
+.ws-h{text-align:center}.ws-h .lbl{margin:0 auto}.ws-h .dh{margin-left:auto;margin-right:auto;text-align:center}.ws-h .dh .l2{padding-left:0}.ws-h .dh .l2:before{display:none}
+.ws-lede{max-width:560px;margin:20px auto 0;font:400 17px/1.6 var(--T);color:rgba(214,224,255,.76)}
+.ws-fine{margin-top:10px;font:400 11.5px/1.6 var(--M);color:rgba(214,224,255,.42)}
+.dash-wrap{position:relative;perspective:1600px;margin-top:70px;padding:0 32px}
+/* the dashboard animates in once it tilts into view (.live); without JS everything shows at rest */
+.dash{position:relative;display:grid;grid-template-columns:210px 1fr;max-width:1100px;margin:0 auto;border:1px solid rgba(127,160,255,.2);border-radius:10px;overflow:hidden;background:linear-gradient(180deg,#0d1840,#070e27);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 80px 140px -50px rgba(47,91,255,.65);transform-origin:50% 0;font-family:var(--M)}
+.d-bar{grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:11px;color:rgba(214,224,255,.45)}
+.d-bar span{display:flex;gap:6px}.d-bar span i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.14)}
+.d-bar em{flex:1;max-width:340px;margin:0 auto;padding:6px 12px;border-radius:5px;background:rgba(255,255,255,.05);font-style:normal;text-align:center}
+.d-live{display:flex;align-items:center;gap:7px;font-weight:500;color:var(--sky)}.d-live:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--sky);box-shadow:0 0 8px var(--sky)}
+.d-side{display:flex;flex-direction:column;gap:2px;padding:20px 12px;border-right:1px solid rgba(255,255,255,.07);font-size:12px;color:rgba(214,224,255,.55)}
+.d-side span{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:5px}.d-side span:before{content:"";width:7px;height:7px;border:1.5px solid currentColor;border-radius:2px;opacity:.6}
+.d-side .on{background:linear-gradient(90deg,rgba(47,91,255,.32),rgba(47,91,255,.06));color:#fff;box-shadow:inset 2px 0 0 var(--sky)}.d-side .on:before{background:var(--sky);border-color:var(--sky);opacity:1}
+.d-plan{margin-top:auto;padding:14px 10px 0;border-top:1px solid rgba(255,255,255,.07);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(214,224,255,.38)}
+.d-logo{display:flex;align-items:center;gap:8px;margin:0 0 14px 6px;font:600 13px var(--D);letter-spacing:.1em;text-transform:uppercase;color:#fff}
+.d-main{display:grid;gap:14px;padding:22px}
+.d-top{display:flex;justify-content:space-between;align-items:center;gap:16px}.d-top b{display:block;font:600 19px var(--D);color:#fff}.d-top div>span{display:block;margin-top:6px;font-size:11px;color:rgba(214,224,255,.45)}
+.d-score{display:flex;align-items:center;gap:10px}.d-score svg{width:46px;height:46px;transform:rotate(-90deg)}
+.d-score circle{fill:none;stroke:rgba(255,255,255,.08);stroke-width:4}.d-score .v{stroke:var(--sky);stroke-linecap:round;stroke-dasharray:119.4;stroke-dashoffset:26.3;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1)}
+.d-score b{font:600 26px/1 var(--D);color:#fff}.d-score span{font-size:10px;line-height:1.3;letter-spacing:.08em;text-transform:uppercase;color:rgba(214,224,255,.5)}
+.d-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.d-cards>div{padding:16px;border:1px solid rgba(255,255,255,.08);border-radius:7px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.01))}
+.d-n{display:block;margin-top:14px;font:600 34px/1 var(--D);color:#fff}.d-cards p{margin-top:6px;font-size:11px;color:rgba(214,224,255,.5)}
+.d-cards i{display:block;height:4px;margin-top:14px;border-radius:2px;background:rgba(255,255,255,.07);overflow:hidden}.d-cards i:after{content:"";display:block;width:var(--w);height:100%;background:linear-gradient(90deg,var(--b),var(--sky));transition:width 1.4s cubic-bezier(.2,.8,.2,1) .2s}
+.d-chart{padding:14px 14px 10px;border:1px solid rgba(255,255,255,.08);border-radius:7px;background:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 36px/100% 28px}
+.d-ch{display:flex;justify-content:space-between;gap:12px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(214,224,255,.5)}
+.d-leg{display:flex;align-items:center;gap:8px}.d-leg i{width:12px;height:2px;background:var(--sky)}.d-leg i.o{margin-left:8px;background:repeating-linear-gradient(90deg,rgba(255,170,90,.85) 0 3px,transparent 3px 5px)}
+.d-chart svg{display:block;width:100%;height:120px;margin-top:10px;overflow:visible;transition:clip-path 1.8s cubic-bezier(.4,0,.2,1) .2s;clip-path:inset(-4px -4px -4px -4px)}
+.d-chart .ln{fill:none;stroke:#5ac8fa;stroke-width:2.5;vector-effect:non-scaling-stroke}.d-chart .op{fill:none;stroke:rgba(255,170,90,.75);stroke-width:1.5;stroke-dasharray:4 4;vector-effect:non-scaling-stroke}
+.d-list{display:grid;gap:6px}.d-list>div{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid rgba(255,255,255,.07);border-radius:6px;font-size:12.5px;color:rgba(214,224,255,.75);transition:opacity .5s,transform .6s cubic-bezier(.2,.8,.2,1)}
+.d-list span{flex:1}.d-list b{font-weight:500;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sky)}
+.d-list>div:nth-child(2){transition-delay:.15s}.d-list>div:nth-child(3){transition-delay:.3s}
+.js .dash:not(.live) .d-score .v{stroke-dashoffset:119.4}.js .dash:not(.live) .d-cards i:after{width:0}.js .dash:not(.live) .d-chart svg{clip-path:inset(-4px 100% -4px -4px)}.js .dash:not(.live) .d-list>div{opacity:0;transform:translateX(-12px)}
+/* what the real audit checks, drifting beside the dashboard */
+.ws-chips li{position:absolute;z-index:2;display:flex;align-items:center;gap:10px;padding:12px 16px;border:1px solid rgba(127,160,255,.25);border-radius:8px;background:rgba(10,20,52,.78);box-shadow:0 24px 50px -20px rgba(0,0,0,.7);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font:500 12px/1 var(--M);color:rgba(214,224,255,.8);white-space:nowrap;will-change:transform}
+.ws-chips b{font:600 18px/1 var(--D);color:#fff}
+.ws-chips li:nth-child(1){left:max(16px,calc(50% - 650px));top:38%}.ws-chips li:nth-child(2){right:max(16px,calc(50% - 650px));top:58%}.ws-chips li:nth-child(3){left:max(16px,calc(50% - 610px));bottom:10%}
+@media(max-width:1100px){.ws-chips{display:none}}
+@media(max-width:960px){.dash{grid-template-columns:minmax(0,1fr)}.d-main{min-width:0}.dash-wrap{padding:0 18px}.d-bar em,.d-score span{display:none}.d-top{align-items:flex-start}}
 /* horizontal cards */
 .hz{position:relative}
 .hz-pin{position:relative;overflow:hidden;padding:110px 0}
@@ -291,7 +324,7 @@ code{font:400 12.5px var(--M)}
 @media(max-width:1060px){.st{grid-template-columns:1fr;gap:20px}.st0,.st1{top:auto;padding-top:0}.st0 .hs-l{max-width:640px}.hs-lede{font-size:15px}.hs-chips{display:none}.hs-prog,.hs-scroll,.hs-tags{display:none}
   .hs-co .co{position:relative;width:auto}.hs-co{min-height:180px}.hs-co .co{position:absolute;left:0;right:0}}
 @media(max-width:960px){.sec{padding:96px 0}.two,.sh,.fin-g,.hz-in{grid-template-columns:minmax(0,1fr)}.sh .tx{justify-self:start}.spec,.dark3,.pri,.tgrid{grid-template-columns:1fr 1fr}.anat{grid-template-columns:1fr 1fr}.anat li{border-bottom:1px solid rgba(255,255,255,.08)}
-  .faq-h{position:static}.cnt{justify-self:start;text-align:left}.ft-g{grid-template-columns:1fr 1fr}.dash{grid-template-columns:1fr}.d-side{display:none}.hz-track{overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px}.hc{scroll-snap-align:start}}
+  .faq-h{position:static}.cnt{justify-self:start;text-align:left}.ft-g{grid-template-columns:1fr 1fr}.dash{grid-template-columns:minmax(0,1fr)}.d-side{display:none}.hz-track{overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px}.hc{scroll-snap-align:start}}
 @media(max-width:600px){.scope-chips li:nth-child(2n){display:none}.scope-chips li{font-size:10px;padding:7px 9px}.spec,.dark3,.pri,.tgrid,.anat,.fin-row,.d-cards{grid-template-columns:1fr}.sp{min-height:0}.sp h3{padding-top:24px}.scan{flex-direction:column;align-items:stretch}.scan .btn{width:100%}.ft-g{grid-template-columns:1fr;padding:26px}.faq .a{padding-right:0}.hs-tags{display:none}.tn-chip{width:46px;height:46px;margin:-23px;font-size:11px}.tn-chip small{display:none}.st{padding:0 18px 24px}.hs-scroll{display:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hs-tags span,.scope-chips li,.scope-m,.scope-x,.hs-scroll span{animation:none}.js [data-rv]{transition-duration:.01s}}
 
@@ -457,15 +490,19 @@ requestAnimationFrame(frame);
   <div class="w ws-h">
     <p class="lbl" data-rv>Inside the workspace</p>
     <h2 class="dh sm" id="wsTitle"><span data-scr>One workspace for</span> <span class="l2" data-scr>every search signal.</span></h2>
-    <p class="tx" data-rv>Audits, links, keywords and AI visibility in one organized view. Illustrative preview: the layout may change before launch.</p>
+    <p class="ws-lede" data-rv>Audits, links, keywords and AI visibility in one organized view.</p>
+    <p class="ws-fine" data-rv>Illustrative preview with sample data. The layout may change before launch.</p>
   </div>
-  <div class="dash-wrap"><div class="dash" id="dash" aria-hidden="true">
-    <aside class="d-side"><b class="d-logo"><img src="assets/scoutly-mark.webp" alt="" width="20" height="20">Scoutly</b><span class="on">Overview</span><span>Site audit</span><span>Broken links</span><span>Backlinks</span><span>Keywords</span><span>AI visibility</span></aside>
+  <div class="dash-wrap">
+  <ul class="ws-chips" aria-hidden="true"><li data-y="70"><b>25</b>pages crawled</li><li data-y="-50"><b>120</b>links checked</li><li data-y="40"><b>CWV</b>Core Web Vitals</li></ul>
+  <div class="dash" id="dash" aria-hidden="true">
+    <div class="d-bar"><span><i></i><i></i><i></i></span><em>app.scoutly · overview</em><b class="d-live">Sample data</b></div>
+    <aside class="d-side"><b class="d-logo"><img src="assets/scoutly-mark.webp" alt="" width="20" height="20">Scoutly</b><span class="on">Overview</span><span>Site audit</span><span>Broken links</span><span>Backlinks</span><span>Keywords</span><span>AI visibility</span><p class="d-plan">Early access</p></aside>
     <div class="d-main">
-      <div class="d-top"><b>yourwebsite.com</b><span>Audit overview · sample data</span></div>
-      <div class="d-cards"><div><em class="sv cr">Critical</em><i style="--w:28%"></i></div><div><em class="sv wr">Improvements</em><i style="--w:64%"></i></div><div><em class="sv in">Opportunities</em><i style="--w:82%"></i></div></div>
-      <div class="d-chart"><svg viewBox="0 0 400 120" preserveAspectRatio="none"><defs><linearGradient id="dg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5ac8fa" stop-opacity=".45"/><stop offset="1" stop-color="#5ac8fa" stop-opacity="0"/></linearGradient></defs><path d="M0 92 L50 84 L100 88 L150 66 L200 70 L250 48 L300 52 L350 30 L400 26 L400 120 L0 120Z" fill="url(#dg)"/><path d="M0 92 L50 84 L100 88 L150 66 L200 70 L250 48 L300 52 L350 30 L400 26" fill="none" stroke="#5ac8fa" stroke-width="2.5"/></svg><span>Resolved issues across audits · illustrative</span></div>
-      <div class="d-list"><div><em class="sv cr">404</em><span>/journal → /journal-old</span></div><div><em class="sv wr">LCP</em><span>Hero image is slow to load</span></div><div><em class="sv in">ALT</em><span>Product images missing alt text</span></div></div>
+      <div class="d-top"><div><b>yourwebsite.com</b><span>Last audit · 25 pages · 120 links</span></div><div class="d-score"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19"/><circle class="v" cx="22" cy="22" r="19"/></svg><b data-to="78">78</b><span>Health<br>score</span></div></div>
+      <div class="d-cards"><div><em class="sv cr">Critical</em><b class="d-n" data-to="3">03</b><p>Fix these first</p><i style="--w:28%"></i></div><div><em class="sv wr">Improvements</em><b class="d-n" data-to="12">12</b><p>Worth fixing soon</p><i style="--w:64%"></i></div><div><em class="sv in">Opportunities</em><b class="d-n" data-to="24">24</b><p>Room to grow</p><i style="--w:82%"></i></div></div>
+      <div class="d-chart"><div class="d-ch"><span>Issues across audits · illustrative</span><span class="d-leg"><i></i>Resolved<i class="o"></i>Open</span></div><svg viewBox="0 0 400 120" preserveAspectRatio="none"><defs><linearGradient id="dg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5ac8fa" stop-opacity=".4"/><stop offset="1" stop-color="#5ac8fa" stop-opacity="0"/></linearGradient></defs><path d="M0 98 C30 94 45 86 70 88 S120 74 150 70 S200 72 230 56 S290 46 320 36 S370 24 400 18 L400 120 L0 120Z" fill="url(#dg)"/><path class="ln" d="M0 98 C30 94 45 86 70 88 S120 74 150 70 S200 72 230 56 S290 46 320 36 S370 24 400 18"/><path class="op" d="M0 30 C40 34 70 40 110 52 S180 66 220 76 S300 88 340 92 S380 96 400 98"/></svg></div>
+      <div class="d-list"><div><em class="sv cr">404</em><span>/journal → /journal-old</span><b>Fix →</b></div><div><em class="sv wr">LCP</em><span>Hero image is slow to load</span><b>Fix →</b></div><div><em class="sv in">ALT</em><span>Product images missing alt text</span><b>Fix →</b></div></div>
     </div>
   </div></div>
 </section>
@@ -671,22 +708,29 @@ function tunnel(p){var W=field.clientWidth,H=field.clientHeight;
   var s2=Math.min(4,Math.floor(p*5.3));if(s2!==tstage){tstage=s2;tst.forEach(function(e,i){e.classList.toggle('on',i===s2)});num.textContent='0'+s2;q('[data-scr]',tst[s2]).forEach(function(e){scr(e)})}}
 
 /* ---------- 3. workspace: marquee + dashboard tilt ---------- */
-var ws=$('workspace'),mq=q('.mq-r'),dash=$('dash');
+var ws=$('workspace'),mq=q('.mq-r'),dash=$('dash'),wsChips=q('.ws-chips li'),dNums=q('[data-to]',dash);
+if(!RM)dNums.forEach(function(n){n.textContent='00'});
 function workspace(){var r=ws.getBoundingClientRect(),vh=innerHeight;if(r.bottom<0||r.top>vh)return;
   var p=clamp((vh-r.top)/(r.height+vh),0,1);mq.forEach(function(m){var dir=+m.dataset.dir;m.style.transform='translate3d('+((dir>0?-.1:-.45)+p*.35*dir)*100+'%,0,0)'});
   var dr=dash.getBoundingClientRect(),k=clamp((vh-dr.top)/(vh*.85),0,1),e=1-Math.pow(1-k,3);
-  dash.style.transform=RM?'':'rotateX('+(38*(1-e)).toFixed(2)+'deg) scale('+(.88+.12*e).toFixed(3)+') translateY('+(60*(1-e)).toFixed(1)+'px)';dash.style.opacity=(.3+.7*e).toFixed(3)}
+  dash.style.transform=RM?'':'rotateX('+(38*(1-e)).toFixed(2)+'deg) scale('+(.88+.12*e).toFixed(3)+') translateY('+(60*(1-e)).toFixed(1)+'px)';dash.style.opacity=(.3+.7*e).toFixed(3);
+  /* numbers count up, bars fill and the chart draws once the dashboard is mostly upright */
+  if(!dash.classList.contains('live')&&(RM||e>.55)){dash.classList.add('live');dNums.forEach(count)}
+  var d=clamp((vh-dr.top)/(vh+dr.height),0,1)-.5;
+  wsChips.forEach(function(c){c.style.transform=RM?'':'translate3d(0,'+(d*+c.dataset.y*2).toFixed(1)+'px,0)';c.style.opacity=RM?1:clamp(e*1.6-.4,0,1).toFixed(3)})}
 
 /* ---------- 4. audiences: cards slide sideways while pinned ---------- */
 var hz=$('who'),track=$('hzTrack');
 function horizontal(){if(innerWidth<961){track.style.transform='';return}var p=prog(hz),max=track.scrollWidth-track.clientWidth;track.style.transform='translate3d('+(-max*ss(.05,.92,p)).toFixed(1)+'px,0,0)'}
 
-/* ---------- 5. features: cards tilt up column by column as they scroll in ---------- */
-var fxCards=q('.fx .sp');
-function features(){var vh=innerHeight,cols=Math.max(1,getComputedStyle(fxCards[0].parentNode).gridTemplateColumns.split(' ').length);
-  fxCards.forEach(function(c,i){var r=c.getBoundingClientRect(),raw=(vh*.98-r.top)/(vh*.4)-(i%cols)*.12;
+/* ---------- 5. features: blocks rise in, then columns drift up and down against each other ---------- */
+var fxCards=q('.fx .sp'),fxGrid=fxCards.length&&fxCards[0].parentNode;
+function features(){var vh=innerHeight,cols=Math.max(1,getComputedStyle(fxGrid).gridTemplateColumns.split(' ').length),gr=fxGrid.getBoundingClientRect();
+  var d=clamp((vh-gr.top)/(vh+gr.height),0,1)-.5,amp=cols>1?(innerWidth>960?70:40):0;
+  fxCards.forEach(function(c,i){var top=gr.top+c.offsetTop,raw=(vh*.98-top)/(vh*.4)-(i%cols)*.12,col=i%cols;
     var s=clamp((raw-.55)/.6,0,1),st=c.style;st.setProperty('--e',RM?1:ss(0,1,raw).toFixed(3));st.setProperty('--t',RM?1:ss(.35,1.05,raw).toFixed(3));
-    st.setProperty('--s',s.toFixed(3));st.setProperty('--so',RM?0:Math.sin(s*Math.PI).toFixed(3))})}
+    st.setProperty('--s',s.toFixed(3));st.setProperty('--so',RM?0:Math.sin(s*Math.PI).toFixed(3));
+    st.setProperty('--py',RM?'0px':((col%2?1:-1)*d*2*amp).toFixed(1)+'px')})}
 
 /* drive everything from scroll */
 var queued=false;
