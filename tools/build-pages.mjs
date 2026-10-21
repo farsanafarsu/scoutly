@@ -74,7 +74,7 @@ function nav(r, current, scanHref) {
 <nav class="nav-util" aria-label="Resources and account"><a href="${r}seo-glossary/">SEO glossary</a><a href="${r}about/">About</a><a href="${r}login.html?mode=login">Login</a></nav>
 </div></div>
 <div class="nav-main"><div class="w nav-row">
-<a href="${r}" class="logo nav-logo" aria-label="Scoutly home"><img src="${r}assets/scoutly-mark.webp" alt="" width="34" height="34"><span>Scout<b>ly</b></span></a>
+<a href="${r}" class="logo nav-logo" aria-label="Scoutly home"><img src="${r}assets/scoutly-mark.svg" alt="" width="34" height="34"><span>Scout<b>ly</b></span></a>
 <nav class="lk" id="navLinks" aria-label="Primary"><a href="${r}#features">Features</a><a href="${r}website-seo-audit/"${current === 'website-seo-audit' ? ' aria-current="page"' : ''}>SEO audit</a><a href="${r}backlink-checker/"${current === 'backlink-checker' ? ' aria-current="page"' : ''}>Backlinks</a><a href="${r}ai-search-visibility/"${current === 'ai-search-visibility' ? ' aria-current="page"' : ''}>AI search</a><a href="${r}#how">How it works</a><a href="${r}#faq">FAQ</a></nav>
 <div class="rt"><a class="btn nav-login" href="${r}login.html?mode=login">Login</a><a class="btn nav-cta" href="${scanHref}">Scan your website</a><button class="nav-burger" id="navBurger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><i></i><i></i><i></i></button></div>
 </div></div>
@@ -83,7 +83,7 @@ function nav(r, current, scanHref) {
 
 function footer(r) {
   return `<footer><div class="w"><div class="fg">
-<div><a class="logo" href="${r}" aria-label="Scoutly home"><img src="${r}assets/scoutly-mark.webp" alt="" width="34" height="34" loading="lazy"><span>Scout<b>ly</b></span></a><p style="max-width:300px">Scoutly is your workspace for website SEO audits, backlink intelligence, and search visibility.</p></div>
+<div><a class="logo" href="${r}" aria-label="Scoutly home"><img src="${r}assets/scoutly-mark.svg" alt="" width="34" height="34" loading="lazy"><span>Scout<b>ly</b></span></a><p style="max-width:300px">Scoutly is your workspace for website SEO audits, backlink intelligence, and search visibility.</p></div>
 <nav aria-labelledby="f-platform"><h2 id="f-platform">Platform</h2><ul>${FEATURES.map((f) => `<li><a href="${r}${f.slug}/">${f.footer || f.name}</a></li>`).join('')}</ul></nav>
 <nav aria-labelledby="f-resources"><h2 id="f-resources">Resources</h2><ul><li><a href="${r}seo-glossary/">SEO glossary</a></li><li><a href="${r}website-seo-audit/#what-it-checks">Technical SEO checks</a></li><li><a href="${r}backlink-checker/#link-building">Link-building guidance</a></li><li><a href="${r}#faq">FAQ</a></li></ul></nav>
 <nav aria-labelledby="f-company"><h2 id="f-company">Company</h2><ul><li><a href="${r}about/">About Scoutly</a></li><li><a href="${r}about/#product-status">Product status</a></li><li><a href="${r}about/#data-sources">Data sources</a></li><li><a href="${r}login.html?mode=login">Log in</a></li></ul></nav>
@@ -123,7 +123,7 @@ ${p.noindex ? '<meta name="robots" content="noindex">' : `<link rel="canonical" 
 ${p.noindex ? '' : `<meta property="og:url" content="${url}">\n`}<meta property="og:image" content="${SITE}/assets/og-image.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Scoutly, a blue explorer mascot, next to the headline Get found on Google. Get discovered by AI.">
+<meta property="og:image:alt" content="The Scoutly logo, a search lens with a spark inside, next to the headline Get found on Google. Get discovered by AI.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
@@ -140,7 +140,7 @@ ${nav(r, p.slug, p.form !== false ? '#scan' : p.cta !== false ? '#scanEnd' : r +
   ${p.intro.map((t) => `<p class="intro">${t}</p>`).join('\n  ')}
   ${p.form === false ? '' : scanForm(r, 'scan', p.formLabel)}
   ${p.status ? `<div class="status"><span class="chip">${p.status[0]}</span><p>${p.status[1]}</p></div>` : ''}
-</div><div class="ph-art" aria-hidden="true"><img src="${r}assets/scoutly.webp" alt="" width="300" height="322"></div></div></header>
+</div><div class="ph-art" aria-hidden="true"><img src="${r}assets/scoutly-mark.svg" alt="" width="240" height="240"></div></div></header>
 ${p.body}
 ${p.related ? sec({ id: 'related', kick: 'Related tools', h: p.relatedH || 'Keep investigating', cls: 'alt', body: `<div class="rel">${p.related.map((s) => { const f = feat(s); return `<a href="${r}${f.slug}/"><b>${f.name}</b><span>${f.short}</span></a>`; }).join('')}</div>` }) : ''}
 ${p.faq?.length ? sec({ id: 'faq', kick: 'FAQ', h: p.faqH, body: `<div class="faq">${p.faq.map(([q, a]) => `<details><summary><h3>${q}</h3></summary><div class="a">${a.split('\n\n').map((x) => `<p>${x}</p>`).join('')}</div></details>`).join('')}</div>` }) : ''}
@@ -615,10 +615,10 @@ PAGES.push({
   intro: ['Scoutly is an SEO and search visibility platform in early development. The goal is simple: bring SEO work that’s usually spread across several tools (audits, link checks, backlink research, keyword research, competitor research and AI search visibility) into one workspace that explains what it finds.'],
   form: false,
   body: [
-    sec({ id: 'meet-scoutly', kick: 'Meet the scout', h: 'Why a friendly blue explorer?',
-      body: split(`<p>SEO often feels like detective work: following link trails, checking clues in the page source, and working out why something isn’t showing up. Scoutly, the blue explorer with the captain’s hat and compass, stands for that investigation, done patiently and explained clearly.</p>
-        <p>The mascot is there to make the work feel approachable. The product itself is built around evidence: what was found, where, and what to do about it.</p>`,
-      `<img src="../assets/scoutly.webp" alt="Scoutly, a friendly blue explorer mascot wearing a captain’s hat and holding a compass" width="320" height="344" loading="lazy" style="display:block;margin:0 auto;width:min(320px,80%);height:auto;filter:drop-shadow(0 30px 40px rgba(47,91,255,.3))">`) }),
+    sec({ id: 'the-mark', kick: 'The mark', h: 'A lens and a spark',
+      body: split(`<p>SEO often feels like detective work: following link trails, checking clues in the page source, and working out why something isn’t showing up. The Scoutly mark is a search lens, the investigation itself, done patiently and explained clearly.</p>
+        <p>Inside the lens is a spark: what the investigation turns up, and the AI answers a well-built site gets cited in. Search on the outside, discovery on the inside.</p>`,
+      `<img src="../assets/scoutly-mark.svg" alt="The Scoutly mark: a white search lens with a four-point spark inside, on a blue rounded square" width="220" height="220" loading="lazy" style="display:block;margin:0 auto;width:min(220px,60%);height:auto;filter:drop-shadow(0 30px 40px rgba(47,91,255,.35))">`) }),
     sec({ id: 'principles', cls: 'alt', kick: 'How we build', h: 'Principles behind Scoutly',
       body: cards([
         { icon: 'doc', h: 'Evidence over scores', p: 'Every finding should show what was detected and how to verify it, not just a number to trust.' },

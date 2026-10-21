@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Scoutly">
+  <defs>
+    <linearGradient id="sm-bg" x1="3" y1="2" x2="29" y2="30" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#5ac8fa"/><stop offset=".55" stop-color="#2f5bff"/><stop offset="1" stop-color="#2a3fd6"/></linearGradient>
+    <linearGradient id="sm-sh" x1="16" y1="0" x2="16" y2="16" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="9" fill="url(#sm-bg)"/>
+  <rect x=".3" y=".3" width="31.4" height="31.4" rx="8.7" fill="url(#sm-sh)" stroke="#fff" stroke-opacity=".22" stroke-width=".6"/>
+  <!-- lens: search -->
+  <circle cx="14" cy="14" r="7.2" fill="none" stroke="#fff" stroke-width="2.6"/>
+  <path d="M19.3 19.3 24.6 24.6" stroke="#fff" stroke-width="3.2" stroke-linecap="round"/>
+  <!-- spark: what the scout finds, and the AI answer it gets cited in -->
+  <path d="M14 9.7c.45 2.75 1.55 3.85 4.3 4.3-2.75.45-3.85 1.55-4.3 4.3-.45-2.75-1.55-3.85-4.3-4.3 2.75-.45 3.85-1.55 4.3-4.3Z" fill="#fff"/>
+</svg>
