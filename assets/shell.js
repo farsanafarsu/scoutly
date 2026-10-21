@@ -53,10 +53,15 @@
 
   /* Semrush-style SEO toolkit. lock: needs a paid data provider (the page shows locked.html without one). soon: not built yet. */
   var NAV=[
-    ['SEO Services',[
-      ['dashboard.html','search','SEO Dashboard'],
+    ['SEO management',[
+      ['dashboard.html','dash','SEO Dashboard'],
       ['campaigns.html','rocket','SEO Campaigns'],
-      ['backlink-audit.html','link','Backlink'],
+      ['position-tracking.html','target','Position Tracking'],
+      ['reports.html','rep','Reports']]],
+    ['SEO audit',[
+      ['audit.html','audit','Site Audit'],
+      ['onpage-checker.html','check','On-Page SEO Checker'],
+      ['backlink-audit.html','broken','Backlink Audit'],
       ['local-seo.html','pin','Local SEO']]],
     ['Competitive research',[
       ['domain-overview.html','globe','Domain Overview'],
@@ -71,18 +76,13 @@
     ['Link building',[
       ['backlink-analytics.html','link','Backlink Analytics','lock'],
       ['backlink-gap.html','gap','Backlink Gap','lock']]],
-    ['On-page & tech SEO',[
-      ['audit.html','audit','Site Audit'],
-      ['onpage-checker.html','check','On-Page SEO Checker'],
+    ['Content',[
       ['writing-assistant.html','pen','SEO Writing Assistant'],
       ['topic-research.html','bulb','Topic Research']]],
-    ['Rank tracking',[
-      ['position-tracking.html','target','Position Tracking']]],
     ['AI visibility',[
       ['ai-search.html','ai','AI Search Visibility'],
       ['aeo-checker.html','geo','AEO · GEO Checker']]],
     ['Account',[
-      ['reports.html','rep','Reports'],
       ['settings.html','set','Settings']]]
   ];
   var here=location.pathname.split('/').pop()||'dashboard.html',q=location.search;
