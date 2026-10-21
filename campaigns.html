@@ -8,10 +8,6 @@
 <meta name="theme-color" content="#eef1f7">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<script>
-/* demo gate: no demo login in this tab → back to the login page */
-(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();
-</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/app.css">
@@ -172,7 +168,7 @@
 <script src="assets/app.js"></script>
 <script>
 (function(){
-  /* campaigns live in this tab's sessionStorage until accounts and a backend exist */
+  /* campaigns are saved to the account (scoutly.campaigns in the page store) */
   var $=function(i){return document.getElementById(i)},S=window.Scoutly,KEY='scoutly.campaigns';
   var list=[];try{list=JSON.parse(S.read(KEY)||'[]')||[]}catch(_){list=[]}
   var filter='all',editing=null;

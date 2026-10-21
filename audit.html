@@ -8,10 +8,6 @@
 <meta name="theme-color" content="#eef1f7">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<script>
-/* demo gate: no demo login in this tab → back to the login page */
-(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();
-</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/app.css">
@@ -327,7 +323,7 @@ td.u{max-width:420px;overflow-wrap:anywhere}td.n{text-align:right;white-space:no
     psi=null;psiChecks=[];
     fetch('/api/audit'+q).then(function(r){
       return r.text().then(function(t){var j=null;try{j=JSON.parse(t)}catch(_){}
-        if(!j)throw new Error(r.status===404||r.status===501?'The audit server isn’t running. Start it from the project folder with: python server.py':'The audit server sent an unexpected response.');
+        if(!j)throw new Error(r.status===404||r.status===501?'The audit server isn’t running. Start it from the project folder with: python manage.py runserver':'The audit server sent an unexpected response.');
         if(!r.ok||j.error)throw new Error(j.error||'The audit failed.');return j})
     }).then(function(j){
       data=j;progress(false);$('progBar').style.width='100%';stepEls.forEach(function(li){li.className='ok'});
@@ -336,7 +332,7 @@ td.u{max-width:420px;overflow-wrap:anywhere}td.n{text-align:right;white-space:no
     }).catch(function(e){
       /* never leave the previous site's report on screen under a new site's error */
       data=null;psi=null;psiChecks=[];progress(false);$('prog').hidden=true;$('report').hidden=true;$('idle').hidden=false;
-      $('runErr').textContent=e.message||'Couldn’t reach the audit server. Is python server.py running?';
+      $('runErr').textContent=e.message||'Couldn’t reach the audit server. Is it running? Start it with: python manage.py runserver';
     }).then(function(){$('go').disabled=false});
   }
 
@@ -350,7 +346,7 @@ td.u{max-width:420px;overflow-wrap:anywhere}td.n{text-align:right;white-space:no
       .then(function(j){clearTimeout(to);if(!data||data.finalUrl!==url)return;psi=parsePsi(j);psiChecks=psiToChecks(psi);renderVitals();renderSummary();renderCats();renderFindings();store()})
       .catch(function(e){clearTimeout(to);if(!data||data.finalUrl!==url)return;var m=String(e&&e.message||e);
         var quota=e&&e.status===429||/quota/i.test(m);
-        $('vit').innerHTML='<p class="vit-wait">'+icon('i-alert')+'<span>'+(quota&&!e.hasKey?'Google’s shared PageSpeed quota is used up for today. Add your own free API key to get Core Web Vitals every time: create one at <a href="https://developers.google.com/speed/docs/insights/v5/get-started" target="_blank" rel="noopener noreferrer" style="color:var(--b);text-decoration:underline">developers.google.com</a>, set it as <code>PAGESPEED_API_KEY</code>, then restart <code>python server.py</code>.':quota?'Your PageSpeed API key has hit its quota. Try again later.':'PageSpeed Insights didn’t return results'+(m?': '+esc(m.slice(0,160)):'')+'.')+' Until then, speed scores use the server checks only.</span></p>';
+        $('vit').innerHTML='<p class="vit-wait">'+icon('i-alert')+'<span>'+(quota&&!e.hasKey?'Google’s shared PageSpeed quota is used up for today. Add your own free API key to get Core Web Vitals every time: create one at <a href="https://developers.google.com/speed/docs/insights/v5/get-started" target="_blank" rel="noopener noreferrer" style="color:var(--b);text-decoration:underline">developers.google.com</a>, set it as <code>PAGESPEED_API_KEY</code>, then restart <code>python manage.py runserver</code>.':quota?'Your PageSpeed API key has hit its quota. Try again later.':'PageSpeed Insights didn’t return results'+(m?': '+esc(m.slice(0,160)):'')+'.')+' Until then, speed scores use the server checks only.</span></p>';
         $('psiRetry').hidden=false});
   }
   $('psiRetry').onclick=function(){if(data)runPsi(data.finalUrl)};

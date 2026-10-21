@@ -7,7 +7,6 @@
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#eef1f7">
 <link rel="icon" type="image/png" href="assets/favicon.png">
-<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/app.css">
@@ -70,7 +69,7 @@
   S.provider().then(function(st){
     if(st.ok){location.replace(PAGE[S.qs('tool')]||PAGE.organic);return}
     $('prov').className='provline'+(st.configured?' bad':'');
-    $('prov').innerHTML='<i></i><span>'+(st.configured?'<b>DataForSEO isn’t working:</b> '+esc(st.message):'<b>DataForSEO: not connected.</b> Set <code>DATAFORSEO_LOGIN</code> and <code>DATAFORSEO_PASSWORD</code> and restart <code>python server.py</code>.')+' <a href="settings.html" style="color:var(--b);text-decoration:underline">Settings</a></span>';
+    $('prov').innerHTML='<i></i><span>'+(st.configured?'<b>DataForSEO isn’t working:</b> '+esc(st.message):'<b>DataForSEO: not connected.</b> Set <code>DATAFORSEO_LOGIN</code> and <code>DATAFORSEO_PASSWORD</code> in <code>.env</code> and restart <code>python manage.py runserver</code>.')+' <a href="settings.html" style="color:var(--b);text-decoration:underline">Settings</a></span>';
   });
   document.title=t.h+' — Scoutly';$('grp').textContent=t.g;$('h').textContent=t.h;$('desc').textContent=t.d;$('why').textContent=t.why;
   $('feat').innerHTML=t.f.map(function(x){return '<li>'+esc(x)+'</li>'}).join('');

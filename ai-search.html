@@ -7,7 +7,6 @@
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#eef1f7">
 <link rel="icon" type="image/png" href="assets/favicon.png">
-<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/app.css">
@@ -53,7 +52,7 @@
         <p class="meta-note pad">“Search” crawlers fetch pages to answer people right now; blocking them keeps you out of those answers. “Training” crawlers collect data for future models; blocking them is a policy choice and doesn’t stop citations. The live test requests your page as that crawler, which catches firewalls (like Cloudflare’s “block AI bots”) that robots.txt doesn’t show.</p></section>
 
       <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-ai"/></svg></span><div><h2>Prompt tracker</h2><p>Does each AI assistant mention you for the questions your customers ask?</p></div><span style="margin-left:auto;display:flex;gap:8px"><button class="btn sm" type="button" id="gen"><svg class="i"><use href="#i-wand"/></svg>Suggest prompts</button><button class="btn sm" type="button" id="exp"><svg class="i"><use href="#i-dl"/></svg>CSV</button></span></div>
-        <p class="meta-note pad" style="border-bottom:1px solid var(--ln)">No free API returns AI answers, so this is a guided check: open a prompt in each assistant, read the answer, and mark whether your brand was <b>mentioned</b>, <b>cited</b> (linked as a source) or <b>not</b> there. Scoutly keeps the history in this browser so you can see your share of voice change.</p>
+        <p class="meta-note pad" style="border-bottom:1px solid var(--ln)">No free API returns AI answers, so this is a guided check: open a prompt in each assistant, read the answer, and mark whether your brand was <b>mentioned</b>, <b>cited</b> (linked as a source) or <b>not</b> there. Scoutly keeps the history in your account so you can see your share of voice change.</p>
         <div class="dt-wrap"><table class="dt ptable"><thead><tr><th>Prompt</th><th>Open in</th><th><span class="eng-h">ChatGPT</span></th><th><span class="eng-h">Perplexity</span></th><th><span class="eng-h">Google AI</span></th><th><span class="eng-h">Copilot</span></th><th></th></tr></thead><tbody id="prompts"></tbody></table></div>
         <div class="addp"><input id="newP" placeholder="Add your own prompt, e.g. best running shoes for flat feet"><button class="btn sm p" type="button" id="addP"><svg class="i"><use href="#i-plus"/></svg>Add</button></div>
       </section>
@@ -68,8 +67,8 @@
   var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,KEY='scoutly.aivis',st=load(),info=null;
   var ENG=[['chatgpt','ChatGPT',function(q){return 'https://chatgpt.com/?q='+encodeURIComponent(q)}],['perplexity','Perplexity',function(q){return 'https://www.perplexity.ai/search?q='+encodeURIComponent(q)}],
            ['google','Google AI',function(q){return 'https://www.google.com/search?udm=50&q='+encodeURIComponent(q)}],['copilot','Copilot',function(q){return 'https://copilot.microsoft.com/?q='+encodeURIComponent(q)}]];
-  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'null')||{prompts:[],marks:{}}}catch(_){return {prompts:[],marks:{}}}}
-  function save(){try{localStorage.setItem(KEY,JSON.stringify(st))}catch(_){}}
+  function load(){try{return JSON.parse(S.read(KEY)||'null')||{prompts:[],marks:{}}}catch(_){return {prompts:[],marks:{}}}}
+  function save(){S.write(KEY,JSON.stringify(st))}
   function liveCell(c){if(c.live==null)return '<span class="meta-note">not tested</span>';if(c.live>=200&&c.live<400)return '<span class="tag ok">'+c.live+' allowed</span>';return '<span class="tag bad">'+(c.live||'refused')+' blocked</span>'}
   function renderCrawl(){
     var cs=info.crawlers,search=cs.filter(function(c){return c.kind==='search'}),train=cs.filter(function(c){return c.kind==='training'});

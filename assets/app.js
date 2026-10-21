@@ -1,16 +1,46 @@
-/* Scoutly app shell: shared by dashboard.html and campaigns.html.
-   Fills in the signed-in user, runs the mobile sidebar, toasts, "coming soon" links and logout.
-   Early-access demo: everything is kept in this tab's sessionStorage; nothing is sent anywhere. */
+/* Scoutly app shell, shared by every app page.
+   Fills in the signed-in user, runs the mobile sidebar, toasts, "coming soon" links and logout,
+   and keeps each page's saved data in the user's account.
+
+   The server embeds the user and their saved data in the page (<script id="scoutly-boot">), so
+   read() answers straight away. write() updates that copy and saves it to the account shortly
+   after (PUT /api/store/<key>). Values are strings, as they were in browser storage. */
 (function(){
   var $=function(i){return document.getElementById(i)};
-  function read(k){try{return sessionStorage.getItem(k)}catch(_){return null}}
-  function write(k,v){try{sessionStorage.setItem(k,v)}catch(_){}}
+  var boot=null;try{boot=JSON.parse($('scoutly-boot').textContent)}catch(_){}
+  boot=boot||{user:{name:'',email:''},data:{},withheld:[],csrfToken:''};
+  var data=boot.data||{},withheld=boot.withheld||[],pending={},timer=null;
 
-  var user={name:'Farsana N',email:''};
-  try{var s=JSON.parse(read('scoutly.user')||'null');if(s)user=s}catch(_){}
+  function read(k){var v=data[k];return v==null?null:typeof v==='string'?v:JSON.stringify(v)}
+  function write(k,v){
+    if(withheld.indexOf(k)>-1){console.error('Scoutly: '+k+' isn’t loaded on this page, so it can’t be saved here.');return}
+    var val=v;if(v!=null&&typeof v==='string'){try{val=JSON.parse(v)}catch(_){val=v}}
+    data[k]=val;pending[k]=1;clearTimeout(timer);timer=setTimeout(flush,600);
+  }
+  function remove(k){write(k,null)}
+  function token(){var m=document.cookie.match(/(?:^|;\s*)csrftoken=([^;]+)/);return m?decodeURIComponent(m[1]):boot.csrfToken}
+  function save(k,keepalive){var body=JSON.stringify({data:data[k]==null?null:data[k]});
+    return fetch('/api/store/'+encodeURIComponent(k),{method:'PUT',credentials:'same-origin',keepalive:!!keepalive&&body.length<60000,
+      headers:{'Content-Type':'application/json','X-CSRFToken':token()},body:body})
+      .then(function(r){if(r.status===401)location.href='login.html?mode=login&next='+encodeURIComponent(location.pathname+location.search);
+        else if(!r.ok)return r.json().then(function(j){throw new Error(j.error)},function(){throw new Error()})})
+      .catch(function(e){say(e&&e.message?'Couldn’t save: '+e.message:'Couldn’t save your changes. Check your connection and try again.')})}
+  function flush(keepalive){clearTimeout(timer);var ks=Object.keys(pending);pending={};return Promise.all(ks.map(function(k){return save(k,keepalive)}))}
+  addEventListener('pagehide',function(){flush(true)});
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='hidden')flush(true)});
+
+  /* first login on a browser that used Scoutly before accounts: move what it saved into the account */
+  [['scoutly.kwlists','local'],['scoutly.ranks','local'],['scoutly.aivis','local'],['scoutly.local','local'],['scoutly.draft','local'],
+   ['scoutly.reportPrefs','local'],['scoutly.prefs','local'],['scoutly.kmGl','session'],['scoutly.site','session'],
+   ['scoutly.campaigns','session'],['scoutly.audits','session'],['scoutly.blTarget','session']].forEach(function(p){
+    try{var st=p[1]==='local'?localStorage:sessionStorage,v=st.getItem(p[0]);
+      if(v!=null&&data[p[0]]==null&&withheld.indexOf(p[0])<0){write(p[0],v);st.removeItem(p[0])}}catch(_){}
+  });
+
+  var user=boot.user;
   if($('whoName'))$('whoName').textContent=user.name;
   if($('whoMail'))$('whoMail').textContent=user.email;
-  if($('av'))$('av').textContent=user.name.split(/\s+/).map(function(w){return w[0]}).join('').slice(0,2).toUpperCase();
+  if($('av'))$('av').textContent=(user.name||user.email).split(/\s+/).map(function(w){return w[0]}).join('').slice(0,2).toUpperCase();
 
   /* toast */
   var toast=$('toast'),tt;
@@ -37,14 +67,14 @@
   if($('projB')&&!$('scanUrl'))$('projB').addEventListener('click',function(){location.href='dashboard.html'});
 
   if($('logout'))$('logout').addEventListener('click',function(e){e.preventDefault();
-    try{['scoutly.user','scoutly.site','scoutly.campaigns','scoutly.audits'].forEach(function(k){sessionStorage.removeItem(k)})}catch(_){}
-    location.href='login.html?mode=login'});
+    flush().then(function(){return fetch('/api/auth/logout',{method:'POST',credentials:'same-origin',headers:{'X-CSRFToken':token()}})})
+      .then(function(){location.href='login.html?mode=login'},function(){say('Couldn’t log out. Check your connection and try again.')})});
 
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
-  /* JSON from the local server (python server.py). Errors come back as {error} with a 200. */
+  /* JSON from the local server (python manage.py runserver). Errors come back as {error} with a 200. */
   function api(path,opts){
     return fetch(path,opts).then(function(r){return r.text().then(function(txt){var j=null;try{j=JSON.parse(txt)}catch(_){}
-      if(!j)throw new Error(r.status===404||r.status===501?'The Scoutly server isn’t running. Start it from the project folder with: python server.py':'The server sent an unexpected response.');
+      if(!j)throw new Error(r.status===404||r.status===501?'The Scoutly server isn’t running. Start it from the project folder with: python manage.py runserver':'The server sent an unexpected response.');
       if(j.error){var e=new Error(typeof j.error==='string'?j.error:(j.error.message||'Request failed.'));e.notConnected=!!j.notConnected;throw e}return j})});
   }
   function post(path,body){return api(path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})}
@@ -86,14 +116,17 @@
     var a=document.createElement('a');a.href=URL.createObjectURL(new Blob(['﻿'+body],{type:'text/csv'}));a.download=name;document.body.appendChild(a);a.click();
     setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500);
   }
-  /* Keyword Manager lists, kept in this browser (localStorage) so they survive closing the tab. */
+  /* Keyword Manager lists, saved in the account like everything else. */
   var LK='scoutly.kwlists';
-  function lists(){try{return JSON.parse(localStorage.getItem(LK)||'{}')||{}}catch(_){return {}}}
-  function saveLists(l){try{localStorage.setItem(LK,JSON.stringify(l))}catch(_){}}
+  function lists(){try{return JSON.parse(read(LK)||'{}')||{}}catch(_){return {}}}
+  function saveLists(l){write(LK,JSON.stringify(l))}
   function addToList(name,kws){var l=lists();name=name||'My keywords';var cur=l[name]||{created:new Date().toISOString(),items:[]};
     var have={};cur.items.forEach(function(k){have[k.kw]=1});var added=0;
     kws.forEach(function(k){if(!have[k.kw]){cur.items.push(k);have[k.kw]=1;added++}});l[name]=cur;saveLists(l);return added}
   function qs(k){return new URLSearchParams(location.search).get(k)||''}
 
-  window.Scoutly={user:user,say:say,closeNav:closeNav,read:read,write:write,showSite:showSite,esc:esc,api:api,post:post,provider:provider,paid:paid,fmt:fmt,kdTag:kdTag,ago:ago,csv:csv,lists:lists,saveLists:saveLists,addToList:addToList,qs:qs};
+  /* account requests (profile, password, data) carry the CSRF token */
+  function send(method,path,body){return api(path,{method:method,credentials:'same-origin',headers:{'Content-Type':'application/json','X-CSRFToken':token()},body:body==null?undefined:JSON.stringify(body)})}
+
+  window.Scoutly={user:user,say:say,closeNav:closeNav,read:read,write:write,remove:remove,flush:flush,send:send,showSite:showSite,esc:esc,api:api,post:post,provider:provider,paid:paid,fmt:fmt,kdTag:kdTag,ago:ago,csv:csv,lists:lists,saveLists:saveLists,addToList:addToList,qs:qs};
 })();

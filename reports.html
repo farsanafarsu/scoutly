@@ -7,7 +7,6 @@
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#eef1f7">
 <link rel="icon" type="image/png" href="assets/favicon.png">
-<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/app.css">
@@ -67,11 +66,11 @@
 <script>
 (function(){
   var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,KEY='scoutly.reportPrefs';
-  function J(store,k,d){try{return JSON.parse(store.getItem(k)||'null')||d}catch(_){return d}}
-  var audits=J(sessionStorage,'scoutly.audits',{}),ranks=J(localStorage,'scoutly.ranks',{snaps:[]}),lists=J(localStorage,'scoutly.kwlists',{}),camps=J(sessionStorage,'scoutly.campaigns',[]),ai=J(localStorage,'scoutly.aivis',{prompts:[],marks:{}});
+  function J(k,d){try{return JSON.parse(S.read(k)||'null')||d}catch(_){return d}}
+  var audits=J('scoutly.audits',{}),ranks=J('scoutly.ranks',{snaps:[]}),lists=J('scoutly.kwlists',{}),camps=J('scoutly.campaigns',[]),ai=J('scoutly.aivis',{prompts:[],marks:{}});
   var CATN={crawl:'Crawlability & indexing',onpage:'On-page SEO',content:'Content & keywords',links:'Links & redirects',internal:'Internal linking',perf:'Speed & security',schema:'Structured data',ai:'AI readiness'};
   var SECS=[['audit','Site audit',Object.keys(audits).length],['ranks','Rankings',ranks.snaps.length],['camps','Campaigns',camps.length],['kw','Keyword lists',Object.keys(lists).length],['ai','AI visibility',ai.prompts.length]];
-  var prefs=J(localStorage,KEY,{});
+  var prefs=J(KEY,{});
   $('secs').innerHTML=SECS.map(function(s){var on=prefs.secs?prefs.secs.indexOf(s[0])>-1:s[2]>0;return '<label><input type="checkbox" value="'+s[0]+'"'+(on?' checked':'')+(s[2]?'':' disabled')+'>'+s[1]+'<em>'+(s[2]?s[2]+' saved':'no data yet')+'</em></label>'}).join('');
   var hosts=Object.keys(audits),site=S.read('scoutly.site');if(site){site=site.replace(/^www\./,'');if(hosts.indexOf(site)<0)hosts.unshift(site)}
   $('site').innerHTML=hosts.map(function(h){return '<option>'+esc(h)+'</option>'}).join('')||'<option value="">No website yet</option>';
@@ -80,14 +79,14 @@
   function kp(items){return '<div class="kp">'+items.map(function(x){return '<div><small>'+esc(x[0])+'</small><b>'+esc(x[1])+'</b></div>'}).join('')+'</div>'}
   function render(){
     var on=[].map.call(document.querySelectorAll('#secs input:checked'),function(i){return i.value}),h=$('site').value,a=audits[h],out='';
-    try{localStorage.setItem(KEY,JSON.stringify({secs:on,client:$('client').value,title:$('title').value,notes:$('notes').value}))}catch(_){}
-    out+='<div class="cover"><div><h1>'+esc($('title').value||'SEO report')+'</h1><p>'+(($('client').value?'Prepared for '+esc($('client').value)+' · ':'')+(h?esc(h)+' · ':''))+new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})+'</p><p>Prepared by '+esc(S.user.name)+'</p></div><span class="brand"><img src="assets/scoutly-mark.webp" alt="">Scoutly</span></div>';
+    S.write(KEY,JSON.stringify({secs:on,client:$('client').value,title:$('title').value,notes:$('notes').value}));
+    out+='<div class="cover"><div><h1>'+esc($('title').value||'SEO report')+'</h1><p>'+(($('client').value?'Prepared for '+esc($('client').value)+' · ':'')+(h?esc(h)+' · ':''))+new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})+'</p><p>Prepared by '+esc(S.user.name)+'</p></div><span class="brand"><img src="assets/scoutly-mark.svg" alt="">Scoutly</span></div>';
     if($('notes').value.trim())out+='<h2>Summary</h2><p class="n">'+esc($('notes').value.trim())+'</p>';
     if(on.indexOf('audit')>-1){out+='<h2>Site audit</h2>';
       if(a){out+=kp([['Health score',a.score+'/100'],['Critical',a.critical],['Warnings',a.warning],['Notices',a.notice],['Pages crawled',a.pages],['Broken links',a.broken]])+'<p class="none">Audited '+new Date(a.at).toLocaleString()+' · '+esc(a.url)+'</p>';
         if(a.cats)out+='<div style="margin-top:12px">'+Object.keys(CATN).filter(function(k){return a.cats[k]!=null}).map(function(k){return bar(CATN[k],a.cats[k])}).join('')+'</div>';
         if(a.issues&&a.issues.length)out+='<table><thead><tr><th>Top issues</th><th>Severity</th><th class="n">Count</th></tr></thead><tbody>'+a.issues.map(function(i){return '<tr><td>'+esc(i.t)+'</td><td>'+esc(i.s)+'</td><td class="n">'+i.n+'</td></tr>'}).join('')+'</tbody></table>'}
-      else out+='<p class="none">No audit saved for this website in this browser tab. Run one in Site Audit first.</p>'}
+      else out+='<p class="none">No audit saved for this website yet. Run one in Site Audit first.</p>'}
     if(on.indexOf('ranks')>-1&&ranks.snaps.length){var s=ranks.snaps[ranks.snaps.length-1],p=ranks.snaps.length>1?ranks.snaps[ranks.snaps.length-2]:null,rows=s.queries||s.pages||[],pm={};
       if(p)(p.queries||p.pages||[]).forEach(function(r){pm[r.key]=r.pos});
       var cl=rows.reduce(function(x,r){return x+r.clicks},0),im=rows.reduce(function(x,r){return x+r.impr},0),ap=im?rows.reduce(function(x,r){return x+r.pos*r.impr},0)/im:0;

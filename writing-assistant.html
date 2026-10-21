@@ -7,7 +7,6 @@
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#eef1f7">
 <link rel="icon" type="image/png" href="assets/favicon.png">
-<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/app.css">
@@ -43,7 +42,7 @@
     <div class="ph">
       <p class="lbl">On-page &amp; tech SEO</p>
       <h1>SEO Writing Assistant</h1>
-      <p class="desc">Write or paste your article and get live feedback on readability, length, keyword use, headings, title and meta description. Start lines with <code>#</code> for the H1 and <code>##</code> for sections. Your draft is saved in this browser as you type.</p>
+      <p class="desc">Write or paste your article and get live feedback on readability, length, keyword use, headings, title and meta description. Start lines with <code>#</code> for the H1 and <code>##</code> for sections. Your draft is saved to your account as you type.</p>
     </div>
     <div class="wa">
       <div class="ed">
@@ -67,8 +66,8 @@
 <script>
 (function(){
   var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,recs=[],KEY='scoutly.draft';
-  function load(){try{var d=JSON.parse(localStorage.getItem(KEY)||'null');if(d){$('ti').value=d.ti||'';$('md').value=d.md||'';$('tx').value=d.tx||'';$('kws').value=d.kws||'';$('target').value=d.target||1000;recs=d.recs||[]}}catch(_){}}
-  function save(){try{localStorage.setItem(KEY,JSON.stringify({ti:$('ti').value,md:$('md').value,tx:$('tx').value,kws:$('kws').value,target:$('target').value,recs:recs}))}catch(_){}}
+  function load(){try{var d=JSON.parse(S.read(KEY)||'null');if(d){$('ti').value=d.ti||'';$('md').value=d.md||'';$('tx').value=d.tx||'';$('kws').value=d.kws||'';$('target').value=d.target||1000;recs=d.recs||[]}}catch(_){}}
+  function save(){S.write(KEY,JSON.stringify({ti:$('ti').value,md:$('md').value,tx:$('tx').value,kws:$('kws').value,target:$('target').value,recs:recs}))}
   function syl(w){w=w.toLowerCase();if(w.length<=3)return 1;w=w.replace(/(?:[^laeiouy]es|ed|[^laeiouy]e)$/,'').replace(/^y/,'');var m=w.match(/[aeiouy]{1,2}/g);return Math.max(1,m?m.length:1)}
   function count(text,kw){if(!kw)return 0;var re=new RegExp('\\b'+kw.replace(/[.*+?^${}()|[\]\\]/g,'\\$&').replace(/\s+/g,'\\s+')+'\\b','gi');return (text.match(re)||[]).length}
   function analyze(){

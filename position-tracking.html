@@ -7,7 +7,6 @@
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#eef1f7">
 <link rel="icon" type="image/png" href="assets/favicon.png">
-<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/app.css">
@@ -31,7 +30,7 @@
     <div class="ph">
       <p class="lbl">Rank tracking</p>
       <h1>Position Tracking</h1>
-      <p class="desc">Track where your site ranks in Google using your own Search Console data: real positions, clicks and impressions. Import a fresh export every week or month and Scoutly shows what moved. Imports are saved in this browser.</p>
+      <p class="desc">Track where your site ranks in Google using your own Search Console data: real positions, clicks and impressions. Import a fresh export every week or month and Scoutly shows what moved. Imports are saved to your account.</p>
     </div>
     <div class="how"><b>Get your data from Google Search Console (free):</b>
       <ol><li>Open <a href="https://search.google.com/search-console/performance/search-analytics" target="_blank" rel="noopener noreferrer">Search Console → Performance → Search results</a>.</li><li>Pick a date range (e.g. last 28 days), turn on <b>Average position</b>, then <b>Export → Download CSV</b>.</li><li>Unzip it and drop <b>Queries.csv</b> (and optionally <b>Pages.csv</b>) below.</li></ol></div>
@@ -61,8 +60,8 @@
 (function(){
   var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,KEY='scoutly.ranks',files=[];
   var db=load(),cur=null,kind='queries',sort='impr',dir=-1;
-  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{"snaps":[],"tracked":{}}')}catch(_){return {snaps:[],tracked:{}}}}
-  function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){S.say('Browser storage is full; delete an old snapshot.')}}
+  function load(){try{return JSON.parse(S.read(KEY)||'{"snaps":[],"tracked":{}}')}catch(_){return {snaps:[],tracked:{}}}}
+  function save(){S.write(KEY,JSON.stringify(db))}
   function parseCSV(text){var rows=[],row=[],f='',q=false;text=text.replace(/^﻿/,'');
     for(var i=0;i<text.length;i++){var c=text[i];if(q){if(c==='"'){if(text[i+1]==='"'){f+='"';i++}else q=false}else f+=c}
       else if(c==='"')q=true;else if(c===','){row.push(f);f=''}else if(c==='\n'||c==='\r'){if(c==='\r'&&text[i+1]==='\n')i++;row.push(f);f='';if(row.length>1||row[0])rows.push(row);row=[]}else f+=c}

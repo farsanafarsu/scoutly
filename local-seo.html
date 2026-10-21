@@ -7,7 +7,6 @@
 <meta name="robots" content="noindex">
 <meta name="theme-color" content="#eef1f7">
 <link rel="icon" type="image/png" href="assets/favicon.png">
-<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/app.css">
@@ -79,7 +78,7 @@
   $('f').addEventListener('submit',function(e){e.preventDefault();$('err').textContent='';
     var v={name:$('name').value.trim(),phone:$('phone').value.trim(),addr:$('addr').value.trim(),city:$('city').value.trim(),site:$('site').value.trim(),dirs:$('dirs').value};
     if(!v.site){$('err').textContent='Add your website.';return}if(!v.name&&!v.phone){$('err').textContent='Add at least your business name or phone.';return}
-    try{localStorage.setItem(KEY,JSON.stringify(v))}catch(_){}
+    S.write(KEY,JSON.stringify(v));
     var dirs=v.dirs.split(/\n/).map(function(s){return s.trim()}).filter(Boolean).slice(0,15);
     $('out').hidden=true;$('load').hidden=false;
     Promise.all([v.site].concat(dirs).map(function(u,i){return S.api('/api/page?url='+encodeURIComponent(u)).catch(function(err){if(!i)throw err;return {url:u,finalUrl:u,failed:err.message}})})).then(function(ps){
@@ -107,7 +106,7 @@
       $('load').hidden=true;$('out').hidden=false;
     }).catch(function(e){$('load').hidden=true;$('err').textContent=e.message});
   });
-  try{var v=JSON.parse(localStorage.getItem(KEY)||'null');if(v){['name','phone','addr','city','site','dirs'].forEach(function(k){$(k).value=v[k]||''})}}catch(_){}
+  try{var v=JSON.parse(S.read(KEY)||'null');if(v){['name','phone','addr','city','site','dirs'].forEach(function(k){$(k).value=v[k]||''})}}catch(_){}
   if(!$('site').value)$('site').value=S.read('scoutly.site')||'';
 })();
 </script>

@@ -8,10 +8,6 @@
 <meta name="theme-color" content="#eef1f7">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-<script>
-/* demo gate: no demo login in this tab → back to the login page */
-(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();
-</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/app.css">
@@ -64,7 +60,7 @@
 .radar .blip{position:absolute;width:6px;height:6px;margin:-3px;background:var(--sky);box-shadow:0 0 0 0 rgba(90,200,250,.6);animation:ping 2.4s ease-out infinite}
 .radar .blip.cr{background:var(--cr);animation-delay:-.8s}.radar .blip.wr{background:var(--wa);animation-delay:-1.6s}
 @keyframes ping{0%{box-shadow:0 0 0 0 rgba(90,200,250,.55)}70%,100%{box-shadow:0 0 0 12px rgba(90,200,250,0)}}
-.radar img{position:absolute;left:50%;top:50%;width:56%;height:auto;margin:-31% 0 0 -28%;filter:drop-shadow(0 24px 30px rgba(47,91,255,.55));animation:float 5s ease-in-out infinite}
+.radar img{position:absolute;left:50%;top:50%;width:30%;height:auto;margin:-15% 0 0 -15%;filter:drop-shadow(0 24px 30px rgba(47,91,255,.55));animation:float 5s ease-in-out infinite}
 .chipc{position:absolute;display:flex;align-items:center;gap:10px;padding:9px 12px;background:rgba(8,14,40,.78);border:1px solid rgba(255,255,255,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);box-shadow:0 20px 40px -20px rgba(0,0,0,.7);white-space:nowrap}
 .chipc small{display:block;font:500 9.5px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:rgba(214,224,255,.55)}
 .chipc b{display:block;margin-top:5px;font:500 18px/1 var(--D)}.chipc b em{margin-left:6px;font:600 10.5px/1 var(--M);font-style:normal;color:#3ddba5}
@@ -162,7 +158,7 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
 
       <div class="hero-main">
         <p class="lbl lt">Your workspace is ready</p>
-        <h1 id="hi"><span>Welcome,</span> <span class="l2" id="first">Farsana</span></h1>
+        <h1 id="hi"><span>Welcome,</span> <span class="l2" id="first"></span></h1>
         <p class="hero-sub" id="heroSub">Add the website you want Scoutly to watch. Your first audit fills this dashboard with <b>real findings from your own pages</b>.</p>
 
         <form class="cmd" id="scan" novalidate>
@@ -186,7 +182,7 @@ td.n{text-align:right;white-space:nowrap}th.n{text-align:right}
         <div class="radar">
           <span class="rr r1"></span><span class="rr r2"></span><span class="rr r3"></span><span class="x"></span><span class="y"></span>
           <span class="sweep"></span>
-          <img src="assets/scoutly.webp" alt="" width="180" height="194">
+          <img src="assets/scoutly-mark.svg" alt="" width="120" height="120">
           <div class="chipc a"><span class="mini" style="--v:0"></span><div><small>Health</small><b>—</b></div></div>
           <div class="chipc b"><div><small id="vizK">Waiting for</small><b id="vizV">your first site</b></div></div>
         </div>
