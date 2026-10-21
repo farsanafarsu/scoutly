@@ -81,7 +81,7 @@
   function render(){
     var on=[].map.call(document.querySelectorAll('#secs input:checked'),function(i){return i.value}),h=$('site').value,a=audits[h],out='';
     try{localStorage.setItem(KEY,JSON.stringify({secs:on,client:$('client').value,title:$('title').value,notes:$('notes').value}))}catch(_){}
-    out+='<div class="cover"><div><h1>'+esc($('title').value||'SEO report')+'</h1><p>'+(($('client').value?'Prepared for '+esc($('client').value)+' · ':'')+(h?esc(h)+' · ':''))+new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})+'</p><p>Prepared by '+esc(S.user.name)+'</p></div><span class="brand"><img src="assets/scoutly-mark.webp" alt="">Scoutly</span></div>';
+    out+='<div class="cover"><div><h1>'+esc($('title').value||'SEO report')+'</h1><p>'+(($('client').value?'Prepared for '+esc($('client').value)+' · ':'')+(h?esc(h)+' · ':''))+new Date().toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})+'</p><p>Prepared by '+esc(S.user.name)+'</p></div><span class="brand"><img src="assets/scoutly-mark.svg" alt="">Scoutly</span></div>';
     if($('notes').value.trim())out+='<h2>Summary</h2><p class="n">'+esc($('notes').value.trim())+'</p>';
     if(on.indexOf('audit')>-1){out+='<h2>Site audit</h2>';
       if(a){out+=kp([['Health score',a.score+'/100'],['Critical',a.critical],['Warnings',a.warning],['Notices',a.notice],['Pages crawled',a.pages],['Broken links',a.broken]])+'<p class="none">Audited '+new Date(a.at).toLocaleString()+' · '+esc(a.url)+'</p>';

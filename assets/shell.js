@@ -93,7 +93,7 @@
   var nav=NAV.map(function(g){return '<h2>'+g[0]+'</h2>'+g[1].map(function(it){
     var attrs=it[3]==='soon'?' data-soon="'+it[4]+'"':'',badge=it[3]==='lock'?'<em title="Needs a data provider">API</em>':it[3]==='soon'?'<em>Soon</em>':'';
     return '<a href="'+it[0]+'"'+attrs+(isCurrent(it[0])?' aria-current="page"':'')+'><svg class="i"><use href="#i-'+it[1]+'"/></svg>'+it[2]+badge+'</a>'}).join('')}).join('');
-  var aside='<aside class="side" id="side" aria-label="Workspace"><div class="side-logo"><a class="logo" href="./" aria-label="Scoutly home"><img src="assets/scoutly-mark.webp" alt="" width="30" height="30"><span>Scoutly</span></a></div>'+
+  var aside='<aside class="side" id="side" aria-label="Workspace"><div class="side-logo"><a class="logo" href="./" aria-label="Scoutly home"><img src="assets/scoutly-mark.svg" alt="" width="30" height="30"><span>Scoutly</span></a></div>'+
     '<nav class="side-nav" aria-label="SEO toolkit">'+nav+'<a href="#" id="logout"><svg class="i"><use href="#i-out"/></svg>Log out</a></nav><p class="side-foot">Early access · v0.2</p></aside><div class="scrim" id="scrim"></div>';
   document.currentScript.insertAdjacentHTML('beforebegin',sprite+aside);
 

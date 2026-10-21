@@ -1,0 +1,20 @@
+# Files Cloudflare must not publish: only the site's pages and assets are public.
+.env
+.env.*
+.git
+.github
+.gitignore
+.assetsignore
+.cache
+__pycache__
+*.py
+*.md
+requirements.txt
+config/
+core/
+accounts/
+seo/
+workspace/
+mongo_migrations/
+tools/
+staticfiles/
