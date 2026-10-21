@@ -529,6 +529,26 @@ code{font:400 12.5px var(--M)}
   .faq-h{position:static}.cnt{justify-self:start;text-align:left}.dash{grid-template-columns:minmax(0,1fr)}.d-side{display:none}.hz-track{overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:12px}.hc{scroll-snap-align:start}}
 @media(max-width:600px){.scope-chips li:nth-child(2n){display:none}.scope-chips li{font-size:10px;padding:7px 9px}.spec,.dark3,.pri,.tgrid,.anat,.fin-row,.d-cards{grid-template-columns:1fr}.sp{min-height:0}.sp h3{padding-top:24px}.scan{flex-direction:column;align-items:stretch}.scan .btn{width:100%}.faq .a{padding-right:0}.tn-chip{width:46px;height:46px;margin:-23px;font-size:11px}.tn-chip small{display:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hx-float li,.hx-h1 em,.hx-caret{animation:none}.js [data-rv]{transition-duration:.01s}}
+/* ===== phones, small phones and short landscape screens ===== */
+@media(max-width:1024px){.lbl,.hx-k,.ft-st{font-size:11.5px}.hd .btn.sm{font-size:11px}.hx-pill b,.case-hd b,.case-tabs i{font-size:11px}}
+@media(max-width:600px){
+  .sp a{display:inline-flex;margin-top:6px;padding:12px 0}.meet-link{display:inline-block;padding-top:14px}.ft-up{padding:12px 0;margin-top:14px}.ft nav a{padding:10px 0}
+  .scan input{flex:none}  /* in the stacked form, flex:1 collapsed the field to its text height */
+  .d-main,.d-list{grid-template-columns:minmax(0,1fr)}.d-main{padding:16px}.d-top{flex-wrap:wrap}.d-top b{font-size:16px}.d-ch{flex-wrap:wrap}.d-list>div{gap:8px}.d-list span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
+@media(max-width:400px){.hd-in{gap:10px}.logo{gap:7px;letter-spacing:.06em}.act{gap:6px}.act .btn.d{padding:0 10px;letter-spacing:.06em}}
+/* landscape phones: compact the hero demo so the whole window fits under the header while it's pinned */
+@media(max-height:520px) and (orientation:landscape){
+  .hx-pin{top:70px}.hx-win{--rh:38px}
+  .hx-bar{padding:6px 12px}.hx-q{height:32px;font-size:13px}.hx-dots,.hx-site,.hx-dom,.hx-sn{display:none}
+  .hx-res,.hx-audit,.hx-ai{padding:10px 14px}.hx-list{margin-top:6px}.hx-list li{grid-template-columns:18px 24px minmax(0,1fr);gap:10px}.hx-fav{width:24px;height:24px;font-size:12px}.hx-ttl{font-size:13px}
+  .hx-stats,.hx-iss{margin-top:8px}.hx-iss{gap:3px}.hx-iss li{padding:4px 10px}
+  .hx-ans{min-height:0;margin-top:8px;font-size:14px;line-height:1.55}.hx-cites{margin-top:8px}.hx-foot{padding:8px 14px}
+}
+@media(max-height:400px) and (orientation:landscape){
+  .hx-win{--rh:34px}.hx-ttl{font-size:12.5px}.hx-k{font-size:10.5px}.hx-iss li{padding:3px 10px}
+  .hx-stats span{padding:5px 8px}.hx-stats b{margin-bottom:3px;font-size:14px}.hx-ans{font-size:13px;line-height:1.5}
+}
 
 /* without JavaScript: plain stacked layout */
 html:not(.js) .tn-pin{height:auto;display:block;padding:100px 0}html:not(.js) .tn-st{margin:0 auto 56px}html:not(.js) .tn-count{display:none}
