@@ -30,7 +30,7 @@ from urllib.error import HTTPError, URLError
 from urllib.parse import parse_qs, quote, urljoin, urlparse, urlunparse
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # the site folder, one up from seo/
 # Many sites (Amazon, Cloudflare-protected shops) refuse or stall unknown bots, so pages are
 # requested like a normal Chrome browser. robots.txt rules are still read for ScoutlyBot and "*".
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
@@ -1253,13 +1253,17 @@ class Handler(SimpleHTTPRequestHandler):
             sys.stderr.write("%s %s\n" % (self.log_date_time_string(), msg))
 
 
-if __name__ == "__main__":
+def main():
     # tools.py and provider.py do `from server import ...`; without this they would load a second copy
     # of this file, and their AuditErrors wouldn't be caught by the handler here
-    sys.modules.setdefault("server", sys.modules[__name__])
+    sys.modules["server"] = sys.modules[__name__]
     port = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
     print(f"Scoutly running at http://localhost:{port}  (audit API: /api/audit?url=example.com)")
     print("PageSpeed Insights: " + ("using your API key" if PSI_KEY else "no PAGESPEED_API_KEY set, using Google's shared quota"))
     print("DataForSEO: " + ("credentials found (checked on first use)" if os.environ.get("DATAFORSEO_LOGIN") and os.environ.get("DATAFORSEO_PASSWORD")
                             else "not connected, set DATAFORSEO_LOGIN and DATAFORSEO_PASSWORD to turn on volume, rankings and backlinks"))
     ThreadingHTTPServer(("", port), Handler).serve_forever()
+
+
+if __name__ == "__main__":
+    main()
