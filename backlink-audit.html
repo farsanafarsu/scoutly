@@ -43,7 +43,8 @@
     <div id="out" hidden>
       <div class="kpis" id="kpis"></div>
       <section class="panel">
-        <div class="toolbar"><div class="seg" role="group" aria-label="Show" id="seg"></div><span class="grow"></span>
+        <div class="toolbar no-report"><div class="seg" role="group" aria-label="Show" id="seg"></div><span class="grow"></span>
+          <button class="btn sm" type="button" id="rep"><svg class="i"><use href="#i-dl"/></svg>Download report</button>
           <button class="btn sm" type="button" id="exp"><svg class="i"><use href="#i-dl"/></svg>Export CSV</button>
           <button class="btn sm" type="button" id="dis"><svg class="i"><use href="#i-dl"/></svg>Disavow file</button></div>
         <div class="dt-wrap"><table class="dt"><thead><tr><th>Linking page</th><th>Status</th><th>Link</th><th>Anchor text</th><th>Type</th><th class="n">Outbound domains</th><th>Risk</th></tr></thead><tbody id="rows"></tbody></table></div>
@@ -91,6 +92,8 @@
         .catch(function(err){$('load').hidden=true;$('go').disabled=false;$('err').textContent=err.message;if(rows.length){render();$('out').hidden=false}});
     })();
   });
+  $('rep').onclick=function(){if(!rows.length)return;var v=VIEWS.find(function(x){return x[0]===view});
+    S.report($('out'),{title:'Backlink audit report',file:'backlink-audit-'+S.slug(S.read('scoutly.blTarget')),meta:[['Website',S.read('scoutly.blTarget')],['Links checked',String(rows.length)],['Showing',v[1]+' links']]})};
   $('exp').onclick=function(){S.csv([['Linking page','Status','Link found','Anchor','Rel','Outbound domains','Risk','Flags']].concat(rows.map(function(r){return [r.source,r.status,r.found?'yes':'no',r.anchor,r.rel.join(' '),r.outbound,r.risk,r.flags.join('; ')]})),'scoutly-backlink-audit.csv')};
   $('dis').onclick=function(){var risky=rows.filter(function(r){return r.risk>=40});if(!risky.length)return S.say('No risky links to disavow.');
     var doms={};risky.forEach(function(r){try{doms[new URL(r.final||r.source).hostname.replace(/^www\./,'')]=1}catch(_){}});

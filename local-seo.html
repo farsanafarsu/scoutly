@@ -45,6 +45,7 @@
     <p class="qerr" id="err" role="alert"></p>
     <div class="loading" id="load" hidden><span class="spin"></span>Reading your website and listings…</div>
     <div id="out" hidden>
+      <div class="res-act no-report"><button class="btn sm" type="button" id="rep"><svg class="i"><use href="#i-dl"/></svg>Download report</button></div>
       <div class="kpis" id="kpis"></div>
       <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-list"/></svg></span><div><h2>NAP consistency</h2><p>Is the same name, address and phone on every page?</p></div></div>
         <div class="dt-wrap"><table class="dt"><thead><tr><th>Page</th><th>Name</th><th>Phone</th><th>Address</th><th>City</th></tr></thead><tbody id="napT"></tbody></table></div></section>
@@ -60,7 +61,7 @@
             <li><span>Post updates or offers at least monthly.</span></li>
             <li><span>Link the profile to the matching location page on your website.</span></li>
           </ul>
-          <div class="pad" style="border-top:1px solid var(--ln)"><a class="btn sm" id="kwLink" href="keyword-magic.html"><svg class="i"><use href="#i-wand"/></svg>Find local keywords</a></div></section>
+          <div class="pad no-report" style="border-top:1px solid var(--ln)"><a class="btn sm" id="kwLink" href="keyword-magic.html"><svg class="i"><use href="#i-wand"/></svg>Find local keywords</a></div></section>
       </div>
     </div>
   </main>
@@ -68,7 +69,7 @@
 <script src="assets/app.js"></script>
 <script>
 (function(){
-  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,KEY='scoutly.local';
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,KEY='scoutly.local',last=null;
   function digits(s){return (s||'').replace(/\D/g,'')}
   function norm(s){return (s||'').toLowerCase().replace(/&/g,' and ').replace(/[^a-z0-9]+/g,' ').trim()}
   function phoneIn(text,tels,phone){var d=digits(phone).slice(-10);if(d.length<6)return null;var all=digits(text)+' '+tels.map(digits).join(' ');return all.indexOf(d)>-1}
@@ -104,9 +105,10 @@
       $('kpis').innerHTML=[['list','Listings consistent',checked.length?consistent+' / '+checked.length:'—','Name, phone and address match'],['globe','Website signals',good+' / '+total,'Local checks passed'],['alert','Couldn’t check',rows.length-checked.length,'Blocked or empty pages'],['star','Reviews markup',lb&&lb.rating?'Yes':'No','On your website']]
         .map(function(k){return '<div class="kpi"><small><svg class="i"><use href="#i-'+k[0]+'"/></svg>'+k[1]+'</small><b>'+k[2]+'</b><span>'+k[3]+'</span></div>'}).join('');
       var svc=(me.h1[0]||me.title||'').split(/[|–—-]/)[0].trim().split(' ').slice(0,3).join(' ');$('kwLink').href='keyword-magic.html?q='+encodeURIComponent((svc||v.name)+' '+(v.city||'near me'));
-      $('load').hidden=true;$('out').hidden=false;
+      last={v:v,url:me.finalUrl};$('load').hidden=true;$('out').hidden=false;
     }).catch(function(e){$('load').hidden=true;$('err').textContent=e.message});
   });
+  $('rep').onclick=function(){if(last)S.report($('out'),{title:'Local SEO report',file:'local-seo-'+S.slug(last.url),meta:[['Business',last.v.name],['Website',last.url],['City',last.v.city],['Phone',last.v.phone]]})};
   try{var v=JSON.parse(localStorage.getItem(KEY)||'null');if(v){['name','phone','addr','city','site','dirs'].forEach(function(k){$(k).value=v[k]||''})}}catch(_){}
   if(!$('site').value)$('site').value=S.read('scoutly.site')||'';
 })();

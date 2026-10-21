@@ -231,8 +231,9 @@ td.u{max-width:420px;overflow-wrap:anywhere}td.n{text-align:right;white-space:no
           <div class="facts" id="facts"></div>
           <div class="counts" id="counts"></div>
         </div>
-        <div class="sum-act">
+        <div class="sum-act no-report">
           <button class="btn sm" type="button" id="rerun"><svg class="i"><use href="#i-pulse"/></svg>Re-run</button>
+          <button class="btn sm p" type="button" id="rep"><svg class="i"><use href="#i-dl"/></svg>Download report</button>
           <button class="btn sm" type="button" id="dl"><svg class="i"><use href="#i-rep"/></svg>Download JSON</button>
           <button class="btn sm" type="button" id="pr"><svg class="i"><use href="#i-page"/></svg>Print / PDF</button>
         </div>
@@ -465,6 +466,9 @@ td.u{max-width:420px;overflow-wrap:anywhere}td.n{text-align:right;white-space:no
   $('dl').onclick=function(){if(!data)return;var out=JSON.parse(JSON.stringify(data));out.pagespeed=psi;out.score=overall();out.checks=allChecks();
     var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(out,null,2)],{type:'application/json'}));
     a.download='scoutly-audit-'+new URL(data.finalUrl).hostname+'-'+data.fetchedAt.slice(0,10)+'.json';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500)};
+  /* report: issues only with every finding expanded, like Print */
+  $('rep').onclick=function(){if(!data)return;var prev=view;setView('issues');
+    S.report($('report'),{title:'SEO audit report',file:'audit-'+S.slug(data.finalUrl),meta:[['Website',data.finalUrl],['Keyword',data.keyword],['Score',overall()+' / 100'],['Pages crawled',String(data.crawl.length)]]}).then(function(){setView(prev)})};
   $('pr').onclick=function(){var prev=view;setView('issues');[].forEach.call(document.querySelectorAll('.fd'),function(d){d.open=true});window.print();setView(prev)};
 
   /* start from ?url=…&kw=… (campaign Audit buttons, dashboard) */

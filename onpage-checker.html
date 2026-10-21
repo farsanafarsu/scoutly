@@ -45,6 +45,7 @@
     <p class="qerr" id="err" role="alert"></p>
     <div class="loading" id="load" hidden><span class="spin"></span>Reading your page and the competitors…</div>
     <div id="out" hidden>
+      <div class="res-act no-report"><button class="btn sm" type="button" id="rep"><svg class="i"><use href="#i-dl"/></svg>Download report</button></div>
       <div class="kpis" id="kpis"></div>
       <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-bulb"/></svg></span><div><h2>Ideas to improve this page</h2><p id="ideasP"></p></div></div><div id="ideas"></div></section>
       <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-check"/></svg></span><div><h2>Already good</h2><p>Nothing to do here</p></div></div><div id="good"></div></section>
@@ -54,7 +55,7 @@
 <script src="assets/app.js"></script>
 <script>
 (function(){
-  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc;
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,last=null;
   $('kw').addEventListener('input',function(){$('gLink').href='https://www.google.com/search?q='+encodeURIComponent(this.value)});
   function has(s,kw){s=(s||'').toLowerCase();var t=kw.toLowerCase().split(/\s+/).filter(function(w){return w.length>2});return s.indexOf(kw.toLowerCase())>-1||(t.length&&t.every(function(w){return s.indexOf(w)>-1}))}
   function analyze(me,comps,kw){
@@ -106,9 +107,10 @@
       $('ideasP').textContent=me.finalUrl+' · “'+kw+'”';
       $('ideas').innerHTML=r.ideas.map(function(x){return '<div class="idea"><div class="k"><span class="tag">'+x.cat+'</span><span class="'+PR[x.pr][1]+'" style="font:600 10.5px/1 var(--M);letter-spacing:.1em;text-transform:uppercase">'+PR[x.pr][0]+' priority</span></div><div><h4>'+esc(x.title)+'</h4><p>'+esc(x.detail)+'</p>'+(x.terms?'<div class="terms">'+x.terms.map(function(t){return '<span class="tag in">'+esc(t)+'</span>'}).join('')+'</div>':'')+'</div></div>'}).join('')||'<p class="pad meta-note">No ideas: this page is in great shape for this keyword.</p>';
       $('good').innerHTML=r.good.map(function(t){return '<div class="ok-row"><svg class="i"><use href="#i-check"/></svg>'+esc(t)+'</div>'}).join('');
-      $('load').hidden=true;$('out').hidden=false;
+      last={url:me.finalUrl,kw:kw,comps:comps.length};$('load').hidden=true;$('out').hidden=false;
     }).catch(function(e){$('load').hidden=true;$('err').textContent=e.message});
   });
+  $('rep').onclick=function(){if(last)S.report($('out'),{title:'On-page SEO report',file:'onpage-'+S.slug(last.url),meta:[['Page',last.url],['Keyword',last.kw],['Competitors compared',String(last.comps)]]})};
   ['url','kw','c1','c2','c3'].forEach(function(k){if(S.qs(k))$(k).value=S.qs(k)});
   $('gLink').href='https://www.google.com/search?q='+encodeURIComponent($('kw').value);
   if(S.qs('url')&&S.qs('kw'))$('f').requestSubmit();else if(!$('url').value)$('url').value=S.read('scoutly.site')||'';
