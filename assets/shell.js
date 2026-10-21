@@ -47,7 +47,8 @@
     dl:'<path d="M12 4v12M7 11l5 5 5-5M4 20h16"/>',
     check:'<path d="M4 12l5 5L20 6"/>',
     star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
-    filter:'<path d="M3 5h18l-7 8v6l-4 2v-8z"/>'
+    filter:'<path d="M3 5h18l-7 8v6l-4 2v-8z"/>',
+    copy:'<path d="M9 9h11v11H9zM5 15H4V4h11v1"/>'
   };
   var sprite='<svg width="0" height="0" style="position:absolute" aria-hidden="true">'+Object.keys(I).map(function(k){return '<symbol id="i-'+k+'" viewBox="0 0 24 24">'+I[k]+'</symbol>'}).join('')+'</svg>';
 
@@ -78,7 +79,8 @@
       ['backlink-gap.html','gap','Backlink Gap','lock']]],
     ['Content',[
       ['writing-assistant.html','pen','SEO Writing Assistant'],
-      ['topic-research.html','bulb','Topic Research']]],
+      ['topic-research.html','bulb','Topic Research'],
+      ['plagiarism-checker.html','copy','Plagiarism Checker']]],
     ['AI visibility',[
       ['ai-search.html','ai','AI Search Visibility'],
       ['aeo-checker.html','geo','AEO · GEO Checker']]],
