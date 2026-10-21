@@ -36,9 +36,10 @@
   /* pages without the add-website box send the "+ Add a website" button to the dashboard */
   if($('projB')&&!$('scanUrl'))$('projB').addEventListener('click',function(){location.href='dashboard.html'});
 
-  if($('logout'))$('logout').addEventListener('click',function(e){e.preventDefault();
+  /* logout: the sidebar link and the top bar button */
+  [].forEach.call(document.querySelectorAll('[data-logout]'),function(el){el.addEventListener('click',function(e){e.preventDefault();
     try{['scoutly.user','scoutly.site','scoutly.campaigns','scoutly.audits'].forEach(function(k){sessionStorage.removeItem(k)})}catch(_){}
-    location.href='login.html?mode=login'});
+    location.href='login.html?mode=login'})});
 
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
   /* JSON from the local server (python server.py). Errors come back as {error} with a 200. */
