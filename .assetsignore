@@ -18,3 +18,4 @@ workspace/
 mongo_migrations/
 tools/
 staticfiles/
+wrangler.jsonc
