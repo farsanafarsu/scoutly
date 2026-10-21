@@ -1,0 +1,5 @@
+Django>=5.2,<6.0
+# MongoDB's official Django backend (installs pymongo). Its 5.2.x line matches Django 5.2.
+django-mongodb-backend>=5.2.4,<5.3
+# WSGI server in production (Linux/macOS):
+# gunicorn>=23

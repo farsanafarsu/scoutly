@@ -24,12 +24,12 @@ import time
 from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
-from server import AuditError
+from .engine import AuditError
 
 LOGIN = os.environ.get("DATAFORSEO_LOGIN", "").strip()
 PASSWORD = os.environ.get("DATAFORSEO_PASSWORD", "").strip()
 BASE = os.environ.get("DATAFORSEO_BASE", "https://api.dataforseo.com").rstrip("/")  # override only for testing
-CACHE_DIR = os.environ.get("DATAFORSEO_CACHE_DIR") or os.path.join(os.path.dirname(os.path.abspath(__file__)), ".cache", "dataforseo")
+CACHE_DIR = os.environ.get("DATAFORSEO_CACHE_DIR") or os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), ".cache", "dataforseo")
 TTL = 24 * 3600
 BATCH = 1000  # keywords per Keywords Data / bulk difficulty call
 
@@ -154,7 +154,7 @@ def status(refresh=False):
     """Are credentials set, and does DataForSEO accept them? Checked with the free user_data call."""
     if not (LOGIN and PASSWORD):
         return {"provider": "DataForSEO", "configured": False, "ok": False, "connected": False,
-                "message": "Not connected. Set DATAFORSEO_LOGIN and DATAFORSEO_PASSWORD, then restart python server.py."}
+                "message": "Not connected. Set DATAFORSEO_LOGIN and DATAFORSEO_PASSWORD in the .env file, then restart the server (python manage.py runserver)."}
     with _lock:
         fresh = _status["value"] and time.time() - _status["at"] < (600 if _status["value"]["ok"] else 60)
         if fresh and not refresh:

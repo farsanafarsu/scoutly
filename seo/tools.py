@@ -17,7 +17,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from urllib.parse import quote, urljoin, urlparse
 
-from server import UA, AuditError, _abs, _try, decode, fetch, norm_url, parse, safe_host, same_site
+from .engine import UA, AuditError, _abs, _try, decode, fetch, norm_url, parse, safe_host, same_site
 
 STOP = set("""a about above after again against all am an and any are aren't as at be because been before being below between both but by
 can can't cannot could couldn't did didn't do does doesn't doing don't down during each few for from further had hadn't has hasn't have haven't

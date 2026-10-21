@@ -1,15 +1,9 @@
-#!/usr/bin/env python3
-"""Scoutly local server.
+"""Scoutly's SEO audit engine.
 
-Serves the static site and runs real SEO audits at /api/audit?url=...&kw=...
-
-    python server.py            # http://localhost:8000
-    python server.py 9000       # another port
-
-Standard library only. The audit fetches the page you give it, reads robots.txt and
-the XML sitemap, crawls a limited number of internal pages (respecting robots.txt),
-checks links, and returns every finding as JSON for audit.html to render.
-Core Web Vitals come from the PageSpeed Insights API, which audit.html calls directly.
+run_audit() fetches the page you give it, reads robots.txt and the XML sitemap, crawls a limited
+number of internal pages (respecting robots.txt), checks links, and returns every finding as a
+dict for audit.html to render. Standard library only; seo/views.py exposes it at /api/audit.
+Core Web Vitals come from the PageSpeed Insights API, proxied by /api/pagespeed.
 """
 import gzip
 import html
@@ -18,19 +12,16 @@ import json
 import os
 import re
 import socket
-import sys
 import time
 import zlib
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from html.parser import HTMLParser
-from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from urllib import robotparser
 from urllib.error import HTTPError, URLError
-from urllib.parse import parse_qs, quote, urljoin, urlparse, urlunparse
+from urllib.parse import quote, urljoin, urlparse, urlunparse
 from urllib.request import HTTPRedirectHandler, Request, build_opener
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
 # Many sites (Amazon, Cloudflare-protected shops) refuse or stall unknown bots, so pages are
 # requested like a normal Chrome browser. robots.txt rules are still read for ScoutlyBot and "*".
 UA = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 Safari/537.36"
@@ -1114,152 +1105,3 @@ def _noindex(p, headers):
 
 def _first_href(links, base):
     return urljoin(base, links[0].get("href", "")) if links else None
-
-
-# ---------------------------------------------------------------- server
-
-def _tools():
-    import tools  # imported lazily: tools.py builds on the fetch/parse helpers above
-    return tools
-
-
-TOOL_ROUTES = {
-    "/api/keywords": lambda q: _tools().keyword_ideas(q.get("q", ""), q.get("hl", "en"), q.get("gl", "us"), q.get("deep", "1") != "0"),
-    "/api/topics": lambda q: _tools().topics(q.get("q", ""), q.get("hl", "en"), q.get("gl", "us")),
-    "/api/page": lambda q: _tools().page(q.get("url", ""), q.get("kw", "")),
-    "/api/domain": lambda q: _tools().domain(q.get("d", "")),
-    "/api/intent": lambda q: {"items": [{"kw": k, "intent": _tools().intent(k)} for k in
-                                        [" ".join(x.lower().split()) for x in q.get("q", "").split("\n")][:500] if k]},
-    "/api/ai-ready": lambda q: _tools().ai_ready(q.get("url", "")),
-    "/api/aeo": lambda q: _tools().aeo(q.get("url", ""), q.get("q", "")),
-    # optional DataForSEO data (provider.py). run=1 calls the API; without it only the cache answers.
-    "/api/provider/status": lambda q: _provider().status(q.get("refresh") == "1"),
-    "/api/provider/usage": lambda q: _provider().usage(),
-    "/api/provider/serp": lambda q: _provider().serp(q.get("q", ""), q.get("gl", "us"), q.get("run") == "1"),
-    "/api/provider/organic": lambda q: _provider().organic(q.get("d", ""), q.get("gl", "us"), q.get("run") == "1"),
-    "/api/provider/traffic": lambda q: _provider().traffic(q.get("d", ""), q.get("gl", "us"), q.get("run") == "1"),
-    "/api/provider/backlinks": lambda q: _provider().backlinks(q.get("d", ""), q.get("run") == "1"),
-    "/api/provider/gap": lambda q: _provider().backlink_gap(q.get("you", ""), [c for c in q.get("c", "").split(",") if c.strip()],
-                                                            q.get("mode", "partial"), q.get("run") == "1"),
-}
-
-POST_ROUTES = {
-    "/api/backlinks": lambda b: _tools().backlink_audit(str(b.get("target") or ""), [str(s) for s in b.get("sources") or []]),
-    "/api/provider/keywords": lambda b: _provider().keyword_metrics([str(k) for k in b.get("keywords") or []][:5000],
-                                                                    str(b.get("gl") or "us"), bool(b.get("run"))),
-    "/api/provider/clear-cache": lambda b: _provider().clear_cache(),
-}
-
-
-def _provider():
-    import provider
-    return provider
-
-
-class Handler(SimpleHTTPRequestHandler):
-    def __init__(self, *a, **k):
-        super().__init__(*a, directory=ROOT, **k)
-
-    def end_headers(self):
-        self.send_header("Cache-Control", "no-store")
-        super().end_headers()
-
-    def _json(self, code, obj):
-        body = json.dumps(obj).encode()
-        self.send_response(code)
-        self.send_header("Content-Type", "application/json; charset=utf-8")
-        self.send_header("Content-Length", str(len(body)))
-        self.end_headers()
-        self.wfile.write(body)
-
-    def _tool(self, fn):
-        """Run a research tool; expected failures go back as {error} with a 200, like /api/audit."""
-        try:
-            return self._json(200, fn())
-        except AuditError as e:
-            return self._json(200, {"error": str(e), **getattr(e, "extra", {})})
-        except Exception as e:
-            return self._json(500, {"error": f"The tool failed unexpectedly: {e.__class__.__name__}"})
-
-    def do_POST(self):
-        u = urlparse(self.path)
-        if u.path not in POST_ROUTES:
-            self.send_error(404)
-            return
-        length = min(int(self.headers.get("Content-Length") or 0), 1_000_000)
-        try:
-            body = json.loads(self.rfile.read(length) or b"{}")
-        except ValueError:
-            return self._json(400, {"error": "Send JSON."})
-        if not isinstance(body, dict):
-            return self._json(400, {"error": "Send a JSON object."})
-        return self._tool(lambda: POST_ROUTES[u.path](body))
-
-    def do_GET(self):
-        u = urlparse(self.path)
-        if u.path == "/api/audit":
-            q = parse_qs(u.query)
-            target = (q.get("url") or [""])[0]
-            if not target.strip():
-                return self._json(400, {"error": "Add a website address to audit."})
-            try:
-                return self._json(200, run_audit(target, (q.get("kw") or [""])[0]))
-            except AuditError as e:  # an expected outcome (site blocked, unknown domain), so not an HTTP error
-                return self._json(200, {"error": str(e)})
-            except Exception as e:  # keep the server alive and tell the page what happened
-                return self._json(500, {"error": f"The audit failed unexpectedly: {e.__class__.__name__}"})
-        if u.path == "/api/pagespeed":
-            return self._pagespeed((parse_qs(u.query).get("url") or [""])[0])
-        if u.path in TOOL_ROUTES:
-            q = {k: v[0] for k, v in parse_qs(u.query).items()}
-            return self._tool(lambda: TOOL_ROUTES[u.path](q))
-        if u.path == "/api/health":
-            return self._json(200, {"ok": True})
-        # never serve source control, the server itself or dotfiles
-        parts = [p for p in u.path.split("/") if p]
-        if any(p.startswith(".") for p in parts) or u.path.endswith(".py"):
-            self.send_error(404)
-            return
-        return super().do_GET()
-
-    def _pagespeed(self, target):
-        """Proxy PageSpeed Insights so an API key stays on the server."""
-        if not re.match(r"^https?://", target or "", re.I):
-            return self._json(400, {"error": {"message": "Missing url"}})
-        q = "strategy=mobile&category=performance&url=" + quote(target, safe="")
-        if PSI_KEY:
-            q += "&key=" + quote(PSI_KEY, safe="")
-        try:
-            with build_opener().open(Request("https://www.googleapis.com/pagespeedonline/v5/runPagespeed?" + q, headers={"User-Agent": UA}), timeout=100) as r:
-                body = json.loads(r.read())
-            body["scoutlyHasKey"] = bool(PSI_KEY)
-            return self._json(200, body)
-        except HTTPError as e:
-            try:
-                body = json.loads(e.read())
-            except Exception:
-                body = {"error": {"message": f"HTTP {e.code}"}}
-            # answer 200 and put Google's status in the body: a quota limit is an expected outcome,
-            # not a broken request, so the browser shouldn't log it as a failed resource
-            body["scoutlyHasKey"] = bool(PSI_KEY)
-            body["scoutlyStatus"] = e.code
-            return self._json(200, body)
-        except Exception as e:
-            return self._json(200, {"error": {"message": f"PageSpeed Insights didn't respond ({e.__class__.__name__})"}, "scoutlyStatus": 504, "scoutlyHasKey": bool(PSI_KEY)})
-
-    def log_message(self, fmt, *args):
-        msg = fmt % args
-        if "/api/" in msg:  # keep the console quiet for static files
-            sys.stderr.write("%s %s\n" % (self.log_date_time_string(), msg))
-
-
-if __name__ == "__main__":
-    # tools.py and provider.py do `from server import ...`; without this they would load a second copy
-    # of this file, and their AuditErrors wouldn't be caught by the handler here
-    sys.modules.setdefault("server", sys.modules[__name__])
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
-    print(f"Scoutly running at http://localhost:{port}  (audit API: /api/audit?url=example.com)")
-    print("PageSpeed Insights: " + ("using your API key" if PSI_KEY else "no PAGESPEED_API_KEY set, using Google's shared quota"))
-    print("DataForSEO: " + ("credentials found (checked on first use)" if os.environ.get("DATAFORSEO_LOGIN") and os.environ.get("DATAFORSEO_PASSWORD")
-                            else "not connected, set DATAFORSEO_LOGIN and DATAFORSEO_PASSWORD to turn on volume, rankings and backlinks"))
-    ThreadingHTTPServer(("", port), Handler).serve_forever()
