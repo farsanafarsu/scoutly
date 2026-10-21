@@ -467,7 +467,7 @@ td.u{max-width:420px;overflow-wrap:anywhere}td.n{text-align:right;white-space:no
     a.download='scoutly-audit-'+new URL(data.finalUrl).hostname+'-'+data.fetchedAt.slice(0,10)+'.json';document.body.appendChild(a);a.click();setTimeout(function(){URL.revokeObjectURL(a.href);a.remove()},500)};
   $('pr').onclick=function(){var prev=view;setView('issues');[].forEach.call(document.querySelectorAll('.fd'),function(d){d.open=true});window.print();setView(prev)};
 
-  /* start from ?url=…&kw=… (campaign Audit buttons, External audit dialog, dashboard) */
+  /* start from ?url=…&kw=… (campaign Audit buttons, dashboard) */
   var q=new URLSearchParams(location.search);
   if(q.get('url')){$('url').value=q.get('url');$('kw').value=q.get('kw')||'';run(q.get('url'),q.get('kw')||'')}
   else{var site=S.read('scoutly.site');if(site)$('url').value=site;$('url').focus()}
