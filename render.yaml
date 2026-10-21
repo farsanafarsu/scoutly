@@ -1,0 +1,21 @@
+# Render Blueprint for the Scoutly API (seo/engine.py). The live site's Cloudflare Worker forwards /api/* here.
+# Standard library only, so there is nothing to install.
+services:
+  - type: web
+    name: scoutly-api
+    runtime: python
+    plan: free
+    buildCommand: python --version
+    startCommand: python server.py
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: SCOUTLY_API_ONLY
+        value: "1"
+      # copy this generated value into Cloudflare as the API_KEY secret
+      - key: SCOUTLY_PROXY_KEY
+        generateValue: true
+      # optional: a free Google key gives PageSpeed its own quota
+      - key: PAGESPEED_API_KEY
+        sync: false

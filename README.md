@@ -29,3 +29,19 @@ Commit the generated files. No dependencies are needed (Node 18+).
 
 1. Set the real domain in `tools/site.config.mjs` (it's currently the placeholder `https://scoutly.example`), then run `node tools/build-pages.mjs`. This also updates the canonical, Open Graph and JSON-LD URLs in `index.html`.
 2. `404.html` uses root-relative links (`/…`), which assumes the site is served from the domain root (a custom domain). If you deploy to a project URL such as `user.github.io/scoutly/`, adjust those links.
+
+## The app's tools (the `/api` server)
+
+The app pages (dashboard, audits, keyword and domain tools) call `/api/…`, answered by the Python server in `seo/` (standard library only, Python 3.12+).
+
+- **Locally:** `python server.py` (or `python server.py 9000` for another port) serves the whole site with the API at http://localhost:8000.
+- **Live:** Cloudflare serves the pages. `worker.js` runs only for `/api/*` and forwards it to the same server hosted on Render (`render.yaml`). The Worker adds a shared key, and the hosted server (`SCOUTLY_API_ONLY=1`) refuses requests without it and serves nothing but the API.
+
+### Connecting the live site
+
+1. **Render:** New → Blueprint → pick this repository. It creates `scoutly-api` from `render.yaml`. When it's live, note its URL (`https://scoutly-api-….onrender.com`) and copy the generated `SCOUTLY_PROXY_KEY` from the service's Environment tab.
+2. **Cloudflare:** Workers & Pages → `scoutly` → Settings → Variables and Secrets → add a **Secret** named `API_KEY` with that key.
+3. Put the Render URL in `API_ORIGIN` in `wrangler.jsonc` (no trailing slash) and push to `main`. Set it there, not in the dashboard: a deploy replaces dashboard variables with the ones in `wrangler.jsonc`.
+4. Check: `https://<your site>/api/health` should return `{"ok": true}`, then try Domain Overview.
+
+Render's free plan sleeps after 15 minutes without traffic, so the first tool run after a quiet spell can take up to a minute. Optional Render variables: `PAGESPEED_API_KEY` (own PageSpeed quota), and `DATAFORSEO_LOGIN` / `DATAFORSEO_PASSWORD`, which turn on paid data billed to that account for anyone using the live site.

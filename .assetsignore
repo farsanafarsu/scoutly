@@ -19,3 +19,5 @@ mongo_migrations/
 tools/
 staticfiles/
 wrangler.jsonc
+worker.js
+render.yaml

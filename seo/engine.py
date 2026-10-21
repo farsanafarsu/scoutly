@@ -12,6 +12,7 @@ checks links, and returns every finding as JSON for audit.html to render.
 Core Web Vitals come from the PageSpeed Insights API, which audit.html calls directly.
 """
 import gzip
+import hmac
 import html
 import ipaddress
 import json
@@ -45,6 +46,10 @@ ALLOW_PRIVATE = os.environ.get("SCOUTLY_ALLOW_PRIVATE") == "1"  # lets you audit
 # Google's keyless PageSpeed quota is shared and often used up. A free key from
 # https://developers.google.com/speed/docs/insights/v5/get-started goes in this env var.
 PSI_KEY = os.environ.get("PAGESPEED_API_KEY", "").strip()
+# Hosted behind the Cloudflare Worker (worker.js): serve the API only, and answer only requests that
+# carry the Worker's shared key, so nobody can use the hosted server directly.
+API_ONLY = os.environ.get("SCOUTLY_API_ONLY") == "1"
+PROXY_KEY = os.environ.get("SCOUTLY_PROXY_KEY", "").strip()
 AI_BOTS = ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "CCBot"]
 AI_SEARCH_BOTS = {"OAI-SearchBot", "PerplexityBot", "Claude-SearchBot"}
 SKIP_EXT = re.compile(r"\.(jpe?g|png|gif|webp|avif|svg|ico|pdf|zip|rar|gz|mp4|webm|mp3|wav|css|js|json|xml|txt|woff2?|ttf|eot|docx?|xlsx?|pptx?)$", re.I)
@@ -1181,8 +1186,22 @@ class Handler(SimpleHTTPRequestHandler):
         except Exception as e:
             return self._json(500, {"error": f"The tool failed unexpectedly: {e.__class__.__name__}"})
 
+    def _refused(self, path):
+        """True (and answered) when a hosted server gets a request that didn't come through the Worker."""
+        if path == "/api/health":
+            return False
+        if API_ONLY and not path.startswith("/api/"):
+            self.send_error(404)
+            return True
+        if PROXY_KEY and not hmac.compare_digest(self.headers.get("X-Scoutly-Key", ""), PROXY_KEY):
+            self._json(403, {"error": "This Scoutly server only answers requests from the Scoutly site."})
+            return True
+        return False
+
     def do_POST(self):
         u = urlparse(self.path)
+        if self._refused(u.path):
+            return
         if u.path not in POST_ROUTES:
             self.send_error(404)
             return
@@ -1197,6 +1216,8 @@ class Handler(SimpleHTTPRequestHandler):
 
     def do_GET(self):
         u = urlparse(self.path)
+        if self._refused(u.path):
+            return
         if u.path == "/api/audit":
             q = parse_qs(u.query)
             target = (q.get("url") or [""])[0]
@@ -1257,7 +1278,7 @@ def main():
     # tools.py and provider.py do `from server import ...`; without this they would load a second copy
     # of this file, and their AuditErrors wouldn't be caught by the handler here
     sys.modules["server"] = sys.modules[__name__]
-    port = int(sys.argv[1]) if len(sys.argv) > 1 else 8000
+    port = int(sys.argv[1]) if len(sys.argv) > 1 else int(os.environ.get("PORT") or 8000)  # hosts set PORT
     print(f"Scoutly running at http://localhost:{port}  (audit API: /api/audit?url=example.com)")
     print("PageSpeed Insights: " + ("using your API key" if PSI_KEY else "no PAGESPEED_API_KEY set, using Google's shared quota"))
     print("DataForSEO: " + ("credentials found (checked on first use)" if os.environ.get("DATAFORSEO_LOGIN") and os.environ.get("DATAFORSEO_PASSWORD")
