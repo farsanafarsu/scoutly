@@ -167,13 +167,16 @@
   function icon(id){var s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('class','i');s.setAttribute('aria-hidden','true');var u=document.createElementNS('http://www.w3.org/2000/svg','use');u.setAttribute('href','#'+id);s.appendChild(u);return s}
   function fmt(d){if(!d)return '';var x=new Date(d+(d.length===10?'T00:00':''));return isNaN(x)?d:x.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}
   function norm(u){u=u.trim();return /^https?:\/\//i.test(u)?u:'https://'+u}
+  /* backlinks logged for this campaign in the Backlink Manager (matched by "brand — name", as it lists them) */
+  var links=[];try{links=JSON.parse(localStorage.getItem('scoutly.backlinks')||'[]')||[]}catch(_){}
+  function linkCount(c){var n=c.brand?c.brand+' — '+c.name:c.name;return links.filter(function(b){return b.campaign===n}).length}
 
   function card(c){
     var a=el('article','card');
     var h=el('div','card-h');h.appendChild(icon('i-target'));h.appendChild(el('h3',null,c.name)).title=c.name;
     var st=el('span','st '+(c.status==='Active'?'on':'off'));st.appendChild(el('i'));st.appendChild(document.createTextNode(c.status));h.appendChild(st);a.appendChild(h);
     var b=el('div','card-b');
-    var r1=el('div','row');r1.appendChild(icon('i-build'));r1.appendChild(el('b',null,c.brand));var bl=el('span','pill bl sp');bl.appendChild(icon('i-link'));bl.appendChild(document.createTextNode((c.backlinks||0)+' backlinks'));r1.appendChild(bl);b.appendChild(r1);
+    var r1=el('div','row');r1.appendChild(icon('i-build'));r1.appendChild(el('b',null,c.brand));var bl=el('span','pill bl sp');bl.appendChild(icon('i-link'));bl.appendChild(document.createTextNode(linkCount(c)+' backlinks'));r1.appendChild(bl);b.appendChild(r1);
     var m=el('div','meta');
     if(c.loc){var r2=el('span','row');r2.appendChild(icon('i-pin'));r2.appendChild(document.createTextNode(c.loc));m.appendChild(r2)}
     if(c.end){var r3=el('span','row');r3.appendChild(icon('i-cal'));r3.appendChild(document.createTextNode('Ends '+fmt(c.end)));m.appendChild(r3)}

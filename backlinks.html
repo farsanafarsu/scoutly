@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backlink Manager — Scoutly</title>
+<meta name="description" content="Log the backlinks you build for each website and campaign, and check they're still live.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<script>
+/* demo gate: no demo login in this tab → back to the login page */
+(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+/* backlink manager */
+.ph{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
+.ph h1{margin-top:14px;font:500 clamp(28px,3vw,44px)/1 var(--D);text-transform:uppercase;letter-spacing:.01em}
+.ph .desc{margin-top:10px;max-width:600px;font:400 13px/1.7 var(--M);color:var(--sl)}
+.ph-act{display:flex;flex-wrap:wrap;gap:10px}
+.kpi small svg{width:14px;height:14px;color:var(--b)}
+.tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:22px}
+.search{position:relative;flex:1;min-width:240px;max-width:620px}
+.search svg{position:absolute;left:14px;top:50%;margin-top:-9px;color:var(--mu)}
+.search input{width:100%;height:46px;padding:0 14px 0 42px;border:1px solid var(--ln);border-radius:3px;background:var(--card);color:var(--ink);font:400 14px/1 var(--M)}
+.search input:focus,.filters select:focus{outline:0;border-color:var(--b);box-shadow:0 0 0 3px rgba(47,91,255,.12)}
+.tools .grow{flex:1}
+.btn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.count{font:500 11px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
+.filters{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px;margin-top:12px;padding:14px 16px;background:var(--card);border:1px solid var(--ln)}
+.filters label{display:grid;gap:6px;font:500 10px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--sl)}
+.filters select{height:38px;min-width:170px;max-width:280px;padding:0 10px;border:1px solid var(--ln);border-radius:3px;background:#fff;font:400 13px/1 var(--M);color:var(--ink)}
+.progress{display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px 16px;background:var(--card);border:1px solid var(--ln);font:400 12.5px/1.5 var(--M);color:var(--sl)}
+.bl-table{margin-top:14px}
+.bl-table .dt td{vertical-align:middle}
+.bl-table .dt th{background:var(--nv);color:#cfd8ff}
+.bl-table .dt th.sortable:hover{color:#fff}
+.bl-table .dt th[aria-sort] .ar:after{content:" ↓"}.bl-table .dt th[aria-sort="ascending"] .ar:after{content:" ↑"}
+.camp{min-width:170px;max-width:240px;font:500 13px/1.4 Geist,system-ui,sans-serif;color:var(--ink)}
+.lnk{display:block;max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--b)}
+.lnk:hover{text-decoration:underline}
+.lnk b{font-weight:600}
+.to{display:block;max-width:340px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--mu)}
+.n{text-align:right;font-variant-numeric:tabular-nums}
+.when{min-width:130px}
+.by{min-width:110px}
+.acts{display:flex;gap:6px;justify-content:flex-end}
+.btn.ic{width:32px;height:32px;padding:0}.btn.ic svg{width:15px;height:15px}
+.btn.ic.del:hover{background:var(--cr);border-color:var(--cr)}
+.more{display:flex;justify-content:center;padding:14px}
+.zero{margin-top:22px}
+/* add / edit / import dialog */
+.dlg{width:min(600px,calc(100% - 32px));max-height:calc(100% - 32px);padding:0;border:0;background:transparent;color:var(--ink)}
+.dlg::backdrop{background:rgba(5,10,31,.6);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.dlg-c{position:relative;background:var(--card);border:1px solid var(--ln);box-shadow:0 40px 100px -30px rgba(5,10,31,.6)}
+.dlg-h{display:flex;align-items:center;gap:14px;padding:18px 22px;background:var(--nv);color:#fff}
+.dlg-h h2{flex:1;font:500 18px/1.2 var(--D);letter-spacing:.04em;text-transform:uppercase}
+.dlg-h .x{display:grid;place-items:center;width:34px;height:34px;border:1px solid rgba(255,255,255,.2);background:none;color:#fff;cursor:pointer}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;padding:20px 22px 6px}
+.f{display:grid;gap:6px;align-content:start}.f.w{grid-column:1/-1}
+.f label{font:500 10.5px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--sl)}.f label i{font-style:normal;color:var(--cr)}
+.f input,.f select,.f textarea{width:100%;height:44px;padding:0 12px;border:1px solid var(--ln);border-radius:3px;background:#fff;color:var(--ink);font:400 14px/1 var(--M)}
+.f textarea{height:auto;min-height:96px;padding:10px 12px;line-height:1.5;resize:vertical}
+.f input:focus,.f select:focus,.f textarea:focus{outline:0;border-color:var(--b);box-shadow:0 0 0 3px rgba(47,91,255,.12)}
+.f [aria-invalid="true"]{border-color:var(--cr)}
+.f .err{min-height:16px;font:500 11px/1.4 var(--M);color:var(--cr)}
+.f .hint{font:400 11px/1.5 var(--M);color:var(--mu)}
+.dlg-f{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px 20px}
+@media(max-width:700px){.fg{grid-template-columns:1fr}.ph-act{width:100%}.ph-act .btn{flex:1}}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <div>
+        <p class="lbl">Link building</p>
+        <h1>Backlink Manager</h1>
+        <p class="desc">Log every backlink you build for your websites and campaigns, then check they’re still live and pointing at the right page. Saved in this browser.</p>
+      </div>
+      <div class="ph-act">
+        <button class="btn" type="button" id="impB"><svg class="i"><use href="#i-upload"/></svg>Import CSV</button>
+        <button class="btn" type="button" id="expB"><svg class="i"><use href="#i-dl"/></svg>Export CSV</button>
+        <button class="btn p" type="button" data-new><svg class="i"><use href="#i-plus"/></svg>Add backlink</button>
+      </div>
+    </div>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div class="tools">
+      <label class="search"><span class="sr-only">Search backlinks</span><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Search by keyword, brand or link…" autocomplete="off"></label>
+      <button class="btn" type="button" id="checkB"><svg class="i"><use href="#i-pulse"/></svg>Check status</button>
+      <button class="btn" type="button" id="filterB" aria-pressed="false" aria-controls="filters"><svg class="i"><use href="#i-filter"/></svg>Filter</button>
+      <span class="grow"></span>
+      <span class="count" id="count" aria-live="polite"></span>
+    </div>
+    <div class="filters" id="filters" hidden>
+      <label>Campaign<select id="fCamp"></select></label>
+      <label>Link type<select id="fType"></select></label>
+      <label>Status<select id="fStat"></select></label>
+      <label>Added by<select id="fBy"></select></label>
+      <button class="btn sm" type="button" id="clearF">Clear filters</button>
+    </div>
+    <div class="progress" id="prog" hidden role="status"><span class="spin"></span><span id="progT"></span></div>
+
+    <section class="panel empty zero" id="zero" hidden>
+      <div class="empty-i" aria-hidden="true"><svg class="i"><use href="#i-link"/></svg></div>
+      <h3>No backlinks logged yet</h3>
+      <p>Add the links you’ve built, one at a time or many at once, or import a CSV from the tool you use now.</p>
+      <button class="btn p" type="button" data-new><svg class="i"><use href="#i-plus"/></svg>Add your first backlink</button>
+    </section>
+
+    <section class="panel bl-table" id="tbl" hidden>
+      <div class="dt-wrap" style="max-height:none"><table class="dt">
+        <thead><tr><th>Campaign</th><th>Link</th><th>Link type</th><th class="n sortable" data-s="da" tabindex="0"><span class="ar">DA</span></th><th>Status</th><th class="sortable" data-s="added" tabindex="0" aria-sort="descending"><span class="ar">Added</span></th><th>Added by</th><th class="n">Actions</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table></div>
+      <div class="more" id="more" hidden><button class="btn sm" type="button" id="moreB">Show more</button></div>
+    </section>
+  </main>
+</div>
+
+<dialog class="dlg" id="dlg" aria-labelledby="dlgH">
+  <form class="dlg-c" id="form" method="dialog" novalidate>
+    <div class="dlg-h"><h2 id="dlgH">Add backlink</h2><button class="x" type="button" id="dlgX" aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></div>
+    <div class="fg">
+      <div class="f w"><label for="iCamp">Campaign <i>*</i></label><input id="iCamp" list="camps" placeholder="e.g. Serene Derma — PRP treatment in Kollam" autocomplete="off"><datalist id="camps"></datalist><p class="err" id="iCampE"></p></div>
+      <div class="f w"><label for="iTarget">Your page the links point to</label><input id="iTarget" inputmode="url" autocapitalize="off" spellcheck="false" placeholder="https://yourwebsite.com/page"><p class="hint">Needed for Check status. Filled in for campaigns you’ve used before.</p><p class="err" id="iTargetE"></p></div>
+      <div class="f w"><label for="iLink" id="iLinkL">Backlink URLs <i>*</i></label><textarea id="iLink" inputmode="url" autocapitalize="off" spellcheck="false" placeholder="https://example.com/article-with-your-link&#10;One per line to add several"></textarea><p class="err" id="iLinkE"></p></div>
+      <div class="f"><label for="iType">Link type</label><select id="iType"></select><p class="err"></p></div>
+      <div class="f"><label for="iDa">DA (0–100)</label><input id="iDa" type="number" min="0" max="100" step="0.1" inputmode="decimal" placeholder="e.g. 94"><p class="err" id="iDaE"></p></div>
+      <div class="f w"><label for="iBy">Added by</label><input id="iBy" autocomplete="name"><p class="err"></p></div>
+    </div>
+    <div class="dlg-f"><button class="btn" type="button" id="dlgC">Cancel</button><button class="btn p" type="submit" id="dlgS">Add backlink</button></div>
+  </form>
+</dialog>
+<input type="file" id="impF" accept=".csv,text/csv" hidden>
+
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  /* backlinks live in this browser (localStorage) until the account backend is live */
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,KEY='scoutly.backlinks';
+  var TYPES=['Article','Blog','Guest post','Profile','Directory','Social bookmark','Forum','Comment','PDF / document','Other'];
+  var STATUS={live:['Live','ok'],nofollow:['Nofollow','wr'],missing:['Link missing','bad'],broken:['Page broken','bad'],'':['Not checked','']};
+  var list=load(),editing=null,shown=100,sortBy='added',sortDir=-1;
+
+  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')||[]}catch(_){return []}}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(list));return true}catch(_){S.say('Browser storage is full, so this change wasn’t saved. Export a CSV and delete old links.');return false}}
+  function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
+  function norm(u){u=String(u||'').trim();return !u?'':/^https?:\/\//i.test(u)?u:'https://'+u}
+  function host(u){try{return new URL(norm(u)).hostname.replace(/^www\./,'').toLowerCase()}catch(_){return ''}}
+  function same(camp,u){u=norm(u).replace(/^https?:\/\/(www\.)?/i,'').replace(/[\/#?]+$/,'');var i=u.indexOf('/');return camp+'|'+(i<0?u.toLowerCase():u.slice(0,i).toLowerCase()+u.slice(i))}
+  function isUrl(u){return /^(https?:\/\/)?[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?$/i.test(String(u||'').trim())}
+  function when(iso){var d=new Date(iso);if(isNaN(d))return '';var o={weekday:'short',month:'short',day:'numeric',year:'numeric'};
+    if(d.getHours()||d.getMinutes()){o.hour='2-digit';o.minute='2-digit'}return d.toLocaleString(undefined,o)}  /* date-only imports show just the date */
+  function daOf(v){if(v===''||v==null)return null;var n=parseFloat(String(v).replace(',','.'));return isNaN(n)?null:Math.max(0,Math.min(100,Math.round(n*10)/10))}
+  function opts(sel,label,values){var cur=sel.value;sel.innerHTML='<option value="">'+label+'</option>'+values.map(function(v){return '<option>'+esc(v)+'</option>'}).join('');if(values.indexOf(cur)>-1)sel.value=cur}
+  function uniq(a){return a.filter(function(v,i){return v&&a.indexOf(v)===i}).sort(function(x,y){return x.localeCompare(y)})}
+
+  /* campaigns you can pick from: the ones on these links, plus the SEO Campaigns in this tab */
+  function campaigns(){var m={};list.forEach(function(b){if(b.campaign&&!m[b.campaign])m[b.campaign]=b.target||''});
+    try{(JSON.parse(S.read('scoutly.campaigns')||'[]')||[]).forEach(function(c){var n=c.brand?c.brand+' — '+c.name:c.name;if(n&&!m[n])m[n]=c.url||''})}catch(_){}
+    return m}
+
+  /* ---------- table, stats, filters */
+  function filtered(){var q=$('q').value.trim().toLowerCase(),c=$('fCamp').value,t=$('fType').value,st=$('fStat').value,by=$('fBy').value;
+    return list.filter(function(b){return (!c||b.campaign===c)&&(!t||b.type===t)&&(!by||b.by===by)&&(!st||STATUS[b.status||''][0]===st)&&
+      (!q||[b.campaign,b.link,b.type,b.by].join(' ').toLowerCase().indexOf(q)>-1)})
+      .sort(function(a,b){var x=sortBy==='da'?(a.da==null?-1:a.da):a.added,y=sortBy==='da'?(b.da==null?-1:b.da):b.added;return (x<y?-1:x>y?1:0)*sortDir})}
+  function kpis(){var doms={},camps={},das=[],now=new Date(),month=0,live=0,checked=0;
+    list.forEach(function(b){var h=host(b.link);if(h)doms[h]=1;if(b.campaign)camps[b.campaign]=1;if(b.da!=null)das.push(b.da);
+      var d=new Date(b.added);if(d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth())month++;
+      if(b.status){checked++;if(b.status==='live'||b.status==='nofollow')live++}});
+    var avg=das.length?das.reduce(function(a,b){return a+b},0)/das.length:null;
+    $('kpis').innerHTML=[['link','Total backlinks',list.length.toLocaleString(),'Across all campaigns'],['globe','Unique domains',Object.keys(doms).length.toLocaleString(),'Sites linking to you'],
+      ['rocket','Total campaigns',Object.keys(camps).length.toLocaleString(),'With at least one link'],['trend','Average DA',avg==null?'—':avg.toFixed(1),das.length+' link'+(das.length===1?'':'s')+' with a DA'],
+      ['cal','Added this month',month.toLocaleString(),now.toLocaleDateString(undefined,{month:'long',year:'numeric'})],['check','Still live',checked?live+' / '+checked:'—',checked?'Of the links checked':'Run Check status']]
+      .map(function(k){return '<div class="kpi"><small><svg class="i"><use href="#i-'+k[0]+'"/></svg>'+k[1]+'</small><b>'+k[2]+'</b><span>'+k[3]+'</span></div>'}).join('')}
+  function render(){
+    opts($('fCamp'),'All campaigns',uniq(list.map(function(b){return b.campaign})));
+    opts($('fType'),'All link types',uniq(list.map(function(b){return b.type})));
+    opts($('fStat'),'Any status',uniq(list.map(function(b){return STATUS[b.status||''][0]})));
+    opts($('fBy'),'Anyone',uniq(list.map(function(b){return b.by})));
+    kpis();
+    var rows=filtered();$('zero').hidden=list.length>0;$('tbl').hidden=list.length===0;
+    $('count').textContent=list.length?(rows.length===list.length?list.length.toLocaleString():rows.length.toLocaleString()+' of '+list.length.toLocaleString())+' backlink'+(list.length===1?'':'s'):'';
+    $('rows').innerHTML=rows.length?rows.slice(0,shown).map(function(b){var s=STATUS[b.status||''],h=host(b.link),path=b.link.replace(/^https?:\/\/(www\.)?[^\/]+/i,'');
+      return '<tr><td class="camp">'+esc(b.campaign)+'</td>'+
+        '<td><a class="lnk" href="'+esc(norm(b.link))+'" target="_blank" rel="noopener noreferrer nofollow" title="'+esc(b.link)+'"><b>'+esc(h)+'</b>'+esc(path)+'</a>'+(b.target?'<span class="to" title="'+esc(b.target)+'">→ '+esc(b.target.replace(/^https?:\/\//i,''))+'</span>':'')+'</td>'+
+        '<td>'+esc(b.type||'')+'</td><td class="n">'+(b.da==null?'<span style="color:var(--mu)">—</span>':b.da.toFixed(1))+'</td>'+
+        '<td><span class="tag '+s[1]+'"'+(b.note||b.checked?' title="'+esc((b.note?b.note+' · ':'')+(b.checked?'Checked '+when(b.checked):''))+'"':'')+'>'+s[0]+'</span></td>'+
+        '<td class="when">'+esc(when(b.added))+'</td><td class="by">'+esc(b.by||'')+'</td>'+
+        '<td><div class="acts"><button class="btn sm ic" type="button" data-edit="'+b.id+'" aria-label="Edit backlink"><svg class="i"><use href="#i-edit"/></svg></button>'+
+        '<button class="btn sm ic del" type="button" data-del="'+b.id+'" aria-label="Delete backlink"><svg class="i"><use href="#i-trash"/></svg></button></div></td></tr>'}).join('')
+      :'<tr><td colspan="8" style="padding:30px;text-align:center;color:var(--mu)">No backlinks match. Try another search or clear the filters.</td></tr>';
+    $('more').hidden=rows.length<=shown;$('moreB').textContent='Show more ('+(rows.length-shown).toLocaleString()+' left)';
+    [].forEach.call(document.querySelectorAll('th[data-s]'),function(th){if(th.dataset.s===sortBy)th.setAttribute('aria-sort',sortDir<0?'descending':'ascending');else th.removeAttribute('aria-sort')});
+  }
+  $('q').addEventListener('input',function(){shown=100;render()});
+  ['fCamp','fType','fStat','fBy'].forEach(function(i){$(i).addEventListener('change',function(){shown=100;render()})});
+  $('filterB').onclick=function(){var on=$('filters').hidden;$('filters').hidden=!on;this.setAttribute('aria-pressed',on)};
+  $('clearF').onclick=function(){['fCamp','fType','fStat','fBy'].forEach(function(i){$(i).value=''});render()};
+  $('moreB').onclick=function(){shown+=200;render()};
+  [].forEach.call(document.querySelectorAll('th[data-s]'),function(th){function go(){if(sortBy===th.dataset.s)sortDir=-sortDir;else{sortBy=th.dataset.s;sortDir=-1}render()}
+    th.addEventListener('click',go);th.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
+  $('rows').addEventListener('click',function(e){var ed=e.target.closest('[data-edit]'),dl=e.target.closest('[data-del]');
+    if(ed)open(list.find(function(b){return b.id===ed.dataset.edit}));
+    if(dl){var b=list.find(function(x){return x.id===dl.dataset.del});if(b&&confirm('Delete this backlink?\n\n'+b.link)){list=list.filter(function(x){return x!==b});save();render();S.say('Backlink deleted.')}}});
+
+  /* ---------- add / edit */
+  var dlg=$('dlg');
+  opts($('iType'),'Choose a type',TYPES);
+  function clearErr(){['iCamp','iTarget','iLink','iDa'].forEach(function(i){$(i).removeAttribute('aria-invalid');$(i+'E').textContent=''})}
+  function open(b){editing=b||null;clearErr();var m=campaigns();
+    $('camps').innerHTML=Object.keys(m).sort().map(function(n){return '<option value="'+esc(n)+'">'}).join('');
+    var last=list[0]||{};
+    $('iCamp').value=b?b.campaign:'';$('iTarget').value=b?b.target||'':'';$('iLink').value=b?b.link:'';
+    $('iType').value=b?b.type||'':last.type||'Article';$('iDa').value=b&&b.da!=null?b.da:'';$('iBy').value=b?b.by||'':S.user.name||'';
+    $('iLink').rows=b?2:4;$('iLinkL').innerHTML=(b?'Backlink URL':'Backlink URLs')+' <i>*</i>';
+    $('dlgH').textContent=b?'Edit backlink':'Add backlink';$('dlgS').textContent=b?'Save changes':'Add backlink';
+    if(dlg.showModal)dlg.showModal();else dlg.setAttribute('open','');setTimeout(function(){(b?$('iLink'):$('iCamp')).focus()},30)}
+  function close(){if(dlg.close)dlg.close();else dlg.removeAttribute('open')}
+  [].forEach.call(document.querySelectorAll('[data-new]'),function(b){b.addEventListener('click',function(){open()})});
+  $('dlgX').onclick=close;$('dlgC').onclick=close;dlg.addEventListener('click',function(e){if(e.target===dlg)close()});
+  $('iCamp').addEventListener('change',function(){var t=campaigns()[this.value.trim()];if(t&&!$('iTarget').value.trim())$('iTarget').value=t});
+  function bad(i,m){$(i).setAttribute('aria-invalid','true');$(i+'E').textContent=m;return false}
+  $('form').addEventListener('submit',function(e){e.preventDefault();clearErr();var ok=true;
+    var camp=$('iCamp').value.trim(),target=$('iTarget').value.trim(),da=$('iDa').value.trim();
+    var links=$('iLink').value.split(/\n/).map(function(s){return s.trim()}).filter(Boolean);
+    if(!camp)ok=bad('iCamp','Add the campaign, e.g. the client and keyword.');
+    if(target&&!isUrl(target))ok=bad('iTarget','That doesn’t look like a web address.')&&ok;
+    if(!links.length)ok=bad('iLink','Add the URL of the page with your link.')&&ok;
+    else{var wrong=links.filter(function(l){return !isUrl(l)});if(wrong.length)ok=bad('iLink','Not a web address: '+wrong.slice(0,3).join(', ')+(wrong.length>3?'…':''))&&ok}
+    if(editing&&links.length>1)ok=bad('iLink','Edit one link at a time.')&&ok;
+    if(da&&(daOf(da)==null||+da<0||+da>100))ok=bad('iDa','DA is a number from 0 to 100.')&&ok;
+    if(!ok){var f=document.querySelector('.dlg [aria-invalid="true"]');if(f)f.focus();return}
+    var base={campaign:camp,target:target?norm(target):'',type:$('iType').value,da:daOf(da),by:$('iBy').value.trim()};
+    if(editing){var moved=norm(links[0])!==editing.link||base.target!==editing.target;for(var k in base)editing[k]=base[k];editing.link=norm(links[0]);
+      if(moved){editing.status='';editing.checked='';editing.note=''}save();S.say('Backlink updated.')}
+    else{var have={},added=0,now=new Date().toISOString();list.forEach(function(b){have[same(b.campaign,b.link)]=1});
+      links.forEach(function(l){l=norm(l);if(have[same(camp,l)])return;have[same(camp,l)]=1;
+        list.unshift({id:uid(),campaign:base.campaign,target:base.target,link:l,type:base.type,da:base.da,by:base.by,added:now,status:'',checked:'',note:''});added++});
+      if(!save())return;S.say(added?added+' backlink'+(added===1?'':'s')+' added.'+(added<links.length?' '+(links.length-added)+' already in this campaign.':''):'Those links are already in this campaign.')}
+    close();render()});
+
+  /* ---------- check status: visit each linking page and look for the link (seo/tools.py check_backlink) */
+  function verdict(r){if(r.error||!r.status||r.status>=400)return ['broken',r.error||('Page returns '+r.status)];
+    if(!r.found)return ['missing','No link to your site on the page'];
+    var nf=(r.rel||[]).filter(function(x){return /nofollow|ugc|sponsored/i.test(x)});
+    return nf.length?['nofollow','rel="'+nf.join(' ')+'"'+(r.anchor?' · anchor “'+r.anchor+'”':'')]:['live',r.anchor?'Anchor “'+r.anchor+'”':'Link found']}
+  $('checkB').onclick=function(){var btn=this,rows=filtered(),todo=rows.filter(function(b){return b.target}),skip=rows.length-todo.length;
+    if(!rows.length)return S.say('Nothing to check: add a backlink first.');
+    if(!todo.length)return S.say('Add “Your page the links point to” on these backlinks (Edit) so Scoutly knows what to look for.');
+    var groups={};todo.forEach(function(b){(groups[b.target]=groups[b.target]||[]).push(b)});
+    var batches=[];Object.keys(groups).forEach(function(t){for(var i=0;i<groups[t].length;i+=20)batches.push({target:t,items:groups[t].slice(i,i+20)})});
+    var done=0,failed=null;btn.disabled=true;$('prog').hidden=false;
+    function step(i){if(i>=batches.length||failed){btn.disabled=false;$('prog').hidden=true;save();render();
+        if(failed)S.say('Check stopped: '+failed);else S.say('Checked '+done+' backlink'+(done===1?'':'s')+'.'+(skip?' '+skip+' skipped (no target page).':''));return}
+      var b=batches[i];$('progT').textContent='Checking '+(done+1)+'–'+(done+b.items.length)+' of '+todo.length+' links… (the first check can take a minute while the server wakes up)';
+      S.post('/api/backlinks',{target:b.target,sources:b.items.map(function(x){return x.link})}).then(function(r){
+        (r.rows||[]).forEach(function(row,k){var x=b.items[k];if(!x)return;var v=verdict(row);x.status=v[0];x.note=v[1];x.checked=new Date().toISOString()});
+        done+=b.items.length;save();render();step(i+1)}).catch(function(e){failed=e.message;step(i+1)})}
+    step(0)};
+
+  /* ---------- CSV export / import */
+  $('expB').onclick=function(){if(!list.length)return S.say('Nothing to export yet.');
+    S.csv([['Campaign','Link','Target page','Link type','DA','Status','Added','Added by']].concat(filtered().map(function(b){return [b.campaign,b.link,b.target,b.type,b.da,STATUS[b.status||''][0],b.added,b.by]})),'scoutly-backlinks-'+new Date().toISOString().slice(0,10)+'.csv')};
+  function parseCSV(t){var rows=[],row=[],f='',q=false;t=t.replace(/^﻿/,'');var sep=(t.split('\n')[0].match(/;/g)||[]).length>(t.split('\n')[0].match(/,/g)||[]).length?';':',';
+    for(var i=0;i<t.length;i++){var c=t[i];if(q){if(c==='"'){if(t[i+1]==='"'){f+='"';i++}else q=false}else f+=c}
+      else if(c==='"')q=true;else if(c===sep){row.push(f);f=''}else if(c==='\n'||c==='\r'){if(c==='\r'&&t[i+1]==='\n')i++;row.push(f);f='';if(row.length>1||row[0])rows.push(row);row=[]}else f+=c}
+    if(f||row.length){row.push(f);rows.push(row)}return rows}
+  /* "Thursday, Oct 22, 2026 at 01:20 PM", 2026-10-22, or 22/10/2026 (day first, as Excel writes it in India,
+     unless the numbers only work month first) */
+  function parseDate(s){s=String(s||'').trim();var m=s.match(/^(\d{1,2})[\/.\-](\d{1,2})[\/.\-](\d{4})(.*)$/);
+    if(m){var a=+m[1],b=+m[2],day=a>12||b<=12?a:b,mon=a>12||b<=12?b:a;s=m[3]+'-'+('0'+mon).slice(-2)+'-'+('0'+day).slice(-2)+(m[4].trim()?'T'+m[4].trim():'T00:00')}
+    else if(/^\d{4}-\d{2}-\d{2}$/.test(s))s+='T00:00';
+    return new Date(s.replace(/\s+at\s+/i,' '))}
+  $('impB').onclick=function(){$('impF').click()};
+  $('impF').addEventListener('change',function(){var file=this.files[0];this.value='';if(!file)return;
+    file.text().then(function(t){var r=parseCSV(t);if(r.length<2)throw new Error('That file has no rows.');
+      var h=r[0].map(function(x){return x.toLowerCase().trim()});function col(re){return h.findIndex(function(x){return re.test(x)})}
+      var cL=col(/^(link|url|backlink|backlink url|source|source url|linking page)$/),cC=col(/campaign|project|client|brand/),cT=col(/target|landing|your page|destination/),
+        cY=col(/type/),cD=col(/^da$|domain authority|authority/),cA=col(/^added$|date|created/),cB=col(/added by|author|^by$|owner|user/);
+      if(cL<0)throw new Error('Couldn’t find a Link (or URL) column. Expected headers like Campaign, Link, Link type, DA, Added, Added by.');
+      var have={},added=0,dup=0;list.forEach(function(b){have[same(b.campaign,b.link)]=1});
+      r.slice(1).forEach(function(x){var l=(x[cL]||'').trim();if(!isUrl(l))return;l=norm(l);var camp=cC>-1?(x[cC]||'').trim():'Imported';
+        if(have[same(camp,l)]){dup++;return}have[same(camp,l)]=1;
+        var d=cA>-1?parseDate(x[cA]):null;
+        list.push({id:uid(),campaign:camp||'Imported',target:cT>-1&&isUrl(x[cT])?norm(x[cT]):'',link:l,type:cY>-1?(x[cY]||'').trim():'',da:cD>-1?daOf(x[cD]):null,
+          by:cB>-1?(x[cB]||'').trim():'',added:d&&!isNaN(d)?d.toISOString():new Date().toISOString(),status:'',checked:'',note:''});added++});
+      if(!added)throw new Error(dup?'All '+dup+' links in that file are already here.':'No rows with a valid link in that file.');
+      if(!save()){list=load();return}render();S.say('Imported '+added+' backlink'+(added===1?'':'s')+(dup?' ('+dup+' already here)':'')+'.')})
+      .catch(function(e){S.say(e.message)})});
+
+  render();
+})();
+</script>
+</body>
+</html>

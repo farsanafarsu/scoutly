@@ -75,7 +75,8 @@
       ['keyword-gap.html','gap','Keyword Gap'],
       ['keyword-manager.html','list','Keyword Manager']]],
     ['Link building',[
-      ['backlink-analytics.html','link','Backlink Analytics','lock'],
+      ['backlinks.html','link','Backlink Manager'],
+      ['backlink-analytics.html','chart','Backlink Analytics','lock'],
       ['backlink-gap.html','gap','Backlink Gap','lock']]],
     ['Content',[
       ['writing-assistant.html','pen','SEO Writing Assistant'],
