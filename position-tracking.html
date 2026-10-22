@@ -67,7 +67,8 @@
       else if(c==='"')q=true;else if(c===','){row.push(f);f=''}else if(c==='\n'||c==='\r'){if(c==='\r'&&text[i+1]==='\n')i++;row.push(f);f='';if(row.length>1||row[0])rows.push(row);row=[]}else f+=c}
     if(f||row.length){row.push(f);rows.push(row)}return rows}
   function num(s){s=String(s||'').replace(/[%\s,]/g,'');var n=parseFloat(s);return isNaN(n)?0:n}
-  function fromCSV(text){var r=parseCSV(text);if(r.length<2)return null;var h=r[0].map(function(x){return x.toLowerCase().trim()});
+  /* rows from a Search Console export; null when it isn't one (an export with no rows yet gives rows: []) */
+  function fromCSV(text){var r=parseCSV(text);if(!r.length)return null;var h=r[0].map(function(x){return x.toLowerCase().trim()});
     function col(re){return h.findIndex(function(x){return re.test(x)})}
     var k=col(/quer|keyword/),p=col(/^top pages|^page|url|landing/),cl=col(/click/),im=col(/impress/),ct=col(/ctr/),po=col(/position/);
     var key=k>-1?k:p;if(key<0||po<0)return null;
@@ -102,8 +103,9 @@
     $('fileN').textContent='Reading '+names+'…';
     read(fs).then(function(items){
       var date=$('date').value||dated||today(),snap={date:date,queries:null,pages:null},bad=[];
-      items.forEach(function(it){var d=fromCSV(it.text);if(d)snap[d.kind]=d.rows;else bad.push(it.name)});
-      if(!snap.queries&&!snap.pages)throw new Error(bad.join(', ')+' doesn’t look like a Search Console export (needs Query/Page and Position columns).');
+      items.forEach(function(it){var d=fromCSV(it.text);if(!d)bad.push(it.name);else if(d.rows.length)snap[d.kind]=d.rows});
+      if(!snap.queries&&!snap.pages)throw new Error(bad.length?bad.join(', ')+' doesn’t look like a Search Console export (needs Query/Page and Position columns).':
+        'This export has no rows yet: Search Console has no queries or pages for that date range. Pick a longer range (for example Last 3 months), export again and drop the new .zip.');
       db.snaps=db.snaps.filter(function(s){return s.date!==date});db.snaps.push(snap);db.snaps.sort(function(a,b){return a.date<b.date?-1:1});
       cur=date;kind=snap.queries?'queries':'pages';save();$('fileN').textContent='';render();
       S.say('Imported '+((snap.queries||[]).length+(snap.pages||[]).length)+' rows for '+date+'.')
