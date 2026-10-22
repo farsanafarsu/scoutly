@@ -14,6 +14,6 @@
   "vars": {
     // the hosted Python server, e.g. https://scoutly-api.onrender.com (no trailing slash).
     // API_KEY is a secret set in the Cloudflare dashboard, not here.
-    "API_ORIGIN": ""
+    "API_ORIGIN": "https://scoutly-api.onrender.com"
   }
 }
