@@ -17,7 +17,8 @@ from server import AuditError
 
 URI = os.environ.get("MONGODB_URI", "").strip()
 DB_NAME = os.environ.get("MONGODB_NAME", "").strip() or "scoutly"
-STATUSES = {"", "live", "nofollow", "missing", "broken"}
+STATUSES = {"", "live", "nofollow", "missing", "broken", "alive"}  # alive: page loads; no target page to look for
+QUALITIES = {"", "good", "fair", "poor"}
 MAX_BATCH = 2000
 
 _lock = threading.Lock()
@@ -98,6 +99,7 @@ def _doc(item):
         "by": _clip(item.get("by"), 120), "added": _iso(item.get("added")),
         "status": item.get("status") if item.get("status") in STATUSES else "", "note": _clip(item.get("note"), 300),
         "checked": _clip(item.get("checked"), 40),
+        "quality": item.get("quality") if item.get("quality") in QUALITIES else "",
     }
 
 
@@ -159,7 +161,7 @@ def update(item):
     if not d:
         raise AuditError("Add a campaign and a valid backlink URL.")
     if d["key"] != cur["key"] or d["target"] != cur.get("target"):
-        d.update(status="", note="", checked="")
+        d.update(status="", note="", checked="", quality="")
     from pymongo.errors import DuplicateKeyError
     try:
         coll.replace_one({"_id": lid}, d)
@@ -180,10 +182,11 @@ def delete(ids):
 
 
 def set_status(updates):
-    """Save Check status results: [{id, status, note, checked}]."""
+    """Save Check status results: [{id, status, note, checked, quality}]."""
     coll = _collection()
     from pymongo import UpdateOne
-    ops = [UpdateOne({"_id": _clip(u.get("id"), 40)}, {"$set": {"status": u.get("status"), "note": _clip(u.get("note"), 300), "checked": _clip(u.get("checked"), 40)}})
+    ops = [UpdateOne({"_id": _clip(u.get("id"), 40)}, {"$set": {"status": u.get("status"), "note": _clip(u.get("note"), 300), "checked": _clip(u.get("checked"), 40),
+                                                          "quality": u.get("quality") if u.get("quality") in QUALITIES else ""}})
            for u in (updates or [])[:MAX_BATCH] if isinstance(u, dict) and u.get("status") in STATUSES]
     if not ops:
         return {"updated": 0}

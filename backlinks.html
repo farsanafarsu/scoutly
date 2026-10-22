@@ -32,8 +32,21 @@
 .btn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
 .count{font:500 11px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
 .filters{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px;margin-top:12px;padding:14px 16px;background:var(--card);border:1px solid var(--ln)}
-.filters label{display:grid;gap:6px;font:500 10px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--sl)}
-.filters select{height:38px;min-width:170px;max-width:280px;padding:0 10px;border:1px solid var(--ln);border-radius:3px;background:#fff;font:400 13px/1 var(--M);color:var(--ink)}
+.checker{margin-top:12px;background:var(--card);border:1px solid var(--ln);box-shadow:0 30px 60px -50px rgba(10,26,74,.5)}
+.ck-h{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding:14px 18px;background:linear-gradient(100deg,#050a1f,#0b1a52 60%,#15349e);color:#fff}
+.ck-h .ic{display:grid;place-items:center;width:34px;height:34px;background:rgba(255,255,255,.1);color:var(--sky)}.ck-h .ic svg{width:17px;height:17px}
+.ck-h h2{font:500 16px/1.2 var(--D);letter-spacing:.04em;text-transform:uppercase}
+.ck-h p{margin-left:auto;font:400 11.5px/1.4 var(--M);color:rgba(214,224,255,.72)}
+.ck-b{display:flex;flex-wrap:wrap;align-items:flex-end;gap:12px;padding:16px 18px}
+.ck-b .btn{min-width:150px}
+.ck-sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));border-top:1px solid var(--ln)}
+.ck-sum div{padding:12px 16px;border-right:1px solid var(--ln)}.ck-sum div:last-child{border-right:0}
+.ck-sum small{font:600 9.5px/1.3 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
+.ck-sum b{display:block;margin-top:6px;font:500 22px/1 var(--D)}
+.ck-sum .ok b{color:var(--ok)}.ck-sum .bad b{color:var(--cr)}.ck-sum .wr b{color:#a46a00}
+.ck-n{padding:10px 18px;border-top:1px solid var(--ln);font:400 11.5px/1.6 var(--M);color:var(--mu)}
+.filters label,.ck-b label{display:grid;gap:6px;font:500 10px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--sl)}
+.filters select,.ck-b select{height:38px;min-width:170px;max-width:280px;padding:0 10px;border:1px solid var(--ln);border-radius:3px;background:#fff;font:400 13px/1 var(--M);color:var(--ink)}
 .progress{display:flex;align-items:center;gap:12px;margin-top:12px;padding:12px 16px;background:var(--card);border:1px solid var(--ln);font:400 12.5px/1.5 var(--M);color:var(--sl)}
 .bl-table{margin-top:14px}
 .bl-table .dt td{vertical-align:middle}
@@ -106,7 +119,7 @@
 
     <div class="tools">
       <label class="search"><span class="sr-only">Search backlinks</span><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Search by keyword, brand or link…" autocomplete="off"></label>
-      <button class="btn" type="button" id="checkB"><svg class="i"><use href="#i-pulse"/></svg>Check status</button>
+      <button class="btn" type="button" id="checkB" aria-pressed="false" aria-controls="checker"><svg class="i"><use href="#i-pulse"/></svg>Status checker</button>
       <button class="btn" type="button" id="filterB" aria-pressed="false" aria-controls="filters"><svg class="i"><use href="#i-filter"/></svg>Filter</button>
       <span class="grow"></span>
       <span class="count" id="count" aria-live="polite"></span>
@@ -115,9 +128,21 @@
       <label>Campaign<select id="fCamp"></select></label>
       <label>Link type<select id="fType"></select></label>
       <label>Status<select id="fStat"></select></label>
+      <label>Quality<select id="fQual"></select></label>
       <label>Added by<select id="fBy"></select></label>
       <button class="btn sm" type="button" id="clearF">Clear filters</button>
     </div>
+    <section class="checker" id="checker" hidden aria-labelledby="ckH">
+      <div class="ck-h"><span class="ic" aria-hidden="true"><svg class="i"><use href="#i-pulse"/></svg></span><h2 id="ckH">Backlink Status Checker</h2><p>Is each link still alive, and is it a good one?</p></div>
+      <div class="ck-b">
+        <label>Filter by brand<select id="cBrand"></select></label>
+        <label>Filter by added by<select id="cBy"></select></label>
+        <label>Which links<select id="cWhich"><option value="all">All of them</option><option value="new">Not checked yet</option><option value="week">Not checked in 7 days</option></select></label>
+        <button class="btn p" type="button" id="cStart"><svg class="i"><use href="#i-pulse"/></svg><span id="cStartT">Start</span></button>
+      </div>
+      <div class="ck-sum" id="cSum" hidden></div>
+      <p class="ck-n">Scoutly opens each linking page. With “your page the links point to” it checks the link is still there and followed; without it, that the page is alive. Quality grades the page: dead or missing links, nofollow, pages hidden from Google (noindex), link farms (100+ outbound sites) and spam domains or topics.</p>
+    </section>
     <div class="progress" id="prog" hidden role="status"><span class="spin"></span><span id="progT"></span></div>
 
     <section class="panel empty zero" id="zero" hidden>
@@ -129,7 +154,7 @@
 
     <section class="panel bl-table" id="tbl" hidden>
       <div class="dt-wrap" style="max-height:none"><table class="dt">
-        <thead><tr><th>Campaign</th><th>Link</th><th>Link type</th><th class="n sortable" data-s="da" tabindex="0"><span class="ar">DA</span></th><th>Status</th><th class="sortable" data-s="added" tabindex="0" aria-sort="descending"><span class="ar">Added</span></th><th>Added by</th><th class="n">Actions</th></tr></thead>
+        <thead><tr><th>Campaign</th><th>Link</th><th>Link type</th><th class="n sortable" data-s="da" tabindex="0"><span class="ar">DA</span></th><th>Status</th><th>Quality</th><th class="sortable" data-s="added" tabindex="0" aria-sort="descending"><span class="ar">Added</span></th><th>Added by</th><th class="n">Actions</th></tr></thead>
         <tbody id="rows"></tbody>
       </table></div>
       <div class="more" id="more" hidden><button class="btn sm" type="button" id="moreB">Show more</button></div>
@@ -160,7 +185,9 @@
      otherwise, or until a teammate enters the team key, in this browser (localStorage). */
   var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,KEY='scoutly.backlinks',TK='scoutly.teamKey';
   var TYPES=['Article','Blog','Guest post','Profile','Directory','Social bookmark','Forum','Comment','PDF / document','Other'];
-  var STATUS={live:['Live','ok'],nofollow:['Nofollow','wr'],missing:['Link missing','bad'],broken:['Page broken','bad'],'':['Not checked','']};
+  var STATUS={live:['Live','ok'],alive:['Alive','ok'],nofollow:['Nofollow','wr'],missing:['Link missing','bad'],broken:['Page broken','bad'],'':['Not checked','']};
+  var QUALITY={good:['Good','ok'],fair:['Fair','wr'],poor:['Poor','bad'],'':['—','']};
+  function brand(c){return String(c||'').split(/\s+[—–-]\s+/)[0].trim()}
   var list=load(),editing=null,shown=100,sortBy='added',sortDir=-1,db=false,busy=false;
   var OFFLINE='The Scoutly server isn’t reachable, so backlinks are saved in this browser.';
 
@@ -181,7 +208,7 @@
     remove:function(b){var drop=function(){list=list.filter(function(x){return x!==b})};if(!db){drop();save();return Promise.resolve()}
       return call('/api/links/delete',{ids:[b.id]}).then(drop)},
     status:function(items){if(!db){save();return Promise.resolve()}
-      return call('/api/links/status',{updates:items.map(function(b){return {id:b.id,status:b.status,note:b.note,checked:b.checked}})})}
+      return call('/api/links/status',{updates:items.map(function(b){return {id:b.id,status:b.status,note:b.note,checked:b.checked,quality:b.quality}})})}
   };
   function bar(msg,askKey){$('dbBar').hidden=!msg;$('dbMsg').textContent=msg||'';$('keyF').hidden=!askKey}
   /* connect to the team database, and move anything this browser saved before into it */
@@ -215,14 +242,14 @@
     return m}
 
   /* ---------- table, stats, filters */
-  function filtered(){var q=$('q').value.trim().toLowerCase(),c=$('fCamp').value,t=$('fType').value,st=$('fStat').value,by=$('fBy').value;
-    return list.filter(function(b){return (!c||b.campaign===c)&&(!t||b.type===t)&&(!by||b.by===by)&&(!st||STATUS[b.status||''][0]===st)&&
+  function filtered(){var q=$('q').value.trim().toLowerCase(),c=$('fCamp').value,t=$('fType').value,st=$('fStat').value,ql=$('fQual').value,by=$('fBy').value;
+    return list.filter(function(b){return (!c||b.campaign===c)&&(!t||b.type===t)&&(!by||b.by===by)&&(!st||STATUS[b.status||''][0]===st)&&(!ql||QUALITY[b.quality||''][0]===ql)&&
       (!q||[b.campaign,b.link,b.type,b.by].join(' ').toLowerCase().indexOf(q)>-1)})
       .sort(function(a,b){var x=sortBy==='da'?(a.da==null?-1:a.da):a.added,y=sortBy==='da'?(b.da==null?-1:b.da):b.added;return (x<y?-1:x>y?1:0)*sortDir})}
   function kpis(){var doms={},camps={},das=[],now=new Date(),month=0,live=0,checked=0;
     list.forEach(function(b){var h=host(b.link);if(h)doms[h]=1;if(b.campaign)camps[b.campaign]=1;if(b.da!=null)das.push(b.da);
       var d=new Date(b.added);if(d.getFullYear()===now.getFullYear()&&d.getMonth()===now.getMonth())month++;
-      if(b.status){checked++;if(b.status==='live'||b.status==='nofollow')live++}});
+      if(b.status){checked++;if(b.status!=='broken'&&b.status!=='missing')live++}});
     var avg=das.length?das.reduce(function(a,b){return a+b},0)/das.length:null;
     $('kpis').innerHTML=[['link','Total backlinks',list.length.toLocaleString(),'Across all campaigns'],['globe','Unique domains',Object.keys(doms).length.toLocaleString(),'Sites linking to you'],
       ['rocket','Total campaigns',Object.keys(camps).length.toLocaleString(),'With at least one link'],['trend','Average DA',avg==null?'—':avg.toFixed(1),das.length+' link'+(das.length===1?'':'s')+' with a DA'],
@@ -232,7 +259,10 @@
     opts($('fCamp'),'All campaigns',uniq(list.map(function(b){return b.campaign})));
     opts($('fType'),'All link types',uniq(list.map(function(b){return b.type})));
     opts($('fStat'),'Any status',uniq(list.map(function(b){return STATUS[b.status||''][0]})));
+    opts($('fQual'),'Any quality',uniq(list.map(function(b){return b.quality?QUALITY[b.quality][0]:''})));
     opts($('fBy'),'Anyone',uniq(list.map(function(b){return b.by})));
+    opts($('cBrand'),'All brands',uniq(list.map(function(b){return brand(b.campaign)})));
+    opts($('cBy'),'All users',uniq(list.map(function(b){return b.by})));
     kpis();
     var rows=filtered();$('zero').hidden=list.length>0;$('tbl').hidden=list.length===0;
     $('count').textContent=list.length?(rows.length===list.length?list.length.toLocaleString():rows.length.toLocaleString()+' of '+list.length.toLocaleString())+' backlink'+(list.length===1?'':'s'):'';
@@ -241,17 +271,18 @@
         '<td><a class="lnk" href="'+esc(norm(b.link))+'" target="_blank" rel="noopener noreferrer nofollow" title="'+esc(b.link)+'"><b>'+esc(h)+'</b>'+esc(path)+'</a>'+(b.target?'<span class="to" title="'+esc(b.target)+'">→ '+esc(b.target.replace(/^https?:\/\//i,''))+'</span>':'')+'</td>'+
         '<td>'+esc(b.type||'')+'</td><td class="n">'+(b.da==null?'<span style="color:var(--mu)">—</span>':b.da.toFixed(1))+'</td>'+
         '<td><span class="tag '+s[1]+'"'+(b.note||b.checked?' title="'+esc((b.note?b.note+' · ':'')+(b.checked?'Checked '+when(b.checked):''))+'"':'')+'>'+s[0]+'</span></td>'+
+        '<td><span class="tag '+QUALITY[b.quality||''][1]+'"'+(b.quality&&b.note?' title="'+esc(b.note)+'"':'')+'>'+QUALITY[b.quality||''][0]+'</span></td>'+
         '<td class="when">'+esc(when(b.added))+'</td><td class="by">'+esc(b.by||'')+'</td>'+
         '<td><div class="acts"><button class="btn sm ic" type="button" data-edit="'+b.id+'" aria-label="Edit backlink"><svg class="i"><use href="#i-edit"/></svg></button>'+
         '<button class="btn sm ic del" type="button" data-del="'+b.id+'" aria-label="Delete backlink"><svg class="i"><use href="#i-trash"/></svg></button></div></td></tr>'}).join('')
-      :'<tr><td colspan="8" style="padding:30px;text-align:center;color:var(--mu)">No backlinks match. Try another search or clear the filters.</td></tr>';
+      :'<tr><td colspan="9" style="padding:30px;text-align:center;color:var(--mu)">No backlinks match. Try another search or clear the filters.</td></tr>';
     $('more').hidden=rows.length<=shown;$('moreB').textContent='Show more ('+(rows.length-shown).toLocaleString()+' left)';
     [].forEach.call(document.querySelectorAll('th[data-s]'),function(th){if(th.dataset.s===sortBy)th.setAttribute('aria-sort',sortDir<0?'descending':'ascending');else th.removeAttribute('aria-sort')});
   }
   $('q').addEventListener('input',function(){shown=100;render()});
-  ['fCamp','fType','fStat','fBy'].forEach(function(i){$(i).addEventListener('change',function(){shown=100;render()})});
+  ['fCamp','fType','fStat','fQual','fBy'].forEach(function(i){$(i).addEventListener('change',function(){shown=100;render()})});
   $('filterB').onclick=function(){var on=$('filters').hidden;$('filters').hidden=!on;this.setAttribute('aria-pressed',on)};
-  $('clearF').onclick=function(){['fCamp','fType','fStat','fBy'].forEach(function(i){$(i).value=''});render()};
+  $('clearF').onclick=function(){['fCamp','fType','fStat','fQual','fBy'].forEach(function(i){$(i).value=''});render()};
   $('moreB').onclick=function(){shown+=200;render()};
   [].forEach.call(document.querySelectorAll('th[data-s]'),function(th){function go(){if(sortBy===th.dataset.s)sortDir=-sortDir;else{sortBy=th.dataset.s;sortDir=-1}render()}
     th.addEventListener('click',go);th.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
@@ -291,33 +322,52 @@
     function fail(err){go.disabled=false;$('iLinkE').textContent=err.message}
     go.disabled=true;
     if(editing){var b=editing,fields=Object.assign({link:norm(links[0])},base);
-      if(fields.link!==b.link||fields.target!==b.target){fields.status='';fields.checked='';fields.note=''}
+      if(fields.link!==b.link||fields.target!==b.target){fields.status='';fields.checked='';fields.note='';fields.quality=''}
       store.update(b,fields).then(function(){done('Backlink updated.')},fail);return}
     var have={},now=new Date().toISOString(),items=[];list.forEach(function(b){have[same(b.campaign,b.link)]=1});
     links.forEach(function(l){l=norm(l);if(have[same(camp,l)])return;have[same(camp,l)]=1;
-      items.push({id:uid(),campaign:base.campaign,target:base.target,link:l,type:base.type,da:base.da,by:base.by,added:now,status:'',checked:'',note:''})});
+      items.push({id:uid(),campaign:base.campaign,target:base.target,link:l,type:base.type,da:base.da,by:base.by,added:now,status:'',checked:'',note:'',quality:''})});
     if(!items.length){go.disabled=false;return bad('iLink','Those links are already in this campaign.')}
     store.add(items).then(function(r){var dup=links.length-r.added;
       done(r.added+' backlink'+(r.added===1?'':'s')+' added.'+(dup?' '+dup+' already in this campaign.':''))},fail)});
 
-  /* ---------- check status: visit each linking page and look for the link (seo/tools.py check_backlink) */
-  function verdict(r){if(r.error||!r.status||r.status>=400)return ['broken',r.error||('Page returns '+r.status)];
+  /* ---------- status checker: open each linking page (seo/tools.py check_backlink) and grade it */
+  function verdict(r,hasTarget){if(r.error||!r.status||r.status>=400)return ['broken',r.error||('Page returns '+r.status)];
+    if(!hasTarget)return ['alive','Page loads'];
     if(!r.found)return ['missing','No link to your site on the page'];
     var nf=(r.rel||[]).filter(function(x){return /nofollow|ugc|sponsored/i.test(x)});
     return nf.length?['nofollow','rel="'+nf.join(' ')+'"'+(r.anchor?' · anchor “'+r.anchor+'”':'')]:['live',r.anchor?'Anchor “'+r.anchor+'”':'Link found']}
-  $('checkB').onclick=function(){var btn=this,rows=filtered(),todo=rows.filter(function(b){return b.target}),skip=rows.length-todo.length;
-    if(!rows.length)return S.say('Nothing to check: add a backlink first.');
-    if(!todo.length)return S.say('Add “Your page the links point to” on these backlinks (Edit) so Scoutly knows what to look for.');
-    var groups={};todo.forEach(function(b){(groups[b.target]=groups[b.target]||[]).push(b)});
+  /* poor: dead, missing, hidden from Google or spam signals; fair: nofollow or a crowded page; good: the rest */
+  function grade(r,v){var why=(r.flags||[]).filter(function(f){return f!=='Link not found'&&!/^Page returns|^Unreachable/.test(f)});
+    if(v[0]==='broken'||v[0]==='missing')return ['poor',[v[0]==='broken'?'Page is down':'Link removed'].concat(why)];
+    if(r.noindex||(r.risk||0)>=40)return ['poor',why];
+    if(v[0]==='nofollow')why.unshift('Nofollow: passes little ranking value');
+    if(why.length)return ['fair',why];
+    return ['good',[v[0]==='live'?'Followed link on an indexable page, no spam signals':'Indexable page, no spam signals']]}
+  var run=null;
+  $('checkB').onclick=function(){var on=$('checker').hidden;$('checker').hidden=!on;this.setAttribute('aria-pressed',on)};
+  function summary(items,done){var c={alive:0,dead:0,missing:0,good:0,fair:0,poor:0};
+    items.forEach(function(b){if(!b.status||!b._run)return;if(b.status==='broken')c.dead++;else if(b.status==='missing')c.missing++;else c.alive++;if(b.quality)c[b.quality]++});
+    $('cSum').hidden=false;$('cSum').innerHTML=[['','Checked',done+' / '+items.length],['ok','Alive',c.alive],['bad','Dead',c.dead],['bad','Link missing',c.missing],['ok','Good',c.good],['wr','Fair',c.fair],['bad','Poor',c.poor]]
+      .map(function(t){return '<div class="'+t[0]+'"><small>'+t[1]+'</small><b>'+t[2].toLocaleString()+'</b></div>'}).join('')}
+  $('cStart').onclick=function(){
+    if(run){run.stop=true;$('cStartT').textContent='Stopping…';return}
+    var br=$('cBrand').value,by=$('cBy').value,which=$('cWhich').value,week=Date.now()-7*864e5;
+    var items=list.filter(function(b){return (!br||brand(b.campaign)===br)&&(!by||b.by===by)&&(which==='all'||(which==='new'?!b.checked:!b.checked||new Date(b.checked)<week))});
+    if(!items.length)return S.say(list.length?'No backlinks match these filters.':'Nothing to check: add a backlink first.');
+    list.forEach(function(b){delete b._run});items.forEach(function(b){b._run=1});
+    var groups={};items.forEach(function(b){(groups[b.target||'']=groups[b.target||'']||[]).push(b)});
     var batches=[];Object.keys(groups).forEach(function(t){for(var i=0;i<groups[t].length;i+=20)batches.push({target:t,items:groups[t].slice(i,i+20)})});
-    var done=0,failed=null;btn.disabled=true;busy=true;$('prog').hidden=false;
-    function step(i){if(i>=batches.length||failed){btn.disabled=false;busy=false;$('prog').hidden=true;render();
-        if(failed)S.say('Check stopped: '+failed);else S.say('Checked '+done+' backlink'+(done===1?'':'s')+'.'+(skip?' '+skip+' skipped (no target page).':''));return}
-      var b=batches[i];$('progT').textContent='Checking '+(done+1)+'–'+(done+b.items.length)+' of '+todo.length+' links… (the first check can take a minute while the server wakes up)';
-      S.post('/api/backlinks',{target:b.target,sources:b.items.map(function(x){return x.link})}).then(function(r){
-        (r.rows||[]).forEach(function(row,k){var x=b.items[k];if(!x)return;var v=verdict(row);x.status=v[0];x.note=v[1];x.checked=new Date().toISOString()});
-        done+=b.items.length;render();return store.status(b.items)}).then(function(){step(i+1)}).catch(function(e){failed=e.message;step(i+1)})}
-    step(0)};
+    run={stop:false,done:0,error:null};var me=run,next=0;busy=true;$('cStartT').textContent='Stop';$('prog').hidden=false;
+    function tell(){$('progT').textContent='Checked '+me.done.toLocaleString()+' of '+items.length.toLocaleString()+' links… (the first batch can take a minute while the server wakes up)';summary(items,me.done)}
+    function worker(){if(me.stop||me.error||next>=batches.length)return Promise.resolve();var b=batches[next++];
+      return S.post('/api/backlinks',{target:b.target,aliveOnly:!b.target,sources:b.items.map(function(x){return x.link})}).then(function(r){
+        (r.rows||[]).forEach(function(row,k){var x=b.items[k];if(!x)return;var v=verdict(row,!!b.target),g=grade(row,v);
+          x.status=v[0];x.quality=g[0];x.note=[v[1]].concat(g[1]).join(' · ');x.checked=new Date().toISOString()});
+        me.done+=b.items.length;tell();render();return store.status(b.items)}).catch(function(e){me.error=e.message}).then(worker)}
+    tell();
+    Promise.all([worker(),worker(),worker()]).then(function(){run=null;busy=false;$('cStartT').textContent='Start';$('prog').hidden=true;render();summary(items,me.done);
+      S.say(me.error?'Check stopped: '+me.error:me.stop&&me.done<items.length?'Stopped after '+me.done+' of '+items.length+' links.':'Checked '+me.done+' backlink'+(me.done===1?'':'s')+'.')})};
 
   /* ---------- CSV export / import */
   $('expB').onclick=function(){if(!list.length)return S.say('Nothing to export yet.');
@@ -344,7 +394,7 @@
         if(have[same(camp,l)]){dup++;return}have[same(camp,l)]=1;
         var d=cA>-1?parseDate(x[cA]):null;
         items.push({id:uid(),campaign:camp||'Imported',target:cT>-1&&isUrl(x[cT])?norm(x[cT]):'',link:l,type:cY>-1?(x[cY]||'').trim():'',da:cD>-1?daOf(x[cD]):null,
-          by:cB>-1?(x[cB]||'').trim():'',added:d&&!isNaN(d)?d.toISOString():new Date().toISOString(),status:'',checked:'',note:''})});
+          by:cB>-1?(x[cB]||'').trim():'',added:d&&!isNaN(d)?d.toISOString():new Date().toISOString(),status:'',checked:'',note:'',quality:''})});
       if(!items.length)throw new Error(dup?'All '+dup+' links in that file are already here.':'No rows with a valid link in that file.');
       $('prog').hidden=false;$('progT').textContent='Importing '+items.length.toLocaleString()+' backlinks…';
       return store.add(items).then(function(r){dup+=r.duplicates;$('prog').hidden=true;render();

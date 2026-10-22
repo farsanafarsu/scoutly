@@ -419,7 +419,8 @@ def check_backlink(src, target):
     P = parse(decode(r)) if "html" in r["headers"].get("content-type", "") else parse("")
     row["title"] = P.title
     row["noindex"] = "noindex" in (P.meta("robots") or "").lower() or "noindex" in r["headers"].get("x-robots-tag", "").lower()
-    th = (urlparse(target if "//" in target else "https://" + target).hostname or target).lower()
+    # no target: only check the page is alive and how good it looks; nothing to look for on it
+    th = (urlparse(target if "//" in target else "https://" + target).hostname or target).lower() if target else ""
     th = th[4:] if th.startswith("www.") else th
     outs = set()
     for a in P.anchors:
@@ -429,13 +430,14 @@ def check_backlink(src, target):
         h = (urlparse(u).hostname or "").lower()
         if not same_site(u, r["url"]):
             outs.add(h)
-        if h == th or h.endswith("." + th):
+        if th and (h == th or h.endswith("." + th)):
             if not row["found"]:
                 row.update(found=True, href=u, anchor=a["text"] or a["img_alt"] or "", rel=a["rel"].split())
     row["outbound"] = len(outs)
     sh = (urlparse(r["url"]).hostname or "").lower()
     if not row["found"]:
-        row["flags"].append("Link not found")
+        if th:
+            row["flags"].append("Link not found")
     if row["noindex"]:
         row["flags"].append("Page is noindex")
     if row["outbound"] > 100:
@@ -453,10 +455,14 @@ def check_backlink(src, target):
     return row
 
 
-def backlink_audit(target, sources):
+def backlink_audit(target, sources, alive_only=False):
+    """Check linking pages. alive_only (Backlink Manager, no target page known): only whether each page
+    loads and its quality signals, without looking for a link to the target."""
     sources = [s.strip() for s in sources if s.strip()][:300]
     sources = [s if re.match(r"^https?://", s, re.I) else "https://" + s for s in sources]
-    if not target:
+    if alive_only:
+        target = ""
+    elif not target:
         raise AuditError("Enter your website (the site the links should point to).")
     if not sources:
         raise AuditError("Add at least one linking page URL.")

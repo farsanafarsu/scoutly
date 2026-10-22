@@ -1152,7 +1152,7 @@ TOOL_ROUTES = {
 }
 
 POST_ROUTES = {
-    "/api/backlinks": lambda b: _tools().backlink_audit(str(b.get("target") or ""), [str(s) for s in b.get("sources") or []]),
+    "/api/backlinks": lambda b: _tools().backlink_audit(str(b.get("target") or ""), [str(s) for s in b.get("sources") or []], bool(b.get("aliveOnly"))),
     "/api/provider/keywords": lambda b: _provider().keyword_metrics([str(k) for k in b.get("keywords") or []][:5000],
                                                                     str(b.get("gl") or "us"), bool(b.get("run"))),
     "/api/provider/clear-cache": lambda b: _provider().clear_cache(),
