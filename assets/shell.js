@@ -76,6 +76,7 @@
       ['keyword-manager.html','list','Keyword Manager']]],
     ['Link building',[
       ['backlinks.html','link','Backlink Manager'],
+      ['backlink-sites.html','globe','Backlink Sites'],
       ['backlink-analytics.html','chart','Backlink Analytics','lock'],
       ['backlink-gap.html','gap','Backlink Gap','lock']]],
     ['Content',[

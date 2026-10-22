@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Backlink Sites — Scoutly</title>
+<meta name="description" content="Sites to build backlinks on: guest posting, social bookmarking, business listings and more, with each site's domain score.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<script>
+/* demo gate: no demo login in this tab → back to the login page */
+(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+/* backlink sites */
+.ph{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
+.ph h1{margin-top:14px;font:500 clamp(28px,3vw,44px)/1 var(--D);text-transform:uppercase;letter-spacing:.01em}
+.ph .desc{margin-top:10px;max-width:640px;font:400 13px/1.7 var(--M);color:var(--sl)}
+.ph-act{display:flex;flex-wrap:wrap;gap:10px}
+.cats{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.cat{display:inline-flex;align-items:center;gap:8px;height:36px;padding:0 12px;border:1px solid var(--ln);border-radius:3px;background:var(--card);color:var(--sl);font:500 12.5px/1 var(--M);cursor:pointer}
+.cat i{font-style:normal;font-size:11px;color:var(--mu)}
+.cat:hover{border-color:var(--b);color:var(--ink)}
+.cat[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}.cat[aria-pressed="true"] i{color:#cfd8ff}
+.tools{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px;margin-top:14px}
+.search{position:relative;flex:1;min-width:240px;max-width:520px}
+.search svg{position:absolute;left:14px;top:50%;margin-top:-9px;color:var(--mu)}
+.search input{width:100%;height:42px;padding:0 14px 0 42px;border:1px solid var(--ln);border-radius:3px;background:var(--card);color:var(--ink);font:400 14px/1 var(--M)}
+.tools label{display:grid;gap:6px;font:500 10px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--sl)}
+.tools select{height:42px;min-width:150px;padding:0 10px;border:1px solid var(--ln);border-radius:3px;background:#fff;font:400 13px/1 var(--M);color:var(--ink)}
+.search input:focus,.tools select:focus{outline:0;border-color:var(--b);box-shadow:0 0 0 3px rgba(47,91,255,.12)}
+.tools .grow{flex:1}
+.count{align-self:center;font:500 11px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
+.sites{display:grid;gap:10px;margin-top:14px;padding:0;list-style:none}
+.site{display:grid;grid-template-columns:46px 44px minmax(0,1fr) auto auto;align-items:center;gap:14px;padding:14px 18px;background:var(--card);border:1px solid var(--ln);border-left:3px solid transparent}
+.site:hover{border-left-color:var(--b);box-shadow:0 20px 40px -34px rgba(10,26,74,.6)}
+.site .rk{font:500 12px/1 var(--M);color:var(--mu);text-align:right}
+.site .gl{display:grid;place-items:center;width:44px;height:44px;background:linear-gradient(140deg,#15349e,#2f5bff);color:#fff}
+.site .gl svg{width:20px;height:20px}
+.site .nm{min-width:0}
+.site .nm a{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:600 15px/1.3 Geist,system-ui,sans-serif;color:var(--ink)}
+.site .nm a:hover{color:var(--b);text-decoration:underline}
+.site .nm small{display:block;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:400 12px/1.4 var(--M);color:var(--mu)}
+.site .meta{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px}
+.da{display:grid;place-items:center;min-width:58px;height:40px;padding:0 10px;border-radius:20px;font:600 15px/1 var(--M);color:#fff;background:#8a94a8}
+.da small{display:block;font:600 8px/1 var(--M);letter-spacing:.14em;opacity:.8}
+.da.hi{background:#0f8a62}.da.md{background:#2f5bff}.da.lo{background:#c98a00}.da.no{background:#e6e9f0;color:var(--mu)}
+.note{margin-top:14px;font:400 11.5px/1.6 var(--M);color:var(--mu)}
+.zero{margin-top:22px}
+.more{display:flex;justify-content:center;padding:14px}
+@media(max-width:700px){.site{grid-template-columns:40px minmax(0,1fr) auto;gap:10px;padding:12px}.site .rk{display:none}.site .meta{grid-column:2/-1;justify-content:flex-start}.site .gl{width:40px;height:40px}.ph-act{width:100%}.ph-act .btn{flex:1}}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <div>
+        <p class="lbl">Link building</p>
+        <h1>Backlink Sites</h1>
+        <p class="desc">Where to build links: guest posting, social bookmarking, business listings, classifieds and more, each with its domain score. Sites your team has already used in the Backlink Manager are added automatically.</p>
+      </div>
+      <div class="ph-act">
+        <button class="btn" type="button" id="copyB"><svg class="i"><use href="#i-copy"/></svg>Copy links</button>
+        <button class="btn" type="button" id="expB"><svg class="i"><use href="#i-dl"/></svg>Export CSV</button>
+      </div>
+    </div>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div class="cats" id="cats" role="group" aria-label="Category"></div>
+
+    <div class="tools">
+      <label class="search"><span class="sr-only">Search sites</span><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Search sites…" autocomplete="off"></label>
+      <label>Domain score<select id="fDa"><option value="0">Any</option><option value="90">90+</option><option value="70">70+</option><option value="50">50+</option><option value="30">30+</option></select></label>
+      <label>Show<select id="fUsed"><option value="">All sites</option><option value="used">Used by the team</option><option value="new">Not used yet</option></select></label>
+      <label>Sort by<select id="fSort"><option value="da">Domain score</option><option value="used">Times used</option><option value="name">Name</option></select></label>
+      <span class="grow"></span>
+      <span class="count" id="count" aria-live="polite"></span>
+    </div>
+
+    <ol class="sites" id="sites"></ol>
+    <div class="more" id="more" hidden><button class="btn sm" type="button" id="moreB">Show more</button></div>
+    <section class="panel empty zero" id="zero" hidden>
+      <div class="empty-i" aria-hidden="true"><svg class="i"><use href="#i-globe"/></svg></div>
+      <h3>No sites match</h3>
+      <p>Try another category or search, or lower the domain score filter.</p>
+    </section>
+    <p class="note">Domain score is Moz Domain Authority (0–100). For the starter list it’s an approximate figure; for sites from your Backlink Manager it’s the highest DA logged on your links there. Always check a site’s current rules before posting.</p>
+  </main>
+</div>
+
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,KEY='scoutly.backlinks',TK='scoutly.teamKey';
+  var CATS=['Guest posting','Social bookmarking','Business listing','Article submission','Profile creation','Classified ads','Q&A and forums','Web 2.0 blogs','Image and video','Document sharing','Other'];
+  /* starter list: [domain, category, approximate Moz DA] */
+  var SEED=[
+    ['medium.com','Guest posting',95],['linkedin.com','Guest posting',98],['hackernoon.com','Guest posting',88],['sitepoint.com','Guest posting',89],
+    ['searchenginejournal.com','Guest posting',89],['business2community.com','Guest posting',89],['dzone.com','Guest posting',84],['readwrite.com','Guest posting',88],
+    ['lifehack.org','Guest posting',85],['thriveglobal.com','Guest posting',82],['yourstory.com','Guest posting',86],['techbullion.com','Guest posting',72],
+    ['problogger.com','Guest posting',78],['tinybuddha.com','Guest posting',72],['pickthebrain.com','Guest posting',70],['addicted2success.com','Guest posting',62],
+    ['reddit.com','Social bookmarking',96],['pinterest.com','Social bookmarking',94],['digg.com','Social bookmarking',92],['mix.com','Social bookmarking',91],
+    ['diigo.com','Social bookmarking',91],['scoop.it','Social bookmarking',90],['flipboard.com','Social bookmarking',89],['instapaper.com','Social bookmarking',88],
+    ['pearltrees.com','Social bookmarking',85],['folkd.com','Social bookmarking',70],['bibsonomy.org','Social bookmarking',72],['bizsugar.com','Social bookmarking',55],
+    ['mastodon.social','Social bookmarking',65],['bsky.app','Social bookmarking',55],
+    ['business.google.com','Business listing',98],['yelp.com','Business listing',93],['foursquare.com','Business listing',92],['bbb.org','Business listing',92],
+    ['trustpilot.com','Business listing',93],['crunchbase.com','Business listing',91],['yellowpages.com','Business listing',88],['justdial.com','Business listing',87],
+    ['indiamart.com','Business listing',88],['clutch.co','Business listing',87],['manta.com','Business listing',82],['sulekha.com','Business listing',80],
+    ['tradeindia.com','Business listing',80],['f6s.com','Business listing',80],['merchantcircle.com','Business listing',76],['chamberofcommerce.com','Business listing',72],
+    ['hotfrog.com','Business listing',70],['brownbook.net','Business listing',66],['ezlocal.com','Business listing',60],
+    ['hubpages.com','Article submission',90],['ezinearticles.com','Article submission',82],['vocal.media','Article submission',75],['dev.to','Article submission',88],
+    ['hashnode.com','Article submission',75],['sooperarticles.com','Article submission',55],['articlebiz.com','Article submission',55],
+    ['github.com','Profile creation',96],['gravatar.com','Profile creation',93],['about.me','Profile creation',92],['behance.net','Profile creation',92],
+    ['dribbble.com','Profile creation',92],['disqus.com','Profile creation',92],['producthunt.com','Profile creation',90],['gitlab.com','Profile creation',92],
+    ['soundcloud.com','Profile creation',93],
+    ['craigslist.org','Classified ads',92],['olx.in','Classified ads',79],['quikr.com','Classified ads',78],['locanto.com','Classified ads',70],
+    ['oodle.com','Classified ads',72],['adpost.com','Classified ads',60],['clickindia.com','Classified ads',60],
+    ['quora.com','Q&A and forums',93],['stackexchange.com','Q&A and forums',92],['warriorforum.com','Q&A and forums',75],['forums.digitalpoint.com','Q&A and forums',80],
+    ['blogger.com','Web 2.0 blogs',99],['wordpress.com','Web 2.0 blogs',94],['tumblr.com','Web 2.0 blogs',95],['weebly.com','Web 2.0 blogs',93],
+    ['wix.com','Web 2.0 blogs',94],['livejournal.com','Web 2.0 blogs',93],['jimdo.com','Web 2.0 blogs',92],['substack.com','Web 2.0 blogs',92],
+    ['youtube.com','Image and video',100],['vimeo.com','Image and video',98],['flickr.com','Image and video',95],['dailymotion.com','Image and video',95],
+    ['imgur.com','Image and video',93],['500px.com','Image and video',90],
+    ['slideshare.net','Document sharing',95],['issuu.com','Document sharing',94],['scribd.com','Document sharing',94],['academia.edu','Document sharing',93],
+    ['yumpu.com','Document sharing',90],['calameo.com','Document sharing',88],['docdroid.net','Document sharing',80]
+  ];
+  /* Backlink Manager link type → category */
+  var FROM_TYPE={'Guest post':'Guest posting','Social bookmark':'Social bookmarking','Directory':'Business listing','Article':'Article submission','Profile':'Profile creation',
+    'Forum':'Q&A and forums','Comment':'Q&A and forums','Blog':'Web 2.0 blogs','PDF / document':'Document sharing'};
+  /* no useful type: guess from the domain name */
+  function guess(h){return /bookmark|social|links?\b|sites?row|somuch|digg|folkd/.test(h)?'Social bookmarking':/directory|webdir|\bdir\b|listing|local|yellow|business/.test(h)?'Business listing':
+    /ads?\b|freeads|classified|adpost|adland|posting/.test(h)?'Classified ads':/article/.test(h)?'Article submission':/blogspot|blogger|wordpress|tumblr|weebly|wix/.test(h)?'Web 2.0 blogs':
+    /pdf|doc|slide/.test(h)?'Document sharing':/forum|answers|quora/.test(h)?'Q&A and forums':'Other'}
+  var sites=[],cat='',shown=100;
+
+  function host(u){u=String(u||'').trim();if(!/^https?:\/\//i.test(u))u='https://'+u;try{return new URL(u).hostname.replace(/^www\./,'').replace(/^\.+/,'').toLowerCase()}catch(_){return ''}}
+  function teamKey(){try{return localStorage.getItem(TK)||''}catch(_){return ''}}
+  /* the team's backlinks: team database when it's on, otherwise what this browser saved */
+  function teamLinks(){var local=function(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')||[]}catch(_){return []}};
+    return fetch('/api/links',{headers:{'X-Scoutly-Team':teamKey()}}).then(function(r){return r.json()}).then(function(j){return j.error?local():j.items||[]},local)}
+
+  function build(links){var m={};
+    SEED.forEach(function(s){m[s[0]]={domain:s[0],cat:s[1],da:s[2],used:0,types:{}}});
+    links.forEach(function(b){var h=host(b.link);if(!h)return;var s=m[h]||(m[h]={domain:h,cat:'',da:null,used:0,types:{},team:true});
+      s.used++;if(b.type)s.types[b.type]=(s.types[b.type]||0)+1;if(b.da!=null&&s.team&&(s.da==null||b.da>s.da))s.da=b.da});
+    sites=Object.keys(m).map(function(k){var s=m[k];
+      if(!s.cat){var top=Object.keys(s.types).sort(function(a,b){return s.types[b]-s.types[a]})[0];s.cat=FROM_TYPE[top]||guess(s.domain)}
+      return s});
+    render()}
+
+  function filtered(){var q=$('q').value.trim().toLowerCase(),min=+$('fDa').value,u=$('fUsed').value,so=$('fSort').value;
+    return sites.filter(function(s){return (!cat||s.cat===cat)&&(!q||s.domain.indexOf(q)>-1||s.cat.toLowerCase().indexOf(q)>-1)&&(!min||(s.da||0)>=min)&&(!u||(u==='used'?s.used>0:!s.used))})
+      .sort(function(a,b){return so==='name'?a.domain.localeCompare(b.domain):so==='used'?b.used-a.used||(b.da||0)-(a.da||0):(b.da==null?-1:b.da)-(a.da==null?-1:a.da)||b.used-a.used})}
+  function daTag(v){if(v==null)return '<span class="da no" title="No DA logged yet">—</span>';
+    return '<span class="da '+(v>=70?'hi':v>=40?'md':'lo')+'" title="Domain Authority '+v+'"><span>'+(Math.round(v*10)/10)+'<small>DA</small></span></span>'}
+  function render(){
+    var n={};sites.forEach(function(s){n[s.cat]=(n[s.cat]||0)+1});
+    $('cats').innerHTML=[['','All sites',sites.length]].concat(CATS.filter(function(c){return n[c]}).map(function(c){return [c,c,n[c]]}))
+      .map(function(c){return '<button class="cat" type="button" data-cat="'+esc(c[0])+'" aria-pressed="'+(cat===c[0])+'">'+esc(c[1])+' <i>'+c[2]+'</i></button>'}).join('');
+    var das=sites.filter(function(s){return s.da!=null}).map(function(s){return s.da}),used=sites.filter(function(s){return s.used}).length;
+    $('kpis').innerHTML=[['globe','Total sites',sites.length,CATS.filter(function(c){return n[c]}).length+' categories'],
+      ['star','DA 90+',das.filter(function(d){return d>=90}).length,'Top authority sites'],
+      ['trend','Average DA',das.length?(das.reduce(function(a,b){return a+b},0)/das.length).toFixed(1):'—','Of '+das.length+' sites with a DA'],
+      ['link','Used by the team',used,'From the Backlink Manager'],['plus','Not used yet',sites.length-used,'Opportunities left']]
+      .map(function(k){return '<div class="kpi"><small><svg class="i"><use href="#i-'+k[0]+'"/></svg>'+k[1]+'</small><b>'+k[2].toLocaleString()+'</b><span>'+k[3]+'</span></div>'}).join('');
+    var rows=filtered();
+    $('count').textContent=rows.length.toLocaleString()+' site'+(rows.length===1?'':'s');
+    $('zero').hidden=rows.length>0;
+    $('sites').innerHTML=rows.slice(0,shown).map(function(s,i){var url='https://'+s.domain;
+      return '<li class="site"><span class="rk">#'+(i+1)+'</span><span class="gl" aria-hidden="true"><svg class="i"><use href="#i-globe"/></svg></span>'+
+        '<div class="nm"><a href="'+esc(url)+'" target="_blank" rel="noopener noreferrer nofollow">'+esc(s.domain)+'</a><small>'+esc(url)+'</small></div>'+
+        '<div class="meta"><span class="tag in">'+esc(s.cat)+'</span>'+(s.used?'<span class="tag ok" title="Links logged in the Backlink Manager">Used '+s.used+'×</span>':'')+'</div>'+daTag(s.da)+'</li>'}).join('');
+    $('more').hidden=rows.length<=shown;$('moreB').textContent='Show more ('+(rows.length-shown).toLocaleString()+' left)'}
+
+  $('cats').addEventListener('click',function(e){var b=e.target.closest('[data-cat]');if(!b)return;cat=b.dataset.cat;shown=100;render()});
+  $('q').addEventListener('input',function(){shown=100;render()});
+  ['fDa','fUsed','fSort'].forEach(function(i){$(i).addEventListener('change',function(){shown=100;render()})});
+  $('moreB').onclick=function(){shown+=200;render()};
+  $('expB').onclick=function(){var r=filtered();if(!r.length)return S.say('Nothing to export.');
+    S.csv([['Site','Link','Category','DA','Times used']].concat(r.map(function(s){return [s.domain,'https://'+s.domain,s.cat,s.da,s.used]})),'scoutly-backlink-sites'+(cat?'-'+S.slug(cat):'')+'.csv')};
+  $('copyB').onclick=function(){var t=filtered().map(function(s){return 'https://'+s.domain}).join('\n');if(!t)return S.say('Nothing to copy.');
+    (navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){S.say('Copied '+t.split('\n').length+' links.')},function(){S.say('Couldn’t copy. Use Export CSV instead.')})};
+
+  build([]);teamLinks().then(build);
+})();
+</script>
+</body>
+</html>
