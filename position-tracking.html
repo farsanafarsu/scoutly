@@ -34,11 +34,10 @@
       <p class="desc">Track where your site ranks in Google using your own Search Console data: real positions, clicks and impressions. Import a fresh export every week or month and Scoutly shows what moved. Imports are saved in this browser.</p>
     </div>
     <div class="how"><b>Get your data from Google Search Console (free):</b>
-      <ol><li>Open <a href="https://search.google.com/search-console/performance/search-analytics" target="_blank" rel="noopener noreferrer">Search Console → Performance → Search results</a>.</li><li>Pick a date range (e.g. last 28 days), turn on <b>Average position</b>, then <b>Export → Download CSV</b>.</li><li>Unzip it and drop <b>Queries.csv</b> (and optionally <b>Pages.csv</b>) below.</li></ol></div>
+      <ol><li>Open <a href="https://search.google.com/search-console/performance/search-analytics" target="_blank" rel="noopener noreferrer">Search Console → Performance → Search results</a>.</li><li>Pick a date range (e.g. last 28 days), turn on <b>Average position</b>, then <b>Export → Download CSV</b>.</li><li>Drop the downloaded <b>.zip</b> below as it is, or <b>Queries.csv</b> / <b>Pages.csv</b> if you unzipped it.</li></ol></div>
     <form class="qbar" id="f" novalidate>
-      <label class="drop" id="drop"><input type="file" id="file" accept=".csv" multiple><svg class="i"><use href="#i-upload"/></svg><span><b>Drop Queries.csv / Pages.csv here</b> or click to choose</span><span class="meta-note" id="fileN"></span></label>
-      <div class="qf sm"><label for="date">Snapshot date</label><input id="date" type="date"></div>
-      <button class="btn p" type="submit"><svg class="i"><use href="#i-upload"/></svg>Import</button>
+      <label class="drop" id="drop"><input type="file" id="file" accept=".zip,.csv,.xlsx,.xls,application/zip,text/csv" multiple><svg class="i"><use href="#i-upload"/></svg><span><b>Drop the Search Console .zip (or Queries.csv / Pages.csv) here</b> or click to choose</span><span class="meta-note" id="fileN" aria-live="polite"></span></label>
+      <div class="qf sm"><label for="date">Snapshot date <span class="meta-note">(optional)</span></label><input id="date" type="date"></div>
     </form>
     <p class="qerr" id="err" role="alert"></p>
     <div class="snaps" id="snaps"></div>
@@ -59,7 +58,7 @@
 <script src="assets/app.js"></script>
 <script>
 (function(){
-  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,KEY='scoutly.ranks',files=[];
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,KEY='scoutly.ranks';
   var db=load(),cur=null,kind='queries',sort='impr',dir=-1;
   function load(){try{return JSON.parse(localStorage.getItem(KEY)||'{"snaps":[],"tracked":{}}')}catch(_){return {snaps:[],tracked:{}}}}
   function save(){try{localStorage.setItem(KEY,JSON.stringify(db))}catch(e){S.say('Browser storage is full; delete an old snapshot.')}}
@@ -73,17 +72,46 @@
     var k=col(/quer|keyword/),p=col(/^top pages|^page|url|landing/),cl=col(/click/),im=col(/impress/),ct=col(/ctr/),po=col(/position/);
     var key=k>-1?k:p;if(key<0||po<0)return null;
     return {kind:k>-1?'queries':'pages',rows:r.slice(1).filter(function(x){return x[key]}).map(function(x){return {key:x[key].trim(),clicks:num(x[cl]),impr:num(x[im]),ctr:ct>-1?num(x[ct]):(num(x[im])?num(x[cl])/num(x[im])*100:0),pos:Math.round(num(x[po])*10)/10}})}}
-  function handle(fs){files=[].slice.call(fs).filter(function(f){return /\.csv$/i.test(f.name)});$('fileN').textContent=files.map(function(f){return f.name}).join(', ')}
-  $('file').addEventListener('change',function(){handle(this.files)});
-  ['dragover','dragenter'].forEach(function(ev){$('drop').addEventListener(ev,function(e){e.preventDefault();this.classList.add('on')})});
-  ['dragleave','drop'].forEach(function(ev){$('drop').addEventListener(ev,function(e){e.preventDefault();this.classList.remove('on');if(e.dataTransfer&&e.dataTransfer.files.length)handle(e.dataTransfer.files)})});
-  $('f').addEventListener('submit',function(e){e.preventDefault();$('err').textContent='';if(!files.length){$('err').textContent='Choose Queries.csv or Pages.csv first.';return}
-    var date=$('date').value||new Date().toISOString().slice(0,10),snap={date:date,queries:null,pages:null};
-    Promise.all(files.map(function(f){return f.text()})).then(function(texts){
-      texts.forEach(function(t,i){var d=fromCSV(t);if(d)snap[d.kind]=d.rows;else $('err').textContent=files[i].name+' doesn’t look like a Search Console export (needs Query/Page and Position columns).'});
-      if(!snap.queries&&!snap.pages)return;
+  /* Search Console's "Download CSV" gives a .zip; read Queries.csv and Pages.csv straight out of it */
+  function unzip(file){return file.arrayBuffer().then(function(buf){
+    var u=new Uint8Array(buf),dv=new DataView(buf),i=u.length-22,out=[];
+    while(i>=0&&dv.getUint32(i,true)!==0x06054b50)i--;
+    if(i<0)throw new Error(file.name+' isn’t a readable .zip file.');
+    for(var n=dv.getUint16(i+10,true),p=dv.getUint32(i+16,true);n>0;n--){
+      var method=dv.getUint16(p+10,true),size=dv.getUint32(p+20,true),nl=dv.getUint16(p+28,true),off=dv.getUint32(p+42,true);
+      var name=new TextDecoder().decode(u.subarray(p+46,p+46+nl)).split('/').pop();p+=46+nl+dv.getUint16(p+30,true)+dv.getUint16(p+32,true);
+      if(!/^(queries|pages)\.csv$/i.test(name))continue;
+      var data=u.subarray(off+30+dv.getUint16(off+26,true)+dv.getUint16(off+28,true)).subarray(0,size);
+      if(method===0)out.push(Promise.resolve({name:name,text:new TextDecoder().decode(data)}));
+      else if(method===8&&window.DecompressionStream)out.push(new Response(new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text().then(function(nm){return function(t){return {name:nm,text:t}}}(name)));
+      else throw new Error('This browser can’t open .zip files. Unzip it and choose Queries.csv instead.');
+    }
+    if(!out.length)throw new Error(file.name+' has no Queries.csv or Pages.csv. Export it from Search Console → Performance → Search results.');
+    return Promise.all(out)})}
+  function read(fs){var list=[].slice.call(fs);
+    if(list.some(function(f){return /\.xlsx?$/i.test(f.name)}))return Promise.reject(new Error('That’s an Excel file. In Search Console choose Export → Download CSV, then drop the .zip here.'));
+    var ok=list.filter(function(f){return /\.(csv|zip)$/i.test(f.name)});
+    if(!ok.length)return Promise.reject(new Error('Choose the .zip from Search Console, or Queries.csv / Pages.csv.'));
+    return Promise.all(ok.map(function(f){return /\.zip$/i.test(f.name)?unzip(f):f.text().then(function(t){return [{name:f.name,text:t}]})}))
+      .then(function(r){return [].concat.apply([],r)})}
+  /* today in the viewer's own time zone (toISOString would give the UTC date) */
+  function today(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+  /* choosing or dropping files imports them straight away; the date comes from the box, else the zip's name, else today */
+  function importFiles(fs){$('err').textContent='';
+    var names=[].map.call(fs,function(f){return f.name}).join(', '),dated=(names.match(/\d{4}-\d{2}-\d{2}/)||[])[0];
+    $('fileN').textContent='Reading '+names+'…';
+    read(fs).then(function(items){
+      var date=$('date').value||dated||today(),snap={date:date,queries:null,pages:null},bad=[];
+      items.forEach(function(it){var d=fromCSV(it.text);if(d)snap[d.kind]=d.rows;else bad.push(it.name)});
+      if(!snap.queries&&!snap.pages)throw new Error(bad.join(', ')+' doesn’t look like a Search Console export (needs Query/Page and Position columns).');
       db.snaps=db.snaps.filter(function(s){return s.date!==date});db.snaps.push(snap);db.snaps.sort(function(a,b){return a.date<b.date?-1:1});
-      cur=date;kind=snap.queries?'queries':'pages';save();files=[];$('fileN').textContent='';render();S.say('Imported snapshot for '+date+'.')})});
+      cur=date;kind=snap.queries?'queries':'pages';save();$('fileN').textContent='';render();
+      S.say('Imported '+((snap.queries||[]).length+(snap.pages||[]).length)+' rows for '+date+'.')
+    }).catch(function(e){$('fileN').textContent='';$('err').textContent=e.message})}
+  $('file').addEventListener('change',function(){if(this.files.length)importFiles(this.files);this.value=''});
+  ['dragover','dragenter'].forEach(function(ev){$('drop').addEventListener(ev,function(e){e.preventDefault();this.classList.add('on')})});
+  ['dragleave','drop'].forEach(function(ev){$('drop').addEventListener(ev,function(e){e.preventDefault();this.classList.remove('on');if(e.dataTransfer&&e.dataTransfer.files.length)importFiles(e.dataTransfer.files)})});
+  $('f').addEventListener('submit',function(e){e.preventDefault()});
   function snap(d){return db.snaps.find(function(s){return s.date===d})}
   function prev(d){var i=db.snaps.findIndex(function(s){return s.date===d});return i>0?db.snaps[i-1]:null}
   function spark(key){var pts=db.snaps.map(function(s){var r=(s[kind]||[]).find(function(x){return x.key===key});return r?r.pos:null}).filter(function(v){return v!==null});
@@ -120,7 +148,7 @@
   document.querySelector('#rows').closest('table').querySelector('thead').addEventListener('click',function(e){var th=e.target.closest('[data-s]');if(!th)return;dir=sort===th.dataset.s?-dir:(th.dataset.s==='pos'||th.dataset.s==='key'?1:-1);sort=th.dataset.s;render()});
   $('find').addEventListener('input',render);$('bucket').addEventListener('change',render);
   $('exp').onclick=function(){var s=snap(cur);if(!s)return;S.csv([[kind==='pages'?'Page':'Query','Position','Clicks','Impressions','CTR %']].concat((s[kind]||[]).map(function(r){return [r.key,r.pos,r.clicks,r.impr,r.ctr.toFixed(2)]})),'scoutly-positions-'+cur+'.csv')};
-  $('date').value=new Date().toISOString().slice(0,10);render();
+  render();
 })();
 </script>
 </body>
