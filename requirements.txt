@@ -1,0 +1,2 @@
+# The API server (seo/engine.py) is standard library only, apart from the team database:
+pymongo>=4.10,<5

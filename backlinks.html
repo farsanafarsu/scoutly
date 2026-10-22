@@ -53,6 +53,11 @@
 .btn.ic.del:hover{background:var(--cr);border-color:var(--cr)}
 .more{display:flex;justify-content:center;padding:14px}
 .zero{margin-top:22px}
+.dbbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin-top:18px;padding:12px 16px;background:rgba(47,91,255,.05);border:1px solid rgba(47,91,255,.3);font:400 12.5px/1.6 var(--M);color:var(--sl)}
+.dbbar>svg{flex:none;width:16px;height:16px;color:var(--b)}
+.dbbar #dbMsg{flex:1 1 320px}
+.keyf{display:flex;gap:8px}
+.keyf input{width:240px;height:34px;padding:0 10px;border:1px solid var(--ln);border-radius:3px;background:#fff;font:400 13px/1 var(--M)}
 /* add / edit / import dialog */
 .dlg{width:min(600px,calc(100% - 32px));max-height:calc(100% - 32px);padding:0;border:0;background:transparent;color:var(--ink)}
 .dlg::backdrop{background:rgba(5,10,31,.6);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
@@ -83,7 +88,7 @@
       <div>
         <p class="lbl">Link building</p>
         <h1>Backlink Manager</h1>
-        <p class="desc">Log every backlink you build for your websites and campaigns, then check they’re still live and pointing at the right page. Saved in this browser.</p>
+        <p class="desc">Log every backlink you build for your websites and campaigns, then check they’re still live and pointing at the right page. <span id="saveNote">Saved in this browser.</span></p>
       </div>
       <div class="ph-act">
         <button class="btn" type="button" id="impB"><svg class="i"><use href="#i-upload"/></svg>Import CSV</button>
@@ -91,6 +96,11 @@
         <button class="btn p" type="button" data-new><svg class="i"><use href="#i-plus"/></svg>Add backlink</button>
       </div>
     </div>
+
+    <form class="dbbar" id="dbBar" hidden novalidate>
+      <svg class="i" aria-hidden="true"><use href="#i-lock"/></svg><span id="dbMsg"></span>
+      <span class="keyf" id="keyF" hidden><label class="sr-only" for="teamKey">Team key</label><input id="teamKey" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your team key"><button class="btn sm p" type="submit">Connect</button></span>
+    </form>
 
     <div class="kpis" id="kpis"></div>
 
@@ -146,14 +156,48 @@
 <script src="assets/app.js"></script>
 <script>
 (function(){
-  /* backlinks live in this browser (localStorage) until the account backend is live */
-  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,KEY='scoutly.backlinks';
+  /* Saved automatically to the team's database (MongoDB, /api/links on the server) when it's switched on;
+     otherwise, or until a teammate enters the team key, in this browser (localStorage). */
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,KEY='scoutly.backlinks',TK='scoutly.teamKey';
   var TYPES=['Article','Blog','Guest post','Profile','Directory','Social bookmark','Forum','Comment','PDF / document','Other'];
   var STATUS={live:['Live','ok'],nofollow:['Nofollow','wr'],missing:['Link missing','bad'],broken:['Page broken','bad'],'':['Not checked','']};
-  var list=load(),editing=null,shown=100,sortBy='added',sortDir=-1;
+  var list=load(),editing=null,shown=100,sortBy='added',sortDir=-1,db=false,busy=false;
+  var OFFLINE='The Scoutly server isn’t reachable, so backlinks are saved in this browser.';
 
   function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')||[]}catch(_){return []}}
-  function save(){try{localStorage.setItem(KEY,JSON.stringify(list));return true}catch(_){S.say('Browser storage is full, so this change wasn’t saved. Export a CSV and delete old links.');return false}}
+  function save(){if(db)return true;try{localStorage.setItem(KEY,JSON.stringify(list));return true}catch(_){S.say('Browser storage is full, so this change wasn’t saved. Export a CSV and delete old links.');return false}}
+  function teamKey(){try{return localStorage.getItem(TK)||''}catch(_){return ''}}
+  /* one request to the team database; errors carry needKey / notConfigured from the server */
+  function call(path,body){var o={headers:{'X-Scoutly-Team':teamKey()}};if(body!==undefined){o.method='POST';o.headers['Content-Type']='application/json';o.body=JSON.stringify(body)}
+    return fetch(path,o).then(function(r){return r.json().catch(function(){return {error:OFFLINE,notConfigured:true}})},function(){return {error:OFFLINE,notConfigured:true}})
+      .then(function(j){if(j.error){var e=new Error(j.error);e.needKey=!!j.needKey;e.notConfigured=!!j.notConfigured;throw e}return j})}
+  /* the four changes, each saved on its own so teammates working at once don't overwrite each other */
+  var store={
+    add:function(items){if(!db){items.forEach(function(b){list.unshift(b)});return save()?Promise.resolve({added:items.length,duplicates:0}):Promise.reject(new Error('Not saved.'))}
+      var out={added:0,duplicates:0},chunks=[];for(var i=0;i<items.length;i+=1000)chunks.push(items.slice(i,i+1000));
+      return chunks.reduce(function(p,c){return p.then(function(){return call('/api/links/add',{items:c}).then(function(r){out.added+=r.added;out.duplicates+=r.duplicates;r.items.forEach(function(b){list.unshift(b)})})})},Promise.resolve()).then(function(){return out})},
+    update:function(b,fields){if(!db){for(var k in fields)b[k]=fields[k];save();return Promise.resolve(b)}
+      return call('/api/links/update',{item:Object.assign({id:b.id},fields)}).then(function(r){for(var k in r.item)b[k]=r.item[k];return b})},
+    remove:function(b){var drop=function(){list=list.filter(function(x){return x!==b})};if(!db){drop();save();return Promise.resolve()}
+      return call('/api/links/delete',{ids:[b.id]}).then(drop)},
+    status:function(items){if(!db){save();return Promise.resolve()}
+      return call('/api/links/status',{updates:items.map(function(b){return {id:b.id,status:b.status,note:b.note,checked:b.checked}})})}
+  };
+  function bar(msg,askKey){$('dbBar').hidden=!msg;$('dbMsg').textContent=msg||'';$('keyF').hidden=!askKey}
+  /* connect to the team database, and move anything this browser saved before into it */
+  function connect(){$('prog').hidden=false;$('progT').textContent='Loading your team’s backlinks…';
+    return call('/api/links').then(function(r){db=true;list=r.items||[];bar('');$('saveNote').textContent='Saved automatically to your team’s database.';
+      var local=load();if(!local.length)return;
+      return store.add(local).then(function(r2){try{localStorage.removeItem(KEY)}catch(_){}
+        S.say('Moved '+r2.added+' backlink'+(r2.added===1?'':'s')+' from this browser into the team database'+(r2.duplicates?' ('+r2.duplicates+' were already there)':'')+'.')})
+    }).catch(function(e){db=false;list=load();$('saveNote').textContent='Saved in this browser.';
+      bar(e.needKey?(teamKey()?'That team key didn’t work. Paste the current one to load the team’s backlinks.':'Your team’s backlinks are saved in a shared database. Paste the team key once to load and save them; ask whoever set Scoutly up for it.'):e.message,e.needKey)
+    }).then(function(){$('prog').hidden=true;render()})}
+  $('dbBar').addEventListener('submit',function(e){e.preventDefault();var k=$('teamKey').value.trim();if(!k)return $('teamKey').focus();
+    try{localStorage.setItem(TK,k)}catch(_){}$('teamKey').value='';connect()});
+  /* see teammates' changes when you come back to the tab */
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&db&&!busy&&!$('dlg').open)
+    call('/api/links').then(function(r){list=r.items||[];render()},function(){})});
   function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2,7)}
   function norm(u){u=String(u||'').trim();return !u?'':/^https?:\/\//i.test(u)?u:'https://'+u}
   function host(u){try{return new URL(norm(u)).hostname.replace(/^www\./,'').toLowerCase()}catch(_){return ''}}
@@ -213,7 +257,7 @@
     th.addEventListener('click',go);th.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();go()}})});
   $('rows').addEventListener('click',function(e){var ed=e.target.closest('[data-edit]'),dl=e.target.closest('[data-del]');
     if(ed)open(list.find(function(b){return b.id===ed.dataset.edit}));
-    if(dl){var b=list.find(function(x){return x.id===dl.dataset.del});if(b&&confirm('Delete this backlink?\n\n'+b.link)){list=list.filter(function(x){return x!==b});save();render();S.say('Backlink deleted.')}}});
+    if(dl){var b=list.find(function(x){return x.id===dl.dataset.del});if(b&&confirm('Delete this backlink?\n\n'+b.link))store.remove(b).then(function(){render();S.say('Backlink deleted.')},function(err){S.say(err.message)})}});
 
   /* ---------- add / edit */
   var dlg=$('dlg');
@@ -242,14 +286,19 @@
     if(editing&&links.length>1)ok=bad('iLink','Edit one link at a time.')&&ok;
     if(da&&(daOf(da)==null||+da<0||+da>100))ok=bad('iDa','DA is a number from 0 to 100.')&&ok;
     if(!ok){var f=document.querySelector('.dlg [aria-invalid="true"]');if(f)f.focus();return}
-    var base={campaign:camp,target:target?norm(target):'',type:$('iType').value,da:daOf(da),by:$('iBy').value.trim()};
-    if(editing){var moved=norm(links[0])!==editing.link||base.target!==editing.target;for(var k in base)editing[k]=base[k];editing.link=norm(links[0]);
-      if(moved){editing.status='';editing.checked='';editing.note=''}save();S.say('Backlink updated.')}
-    else{var have={},added=0,now=new Date().toISOString();list.forEach(function(b){have[same(b.campaign,b.link)]=1});
-      links.forEach(function(l){l=norm(l);if(have[same(camp,l)])return;have[same(camp,l)]=1;
-        list.unshift({id:uid(),campaign:base.campaign,target:base.target,link:l,type:base.type,da:base.da,by:base.by,added:now,status:'',checked:'',note:''});added++});
-      if(!save())return;S.say(added?added+' backlink'+(added===1?'':'s')+' added.'+(added<links.length?' '+(links.length-added)+' already in this campaign.':''):'Those links are already in this campaign.')}
-    close();render()});
+    var base={campaign:camp,target:target?norm(target):'',type:$('iType').value,da:daOf(da),by:$('iBy').value.trim()},go=$('dlgS');
+    function done(msg){go.disabled=false;close();render();S.say(msg)}
+    function fail(err){go.disabled=false;$('iLinkE').textContent=err.message}
+    go.disabled=true;
+    if(editing){var b=editing,fields=Object.assign({link:norm(links[0])},base);
+      if(fields.link!==b.link||fields.target!==b.target){fields.status='';fields.checked='';fields.note=''}
+      store.update(b,fields).then(function(){done('Backlink updated.')},fail);return}
+    var have={},now=new Date().toISOString(),items=[];list.forEach(function(b){have[same(b.campaign,b.link)]=1});
+    links.forEach(function(l){l=norm(l);if(have[same(camp,l)])return;have[same(camp,l)]=1;
+      items.push({id:uid(),campaign:base.campaign,target:base.target,link:l,type:base.type,da:base.da,by:base.by,added:now,status:'',checked:'',note:''})});
+    if(!items.length){go.disabled=false;return bad('iLink','Those links are already in this campaign.')}
+    store.add(items).then(function(r){var dup=links.length-r.added;
+      done(r.added+' backlink'+(r.added===1?'':'s')+' added.'+(dup?' '+dup+' already in this campaign.':''))},fail)});
 
   /* ---------- check status: visit each linking page and look for the link (seo/tools.py check_backlink) */
   function verdict(r){if(r.error||!r.status||r.status>=400)return ['broken',r.error||('Page returns '+r.status)];
@@ -261,13 +310,13 @@
     if(!todo.length)return S.say('Add “Your page the links point to” on these backlinks (Edit) so Scoutly knows what to look for.');
     var groups={};todo.forEach(function(b){(groups[b.target]=groups[b.target]||[]).push(b)});
     var batches=[];Object.keys(groups).forEach(function(t){for(var i=0;i<groups[t].length;i+=20)batches.push({target:t,items:groups[t].slice(i,i+20)})});
-    var done=0,failed=null;btn.disabled=true;$('prog').hidden=false;
-    function step(i){if(i>=batches.length||failed){btn.disabled=false;$('prog').hidden=true;save();render();
+    var done=0,failed=null;btn.disabled=true;busy=true;$('prog').hidden=false;
+    function step(i){if(i>=batches.length||failed){btn.disabled=false;busy=false;$('prog').hidden=true;render();
         if(failed)S.say('Check stopped: '+failed);else S.say('Checked '+done+' backlink'+(done===1?'':'s')+'.'+(skip?' '+skip+' skipped (no target page).':''));return}
       var b=batches[i];$('progT').textContent='Checking '+(done+1)+'–'+(done+b.items.length)+' of '+todo.length+' links… (the first check can take a minute while the server wakes up)';
       S.post('/api/backlinks',{target:b.target,sources:b.items.map(function(x){return x.link})}).then(function(r){
         (r.rows||[]).forEach(function(row,k){var x=b.items[k];if(!x)return;var v=verdict(row);x.status=v[0];x.note=v[1];x.checked=new Date().toISOString()});
-        done+=b.items.length;save();render();step(i+1)}).catch(function(e){failed=e.message;step(i+1)})}
+        done+=b.items.length;render();return store.status(b.items)}).then(function(){step(i+1)}).catch(function(e){failed=e.message;step(i+1)})}
     step(0)};
 
   /* ---------- CSV export / import */
@@ -290,17 +339,19 @@
       var cL=col(/^(link|url|backlink|backlink url|source|source url|linking page)$/),cC=col(/campaign|project|client|brand/),cT=col(/target|landing|your page|destination/),
         cY=col(/type/),cD=col(/^da$|domain authority|authority/),cA=col(/^added$|date|created/),cB=col(/added by|author|^by$|owner|user/);
       if(cL<0)throw new Error('Couldn’t find a Link (or URL) column. Expected headers like Campaign, Link, Link type, DA, Added, Added by.');
-      var have={},added=0,dup=0;list.forEach(function(b){have[same(b.campaign,b.link)]=1});
+      var have={},items=[],dup=0;list.forEach(function(b){have[same(b.campaign,b.link)]=1});
       r.slice(1).forEach(function(x){var l=(x[cL]||'').trim();if(!isUrl(l))return;l=norm(l);var camp=cC>-1?(x[cC]||'').trim():'Imported';
         if(have[same(camp,l)]){dup++;return}have[same(camp,l)]=1;
         var d=cA>-1?parseDate(x[cA]):null;
-        list.push({id:uid(),campaign:camp||'Imported',target:cT>-1&&isUrl(x[cT])?norm(x[cT]):'',link:l,type:cY>-1?(x[cY]||'').trim():'',da:cD>-1?daOf(x[cD]):null,
-          by:cB>-1?(x[cB]||'').trim():'',added:d&&!isNaN(d)?d.toISOString():new Date().toISOString(),status:'',checked:'',note:''});added++});
-      if(!added)throw new Error(dup?'All '+dup+' links in that file are already here.':'No rows with a valid link in that file.');
-      if(!save()){list=load();return}render();S.say('Imported '+added+' backlink'+(added===1?'':'s')+(dup?' ('+dup+' already here)':'')+'.')})
-      .catch(function(e){S.say(e.message)})});
+        items.push({id:uid(),campaign:camp||'Imported',target:cT>-1&&isUrl(x[cT])?norm(x[cT]):'',link:l,type:cY>-1?(x[cY]||'').trim():'',da:cD>-1?daOf(x[cD]):null,
+          by:cB>-1?(x[cB]||'').trim():'',added:d&&!isNaN(d)?d.toISOString():new Date().toISOString(),status:'',checked:'',note:''})});
+      if(!items.length)throw new Error(dup?'All '+dup+' links in that file are already here.':'No rows with a valid link in that file.');
+      $('prog').hidden=false;$('progT').textContent='Importing '+items.length.toLocaleString()+' backlinks…';
+      return store.add(items).then(function(r){dup+=r.duplicates;$('prog').hidden=true;render();
+        S.say('Imported '+r.added.toLocaleString()+' backlink'+(r.added===1?'':'s')+(dup?' ('+dup+' already here)':'')+'.')})})
+      .catch(function(e){$('prog').hidden=true;render();S.say(e.message)})});
 
-  render();
+  render();connect();
 })();
 </script>
 </body>

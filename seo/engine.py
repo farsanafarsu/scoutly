@@ -50,6 +50,9 @@ PSI_KEY = os.environ.get("PAGESPEED_API_KEY", "").strip()
 # carry the Worker's shared key, so nobody can use the hosted server directly.
 API_ONLY = os.environ.get("SCOUTLY_API_ONLY") == "1"
 PROXY_KEY = os.environ.get("SCOUTLY_PROXY_KEY", "").strip()
+# The team's shared backlinks (/api/links, linkstore.py) need this key in X-Scoutly-Team. A hosted server
+# without one keeps them switched off, so the list is never readable by anyone who finds the site.
+TEAM_KEY = os.environ.get("SCOUTLY_TEAM_KEY", "").strip()
 AI_BOTS = ["GPTBot", "OAI-SearchBot", "ChatGPT-User", "ClaudeBot", "Claude-SearchBot", "PerplexityBot", "Google-Extended", "CCBot"]
 AI_SEARCH_BOTS = {"OAI-SearchBot", "PerplexityBot", "Claude-SearchBot"}
 SKIP_EXT = re.compile(r"\.(jpe?g|png|gif|webp|avif|svg|ico|pdf|zip|rar|gz|mp4|webm|mp3|wav|css|js|json|xml|txt|woff2?|ttf|eot|docx?|xlsx?|pptx?)$", re.I)
@@ -1153,12 +1156,22 @@ POST_ROUTES = {
     "/api/provider/keywords": lambda b: _provider().keyword_metrics([str(k) for k in b.get("keywords") or []][:5000],
                                                                     str(b.get("gl") or "us"), bool(b.get("run"))),
     "/api/provider/clear-cache": lambda b: _provider().clear_cache(),
+    # the team's backlinks (Backlink Manager), stored in MongoDB
+    "/api/links/add": lambda b: _links().add(b.get("items")),
+    "/api/links/update": lambda b: _links().update(b.get("item")),
+    "/api/links/delete": lambda b: _links().delete(b.get("ids")),
+    "/api/links/status": lambda b: _links().set_status(b.get("updates")),
 }
 
 
 def _provider():
     import provider
     return provider
+
+
+def _links():
+    import linkstore
+    return linkstore
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -1196,6 +1209,16 @@ class Handler(SimpleHTTPRequestHandler):
         if PROXY_KEY and not hmac.compare_digest(self.headers.get("X-Scoutly-Key", ""), PROXY_KEY):
             self._json(403, {"error": "This Scoutly server only answers requests from the Scoutly site."})
             return True
+        if path == "/api/links" or path.startswith("/api/links/"):
+            if not os.environ.get("MONGODB_URI", "").strip():
+                self._json(200, {"error": "The team database isn't set up on the server yet, so backlinks are saved in this browser.", "notConfigured": True})
+                return True
+            if API_ONLY and not TEAM_KEY:
+                self._json(200, {"error": "The team database isn't switched on yet (set SCOUTLY_TEAM_KEY on the server), so backlinks are saved in this browser.", "notConfigured": True})
+                return True
+            if TEAM_KEY and not hmac.compare_digest(self.headers.get("X-Scoutly-Team", ""), TEAM_KEY):
+                self._json(401, {"error": "Enter your team key to see and save the team’s backlinks.", "needKey": True})
+                return True
         return False
 
     def do_POST(self):
@@ -1231,6 +1254,8 @@ class Handler(SimpleHTTPRequestHandler):
                 return self._json(500, {"error": f"The audit failed unexpectedly: {e.__class__.__name__}"})
         if u.path == "/api/pagespeed":
             return self._pagespeed((parse_qs(u.query).get("url") or [""])[0])
+        if u.path == "/api/links":
+            return self._tool(lambda: _links().list_links())
         if u.path in TOOL_ROUTES:
             q = {k: v[0] for k, v in parse_qs(u.query).items()}
             return self._tool(lambda: TOOL_ROUTES[u.path](q))

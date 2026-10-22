@@ -1,11 +1,11 @@
 # Render Blueprint for the Scoutly API (seo/engine.py). The live site's Cloudflare Worker forwards /api/* here.
-# Standard library only, so there is nothing to install.
+# Standard library only, plus pymongo for the team's shared backlinks.
 services:
   - type: web
     name: scoutly-api
     runtime: python
     plan: free
-    buildCommand: python --version
+    buildCommand: pip install -r requirements.txt
     startCommand: python server.py
     healthCheckPath: /api/health
     envVars:
@@ -15,6 +15,12 @@ services:
         value: "1"
       # copy this generated value into Cloudflare as the API_KEY secret
       - key: SCOUTLY_PROXY_KEY
+        generateValue: true
+      # the team's backlinks database: a MongoDB Atlas connection string (mongodb+srv://…)
+      - key: MONGODB_URI
+        sync: false
+      # teammates enter this once on the Backlink Manager to see and save the shared links
+      - key: SCOUTLY_TEAM_KEY
         generateValue: true
       # optional: a free Google key gives PageSpeed its own quota
       - key: PAGESPEED_API_KEY
