@@ -88,7 +88,8 @@
     ['Account',[
       ['settings.html','set','Settings']]]
   ];
-  var here=location.pathname.split('/').pop()||'dashboard.html',q=location.search;
+  /* Cloudflare serves pages without .html (/backlinks), so add it back before matching the links */
+  var here=location.pathname.split('/').pop()||'dashboard.html',q=location.search;if(here.indexOf('.')<0)here+='.html';
   /* locked.html stands in for a provider tool when no provider is connected; highlight that tool */
   var LOCKED={organic:'organic-research.html',traffic:'traffic-analytics.html',backlinks:'backlink-analytics.html','backlink-gap':'backlink-gap.html'};
   if(here==='locked.html'){var lt=(q.match(/tool=([\w-]+)/)||[])[1];here=LOCKED[lt]||LOCKED.organic;q=''}
