@@ -1,6 +1,7 @@
 /* Scoutly app shell: shared by dashboard.html and campaigns.html.
    Fills in the signed-in user, runs the mobile sidebar, toasts, "coming soon" links and logout.
-   Early-access demo: everything is kept in this tab's sessionStorage; nothing is sent anywhere. */
+   Early-access demo: the session is kept in this tab's sessionStorage. Campaigns and backlinks are kept
+   in the team database when it's on, otherwise in this browser's localStorage. */
 (function(){
   var $=function(i){return document.getElementById(i)};
   function read(k){try{return sessionStorage.getItem(k)}catch(_){return null}}
@@ -36,9 +37,9 @@
   /* pages without the add-website box send the "+ Add a website" button to the dashboard */
   if($('projB')&&!$('scanUrl'))$('projB').addEventListener('click',function(){location.href='dashboard.html'});
 
-  /* logout: the sidebar link and the top bar button */
+  /* logout: the sidebar link and the top bar button (campaigns and backlinks are kept: database / localStorage) */
   [].forEach.call(document.querySelectorAll('[data-logout]'),function(el){el.addEventListener('click',function(e){e.preventDefault();
-    try{['scoutly.user','scoutly.site','scoutly.campaigns','scoutly.audits'].forEach(function(k){sessionStorage.removeItem(k)})}catch(_){}
+    try{['scoutly.user','scoutly.site','scoutly.audits'].forEach(function(k){sessionStorage.removeItem(k)})}catch(_){}
     location.href='login.html?mode=login'})});
 
   function esc(s){return String(s==null?'':s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}

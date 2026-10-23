@@ -1161,6 +1161,9 @@ POST_ROUTES = {
     "/api/links/update": lambda b: _links().update(b.get("item")),
     "/api/links/delete": lambda b: _links().delete(b.get("ids")),
     "/api/links/status": lambda b: _links().set_status(b.get("updates")),
+    # the team's SEO Campaigns, in the same database
+    "/api/campaigns/save": lambda b: _camps().save(b.get("items")),
+    "/api/campaigns/delete": lambda b: _camps().delete(b.get("ids")),
 }
 
 
@@ -1172,6 +1175,11 @@ def _provider():
 def _links():
     import linkstore
     return linkstore
+
+
+def _camps():
+    import campstore
+    return campstore
 
 
 class Handler(SimpleHTTPRequestHandler):
@@ -1209,15 +1217,16 @@ class Handler(SimpleHTTPRequestHandler):
         if PROXY_KEY and not hmac.compare_digest(self.headers.get("X-Scoutly-Key", ""), PROXY_KEY):
             self._json(403, {"error": "This Scoutly server only answers requests from the Scoutly site."})
             return True
-        if path == "/api/links" or path.startswith("/api/links/"):
+        team = next((w for p, w in (("/api/links", "backlinks"), ("/api/campaigns", "campaigns")) if path == p or path.startswith(p + "/")), None)
+        if team:
             if not os.environ.get("MONGODB_URI", "").strip():
-                self._json(200, {"error": "The team database isn't set up on the server yet, so backlinks are saved in this browser.", "notConfigured": True})
+                self._json(200, {"error": f"The team database isn't set up on the server yet, so {team} are saved in this browser.", "notConfigured": True})
                 return True
             if API_ONLY and not TEAM_KEY:
-                self._json(200, {"error": "The team database isn't switched on yet (set SCOUTLY_TEAM_KEY on the server), so backlinks are saved in this browser.", "notConfigured": True})
+                self._json(200, {"error": f"The team database isn't switched on yet (set SCOUTLY_TEAM_KEY on the server), so {team} are saved in this browser.", "notConfigured": True})
                 return True
             if TEAM_KEY and not hmac.compare_digest(self.headers.get("X-Scoutly-Team", ""), TEAM_KEY):
-                self._json(401, {"error": "Enter your team key to see and save the team’s backlinks.", "needKey": True})
+                self._json(401, {"error": f"Enter your team key to see and save the team’s {team}.", "needKey": True})
                 return True
         return False
 
@@ -1256,6 +1265,8 @@ class Handler(SimpleHTTPRequestHandler):
             return self._pagespeed((parse_qs(u.query).get("url") or [""])[0])
         if u.path == "/api/links":
             return self._tool(lambda: _links().list_links())
+        if u.path == "/api/campaigns":
+            return self._tool(lambda: _camps().list_campaigns())
         if u.path in TOOL_ROUTES:
             q = {k: v[0] for k, v in parse_qs(u.query).items()}
             return self._tool(lambda: TOOL_ROUTES[u.path](q))

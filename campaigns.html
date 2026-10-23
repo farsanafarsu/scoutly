@@ -95,6 +95,12 @@
 .dlg-f{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px 20px}
 .f .hint{margin-top:-10px;margin-bottom:6px;font:400 11px/1.4 var(--M);color:var(--mu)}
 
+.dbbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin-top:18px;padding:12px 16px;background:rgba(47,91,255,.05);border:1px solid rgba(47,91,255,.3);font:400 12.5px/1.6 var(--M);color:var(--sl)}
+.dbbar>svg{flex:none;width:16px;height:16px;color:var(--b)}
+.dbbar #dbMsg{flex:1 1 320px}
+.keyf{display:flex;gap:8px}
+.keyf input{width:240px;height:34px;padding:0 10px;border:1px solid var(--ln);border-radius:3px;background:#fff;font:400 13px/1 var(--M)}
+
 @media(max-width:700px){.how{grid-template-columns:1fr}.how li+li{border-left:0;border-top:1px solid var(--ln)}.how li{padding:16px 4px 0}.fg{grid-template-columns:1fr}.ph-act{width:100%}.ph-act .btn{flex:1}}
 @media(max-width:400px){.grid{grid-template-columns:minmax(0,1fr)}}
 </style>
@@ -109,12 +115,17 @@
       <div>
         <p class="lbl">SEO management</p>
         <h1>SEO Campaigns</h1>
-        <p class="desc">Each campaign pairs a target keyword with a location and a landing page, so you can audit that page and track the backlinks pointing to it.</p>
+        <p class="desc">Each campaign pairs a target keyword with a location and a landing page, so you can audit that page and track the backlinks pointing to it. <span id="saveNote">Saved in this browser.</span></p>
       </div>
       <div class="ph-act">
         <button class="btn p" type="button" data-new><svg class="i"><use href="#i-plus"/></svg>Create campaign</button>
       </div>
     </div>
+
+    <form class="dbbar" id="dbBar" hidden novalidate>
+      <svg class="i" aria-hidden="true"><use href="#i-lock"/></svg><span id="dbMsg"></span>
+      <span class="keyf" id="keyF" hidden><label class="sr-only" for="teamKey">Team key</label><input id="teamKey" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your team key"><button class="btn sm p" type="submit">Connect</button></span>
+    </form>
 
     <div class="tools">
       <label class="search"><span class="sr-only">Search campaigns</span><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Search campaigns…" autocomplete="off"></label>
@@ -158,17 +169,53 @@
 <script src="assets/app.js"></script>
 <script>
 (function(){
-  /* campaigns live in this tab's sessionStorage until accounts and a backend exist */
-  var $=function(i){return document.getElementById(i)},S=window.Scoutly,KEY='scoutly.campaigns';
-  var list=[];try{list=JSON.parse(S.read(KEY)||'[]')||[]}catch(_){list=[]}
-  var filter='all',editing=null;
-  function save(){S.write(KEY,JSON.stringify(list))}
+  /* Saved automatically to the team's database (MongoDB, /api/campaigns on the server) when it's switched on,
+     like the Backlink Manager; otherwise in this browser (localStorage), so logging out never loses them.
+     localStorage always holds the latest list for other pages (Backlink Manager, Reports); campaigns made
+     while the database was out of reach carry local:true and move into it on the next connect. */
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,KEY='scoutly.campaigns',TK='scoutly.teamKey';
+  var OFFLINE='The Scoutly server isn’t reachable, so campaigns are saved in this browser.';
+  function load(){try{return JSON.parse(localStorage.getItem(KEY)||'[]')||[]}catch(_){return []}}
+  var list=load(),filter='all',editing=null,db=false;
+  /* campaigns from before this change lived in the tab's sessionStorage: keep any that are still there */
+  try{var old=JSON.parse(S.read(KEY)||'[]')||[];old.forEach(function(c){if(!list.some(function(x){return x.id===c.id})){c.local=true;list.push(c)}});sessionStorage.removeItem(KEY)}catch(_){}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify(list))}catch(_){S.say('Browser storage is full, so this change wasn’t saved.')}}
+  save();
+  function teamKey(){try{return localStorage.getItem(TK)||''}catch(_){return ''}}
+  /* one request to the team database; errors carry needKey / notConfigured from the server */
+  function call(path,body){var o={headers:{'X-Scoutly-Team':teamKey()}};if(body!==undefined){o.method='POST';o.headers['Content-Type']='application/json';o.body=JSON.stringify(body)}
+    return fetch(path,o).then(function(r){return r.json().catch(function(){return {error:OFFLINE,notConfigured:true}})},function(){return {error:OFFLINE,notConfigured:true}})
+      .then(function(j){if(j.error){var e=new Error(j.error);e.needKey=!!j.needKey;e.notConfigured=!!j.notConfigured;throw e}return j})}
+  function clean(c){var o={};for(var k in c)if(k!=='local')o[k]=c[k];return o}
+  var store={
+    put:function(c){if(!db){c.local=true;save();return Promise.resolve(c)}
+      return call('/api/campaigns/save',{items:[clean(c)]}).then(function(r){var s=r.items[0];delete c.local;for(var k in s)c[k]=s[k];save();return c})},
+    remove:function(c){var drop=function(){list=list.filter(function(x){return x!==c});save()};if(!db||c.local){drop();return Promise.resolve()}
+      return call('/api/campaigns/delete',{ids:[c.id]}).then(drop)}
+  };
+  function bar(msg,askKey){$('dbBar').hidden=!msg;$('dbMsg').textContent=msg||'';$('keyF').hidden=!askKey}
+  /* connect to the team database, and move anything this browser saved on its own into it */
+  function connect(){
+    return call('/api/campaigns').then(function(r){var mine=list.filter(function(c){return c.local});
+      return (mine.length?call('/api/campaigns/save',{items:mine.map(clean)}):Promise.resolve({items:[]})).then(function(r2){
+        db=true;var got=r.items||[];r2.items.forEach(function(s){got=got.filter(function(x){return x.id!==s.id});got.unshift(s)});
+        list=got;save();bar('');$('saveNote').textContent='Saved automatically to your team’s database.';
+        if(r2.items.length)S.say('Moved '+r2.items.length+' campaign'+(r2.items.length===1?'':'s')+' from this browser into the team database.')})
+    }).catch(function(e){db=false;$('saveNote').textContent='Saved in this browser.';
+      bar(e.needKey?(teamKey()?'That team key didn’t work. Paste the current one to load the team’s campaigns.':'Your team’s campaigns are saved in a shared database. Paste the team key once to load and save them; ask whoever set Scoutly up for it.'):e.message,e.needKey)
+    }).then(loadLinks).then(render)}
+  $('dbBar').addEventListener('submit',function(e){e.preventDefault();var k=$('teamKey').value.trim();if(!k)return $('teamKey').focus();
+    try{localStorage.setItem(TK,k)}catch(_){}$('teamKey').value='';connect()});
+  /* see teammates' changes when you come back to the tab */
+  document.addEventListener('visibilitychange',function(){if(document.visibilityState==='visible'&&db&&!dlg.open)
+    call('/api/campaigns').then(function(r){list=r.items||[];save();return loadLinks()}).then(render,function(){})});
   function el(tag,cls,text){var e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
   function icon(id){var s=document.createElementNS('http://www.w3.org/2000/svg','svg');s.setAttribute('class','i');s.setAttribute('aria-hidden','true');var u=document.createElementNS('http://www.w3.org/2000/svg','use');u.setAttribute('href','#'+id);s.appendChild(u);return s}
   function fmt(d){if(!d)return '';var x=new Date(d+(d.length===10?'T00:00':''));return isNaN(x)?d:x.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}
   function norm(u){u=u.trim();return /^https?:\/\//i.test(u)?u:'https://'+u}
   /* backlinks logged for this campaign in the Backlink Manager (matched by "brand — name", as it lists them) */
   var links=[];try{links=JSON.parse(localStorage.getItem('scoutly.backlinks')||'[]')||[]}catch(_){}
+  function loadLinks(){if(!db)return;return call('/api/links').then(function(r){links=r.items||[]},function(){})}
   function linkCount(c){var n=c.brand?c.brand+' — '+c.name:c.name;return links.filter(function(b){return b.campaign===n}).length}
 
   function card(c){
@@ -188,7 +235,7 @@
     f.appendChild(au);
     f.appendChild(el('span','by',c.owner+' · '+fmt(c.created)));
     var ed=el('button','btn sm ic');ed.type='button';ed.setAttribute('aria-label','Edit '+c.name);ed.appendChild(icon('i-edit'));ed.onclick=function(){open(c)};f.appendChild(ed);
-    var dl=el('button','btn sm ic del');dl.type='button';dl.setAttribute('aria-label','Delete '+c.name);dl.appendChild(icon('i-trash'));dl.onclick=function(){if(confirm('Delete the campaign "'+c.name+'"?')){list=list.filter(function(x){return x.id!==c.id});save();render();S.say('Campaign deleted.')}};f.appendChild(dl);
+    var dl=el('button','btn sm ic del');dl.type='button';dl.setAttribute('aria-label','Delete '+c.name);dl.appendChild(icon('i-trash'));dl.onclick=function(){if(confirm('Delete the campaign "'+c.name+'"?'))store.remove(c).then(function(){render();S.say('Campaign deleted.')},function(err){S.say(err.message)})};f.appendChild(dl);
     a.appendChild(f);return a;
   }
 
@@ -226,15 +273,18 @@
     else if(!/^(https?:\/\/)?[\w-]+(\.[\w-]+)+(\/\S*)?$/i.test(u))ok=bad('fUrl','That doesn’t look like a web address.')&&ok;
     if(!ok){var f=document.querySelector('.dlg [aria-invalid="true"]');if(f)f.focus();return}
     var data={name:F.name.value.trim(),brand:F.brand.value.trim(),loc:F.loc.value.trim(),url:norm(u),end:F.end.value,status:F.status.value};
-    if(editing){for(var k in data)editing[k]=data[k];S.say('Campaign updated.')}
-    else{data.id=Date.now().toString(36);data.owner=S.user.name;var n=new Date();data.created=n.getFullYear()+'-'+('0'+(n.getMonth()+1)).slice(-2)+'-'+('0'+n.getDate()).slice(-2);data.backlinks=0;list.unshift(data);S.say('Campaign created.')}
-    save();close();render();
+    var c=editing,go=$('dlgS'),was=c&&clean(c);
+    if(c){for(var k in data)c[k]=data[k]}
+    else{c=data;c.id=Date.now().toString(36)+Math.random().toString(36).slice(2,6);c.owner=S.user.name;var n=new Date();c.created=n.getFullYear()+'-'+('0'+(n.getMonth()+1)).slice(-2)+'-'+('0'+n.getDate()).slice(-2);list.unshift(c)}
+    go.disabled=true;
+    store.put(c).then(function(){go.disabled=false;close();render();S.say(was?'Campaign updated.':'Campaign created.')},
+      function(err){go.disabled=false;if(was){for(var k in was)c[k]=was[k]}else list=list.filter(function(x){return x!==c});$('fUrlE').textContent=err.message});
   });
 
   $('q').addEventListener('input',render);
   [].forEach.call(document.querySelectorAll('[data-f]'),function(b){b.addEventListener('click',function(){
     filter=b.dataset.f;[].forEach.call(document.querySelectorAll('[data-f]'),function(x){x.setAttribute('aria-pressed',x===b)});render()})});
-  render();
+  render();connect();
 })();
 </script>
 </body>

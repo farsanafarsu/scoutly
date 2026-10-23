@@ -236,9 +236,9 @@
   function opts(sel,label,values){var cur=sel.value;sel.innerHTML='<option value="">'+label+'</option>'+values.map(function(v){return '<option>'+esc(v)+'</option>'}).join('');if(values.indexOf(cur)>-1)sel.value=cur}
   function uniq(a){return a.filter(function(v,i){return v&&a.indexOf(v)===i}).sort(function(x,y){return x.localeCompare(y)})}
 
-  /* campaigns you can pick from: the ones on these links, plus the SEO Campaigns in this tab */
+  /* campaigns you can pick from: the ones on these links, plus the SEO Campaigns (campaigns.html keeps the latest list in localStorage) */
   function campaigns(){var m={};list.forEach(function(b){if(b.campaign&&!m[b.campaign])m[b.campaign]=b.target||''});
-    try{(JSON.parse(S.read('scoutly.campaigns')||'[]')||[]).forEach(function(c){var n=c.brand?c.brand+' — '+c.name:c.name;if(n&&!m[n])m[n]=c.url||''})}catch(_){}
+    try{(JSON.parse(localStorage.getItem('scoutly.campaigns')||'[]')||[]).forEach(function(c){var n=c.brand?c.brand+' — '+c.name:c.name;if(n&&!m[n])m[n]=c.url||''})}catch(_){}
     return m}
 
   /* ---------- table, stats, filters */

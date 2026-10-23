@@ -68,7 +68,7 @@
 (function(){
   var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,KEY='scoutly.reportPrefs';
   function J(store,k,d){try{return JSON.parse(store.getItem(k)||'null')||d}catch(_){return d}}
-  var audits=J(sessionStorage,'scoutly.audits',{}),ranks=J(localStorage,'scoutly.ranks',{snaps:[]}),lists=J(localStorage,'scoutly.kwlists',{}),camps=J(sessionStorage,'scoutly.campaigns',[]),ai=J(localStorage,'scoutly.aivis',{prompts:[],marks:{}});
+  var audits=J(sessionStorage,'scoutly.audits',{}),ranks=J(localStorage,'scoutly.ranks',{snaps:[]}),lists=J(localStorage,'scoutly.kwlists',{}),camps=J(localStorage,'scoutly.campaigns',[]),ai=J(localStorage,'scoutly.aivis',{prompts:[],marks:{}});
   var CATN={crawl:'Crawlability & indexing',onpage:'On-page SEO',content:'Content & keywords',links:'Links & redirects',internal:'Internal linking',perf:'Speed & security',schema:'Structured data',ai:'AI readiness'};
   var SECS=[['audit','Site audit',Object.keys(audits).length],['ranks','Rankings',ranks.snaps.length],['camps','Campaigns',camps.length],['kw','Keyword lists',Object.keys(lists).length],['ai','AI visibility',ai.prompts.length]];
   var prefs=J(localStorage,KEY,{});
