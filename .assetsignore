@@ -21,3 +21,4 @@ staticfiles/
 wrangler.jsonc
 worker.js
 render.yaml
+tests/

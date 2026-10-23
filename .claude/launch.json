@@ -4,14 +4,33 @@
     {
       "name": "scoutly",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["server.py", "8000"],
+      "runtimeArgs": [
+        "server.py",
+        "8000"
+      ],
       "port": 8000
     },
     {
       "name": "scoutly-static",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "8001"],
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8001"
+      ],
       "port": 8001
+    },
+    {
+      "name": "scoutly-memory-db",
+      "runtimeExecutable": "python",
+      "runtimeArgs": [
+        "server.py",
+        "8002"
+      ],
+      "env": {
+        "SCOUTLY_DEV_MEMORY_DB": "1"
+      },
+      "port": 8002
     }
   ]
 }

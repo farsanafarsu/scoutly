@@ -60,7 +60,7 @@
     ['Overview',[
       ['dashboard.html','dash','SEO Dashboard'],
       ['campaigns.html','rocket','SEO Campaigns'],
-      ['#','pulse','Action Center','soon','Action Center'],
+      ['action-center.html','pulse','Action Center'],
       ['position-tracking.html','target','Position Tracking'],
       ['reports.html','rep','Reports']]],
     ['SEO audit & optimization',[

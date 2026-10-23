@@ -55,3 +55,18 @@ The Backlink Manager saves every backlink, edit, deletion and status check to Mo
 3. **Share the team key** with your teammates privately. Each person pastes it once on the Backlink Manager; it's kept in their browser.
 
 Without a team key, a hosted server keeps the shared list switched off, so nobody who simply finds the site can read it. Optional: `MONGODB_NAME` (default `scoutly`).
+
+### SEO Action Center
+
+`action-center.html` turns real findings into tasks. The server side is `seo/taskstore.py` (storage), `seo/actions.py` (issue rules and priorities) and `seo/taskjobs.py` (background scans). The routes are under `/api/tasks/*` in `seo/engine.py`.
+
+- **Storage:** tasks are kept only in the team database (`MONGODB_URI`), in the `tasks` and `task_scans` collections. Indexes are created on first use, so there are no migrations. A unique `(project, fp)` index stops repeat scans from creating duplicate tasks.
+- **Access:** the same `SCOUTLY_TEAM_KEY` as the backlinks. There are no per-user accounts, so everyone with the key sees every website's tasks, and the "by" name comes from the browser.
+- **Sources:**
+  - Site Audit and PageSpeed Insights (`PAGESPEED_API_KEY` is optional).
+  - Backlink Manager links.
+  - Search Console exports imported in Position Tracking. There's no live Google Search Console connection yet.
+- **Settings:** thresholds can be overridden with `SCOUTLY_TASK_RULES`, a JSON object (see `RULES` in `seo/actions.py`).
+- **Not available:** email notifications, because there's no email service.
+- **Try it locally:** set `SCOUTLY_DEV_MEMORY_DB=1` to keep tasks in memory (lost when the server stops), or use the `scoutly-memory-db` launch config.
+- **Tests:** `python -m unittest discover tests`

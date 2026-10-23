@@ -1126,6 +1126,28 @@ def _first_href(links, base):
 
 # ---------------------------------------------------------------- server
 
+def pagespeed(target, strategy="mobile"):
+    """PageSpeed Insights v5 for a URL (the API key stays on the server). Errors come back in the body."""
+    q = f"strategy={'desktop' if strategy == 'desktop' else 'mobile'}&category=performance&url=" + quote(target, safe="")
+    if PSI_KEY:
+        q += "&key=" + quote(PSI_KEY, safe="")
+    try:
+        with build_opener().open(Request("https://www.googleapis.com/pagespeedonline/v5/runPagespeed?" + q, headers={"User-Agent": UA}), timeout=100) as r:
+            body = json.loads(r.read())
+        body["scoutlyHasKey"] = bool(PSI_KEY)
+        return body
+    except HTTPError as e:
+        try:
+            body = json.loads(e.read())
+        except Exception:
+            body = {"error": {"message": f"HTTP {e.code}"}}
+        body["scoutlyHasKey"] = bool(PSI_KEY)
+        body["scoutlyStatus"] = e.code
+        return body
+    except Exception as e:
+        return {"error": {"message": f"PageSpeed Insights didn't respond ({e.__class__.__name__})"}, "scoutlyStatus": 504, "scoutlyHasKey": bool(PSI_KEY)}
+
+
 def _tools():
     import tools  # imported lazily: tools.py builds on the fetch/parse helpers above
     return tools
@@ -1164,6 +1186,37 @@ POST_ROUTES = {
     # the team's SEO Campaigns, in the same database
     "/api/campaigns/save": lambda b: _camps().save(b.get("items")),
     "/api/campaigns/delete": lambda b: _camps().delete(b.get("ids")),
+}
+
+
+def _tasks():
+    import taskstore
+    return taskstore
+
+
+def _jobs():
+    import taskjobs
+    return taskjobs
+
+
+# SEO Action Center (taskstore.py, taskjobs.py). Each gets the query or body, and who is acting (X-Scoutly-User).
+TASK_GET = {
+    "/api/tasks": lambda q, by: _tasks().list_tasks(q),
+    "/api/tasks/summary": lambda q, by: _tasks().summary(q),
+    "/api/tasks/item": lambda q, by: _tasks().get_task(q.get("id")),
+    "/api/tasks/projects": lambda q, by: _tasks().projects(),
+    "/api/tasks/export": lambda q, by: _tasks().export(q),
+    "/api/tasks/job": lambda q, by: _jobs().status(q.get("id")),
+}
+TASK_POST = {
+    "/api/tasks/create": lambda b, by: _tasks().create(b.get("item"), by),
+    "/api/tasks/update": lambda b, by: _tasks().update(b.get("id"), b.get("changes"), b.get("version"), by),
+    "/api/tasks/bulk": lambda b, by: _tasks().bulk(b.get("ids"), b.get("changes"), by),
+    "/api/tasks/note": lambda b, by: _tasks().add_note(b.get("id"), b.get("text"), by),
+    "/api/tasks/scan": lambda b, by: _jobs().start(b.get("project"), "site", _jobs().site_scan(b.get("project"), str(b.get("url") or ""), str(b.get("kw") or ""), bool(b.get("pagespeed")), by), by),
+    "/api/tasks/backlinks": lambda b, by: _jobs().start(b.get("project"), "backlinks", _jobs().backlink_scan(b.get("project"), by), by),
+    "/api/tasks/search-console": lambda b, by: _jobs().search_console_import(b.get("project"), b.get("snapshots"), by),
+    "/api/tasks/verify": lambda b, by: _jobs().verify(b.get("id"), by),
 }
 
 
@@ -1217,9 +1270,12 @@ class Handler(SimpleHTTPRequestHandler):
         if PROXY_KEY and not hmac.compare_digest(self.headers.get("X-Scoutly-Key", ""), PROXY_KEY):
             self._json(403, {"error": "This Scoutly server only answers requests from the Scoutly site."})
             return True
-        team = next((w for p, w in (("/api/links", "backlinks"), ("/api/campaigns", "campaigns")) if path == p or path.startswith(p + "/")), None)
+        team = next((w for p, w in (("/api/links", "backlinks"), ("/api/campaigns", "campaigns"), ("/api/tasks", "tasks")) if path == p or path.startswith(p + "/")), None)
+        if team == "tasks" and not _tasks().configured():
+            self._json(200, {"error": "The team database isn't set up on the server yet (MONGODB_URI). The Action Center keeps tasks only in the database.", "notConfigured": True})
+            return True
         if team:
-            if not os.environ.get("MONGODB_URI", "").strip():
+            if team != "tasks" and not os.environ.get("MONGODB_URI", "").strip():
                 self._json(200, {"error": f"The team database isn't set up on the server yet, so {team} are saved in this browser.", "notConfigured": True})
                 return True
             if API_ONLY and not TEAM_KEY:
@@ -1234,7 +1290,7 @@ class Handler(SimpleHTTPRequestHandler):
         u = urlparse(self.path)
         if self._refused(u.path):
             return
-        if u.path not in POST_ROUTES:
+        if u.path not in POST_ROUTES and u.path not in TASK_POST:
             self.send_error(404)
             return
         length = min(int(self.headers.get("Content-Length") or 0), 1_000_000)
@@ -1244,6 +1300,8 @@ class Handler(SimpleHTTPRequestHandler):
             return self._json(400, {"error": "Send JSON."})
         if not isinstance(body, dict):
             return self._json(400, {"error": "Send a JSON object."})
+        if u.path in TASK_POST:
+            return self._tool(lambda: TASK_POST[u.path](body, self.headers.get("X-Scoutly-User", "")))
         return self._tool(lambda: POST_ROUTES[u.path](body))
 
     def do_GET(self):
@@ -1267,6 +1325,9 @@ class Handler(SimpleHTTPRequestHandler):
             return self._tool(lambda: _links().list_links())
         if u.path == "/api/campaigns":
             return self._tool(lambda: _camps().list_campaigns())
+        if u.path in TASK_GET:
+            q = {k: v[0] for k, v in parse_qs(u.query).items()}
+            return self._tool(lambda: TASK_GET[u.path](q, self.headers.get("X-Scoutly-User", "")))
         if u.path in TOOL_ROUTES:
             q = {k: v[0] for k, v in parse_qs(u.query).items()}
             return self._tool(lambda: TOOL_ROUTES[u.path](q))
@@ -1283,26 +1344,8 @@ class Handler(SimpleHTTPRequestHandler):
         """Proxy PageSpeed Insights so an API key stays on the server."""
         if not re.match(r"^https?://", target or "", re.I):
             return self._json(400, {"error": {"message": "Missing url"}})
-        q = "strategy=mobile&category=performance&url=" + quote(target, safe="")
-        if PSI_KEY:
-            q += "&key=" + quote(PSI_KEY, safe="")
-        try:
-            with build_opener().open(Request("https://www.googleapis.com/pagespeedonline/v5/runPagespeed?" + q, headers={"User-Agent": UA}), timeout=100) as r:
-                body = json.loads(r.read())
-            body["scoutlyHasKey"] = bool(PSI_KEY)
-            return self._json(200, body)
-        except HTTPError as e:
-            try:
-                body = json.loads(e.read())
-            except Exception:
-                body = {"error": {"message": f"HTTP {e.code}"}}
-            # answer 200 and put Google's status in the body: a quota limit is an expected outcome,
-            # not a broken request, so the browser shouldn't log it as a failed resource
-            body["scoutlyHasKey"] = bool(PSI_KEY)
-            body["scoutlyStatus"] = e.code
-            return self._json(200, body)
-        except Exception as e:
-            return self._json(200, {"error": {"message": f"PageSpeed Insights didn't respond ({e.__class__.__name__})"}, "scoutlyStatus": 504, "scoutlyHasKey": bool(PSI_KEY)})
+        # answer 200 with Google's status in the body: a quota limit is an expected outcome, not a broken request
+        return self._json(200, pagespeed(target))
 
     def log_message(self, fmt, *args):
         msg = fmt % args

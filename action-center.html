@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SEO Action Center — Scoutly</title>
+<meta name="description" content="Turn SEO insights into measurable improvements: prioritised, assigned and verified tasks.">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<script>
+/* demo gate: no demo login in this tab → back to the login page */
+(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+/* action center */
+.ph{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
+.ph h1{margin-top:14px;font:500 clamp(28px,3vw,44px)/1 var(--D);text-transform:uppercase;letter-spacing:.01em}
+.ph .desc{margin-top:10px;max-width:600px;font:400 13px/1.7 var(--M);color:var(--sl)}
+.ph-act{display:flex;flex-wrap:wrap;gap:10px}
+.bar{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px 14px;margin-top:18px;padding:14px 16px;background:var(--card);border:1px solid var(--ln)}
+.bar label,.filters label{display:grid;gap:6px;font:500 10px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--sl)}
+select,.bar input{height:38px;min-width:150px;max-width:260px;padding:0 10px;border:1px solid var(--ln);border-radius:3px;background:#fff;font:400 13px/1 var(--M);color:var(--ink)}
+select:focus,input:focus,textarea:focus{outline:0;border-color:var(--b);box-shadow:0 0 0 3px rgba(47,91,255,.12)}
+.bar .meta{margin-left:auto;font:400 11.5px/1.5 var(--M);color:var(--mu);text-align:right}
+.dbbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin-top:18px;padding:12px 16px;background:rgba(47,91,255,.05);border:1px solid rgba(47,91,255,.3);font:400 12.5px/1.6 var(--M);color:var(--sl)}
+.dbbar>svg{flex:none;width:16px;height:16px;color:var(--b)}.dbbar #dbMsg{flex:1 1 320px}
+.keyf{display:flex;gap:8px}.keyf input{width:240px;height:34px;padding:0 10px;border:1px solid var(--ln);border-radius:3px;background:#fff;font:400 13px/1 var(--M)}
+.kpi.cr b{color:var(--cr)}.kpi.wr b{color:#a46a00}.kpi.ok b{color:var(--ok)}
+.prog{display:flex;align-items:center;gap:14px;padding:12px 16px;background:var(--card);border:1px solid var(--ln);border-top:0;font:400 12px/1.4 var(--M);color:var(--sl)}
+.prog .track{flex:1;height:8px;background:var(--bg2)}.prog .fill{height:100%;background:var(--b);transition:width .4s}
+.views{margin-top:20px}
+.tools{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px}
+.search{position:relative;flex:1;min-width:220px;max-width:520px}
+.search svg{position:absolute;left:14px;top:50%;margin-top:-9px;color:var(--mu)}
+.search input{width:100%;height:44px;padding:0 14px 0 42px;border:1px solid var(--ln);border-radius:3px;background:var(--card);color:var(--ink);font:400 14px/1 var(--M)}
+.btn[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}
+.grow{flex:1}.count{font:500 11px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
+.filters{display:flex;flex-wrap:wrap;align-items:flex-end;gap:10px;margin-top:12px;padding:14px 16px;background:var(--card);border:1px solid var(--ln)}
+.bulk{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin-top:12px;padding:10px 16px;background:var(--nv);color:#fff;font:500 12px/1 var(--M)}
+.bulk select,.bulk input{height:34px;min-width:130px}
+.tbl{margin-top:12px}.tbl .dt th{background:var(--nv);color:#cfd8ff}
+.tbl .dt tbody tr{cursor:pointer}
+.tt{font:500 13px/1.4 Geist,system-ui,sans-serif;color:var(--ink)}
+.tu{display:block;max-width:380px;margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px;color:var(--mu)}
+.pr{display:inline-flex;align-items:center;gap:6px;font:600 10.5px/1 var(--M);letter-spacing:.06em;text-transform:uppercase}
+.pr i{width:8px;height:8px;border-radius:50%}
+.pr.critical i{background:var(--cr)}.pr.high i{background:var(--wa)}.pr.medium i{background:var(--b)}.pr.low i{background:#b4bccd}
+.late{color:var(--cr);font-weight:600}
+.sk td{height:46px}.sk span{display:block;height:10px;background:linear-gradient(90deg,var(--bg2),#f4f6fb,var(--bg2));background-size:200% 100%;animation:sh 1.2s infinite}
+@keyframes sh{to{background-position:-200% 0}}
+.pager{display:flex;align-items:center;justify-content:center;gap:12px;padding:12px;font:400 12px/1 var(--M);color:var(--sl)}
+.ints{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:0;margin-top:20px;border-top:1px solid var(--ln);border-left:1px solid var(--ln)}
+.ints div{padding:14px 16px;border-right:1px solid var(--ln);border-bottom:1px solid var(--ln);background:rgba(248,249,252,.7);font:400 11.5px/1.55 var(--M);color:var(--sl)}
+.ints b{display:flex;align-items:center;gap:8px;margin-bottom:6px;font:600 12px/1.3 Geist,system-ui,sans-serif;color:var(--ink)}
+/* dialogs and the detail drawer */
+.dlg{width:min(600px,calc(100% - 32px));max-height:calc(100% - 32px);padding:0;border:0;background:transparent;color:var(--ink)}
+.dlg::backdrop{background:rgba(5,10,31,.6);backdrop-filter:blur(5px)}
+.dlg-c{position:relative;background:var(--card);border:1px solid var(--ln);box-shadow:0 40px 100px -30px rgba(5,10,31,.6)}
+.dlg-h{display:flex;align-items:center;gap:14px;padding:18px 22px;background:var(--nv);color:#fff}
+.dlg-h h2{flex:1;font:500 18px/1.2 var(--D);letter-spacing:.04em;text-transform:uppercase}
+.x{display:grid;place-items:center;width:34px;height:34px;border:1px solid rgba(255,255,255,.2);background:none;color:#fff;cursor:pointer}
+.fg{display:grid;grid-template-columns:1fr 1fr;gap:4px 14px;padding:20px 22px 6px}
+.f{display:grid;gap:6px;align-content:start}.f.w{grid-column:1/-1}
+.f label{font:500 10.5px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--sl)}
+.f input,.f select,.f textarea{width:100%;max-width:none;height:44px;padding:0 12px;border:1px solid var(--ln);border-radius:3px;background:#fff;color:var(--ink);font:400 14px/1 var(--M)}
+.f textarea{height:auto;min-height:84px;padding:10px 12px;line-height:1.5;resize:vertical}
+.f .err{min-height:16px;font:500 11px/1.4 var(--M);color:var(--cr)}.f .hint{font:400 11px/1.5 var(--M);color:var(--mu)}
+.f input[type=checkbox]{width:16px;height:16px;accent-color:var(--b)}
+.dlg-f{display:flex;justify-content:flex-end;gap:10px;padding:14px 22px 20px}
+.drawer{width:min(720px,100%);height:100%;max-height:none;margin:0 0 0 auto}
+.drawer .dlg-c{min-height:100%}
+.dr-b{display:grid;gap:18px;padding:20px 22px 28px}
+.dr-b h3{margin-bottom:8px;font:600 10px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
+.dr-b p,.dr-b li{font:400 13px/1.65 var(--M);color:var(--sl)}
+.dr-row{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}
+.ctl select,.ctl input{width:100%;max-width:none}
+.urls{max-height:180px;overflow:auto;padding:8px 12px;border:1px solid var(--ln);background:#fff}
+.urls li{overflow-wrap:anywhere;font-size:12px}
+.urls a{color:var(--b)}
+.ev{max-height:200px;overflow:auto;padding:10px 12px;border:1px solid var(--ln);background:#fff;font:400 11.5px/1.6 var(--M);white-space:pre-wrap;overflow-wrap:anywhere}
+.tl li{position:relative;padding:0 0 10px 16px;border-left:1px solid var(--ln);font-size:12px}
+.tl li:before{content:"";position:absolute;left:-4px;top:6px;width:7px;height:7px;background:var(--b)}
+.tl small,.nt small{display:block;color:var(--mu);font-size:10.5px}
+.nt li{padding:8px 10px;margin-bottom:8px;background:#fff;border:1px solid var(--ln);white-space:pre-wrap}
+.note-f{display:flex;gap:8px}.note-f textarea{flex:1;min-height:60px;padding:8px 10px;border:1px solid var(--ln);font:400 13px/1.5 var(--M)}
+.tip{border-bottom:1px dotted var(--mu);cursor:help}
+@media(max-width:700px){.fg{grid-template-columns:1fr}.ph-act{width:100%}.ph-act .btn{flex:1}.bar .meta{margin-left:0;text-align:left}.hide-s{display:none}}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <div>
+        <p class="lbl">Overview</p>
+        <h1>SEO Action Center</h1>
+        <p class="desc">Turn SEO insights into measurable improvements. Every task comes from a real scan, an import, or a teammate, and is saved in your team’s database.</p>
+      </div>
+      <div class="ph-act">
+        <button class="btn" type="button" id="expB"><svg class="i"><use href="#i-dl"/></svg>Export</button>
+        <button class="btn" type="button" id="scanB"><svg class="i"><use href="#i-audit"/></svg>Scan website</button>
+        <button class="btn p" type="button" id="newB"><svg class="i"><use href="#i-plus"/></svg>Create task</button>
+      </div>
+    </div>
+
+    <form class="dbbar" id="dbBar" hidden novalidate>
+      <svg class="i" aria-hidden="true"><use href="#i-lock"/></svg><span id="dbMsg"></span>
+      <span class="keyf" id="keyF" hidden><label class="sr-only" for="teamKey">Team key</label><input id="teamKey" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your team key"><button class="btn sm p" type="submit">Connect</button></span>
+    </form>
+
+    <div class="bar">
+      <label>Website<select id="proj"></select></label>
+      <button class="btn sm" type="button" id="addProj"><svg class="i"><use href="#i-plus"/></svg>Add website</button>
+      <button class="btn sm" type="button" id="blB" title="Turn lost, dead and low-quality backlinks from the Backlink Manager into tasks"><svg class="i"><use href="#i-link"/></svg>Check backlinks</button>
+      <button class="btn sm" type="button" id="gscB" title="Find low-CTR pages, ranking opportunities and click drops in the Search Console exports you imported in Position Tracking"><svg class="i"><use href="#i-target"/></svg>Import Search Console data</button>
+      <button class="btn sm" type="button" id="refB"><svg class="i"><use href="#i-pulse"/></svg>Refresh</button>
+      <span class="meta" id="lastScan" aria-live="polite"></span>
+    </div>
+    <div class="progress loading" id="job" hidden role="status"><span class="spin"></span><span id="jobT"></span></div>
+
+    <div class="kpis" id="kpis"></div>
+    <div class="prog" id="prog"><span id="progT">0 of 0 tasks completed</span><span class="track"><span class="fill" id="progF" style="width:0"></span></span><span id="progP">0%</span></div>
+
+    <div class="seg views" role="group" aria-label="Task views" id="views">
+      <button type="button" data-v="all" aria-pressed="true">All tasks</button><button type="button" data-v="mine" aria-pressed="false">My tasks</button><button type="button" data-v="critical" aria-pressed="false">Critical</button><button type="button" data-v="high" aria-pressed="false">High priority</button><button type="button" data-v="overdue" aria-pressed="false">Overdue</button><button type="button" data-v="recent" aria-pressed="false">Recently detected</button><button type="button" data-v="in_progress" aria-pressed="false">In progress</button><button type="button" data-v="resolved" aria-pressed="false">Resolved</button>
+    </div>
+    <div class="tools">
+      <label class="search"><span class="sr-only">Search tasks</span><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Search by task or URL…" autocomplete="off"></label>
+      <button class="btn" type="button" id="filterB" aria-pressed="false" aria-controls="filters"><svg class="i"><use href="#i-filter"/></svg>Filter</button>
+      <label class="sr-only" for="sort">Sort</label><select id="sort"><option value="priority">Sort: priority</option><option value="detected">Sort: date detected</option><option value="updated">Sort: last updated</option><option value="due">Sort: due date</option></select>
+      <span class="grow"></span><span class="count" id="count" aria-live="polite"></span>
+    </div>
+    <div class="filters" id="filters" hidden>
+      <label>Priority<select id="fPri"><option value="">Any</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select></label>
+      <label>Status<select id="fSt"><option value="">Any</option><option value="active">Open, in progress or blocked</option><option value="open">Open</option><option value="in_progress">In progress</option><option value="blocked">Blocked</option><option value="resolved">Resolved</option><option value="dismissed">Dismissed</option></select></label>
+      <label>Category<select id="fCat"><option value="">Any</option></select></label>
+      <label>Source<select id="fSrc"><option value="">Any</option></select></label>
+      <label>Assigned to<select id="fAs"><option value="">Anyone</option><option value="-">Unassigned</option></select></label>
+      <label>Due<select id="fDue"><option value="">Any time</option><option value="overdue">Overdue</option><option value="week">Next 7 days</option><option value="none">No due date</option></select></label>
+      <button class="btn sm" type="button" id="clearF">Clear filters</button>
+    </div>
+    <div class="bulk" id="bulk" hidden>
+      <span id="bulkN"></span>
+      <select id="bSt" aria-label="Set status"><option value="">Status…</option><option value="open">Open</option><option value="in_progress">In progress</option><option value="blocked">Blocked</option><option value="resolved">Resolved</option><option value="dismissed">Dismissed</option></select>
+      <select id="bPri" aria-label="Set priority"><option value="">Priority…</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select>
+      <input id="bAs" placeholder="Assign to…" aria-label="Assign to" list="people">
+      <input id="bDue" type="date" aria-label="Due date">
+      <button class="btn sm p" type="button" id="bGo">Apply</button><button class="btn sm" type="button" id="bClr" style="color:#fff">Clear</button>
+    </div>
+    <datalist id="people"></datalist>
+
+    <p class="loading" id="err" hidden role="alert"></p>
+    <section class="panel empty" id="zero" hidden>
+      <div class="empty-i" aria-hidden="true"><svg class="i"><use href="#i-check"/></svg></div>
+      <h3 id="zeroH">No tasks yet</h3>
+      <p id="zeroP">Scan your website to find real issues, or add a task by hand.</p>
+      <button class="btn p" type="button" id="zeroB"><svg class="i"><use href="#i-audit"/></svg>Scan website</button>
+    </section>
+    <section class="panel tbl" id="tbl">
+      <div class="dt-wrap" style="max-height:none"><table class="dt">
+        <thead><tr><th><input type="checkbox" id="all" aria-label="Select all tasks on this page"></th><th>Task</th><th>Priority</th><th>Status</th><th class="hide-s">Category</th><th class="hide-s">Assigned</th><th>Due</th><th class="hide-s">Detected</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table></div>
+      <div class="pager" id="pager" hidden><button class="btn sm" type="button" id="prev">Previous</button><span id="pageT"></span><button class="btn sm" type="button" id="next">Next</button></div>
+    </section>
+
+    <div class="ints" id="ints" aria-label="Data sources"></div>
+  </main>
+</div>
+
+<dialog class="dlg" id="dlg" aria-labelledby="dlgH">
+  <form class="dlg-c" id="form" method="dialog" novalidate>
+    <div class="dlg-h"><h2 id="dlgH">Create task</h2><button class="x" type="button" data-close aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></div>
+    <div class="fg">
+      <div class="f w"><label for="nT">Title *</label><input id="nT" autocomplete="off"><p class="err" id="nTE"></p></div>
+      <div class="f w"><label for="nD">Description</label><textarea id="nD"></textarea></div>
+      <div class="f"><label for="nC">Category</label><select id="nC"></select></div>
+      <div class="f"><label for="nP">Priority</label><select id="nP"><option value="critical">Critical</option><option value="high">High</option><option value="medium" selected>Medium</option><option value="low">Low</option></select></div>
+      <div class="f"><label for="nA">Assign to</label><input id="nA" list="people" autocomplete="off"></div>
+      <div class="f"><label for="nDue">Due date</label><input id="nDue" type="date"></div>
+      <div class="f w"><label for="nU">Affected URLs</label><textarea id="nU" placeholder="One per line"></textarea></div>
+      <div class="f w"><label for="nF">Recommended fix</label><textarea id="nF"></textarea></div>
+    </div>
+    <div class="dlg-f"><button class="btn" type="button" data-close>Cancel</button><button class="btn p" type="submit" id="nS">Create task</button></div>
+  </form>
+</dialog>
+
+<dialog class="dlg" id="scanDlg" aria-labelledby="scanH">
+  <form class="dlg-c" id="scanF" method="dialog" novalidate>
+    <div class="dlg-h"><h2 id="scanH">Scan website</h2><button class="x" type="button" data-close aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></div>
+    <div class="fg">
+      <div class="f w"><label for="sU">Start page</label><input id="sU" inputmode="url" autocapitalize="off" spellcheck="false"><p class="hint">The Site Audit crawls up to 25 pages from here (3 clicks deep), respecting robots.txt.</p><p class="err" id="sUE"></p></div>
+      <div class="f w"><label for="sK">Target keyword (optional)</label><input id="sK" autocomplete="off"></div>
+      <div class="f w"><label><input type="checkbox" id="sP" checked> Also run PageSpeed Insights (mobile and desktop)</label><p class="hint">Adds up to two minutes. Creates Core Web Vitals and performance tasks from Google’s data.</p></div>
+    </div>
+    <div class="dlg-f"><button class="btn" type="button" data-close>Cancel</button><button class="btn p" type="submit">Start scan</button></div>
+  </form>
+</dialog>
+
+<dialog class="dlg drawer" id="dr" aria-labelledby="drH">
+  <div class="dlg-c">
+    <div class="dlg-h"><h2 id="drH">Task</h2><button class="x" type="button" data-close aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></div>
+    <div class="dr-b" id="drB"></div>
+  </div>
+</dialog>
+
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  /* Tasks live only in the team database (/api/tasks on the server); this page keeps nothing but the chosen website. */
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,TK='scoutly.teamKey',PK='scoutly.acProject';
+  var CATS={technical:'Technical SEO',onpage:'On-Page SEO',search:'Search Performance',performance:'Performance & Core Web Vitals',backlinks:'Backlink Monitoring',ai:'AI Search Visibility',other:'Other'};
+  var SRCS={'site-audit':'Site Audit',pagespeed:'PageSpeed Insights','backlink-manager':'Backlink Manager','search-console':'Search Console import',manual:'Manual'};
+  var STS={open:'Open',in_progress:'In progress',blocked:'Blocked',resolved:'Resolved',dismissed:'Dismissed'};
+  var KINDS={confirmed:['ok','Confirmed by a scan'],inferred:['wr','Opportunity from search data'],ai:['in','AI suggestion: review it'],manual:['in','Added by a teammate']};
+  var TIPS={'Core Web Vitals':'Google’s loading (LCP), responsiveness (INP) and visual stability (CLS) metrics from real Chrome users.',canonical:'A tag naming the preferred URL when several URLs show the same content.',noindex:'A directive telling search engines not to show the page in results.',CTR:'Click-through rate: clicks divided by impressions.'};
+  var st={project:'',view:'all',page:1,sel:{},items:[],sum:null,ok:false};
+  function today(){var d=new Date();return d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2)}
+  function key(){try{return localStorage.getItem(TK)||''}catch(_){return ''}}
+  function call(path,body){var o={headers:{'X-Scoutly-Team':key(),'X-Scoutly-User':S.user.name}};
+    if(body!==undefined){o.method='POST';o.headers['Content-Type']='application/json';o.body=JSON.stringify(body)}
+    return fetch(path,o).then(function(r){return r.json().catch(function(){throw new Error('The Scoutly server isn’t reachable. Try again in a moment.')})},function(){throw new Error('The Scoutly server isn’t reachable. Try again in a moment.')})
+      .then(function(j){if(j.error){var e=new Error(typeof j.error==='string'?j.error:j.error.message);e.needKey=!!j.needKey;e.notConfigured=!!j.notConfigured;e.conflict=!!j.conflict;throw e}return j})}
+  function qs(o){return Object.keys(o).filter(function(k){return o[k]!==''&&o[k]!=null}).map(function(k){return k+'='+encodeURIComponent(o[k])}).join('&')}
+  function when(iso){if(!iso)return '—';var d=new Date(iso.length===10?iso+'T00:00':iso);return isNaN(d)?iso:d.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}
+  function whenT(iso){var d=new Date(iso);return isNaN(d)?(iso||''):d.toLocaleString(undefined,{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
+  function pr(p){return '<span class="pr '+p+'"><i></i>'+esc(p)+'</span>'}
+  function stTag(s){var c={open:'in',in_progress:'wr',blocked:'bad',resolved:'ok',dismissed:''}[s];return '<span class="tag '+c+'">'+esc(STS[s]||s)+'</span>'}
+  function tipify(t){t=esc(t);Object.keys(TIPS).forEach(function(k){t=t.replace(new RegExp('\\b('+k+')\\b'),'<span class="tip" title="'+esc(TIPS[k])+'">$1</span>')});return t}
+  function bar(msg,ask){$('dbBar').hidden=!msg;$('dbMsg').textContent=msg||'';$('keyF').hidden=!ask}
+  function fail(e){if(e.needKey){bar(key()?'That team key didn’t work. Paste the current one.':'The Action Center is saved in your team’s database. Paste the team key once to open it.',true);return}
+    if(e.notConfigured){bar(e.message,false);st.ok=false;render([]);return}
+    S.say(e.message)}
+  $('dbBar').addEventListener('submit',function(e){e.preventDefault();var k=$('teamKey').value.trim();if(!k)return;try{localStorage.setItem(TK,k)}catch(_){}$('teamKey').value='';bar('');boot()});
+  function fill(sel,map,first){sel.innerHTML=(first||'')+Object.keys(map).map(function(k){return '<option value="'+k+'">'+esc(map[k])+'</option>'}).join('')}
+  fill($('fCat'),CATS,'<option value="">Any</option>');fill($('fSrc'),SRCS,'<option value="">Any</option>');fill($('nC'),CATS);$('nC').value='technical';
+
+  /* websites: the team's task projects and campaigns, plus the site chosen on the dashboard */
+  function host(u){try{return new URL(/^https?:/i.test(u)?u:'https://'+u).hostname.replace(/^www\./,'').toLowerCase()}catch(_){return ''}}
+  function projects(list){var ps={};(list||[]).forEach(function(p){ps[p]=1});var s=S.read('scoutly.site');if(s&&host(s))ps[host(s)]=1;
+    var saved='';try{saved=localStorage.getItem(PK)||''}catch(_){}if(saved)ps[saved]=1;
+    var keys=Object.keys(ps).sort();$('proj').innerHTML=keys.length?keys.map(function(p){return '<option>'+esc(p)+'</option>'}).join(''):'<option value="">Add a website first</option>';
+    st.project=ps[saved]?saved:(keys[0]||'');$('proj').value=st.project}
+  $('proj').onchange=function(){st.project=this.value;st.page=1;st.sel={};try{localStorage.setItem(PK,st.project)}catch(_){}load()};
+  $('addProj').onclick=function(){var h=host(prompt('Website to add (for example example.com):')||'');if(!h)return;try{localStorage.setItem(PK,h)}catch(_){}
+    if(![].some.call($('proj').options,function(o){return o.value===h})){var o=document.createElement('option');o.textContent=h;$('proj').appendChild(o)}$('proj').value=h;$('proj').onchange.call($('proj'))};
+
+  function filters(){return {project:st.project,view:st.view,me:S.user.name,today:today(),q:$('q').value.trim(),priority:$('fPri').value,status:$('fSt').value,
+    category:$('fCat').value,source:$('fSrc').value,assignee:$('fAs').value,due:$('fDue').value,sort:$('sort').value}}
+  function skeleton(){$('rows').innerHTML=new Array(6).join('<tr class="sk"><td></td><td><span style="width:70%"></span></td><td><span></span></td><td><span></span></td><td class="hide-s"><span></span></td><td class="hide-s"><span></span></td><td><span></span></td><td class="hide-s"><span></span></td></tr>')}
+  function load(){if(!st.project){render([]);return Promise.resolve()}
+    skeleton();$('zero').hidden=true;$('tbl').hidden=false;$('err').hidden=true;
+    var f=filters();f.page=st.page;f.size=25;
+    return Promise.all([call('/api/tasks?'+qs(f)),call('/api/tasks/summary?'+qs({project:st.project,today:today()}))]).then(function(r){
+      st.ok=true;bar('');st.items=r[0].items;st.meta=r[0];st.sum=r[1];kpis(r[1]);render(r[0].items,r[0]);
+    }).catch(function(e){$('rows').innerHTML='';if(!e.needKey&&!e.notConfigured){$('err').hidden=false;$('err').textContent=e.message}fail(e)})}
+  function kpis(s){var cards=[['list','Total open tasks',s.open,'Open, in progress or blocked',''],['alert','Critical issues',s.critical,'Open and critical','cr'],['trend','High-priority tasks',s.high,'Open and high','wr'],
+      ['check','Completed tasks',s.completed,s.dismissed+' dismissed','ok'],['cal','Overdue tasks',s.overdue,'Past their due date',s.overdue?'cr':''],['star','Issues fixed this month',s.fixedThisMonth,s.newThisWeek+' new this week','ok']];
+    $('kpis').innerHTML=cards.map(function(c){return '<div class="kpi '+c[4]+'"><small><svg class="i"><use href="#i-'+c[0]+'"/></svg>'+c[1]+'</small><b>'+c[2].toLocaleString()+'</b><span>'+esc(c[3])+'</span></div>'}).join('');
+    $('progT').textContent=s.completed+' of '+s.total+' tasks completed';$('progF').style.width=s.progress+'%';$('progP').textContent=s.progress+'%';
+    var ls=s.lastScan;$('lastScan').innerHTML=ls?'Last scan: '+esc(whenT(ls.at))+' · '+esc(SRCS[ls.source]||ls.source)+(ls.ok?'':' <span class="late">failed</span>'):'Not scanned yet';
+    var have={};[].forEach.call($('fAs').options,function(o){have[o.value]=1});
+    $('people').innerHTML=s.assignees.concat([S.user.name]).map(function(a){return '<option value="'+esc(a)+'">'}).join('');
+    s.assignees.forEach(function(a){if(!have[a]){var o=document.createElement('option');o.value=o.textContent=a;$('fAs').appendChild(o)}})}
+  function render(items,meta){
+    var none=!items.length;$('tbl').hidden=none;$('zero').hidden=!none||!$('err').hidden;
+    var filtered=$('q').value||$('fPri').value||$('fSt').value||$('fCat').value||$('fSrc').value||$('fAs').value||$('fDue').value||st.view!=='all';
+    $('zeroH').textContent=!st.ok?'Action Center isn’t connected':filtered?'No tasks match':'No tasks yet';
+    $('zeroP').textContent=!st.ok?'Tasks are kept only in the team database, so this page needs it switched on (see the message above).':filtered?'Try another view or clear the filters.':'Scan your website to find real issues, or add a task by hand.';
+    $('zeroB').hidden=!st.ok||!!filtered;
+    $('rows').innerHTML=items.map(function(t){var late=t.due&&t.due<today()&&['open','in_progress','blocked'].indexOf(t.status)>-1;
+      return '<tr data-id="'+t.id+'"><td><input type="checkbox" data-sel="'+t.id+'"'+(st.sel[t.id]?' checked':'')+' aria-label="Select '+esc(t.title)+'"></td>'+
+        '<td><span class="tt">'+esc(t.title)+'</span><span class="tu">'+esc(SRCS[t.source]||t.source)+(t.urlCount?' · '+esc(t.urls[0]||'')+(t.urlCount>1?' +'+(t.urlCount-1)+' more':''):'')+
+        (t.lastScan&&t.lastScan.result==='not-detected'?' · <b style="color:var(--ok)">not found in latest scan</b>':'')+'</span></td>'+
+        '<td>'+pr(t.priority)+'</td><td>'+stTag(t.status)+'</td><td class="hide-s">'+esc(CATS[t.category]||t.category)+'</td><td class="hide-s">'+esc(t.assignee||'—')+'</td>'+
+        '<td'+(late?' class="late"':'')+'>'+(t.due?when(t.due):'—')+'</td><td class="hide-s">'+when(t.lastDetected)+'</td></tr>'}).join('');
+    $('count').textContent=meta?meta.total+' task'+(meta.total===1?'':'s'):'';
+    $('pager').hidden=!meta||meta.pages<2;if(meta){$('pageT').textContent='Page '+meta.page+' of '+meta.pages;$('prev').disabled=meta.page<=1;$('next').disabled=meta.page>=meta.pages}
+    $('all').checked=items.length&&items.every(function(t){return st.sel[t.id]});bulkBar()}
+  $('prev').onclick=function(){st.page--;load()};$('next').onclick=function(){st.page++;load()};
+  [].forEach.call(document.querySelectorAll('[data-v]'),function(b){b.onclick=function(){st.view=b.dataset.v;st.page=1;[].forEach.call(document.querySelectorAll('[data-v]'),function(x){x.setAttribute('aria-pressed',x===b)});load()}});
+  var qt;$('q').oninput=function(){clearTimeout(qt);qt=setTimeout(function(){st.page=1;load()},300)};
+  ['fPri','fSt','fCat','fSrc','fAs','fDue','sort'].forEach(function(i){$(i).onchange=function(){st.page=1;load()}});
+  $('filterB').onclick=function(){var o=$('filters').hidden;$('filters').hidden=!o;this.setAttribute('aria-pressed',o)};
+  $('clearF').onclick=function(){['fPri','fSt','fCat','fSrc','fAs','fDue'].forEach(function(i){$(i).value=''});$('q').value='';st.page=1;load()};
+  $('refB').onclick=function(){load().then(function(){S.say('Up to date.')})};
+
+  /* selection and bulk changes */
+  $('rows').addEventListener('click',function(e){var c=e.target.closest('[data-sel]');if(c){if(c.checked)st.sel[c.dataset.sel]=1;else delete st.sel[c.dataset.sel];bulkBar();return}
+    var tr=e.target.closest('tr[data-id]');if(tr)openTask(tr.dataset.id)});
+  $('all').onchange=function(){var on=this.checked;st.items.forEach(function(t){if(on)st.sel[t.id]=1;else delete st.sel[t.id]});render(st.items,st.meta)};
+  function bulkBar(){var n=Object.keys(st.sel).length;$('bulk').hidden=!n;$('bulkN').textContent=n+' selected'}
+  $('bClr').onclick=function(){st.sel={};render(st.items,st.meta)};
+  $('bGo').onclick=function(){var ch={};if($('bSt').value)ch.status=$('bSt').value;if($('bPri').value)ch.priority=$('bPri').value;if($('bAs').value.trim())ch.assignee=$('bAs').value.trim();if($('bDue').value)ch.due=$('bDue').value;
+    if(!Object.keys(ch).length)return S.say('Choose a status, priority, assignee or due date to apply.');
+    if(ch.status==='dismissed'){var r=prompt('Why are you dismissing these tasks?');if(!r)return;ch.dismissReason=r}
+    if(ch.status==='dismissed'&&!confirm('Dismiss '+Object.keys(st.sel).length+' tasks?'))return;
+    call('/api/tasks/bulk',{ids:Object.keys(st.sel),changes:ch}).then(function(r){S.say(r.updated+' updated'+(r.skipped.length?', '+r.skipped.length+' skipped: '+r.skipped[0].reason:'')+'.');
+      st.sel={};['bSt','bPri','bAs','bDue'].forEach(function(i){$(i).value=''});load()},fail)};
+
+  /* dialogs */
+  [].forEach.call(document.querySelectorAll('[data-close]'),function(b){b.onclick=function(){b.closest('dialog').close()}});
+  [].forEach.call(document.querySelectorAll('dialog'),function(d){d.addEventListener('click',function(e){if(e.target===d)d.close()})});
+  function needProject(){if(!st.project){S.say('Add a website first.');return true}if(!st.ok){S.say('Connect the team database first.');return true}}
+  $('newB').onclick=function(){if(needProject())return;$('form').reset();$('nP').value='medium';$('nTE').textContent='';$('dlg').showModal();$('nT').focus()};
+  $('form').onsubmit=function(e){e.preventDefault();var t=$('nT').value.trim();if(!t){$('nTE').textContent='Give the task a title.';return $('nT').focus()}
+    var go=$('nS');go.disabled=true;
+    call('/api/tasks/create',{item:{project:st.project,title:t,description:$('nD').value,category:$('nC').value,priority:$('nP').value,assignee:$('nA').value.trim(),due:$('nDue').value,
+      urls:$('nU').value.split(/\s+/).filter(Boolean).map(function(u){return /^https?:/i.test(u)?u:'https://'+u}),fix:$('nF').value}}).then(function(){go.disabled=false;$('dlg').close();S.say('Task created.');load()},function(e){go.disabled=false;$('nTE').textContent=e.message})};
+  $('scanB').onclick=$('zeroB').onclick=function(){if(needProject())return;$('sU').value='https://'+st.project+'/';$('sUE').textContent='';$('scanDlg').showModal()};
+  $('scanF').onsubmit=function(e){e.preventDefault();var u=$('sU').value.trim();if(host(u)!==st.project){$('sUE').textContent='Pick a page on '+st.project+'.';return}
+    $('scanDlg').close();job(call('/api/tasks/scan',{project:st.project,url:u,kw:$('sK').value.trim(),pagespeed:$('sP').checked}))};
+  $('blB').onclick=function(){if(needProject())return;job(call('/api/tasks/backlinks',{project:st.project}))};
+  $('gscB').onclick=function(){if(needProject())return;var snaps=[];try{snaps=(JSON.parse(localStorage.getItem('scoutly.ranks')||'{}')||{}).snaps||[]}catch(_){}
+    if(!snaps.length){S.say('No Search Console imports in this browser yet. Import an export in Position Tracking first.');return}
+    call('/api/tasks/search-console',{project:st.project,snapshots:snaps.slice(-2)}).then(function(r){S.say(summaryText(r.counts));load()},fail)};
+  function summaryText(c){return c.found+' issue'+(c.found===1?'':'s')+' found: '+c.new+' new, '+c.updated+' updated'+(c.reopened?', '+c.reopened+' reopened':'')+(c.verified?', '+c.verified+' verified fixed':'')+(c.notDetected?', '+c.notDetected+' no longer detected':'')+'.'}
+  /* background scans: poll until done */
+  function job(p){$('job').hidden=false;$('jobT').textContent='Starting the scan…';
+    p.then(function(r){if(r.already)S.say('A scan of this website is already running.');poll(r.job.id)}).catch(function(e){$('job').hidden=true;fail(e)})}
+  function poll(id){call('/api/tasks/job?id='+id).then(function(r){var j=r.job;
+      if(j.state==='running'){$('jobT').textContent=j.step+' ('+j.seconds+' s)';setTimeout(function(){poll(id)},2500);return}
+      $('job').hidden=true;if(j.state==='failed'){S.say(j.error);return}
+      var res=j.result||{},parts=[];if(res.audit)parts.push('Site Audit: '+summaryText(res.audit));if(res.backlinks)parts.push('Backlinks: '+summaryText(res.backlinks));
+      if(res.pagespeed)Object.keys(res.pagespeed).forEach(function(d){var x=res.pagespeed[d];parts.push('PageSpeed '+d+': '+(x.error?x.error:summaryText(x)))});
+      S.say(parts.join(' '));load();if(openId)openTask(openId)},function(e){$('job').hidden=true;fail(e)})}
+
+  /* task detail drawer */
+  var openId=null,cur=null;
+  function openTask(id){openId=id;call('/api/tasks/item?id='+id).then(function(r){cur=r.item;drawer();if(!$('dr').open)$('dr').showModal()},fail)}
+  $('dr').addEventListener('close',function(){openId=null});
+  function drawer(){var t=cur,k=KINDS[t.kind]||KINDS.confirmed,ev=t.evidence||{},ls=t.lastScan;
+    $('drH').textContent=t.title;
+    var h='<div class="dr-row">'+pr(t.priority)+stTag(t.status)+'<span class="tag '+k[0]+'">'+k[1]+'</span><span class="tag">'+esc(CATS[t.category]||t.category)+'</span><span class="tag">'+esc(SRCS[t.source]||t.source)+'</span></div>';
+    h+='<div><h3>Issue</h3><p>'+tipify(t.description||'No description.')+'</p>'+(t.why?'<p><b>Why it matters:</b> '+tipify(t.why)+'</p>':'')+'</div>';
+    h+='<div><h3>Why this priority</h3><p>'+esc(t.priorityReason||'')+'</p></div>';
+    if(t.fix)h+='<div><h3>Recommended fix</h3><p>'+esc(t.fix)+'</p>'+(t.verify?'<p><b>How to verify:</b> '+esc(t.verify)+'</p>':'')+(t.docs?'<p><a style="color:var(--b)" href="'+esc(t.docs)+'" target="_blank" rel="noopener noreferrer">Google’s documentation →</a></p>':'')+'</div>';
+    if(t.urls&&t.urls.length)h+='<div><h3>Affected URLs ('+t.urlCount+')</h3><ul class="urls">'+t.urls.map(function(u){return '<li><a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">'+esc(u)+'</a></li>'}).join('')+'</ul>'+
+      (t.urlCount>t.urls.length?'<p>Showing the first '+t.urls.length+'.</p>':'')+'<p><button class="btn sm" type="button" id="urlCsv"><svg class="i"><use href="#i-dl"/></svg>Export URLs</button></p></div>';
+    if(t.keywords&&t.keywords.length)h+='<div><h3>Related keywords</h3><p>'+t.keywords.map(esc).join(', ')+'</p></div>';
+    if(Object.keys(ev).length)h+='<div><h3>Evidence</h3><div class="ev">'+esc(JSON.stringify(ev,null,2))+'</div></div>';
+    h+='<div><h3>Source and scans</h3><p>First detected '+when(t.firstDetected)+' · last detected '+esc(whenT(t.lastDetected))+(t.detectCount?' · seen in '+t.detectCount+' scan'+(t.detectCount===1?'':'s'):'')+
+      (ls?'<br>Latest scan ('+esc(whenT(ls.at))+'): '+({detected:'still detected',"not-detected":'<b style="color:var(--ok)">not found. Check it and mark it resolved.</b>',verified:'<b style="color:var(--ok)">verified fixed</b>'}[ls.result]||esc(ls.result)):'')+
+      (t.verifiedAt?'<br>Verified fixed '+esc(whenT(t.verifiedAt)):'')+(t.dismissReason?'<br>Dismissed: '+esc(t.dismissReason):'')+'</p>'+
+      (t.source!=='manual'&&t.source!=='search-console'?'<p><button class="btn sm p" type="button" id="verB"><svg class="i"><use href="#i-pulse"/></svg>Recheck now</button></p>':'')+'</div>';
+    h+='<div><h3>Manage</h3><div class="ctl"><label class="f"><span class="sr-only">Status</span><select id="dSt">'+Object.keys(STS).map(function(s){return '<option value="'+s+'"'+(s===t.status?' selected':'')+'>'+STS[s]+'</option>'}).join('')+'</select></label>'+
+      '<select id="dPr" aria-label="Priority">'+['critical','high','medium','low'].map(function(p){return '<option value="'+p+'"'+(p===t.priority?' selected':'')+'>'+p[0].toUpperCase()+p.slice(1)+'</option>'}).join('')+'</select>'+
+      '<input id="dAs" list="people" placeholder="Assign to…" aria-label="Assigned to" value="'+esc(t.assignee||'')+'"><input id="dDue" type="date" aria-label="Due date" value="'+esc(t.due||'')+'"></div>'+
+      '<p style="margin-top:10px"><button class="btn sm p" type="button" id="dSave">Save changes</button> <button class="btn sm" type="button" id="dMine">Assign to me</button></p></div>';
+    h+='<div><h3>Notes</h3><ul class="nt">'+(t.notes||[]).map(function(n){return '<li>'+esc(n.text)+'<small>'+esc(n.by)+' · '+esc(whenT(n.at))+'</small></li>'}).join('')+'</ul>'+
+      '<div class="note-f"><label class="sr-only" for="dNote">Add a note</label><textarea id="dNote" placeholder="Add a note for the team…"></textarea><button class="btn sm" type="button" id="dNoteB">Add</button></div></div>';
+    h+='<div><h3>Activity</h3><ul class="tl">'+(t.history||[]).slice().reverse().map(function(x){return '<li>'+esc(x.text||x.action)+'<small>'+esc(x.by)+' · '+esc(whenT(x.at))+'</small></li>'}).join('')+'</ul></div>';
+    $('drB').innerHTML=h;
+    if($('urlCsv'))$('urlCsv').onclick=function(){S.csv([['URL']].concat(t.urls.map(function(u){return [u]})),'scoutly-task-urls-'+t.id+'.csv')};
+    if($('verB'))$('verB').onclick=function(){job(call('/api/tasks/verify',{id:t.id}))};
+    $('dMine').onclick=function(){$('dAs').value=S.user.name};
+    $('dSave').onclick=function(){var ch={status:$('dSt').value,priority:$('dPr').value,assignee:$('dAs').value.trim(),due:$('dDue').value};
+      if(ch.status==='dismissed'&&t.status!=='dismissed'){var r=prompt('Why are you dismissing this task? (for example: false positive, the page is meant to be noindex)');if(!r)return;ch.dismissReason=r}
+      save(ch,'Task updated.')};
+    $('dNoteB').onclick=function(){var x=$('dNote').value.trim();if(!x)return $('dNote').focus();call('/api/tasks/note',{id:t.id,text:x}).then(function(r){cur=r.item;drawer();S.say('Note added.')},fail)}}
+  function save(ch,msg){call('/api/tasks/update',{id:cur.id,changes:ch,version:cur.version}).then(function(r){cur=r.item;drawer();S.say(msg);load()},
+    function(e){if(e.conflict){S.say(e.message);openTask(cur.id)}else fail(e)})}
+
+  /* exports: tasks with the current filters, and a short project summary */
+  $('expB').onclick=function(){if(needProject())return;var f=filters();
+    call('/api/tasks/export?'+qs(f)).then(function(r){var day=today();
+      S.csv([['Title','Priority','Status','Category','Source','Evidence type','Affected URLs','First URL','Assigned to','Due','First detected','Last detected','Resolved','Priority reason','Recommended fix','Notes']].concat(r.items.map(function(t){
+        return [t.title,t.priority,STS[t.status],CATS[t.category],SRCS[t.source],(KINDS[t.kind]||[])[1],t.urlCount,(t.urls||[])[0]||'',t.assignee,t.due,t.firstDetected,t.lastDetected,t.resolvedAt,t.priorityReason,t.fix,t.notes]})),'scoutly-action-center-'+st.project+'-'+day+'.csv');
+      var s=st.sum;if(s)S.csv([['Website',st.project],['Date',day],['Open tasks',s.open],['Critical',s.critical],['High priority',s.high],['Completed',s.completed],['Overdue',s.overdue],['Fixed this month',s.fixedThisMonth],['New this week',s.newThisWeek],['Resolved this week',s.resolvedThisWeek],['Progress',s.progress+'%']],'scoutly-action-summary-'+st.project+'-'+day+'.csv');
+      S.say('Exported '+r.items.length+' tasks and the summary'+(r.truncated?' (first 5,000 tasks)':'')+'.')},fail)};
+
+  /* what each data source can feed in, honestly */
+  $('ints').innerHTML=[['audit','Site Audit','Connected. Crawls up to 25 pages and turns failed checks into tasks.'],['speed','PageSpeed Insights','Connected through the server (an API key, if set, stays there). Adds Core Web Vitals and performance tasks.'],
+    ['link','Backlink Manager','Connected when the team database is on. “Check backlinks” reads its logged links.'],['target','Google Search Console','No live connection yet. Import exports in Position Tracking, then click Import Search Console data.'],
+    ['ai','AI Search Visibility','Partial. AI-readiness checks come from the Site Audit; tracked brand mentions aren’t connected yet.'],['bell','Email notifications','Not available: Scoutly has no email service set up, so nothing is sent.']]
+    .map(function(i){return '<div><b><svg class="i"><use href="#i-'+i[0]+'"/></svg>'+i[1]+'</b>'+esc(i[2])+'</div>'}).join('');
+
+  function boot(){call('/api/tasks/projects').then(function(r){st.ok=true;projects(r.items);return load()},function(e){projects([]);fail(e)})}
+  boot();
+})();
+</script>
+</body>
+</html>
