@@ -127,6 +127,11 @@
       <span class="keyf" id="keyF" hidden><label class="sr-only" for="teamKey">Team key</label><input id="teamKey" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your team key"><button class="btn sm p" type="submit">Connect</button></span>
     </form>
 
+    <div class="dbbar" id="lost" hidden>
+      <svg class="i" aria-hidden="true"><use href="#i-link"/></svg><span id="lostMsg"></span>
+      <button class="btn sm p" type="button" id="lostB">Restore</button>
+    </div>
+
     <div class="tools">
       <label class="search"><span class="sr-only">Search campaigns</span><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Search campaigns…" autocomplete="off"></label>
       <div class="seg" role="group" aria-label="Filter by status">
@@ -216,6 +221,18 @@
   /* backlinks logged for this campaign in the Backlink Manager (matched by "brand — name", as it lists them) */
   var links=[];try{links=JSON.parse(localStorage.getItem('scoutly.backlinks')||'[]')||[]}catch(_){}
   function loadLinks(){if(!db)return;return call('/api/links').then(function(r){links=r.items||[]},function(){})}
+  /* campaigns named on backlinks but missing here, e.g. made before campaigns were kept past logging out */
+  function lost(){var have={},m={};list.forEach(function(c){have[c.brand?c.brand+' — '+c.name:c.name]=1});
+    links.forEach(function(b){var n=(b.campaign||'').trim();if(n&&!have[n]&&!m[n])m[n]=b.target||''});return m}
+  function showLost(){var m=lost(),n=Object.keys(m);$('lost').hidden=!n.length;if(!n.length)return;
+    $('lostMsg').textContent=n.length===1?'Your backlinks mention a campaign that isn’t here: “'+n[0]+'”. Restore it?':
+      'Your backlinks mention '+n.length+' campaigns that aren’t here, like “'+n[0]+'”. Restore them?'}
+  $('lostB').onclick=function(){var m=lost(),d=new Date(),day=d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+d.getDate()).slice(-2),b=this;
+    var made=Object.keys(m).map(function(n,i){var p=n.split(' — '),brand=p.length>1?p.shift():'';
+      return {id:Date.now().toString(36)+i+Math.random().toString(36).slice(2,6),name:p.join(' — '),brand:brand,loc:'',url:m[n],end:'',status:'Active',owner:S.user.name,created:day}});
+    b.disabled=true;made.forEach(function(c){list.unshift(c)});
+    Promise.all(made.map(function(c){return store.put(c)})).then(function(){b.disabled=false;render();S.say('Restored '+made.length+' campaign'+(made.length===1?'':'s')+'. Add a location or landing page with Edit.')},
+      function(err){b.disabled=false;list=list.filter(function(c){return made.indexOf(c)<0});save();render();S.say(err.message)})};
   function linkCount(c){var n=c.brand?c.brand+' — '+c.name:c.name;return links.filter(function(b){return b.campaign===n}).length}
 
   function card(c){
@@ -228,8 +245,8 @@
     if(c.loc){var r2=el('span','row');r2.appendChild(icon('i-pin'));r2.appendChild(document.createTextNode(c.loc));m.appendChild(r2)}
     if(c.end){var r3=el('span','row');r3.appendChild(icon('i-cal'));r3.appendChild(document.createTextNode('Ends '+fmt(c.end)));m.appendChild(r3)}
     if(m.childNodes.length)b.appendChild(m);
-    var u=el('a','pill url');u.href=c.url;u.target='_blank';u.rel='noopener noreferrer';u.title=c.url;u.appendChild(icon('i-link'));u.appendChild(el('span',null,c.url.replace(/^https?:\/\//i,'')));
-    var r4=el('div','row');r4.appendChild(u);b.appendChild(r4);a.appendChild(b);
+    if(c.url){var u=el('a','pill url');u.href=c.url;u.target='_blank';u.rel='noopener noreferrer';u.title=c.url;u.appendChild(icon('i-link'));u.appendChild(el('span',null,c.url.replace(/^https?:\/\//i,'')));
+    var r4=el('div','row');r4.appendChild(u);b.appendChild(r4)}a.appendChild(b);
     var f=el('div','card-f');
     var au=el('button','btn sm au');au.type='button';au.appendChild(icon('i-audit'));au.appendChild(document.createTextNode('Audit'));au.onclick=function(){location.href='audit.html?url='+encodeURIComponent(c.url)+'&kw='+encodeURIComponent(c.name)};
     f.appendChild(au);
@@ -247,6 +264,7 @@
     g.innerHTML='';
     shown.forEach(function(c){g.appendChild(card(c))});
     if(list.length&&!shown.length){var n=el('div','panel empty nores');n.appendChild(el('h3',null,'No matching campaigns'));n.appendChild(el('p',null,q?'Nothing matches “'+$('q').value.trim()+'”. Try another keyword, brand or location.':'No campaigns have this status.'));g.appendChild(n)}
+    showLost();
     $('count').textContent=(shown.length===list.length?list.length:shown.length+' of '+list.length)+' campaign'+(list.length===1?'':'s');
   }
 
