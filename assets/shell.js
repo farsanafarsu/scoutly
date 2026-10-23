@@ -76,15 +76,11 @@
       ['keyword-gap.html','gap','Keyword Gap'],
       ['keyword-manager.html','list','Keyword Manager'],
       ['domain-overview.html','globe','Domain Overview'],
-      ['domain-vs-domain.html','vs','Domain vs Domain'],
-      ['organic-research.html','chart','Organic Research','lock'],
-      ['traffic-analytics.html','trend','Traffic Analytics','lock']]],
+      ['domain-vs-domain.html','vs','Domain vs Domain']]],
     ['Link building',[
       ['backlink-audit.html','broken','Backlink Audit'],
       ['backlinks.html','link','Backlink Manager'],
       ['backlink-sites.html','globe','Backlink Sites'],
-      ['backlink-analytics.html','chart','Backlink Analytics','lock'],
-      ['backlink-gap.html','gap','Backlink Gap','lock'],
       ['#','tree','Internal Link Opportunities','soon','Internal Link Opportunities']]],
     ['Content',[
       ['writing-assistant.html','pen','SEO Writing Assistant'],
