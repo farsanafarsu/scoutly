@@ -25,7 +25,7 @@
   if($('scrim'))$('scrim').addEventListener('click',closeNav);
   document.addEventListener('keydown',function(e){if(e.key==='Escape')closeNav()});
 
-  document.addEventListener('click',function(e){var a=e.target.closest('[data-soon]');if(!a)return;e.preventDefault();say(a.dataset.soon+' opens when audits go live.');closeNav()});
+  document.addEventListener('click',function(e){var a=e.target.closest('[data-soon]');if(!a)return;e.preventDefault();say(a.dataset.soon+' is coming soon.');closeNav()});
 
   /* website status chip in the top bar */
   function showSite(site){

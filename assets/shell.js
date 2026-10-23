@@ -48,47 +48,59 @@
     check:'<path d="M4 12l5 5L20 6"/>',
     star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
     filter:'<path d="M3 5h18l-7 8v6l-4 2v-8z"/>',
-    copy:'<path d="M9 9h11v11H9zM5 15H4V4h11v1"/>'
+    copy:'<path d="M9 9h11v11H9zM5 15H4V4h11v1"/>',
+    code:'<path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/>',
+    tree:'<path d="M5 4h5v5H5zM14 15h5v5h-5zM14 4h5v5h-5zM7.5 9v8.5H14M10 6.5h4"/>',
+    plug:'<path d="M9 3v5M15 3v5M6 8h12v3a6 6 0 0 1-12 0zM12 17v4"/>'
   };
   var sprite='<svg width="0" height="0" style="position:absolute" aria-hidden="true">'+Object.keys(I).map(function(k){return '<symbol id="i-'+k+'" viewBox="0 0 24 24">'+I[k]+'</symbol>'}).join('')+'</svg>';
 
   /* Semrush-style SEO toolkit. lock: needs a paid data provider (the page shows locked.html without one). soon: not built yet. */
   var NAV=[
-    ['SEO management',[
+    ['Overview',[
       ['dashboard.html','dash','SEO Dashboard'],
       ['campaigns.html','rocket','SEO Campaigns'],
+      ['#','pulse','Action Center','soon','Action Center'],
       ['position-tracking.html','target','Position Tracking'],
       ['reports.html','rep','Reports']]],
-    ['SEO audit',[
+    ['SEO audit & optimization',[
       ['audit.html','audit','Site Audit'],
       ['onpage-checker.html','check','On-Page SEO Checker'],
-      ['backlink-audit.html','broken','Backlink Audit'],
+      ['#','speed','Page Speed & Core Web Vitals','soon','Page Speed & Core Web Vitals'],
+      ['#','page','Indexability & Sitemap Checker','soon','Indexability & Sitemap Checker'],
+      ['#','code','Schema Markup Checker','soon','Schema Markup Checker'],
       ['local-seo.html','pin','Local SEO']]],
-    ['Competitive research',[
+    ['Keyword & competitor research',[
+      ['keyword-overview.html','key','Keyword Overview'],
+      ['keyword-magic.html','wand','Keyword Magic Tool'],
+      ['keyword-gap.html','gap','Keyword Gap'],
+      ['keyword-manager.html','list','Keyword Manager'],
       ['domain-overview.html','globe','Domain Overview'],
       ['domain-vs-domain.html','vs','Domain vs Domain'],
       ['organic-research.html','chart','Organic Research','lock'],
       ['traffic-analytics.html','trend','Traffic Analytics','lock']]],
-    ['Keyword research',[
-      ['keyword-overview.html','key','Keyword Overview'],
-      ['keyword-magic.html','wand','Keyword Magic Tool'],
-      ['keyword-gap.html','gap','Keyword Gap'],
-      ['keyword-manager.html','list','Keyword Manager']]],
     ['Link building',[
+      ['backlink-audit.html','broken','Backlink Audit'],
       ['backlinks.html','link','Backlink Manager'],
       ['backlink-sites.html','globe','Backlink Sites'],
       ['backlink-analytics.html','chart','Backlink Analytics','lock'],
-      ['backlink-gap.html','gap','Backlink Gap','lock']]],
+      ['backlink-gap.html','gap','Backlink Gap','lock'],
+      ['#','tree','Internal Link Opportunities','soon','Internal Link Opportunities']]],
     ['Content',[
       ['writing-assistant.html','pen','SEO Writing Assistant'],
       ['topic-research.html','bulb','Topic Research'],
-      ['plagiarism-checker.html','copy','Plagiarism Checker']]],
-    ['AI visibility',[
+      ['plagiarism-checker.html','copy','Plagiarism Checker'],
+      ['#','clock','Content Decay Monitor','soon','Content Decay Monitor']]],
+    ['AI search visibility',[
       ['ai-search.html','ai','AI Search Visibility'],
-      ['aeo-checker.html','geo','AEO · GEO Checker']]],
+      ['aeo-checker.html','geo','AEO & GEO Checker']]],
     ['Account',[
+      ['#','plug','Integrations','soon','Integrations'],
       ['settings.html','set','Settings']]]
   ];
+  /* hover hints for tools whose names are easy to mix up */
+  var TIP={'audit.html':'Full website crawl and technical SEO issues','backlink-audit.html':'Analyze known backlinks and potential risks',
+    'backlinks.html':'Manage outreach, prospects and link-building status','backlink-sites.html':'Discover and save potential linking websites'};
   /* Cloudflare serves pages without .html (/backlinks), so add it back before matching the links */
   var here=location.pathname.split('/').pop()||'dashboard.html',q=location.search;if(here.indexOf('.')<0)here+='.html';
   /* locked.html stands in for a provider tool when no provider is connected; highlight that tool */
@@ -96,7 +108,7 @@
   if(here==='locked.html'){var lt=(q.match(/tool=([\w-]+)/)||[])[1];here=LOCKED[lt]||LOCKED.organic;q=''}
   function isCurrent(href){var h=href.split('?');return h[0]===here&&(!h[1]||q.indexOf(h[1])>-1)}
   var nav=NAV.map(function(g){return '<h2>'+g[0]+'</h2>'+g[1].map(function(it){
-    var attrs=it[3]==='soon'?' data-soon="'+it[4]+'"':'',badge=it[3]==='lock'?'<em title="Needs a data provider">API</em>':it[3]==='soon'?'<em>Soon</em>':'';
+    var attrs=(it[3]==='soon'?' data-soon="'+it[4]+'"':'')+(TIP[it[0]]?' title="'+TIP[it[0]]+'"':''),badge=it[3]==='lock'?'<em title="Needs a data provider">API</em>':it[3]==='soon'?'<em>Soon</em>':'';
     return '<a href="'+it[0]+'"'+attrs+(isCurrent(it[0])?' aria-current="page"':'')+'><svg class="i"><use href="#i-'+it[1]+'"/></svg>'+it[2]+badge+'</a>'}).join('')}).join('');
   var aside='<aside class="side" id="side" aria-label="Workspace"><div class="side-logo"><a class="logo" href="./" aria-label="Scoutly home"><img src="assets/scoutly-mark.svg" alt="" width="30" height="30"><span>Scoutly</span></a></div>'+
     '<nav class="side-nav" aria-label="SEO toolkit">'+nav+'<a href="#" id="logout" data-logout><svg class="i"><use href="#i-out"/></svg>Log out</a></nav><p class="side-foot">Early access · v0.2</p></aside><div class="scrim" id="scrim"></div>';
