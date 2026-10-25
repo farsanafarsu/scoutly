@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Schema Markup Checker — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.mode{flex:1 1 100%;display:flex}
+.qbar .qf.full{flex:1 1 100%}
+.qf textarea{min-height:180px;font-size:12.5px}
+.ext{display:flex;flex-wrap:wrap;gap:8px 16px;margin-top:12px;font:400 11.5px/1.6 var(--M);color:var(--mu)}
+.ext a{color:var(--b);text-decoration:underline}
+.item{margin-top:20px}
+.item .panel-h{flex-wrap:wrap}
+.item .panel-h .st{margin-left:auto}
+.item .src{font:400 11.5px/1.4 var(--M);color:var(--mu)}
+.msg{display:grid;grid-template-columns:18px minmax(0,1fr);gap:10px;padding:10px 20px;border-bottom:1px solid var(--ln);font:400 12.5px/1.6 var(--M);color:var(--sl)}
+.msg svg{width:15px;height:15px;margin-top:3px}
+.msg.e svg{color:var(--cr)}.msg.w svg{color:var(--wa)}.msg.o svg{color:var(--ok)}
+.msg.e span{color:var(--ink)}
+details.more{border-bottom:1px solid var(--ln)}
+details.more:last-child{border-bottom:0}
+details.more summary{cursor:pointer;padding:11px 20px;font:600 10.5px/1 var(--M);letter-spacing:.1em;text-transform:uppercase;color:var(--sl)}
+details.more summary:hover{color:var(--ink)}
+pre.code{margin:0;padding:14px 20px;max-height:420px;overflow:auto;background:#fff;border-top:1px solid var(--ln);font:400 12px/1.6 var(--M);white-space:pre-wrap;overflow-wrap:anywhere;color:var(--ink)}
+.k{color:#7a2fd0}.s{color:#0f7a52}.n{color:#c25e00}.b{color:var(--b)}
+.none{padding:22px 20px;font:400 13px/1.7 var(--M);color:var(--sl)}
+.tpl{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:0;border-top:1px solid var(--ln)}
+.tpl button{display:grid;gap:4px;justify-items:start;padding:14px 18px;border:0;border-right:1px solid var(--ln);border-bottom:1px solid var(--ln);background:none;text-align:left;cursor:pointer;font:600 13px/1.3 Geist,sans-serif;color:var(--ink)}
+.tpl button span{font:400 11px/1.4 var(--M);color:var(--mu)}
+.tpl button:hover,.tpl button[aria-pressed="true"]{background:#fff;color:var(--b)}
+.tpl-out{border-top:1px solid var(--ln)}
+.tpl-out .bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:10px 20px;font:400 11.5px/1.5 var(--M);color:var(--mu)}
+.tpl-out .bar .btn{margin-left:auto}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">SEO audit</p>
+      <h1>Schema Markup Checker</h1>
+      <p class="desc">See the structured data on a page (JSON-LD and microdata) and whether it qualifies for Google’s rich results: stars, prices, breadcrumbs, recipes, events, job listings and more. Every problem comes with what to change.</p>
+    </div>
+    <form class="qbar" id="f" novalidate>
+      <div class="mode"><div class="seg" role="group" aria-label="What to test"><button type="button" data-mode="url" aria-pressed="true">Page URL</button><button type="button" data-mode="code" aria-pressed="false">Paste code</button></div></div>
+      <div class="qf" id="urlF"><label for="url">Page to test</label><input id="url" placeholder="yourwebsite.com/your-page" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+      <div class="qf full" id="codeF" hidden><label for="code">The page’s HTML, or just the JSON-LD</label><textarea id="code" spellcheck="false" autocapitalize="off" placeholder='{"@context": "https://schema.org", "@type": "Organization", "name": "…"}'></textarea><small>Test markup before you publish it. Nothing you paste is stored.</small></div>
+      <button class="btn p" type="submit" id="go"><svg class="i"><use href="#i-code"/></svg>Test markup</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div class="loading" id="load" hidden><span class="spin"></span>Reading the page’s structured data…</div>
+    <div id="out" hidden>
+      <div class="res-act no-report"><button class="btn sm" type="button" id="rep"><svg class="i"><use href="#i-dl"/></svg>Download report</button></div>
+      <div class="kpis" id="kpis"></div>
+      <p class="ext no-report" id="ext"></p>
+      <div id="items"></div>
+      <section class="panel item" id="tplP"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-plus"/></svg></span><div><h2 id="tplH">Add structured data</h2><p>Starter JSON-LD for the most useful types. Replace the placeholders, then paste it into the page’s &lt;head&gt;.</p></div></div>
+        <div class="tpl" id="tpl"></div><div class="tpl-out" id="tplOut" hidden><div class="bar"><span id="tplNote"></span><button class="btn sm" type="button" id="copy"><svg class="i"><use href="#i-copy"/></svg>Copy</button></div><pre class="code" id="tplCode"></pre></div></section>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  /* /api/schema (seo/schema.py): GET ?url= fetches the page, POST {code} tests pasted markup */
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc;
+  var mode='url',last=null;
+  function icon(id){return '<svg class="i" aria-hidden="true"><use href="#i-'+id+'"/></svg>'}
+  function plural(n,w){return n+' '+w+(n===1?'':'s')}
+  /* pretty JSON with light colouring; built from escaped text so nothing in it can run */
+  function pretty(v){return esc(JSON.stringify(v,null,2)).replace(/(&quot;(?:[^&]|&(?!quot;))*?&quot;)(\s*:)?|\b(true|false|null)\b|-?\b\d+(\.\d+)?\b/g,function(m,str,colon,lit){
+    if(str)return '<span class="'+(colon?'k':'s')+'">'+str+'</span>'+(colon||'');if(lit)return '<span class="b">'+m+'</span>';return '<span class="n">'+m+'</span>'})}
+
+  [].forEach.call(document.querySelectorAll('[data-mode]'),function(b){b.addEventListener('click',function(){mode=b.dataset.mode;
+    [].forEach.call(document.querySelectorAll('[data-mode]'),function(x){x.setAttribute('aria-pressed',x===b)});
+    $('urlF').hidden=mode!=='url';$('codeF').hidden=mode!=='code';$('err').textContent=''})});
+
+  $('f').addEventListener('submit',function(e){e.preventDefault();$('err').textContent='';var req;
+    if(mode==='url'){var u=$('url').value.trim();
+      if(!u)return $('err').textContent='Enter the page you want to test.';
+      if(!/^(https?:\/\/)?[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?$/i.test(u))return $('err').textContent='That doesn’t look like a web address.';
+      history.replaceState(null,'','?url='+encodeURIComponent(u));req=S.api('/api/schema?url='+encodeURIComponent(u))}
+    else{var c=$('code').value.trim();if(!c)return $('err').textContent='Paste the page’s HTML or a JSON-LD block.';
+      if(c.length>900000)return $('err').textContent='That’s too long. Paste one page’s HTML, or just its JSON-LD blocks.';
+      req=S.post('/api/schema',{code:c})}
+    $('out').hidden=true;$('load').hidden=false;$('go').disabled=true;
+    req.then(function(r){last=r;last.pasted=mode==='code';render(r)}).catch(function(e){$('err').textContent=e.message})
+      .then(function(){$('load').hidden=true;$('go').disabled=false});
+  });
+
+  function render(r){
+    var rich=r.items.filter(function(x){return x.rich}),ok=rich.filter(function(x){return x.eligible}),
+      E=r.items.reduce(function(a,x){return a+x.errors.length},0)+r.blocks.filter(function(b){return b.error}).length,
+      W=r.items.reduce(function(a,x){return a+x.warnings.length},0);
+    $('kpis').innerHTML=[['code','Items found',r.items.length,[r.blocks.length?plural(r.blocks.length,'JSON-LD block'):'',r.items.filter(function(x){return x.source==='microdata'}).length?'microdata':'',r.rdfa?'RDFa ('+r.rdfa+' tags, not checked)':''].filter(Boolean).join(' · ')||'No structured data'],
+      ['star','Rich results',ok.length+(rich.length>ok.length?' of '+rich.length:''),rich.length?(ok.length===rich.length?'All eligible':(rich.length-ok.length)+' blocked by errors'):r.items.length?'None of these types have one':'Nothing to check'],
+      ['alert','Errors',E,E?'Fix these first':'Nothing blocking'],['bulb','Suggestions',W,'Recommended additions']]
+      .map(function(k){return '<div class="kpi"><small><svg class="i"><use href="#i-'+k[0]+'"/></svg>'+k[1]+'</small><b>'+esc(k[2])+'</b><span>'+esc(k[3])+'</span></div>'}).join('');
+    $('ext').innerHTML=r.pasted?'Tested pasted markup. Google’s own tools can test it too: <a href="https://search.google.com/test/rich-results" target="_blank" rel="noopener noreferrer">Rich Results Test</a> · <a href="https://validator.schema.org/" target="_blank" rel="noopener noreferrer">Schema.org validator</a>':
+      'Tested '+esc(r.url)+'. Double-check in <a href="https://search.google.com/test/rich-results?url='+encodeURIComponent(r.url)+'" target="_blank" rel="noopener noreferrer">Google’s Rich Results Test</a> or the <a href="https://validator.schema.org/#url='+encodeURIComponent(r.url)+'" target="_blank" rel="noopener noreferrer">Schema.org validator</a>; both also run the page’s JavaScript.';
+    var h='';
+    /* broken JSON-LD first: one syntax error hides the whole block from search engines */
+    r.blocks.filter(function(b){return b.error}).forEach(function(b){
+      h+='<section class="panel item"><div class="panel-h"><span class="ic">'+icon('alert')+'</span><div><h2>JSON-LD block '+b.n+' can’t be read</h2><p class="src">Search engines ignore the whole block until this is fixed</p></div><span class="st tag bad">Invalid JSON</span></div>'+
+        '<div class="msg e">'+icon('alert')+'<span>'+esc(b.error)+'. Common causes: a trailing comma, a missing comma or quote, or “smart quotes” pasted from a word processor.</span></div>'+
+        '<details class="more"><summary>Show the code</summary><pre class="code">'+esc(b.code)+'</pre></details></section>'});
+    r.items.forEach(function(x){
+      var st=x.rich?(x.eligible?'<span class="st tag ok">Eligible · '+esc(x.rich)+'</span>':'<span class="st tag bad">Not eligible · '+esc(x.rich)+'</span>'):'<span class="st tag">No rich result for this type</span>';
+      h+='<section class="panel item"><div class="panel-h"><span class="ic">'+icon(x.rich?'star':'code')+'</span><div><h2>'+esc(x.type)+'</h2><p class="src">'+(x.source==='microdata'?'Microdata':'JSON-LD block '+x.block)+'</p></div>'+st+'</div>'+
+        x.errors.map(function(m){return '<div class="msg e">'+icon('alert')+'<span>'+esc(m)+'</span></div>'}).join('')+
+        x.warnings.map(function(m){return '<div class="msg w">'+icon('bulb')+'<span>'+esc(m)+'</span></div>'}).join('')+
+        (x.rich&&!x.errors.length&&!x.warnings.length?'<div class="msg o">'+icon('check')+'<span>Everything Google asks for is here.</span></div>':'')+
+        (!x.rich&&!x.errors.length?'<div class="msg o">'+icon('check')+'<span>Valid. This type doesn’t create a rich result on its own, but it helps search engines and AI tools understand the page.</span></div>':'')+
+        (x.ok.length?'<details class="more"><summary>'+plural(x.ok.length,'check')+' passed</summary>'+x.ok.map(function(m){return '<div class="msg o">'+icon('check')+'<span>'+esc(m)+'</span></div>'}).join('')+'</details>':'')+
+        '<details class="more"><summary>Show the data</summary><pre class="code">'+pretty(x.data)+'</pre></details></section>'});
+    if(!r.items.length&&!r.blocks.length)h+='<section class="panel item"><p class="none">'+icon('alert')+' No structured data found'+(r.pasted?' in the pasted code.':' on this page.')+
+      (r.jsHeavy?' This page builds most of its content with JavaScript, and Scoutly reads the HTML as the server sends it, so markup added by scripts (some tag managers and site builders do this) isn’t seen. Google’s Rich Results Test runs JavaScript, so check there too.':' Use a starter template below to add some.')+'</p></section>';
+    $('items').innerHTML=h;
+    $('tplH').textContent=r.items.length?'Add more structured data':'Add structured data';
+    $('tplOut').hidden=true;[].forEach.call(document.querySelectorAll('#tpl button'),function(b){b.setAttribute('aria-pressed','false')});
+    $('out').hidden=false;
+  }
+
+  /* starter templates, filled with the tested page where possible */
+  function site(){var u=last&&!last.pasted?last.url:'https://www.example.com/';try{var x=new URL(u);return {origin:x.origin,url:u,host:x.hostname.replace(/^www\./,'')}}catch(_){return {origin:'https://www.example.com',url:u,host:'example.com'}}}
+  var TPL={
+    Organization:['Your brand, logo and social profiles',function(s){return {'@context':'https://schema.org','@type':'Organization',name:'Your company name',url:s.origin+'/',logo:s.origin+'/logo.png',
+      sameAs:['https://www.linkedin.com/company/your-company','https://www.facebook.com/yourpage','https://www.instagram.com/yourhandle'],contactPoint:{'@type':'ContactPoint',telephone:'+91-00000-00000',contactType:'customer service'}}}],
+    LocalBusiness:['Address, hours and phone for Maps',function(s){return {'@context':'https://schema.org','@type':'LocalBusiness',name:'Your business name',url:s.origin+'/',image:s.origin+'/storefront.jpg',telephone:'+91-00000-00000',priceRange:'₹₹',
+      address:{'@type':'PostalAddress',streetAddress:'12 Main Road',addressLocality:'Your city',addressRegion:'Your state',postalCode:'000000',addressCountry:'IN'},geo:{'@type':'GeoCoordinates',latitude:0.0,longitude:0.0},
+      openingHoursSpecification:[{'@type':'OpeningHoursSpecification',dayOfWeek:['Monday','Tuesday','Wednesday','Thursday','Friday'],opens:'09:00',closes:'18:00'}]}}],
+    Article:['Blog posts and news',function(s){var d=new Date().toISOString().slice(0,10);return {'@context':'https://schema.org','@type':'BlogPosting',headline:'Your article title',image:[s.origin+'/images/article-1200x675.jpg'],
+      datePublished:d,dateModified:d,author:{'@type':'Person',name:'Author name',url:s.origin+'/about/'},publisher:{'@type':'Organization',name:'Your company name',logo:{'@type':'ImageObject',url:s.origin+'/logo.png'}},mainEntityOfPage:s.url}}],
+    Product:['Price, stock and ratings',function(s){return {'@context':'https://schema.org','@type':'Product',name:'Product name',image:[s.origin+'/images/product.jpg'],description:'One or two sentences about the product.',sku:'SKU-001',
+      brand:{'@type':'Brand',name:'Brand name'},offers:{'@type':'Offer',url:s.url,price:'1299.00',priceCurrency:'INR',availability:'https://schema.org/InStock'},aggregateRating:{'@type':'AggregateRating',ratingValue:'4.6',reviewCount:'87'}}}],
+    BreadcrumbList:['The path above your search result',function(s){return {'@context':'https://schema.org','@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'Home',item:s.origin+'/'},
+      {'@type':'ListItem',position:2,name:'Category',item:s.origin+'/category/'},{'@type':'ListItem',position:3,name:'This page'}]}}],
+    FAQPage:['Questions and answers on the page',function(s){return {'@context':'https://schema.org','@type':'FAQPage',mainEntity:[{'@type':'Question',name:'Your first question?',acceptedAnswer:{'@type':'Answer',text:'The answer, as written on the page.'}},
+      {'@type':'Question',name:'Your second question?',acceptedAnswer:{'@type':'Answer',text:'The answer, as written on the page.'}}]}}]};
+  var NOTE={FAQPage:'Only use FAQ markup for questions that are visible on the page. Google shows FAQ rich results only for government and health sites now, but other search and AI tools still read it.',
+    Product:'Ratings must come from real reviews shown on the page.',LocalBusiness:'Get latitude and longitude from Google Maps (right-click the pin).'};
+  $('tpl').innerHTML=Object.keys(TPL).map(function(k){return '<button type="button" data-t="'+k+'" aria-pressed="false">'+(k==='BreadcrumbList'?'Breadcrumbs':k==='FAQPage'?'FAQ':k==='LocalBusiness'?'Local business':k)+'<span>'+TPL[k][0]+'</span></button>'}).join('');
+  var tplText='';
+  [].forEach.call(document.querySelectorAll('#tpl button'),function(b){b.addEventListener('click',function(){
+    [].forEach.call(document.querySelectorAll('#tpl button'),function(x){x.setAttribute('aria-pressed',x===b)});
+    tplText='<script type="application/ld+json">\n'+JSON.stringify(TPL[b.dataset.t][1](site()),null,2)+'\n</'+'script>';
+    $('tplCode').textContent=tplText;$('tplNote').textContent=NOTE[b.dataset.t]||'Replace every placeholder with your real details before publishing.';$('tplOut').hidden=false})});
+  $('copy').onclick=function(){if(!tplText)return;(navigator.clipboard?navigator.clipboard.writeText(tplText):Promise.reject()).then(function(){S.say('Copied. Paste it into the page’s <head>.')},function(){S.say('Couldn’t copy; select the code and copy it by hand.')})};
+  $('rep').onclick=function(){if(last)S.report($('items'),{title:'Schema markup report',file:'schema-'+S.slug(last.pasted?'pasted-code':last.url),meta:[['Page',last.pasted?'Pasted code':last.url],['Items found',String(last.items.length)]]})};
+
+  if(S.qs('url')){$('url').value=S.qs('url');$('f').requestSubmit()}
+  else{var s=S.read('scoutly.site');if(s)$('url').value=s}
+})();
+</script>
+</body>
+</html>

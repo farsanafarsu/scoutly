@@ -68,7 +68,7 @@
       ['onpage-checker.html','check','On-Page SEO Checker'],
       ['pagespeed.html','speed','Page Speed & Core Web Vitals'],
       ['indexability.html','page','Indexability & Sitemap Checker'],
-      ['#','code','Schema Markup Checker','soon','Schema Markup Checker'],
+      ['schema.html','code','Schema Markup Checker'],
       ['local-seo.html','pin','Local SEO']]],
     ['Keyword & competitor research',[
       ['keyword-overview.html','key','Keyword Overview'],
