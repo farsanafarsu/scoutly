@@ -91,7 +91,7 @@
       ['ai-search.html','ai','AI Search Visibility'],
       ['aeo-checker.html','geo','AEO & GEO Checker']]],
     ['Account',[
-      ['#','plug','Integrations','soon','Integrations'],
+      ['integrations.html','plug','Integrations'],
       ['settings.html','set','Settings']]]
   ];
   /* hover hints for tools whose names are easy to mix up */

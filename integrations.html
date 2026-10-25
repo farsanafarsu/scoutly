@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Integrations — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.intg{margin-top:20px}
+.intg .panel-h{flex-wrap:wrap}
+.intg .panel-h .st{margin-left:auto}
+.msg{display:grid;grid-template-columns:18px minmax(0,1fr);gap:10px;padding:10px 20px;border-bottom:1px solid var(--ln);font:400 12.5px/1.6 var(--M);color:var(--sl)}
+.msg svg{width:15px;height:15px;margin-top:3px}
+.msg.e svg{color:var(--cr)}.msg.w svg{color:var(--wa)}.msg.o svg{color:var(--ok)}.msg.i svg{color:var(--b)}
+.msg b{color:var(--ink);font-weight:600}
+.uses{display:flex;flex-wrap:wrap;align-items:center;gap:6px;padding:12px 20px;border-bottom:1px solid var(--ln);font:600 10px/1 var(--M);letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+.uses a{font:400 11.5px/1 var(--M);letter-spacing:0;text-transform:none;color:var(--b);border:1px solid rgba(47,91,255,.3);padding:5px 8px}
+.uses a:hover{background:rgba(47,91,255,.06)}
+details.how{border-bottom:1px solid var(--ln)}
+details.how:last-child{border-bottom:0}
+details.how summary{cursor:pointer;padding:11px 20px;font:600 10.5px/1 var(--M);letter-spacing:.1em;text-transform:uppercase;color:var(--sl)}
+details.how summary:hover{color:var(--ink)}
+details.how ol{margin:0;padding:0 20px 14px 38px;font:400 12.5px/1.75 var(--M);color:var(--sl)}
+details.how code{font:500 11.5px/1 var(--M);background:#fff;border:1px solid var(--ln);padding:1px 5px;color:var(--ink)}
+details.how a{color:var(--b);text-decoration:underline}
+.keyf{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 20px;border-bottom:1px solid var(--ln)}
+.keyf input{flex:1 1 220px;min-width:0;height:36px}
+.top-act{display:flex;justify-content:flex-end;margin-top:14px}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">Account</p>
+      <h1>Integrations</h1>
+      <p class="desc">The services Scoutly connects to, whether each one is working, and which tools rely on it. Keys and passwords stay on the server and are never shown here.</p>
+    </div>
+    <div class="top-act"><button class="btn sm" type="button" id="re"><svg class="i"><use href="#i-pulse"/></svg>Check again</button></div>
+    <p class="qerr" id="err" role="alert"></p>
+    <div class="loading" id="load"><span class="spin"></span><span id="loadT">Checking connections…</span></div>
+    <div class="kpis" id="kpis" hidden></div>
+    <div id="cards"></div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  /* /api/health (is the API reachable), /api/integrations (seo/integrations.py: server, DataForSEO, team database, PageSpeed key).
+     Browser-side: the team key (localStorage scoutly.teamKey, checked with POST /api/campaigns) and Search Console
+     imports (Position Tracking's scoutly.ranks, Content Decay's scoutly.decay). */
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,TK='scoutly.teamKey';
+  var st=null,health=null,team=null;
+  function icon(id){return '<svg class="i" aria-hidden="true"><use href="#i-'+id+'"/></svg>'}
+  function msg(kind,html){return '<div class="msg '+kind+'">'+icon({e:'alert',w:'alert',o:'check',i:'bulb'}[kind])+'<span>'+html+'</span></div>'}
+  function tag(state){return {ok:'<span class="st tag ok">Connected</span>',off:'<span class="st tag">Not set up</span>',bad:'<span class="st tag bad">Not working</span>',
+    warn:'<span class="st tag wr">Needs attention</span>',local:'<span class="st tag in">In this browser</span>'}[state]}
+  function uses(list){return '<div class="uses">Used by '+list.map(function(x){return '<a href="'+x[0]+'">'+esc(x[1])+'</a>'}).join('')+'</div>'}
+  function how(title,steps){return '<details class="how"><summary>'+esc(title)+'</summary><ol>'+steps.map(function(s){return '<li>'+s+'</li>'}).join('')+'</ol></details>'}
+  function card(id,ic,name,sub,state,body){return '<section class="panel intg" id="'+id+'"><div class="panel-h"><span class="ic">'+icon(ic)+'</span><div><h2>'+esc(name)+'</h2><p>'+esc(sub)+'</p></div>'+tag(state)+'</div>'+body+'</section>'}
+  function key(){try{return localStorage.getItem(TK)||''}catch(_){return ''}}
+  function store(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(_){return null}}
+  var local=/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+
+  function load(refresh){$('err').textContent='';$('load').hidden=false;$('re').disabled=true;
+    var t0=performance.now();
+    S.api('/api/health').then(function(){health={ok:true,ms:Math.round(performance.now()-t0)};
+      return S.api('/api/integrations'+(refresh?'?refresh=1':''))}).then(function(r){st=r;return checkTeam()})
+    .catch(function(e){if(!health)health={ok:false,error:e.message};else $('err').textContent=e.message})
+    .then(function(){$('load').hidden=true;$('re').disabled=false;render()})}
+
+  /* is the key saved in this browser the right one? /api/campaigns answers needKey when it isn't */
+  function checkTeam(){team=null;var db=st&&st.database;if(!db||!db.ok||!db.teamKey)return;var k=key();if(!k){team={saved:false};return}
+    return S.api('/api/campaigns',{method:'POST',headers:{'X-Scoutly-Team':k}}).then(function(){team={saved:true,ok:true}},function(e){team={saved:true,ok:false,error:e.message}})}
+
+  function render(){var cards=[],n=0,on=0;function count(ok){n++;if(ok)on++}
+    /* 1. API server */
+    var hb='';
+    if(!health||!health.ok){hb=msg('e',local?'The Scoutly server isn’t answering. Start it from the project folder with <code>python server.py</code>.':
+      'The API server isn’t answering. If it’s hosted on Render’s free plan it sleeps after 15 minutes without traffic; the first request can take up to a minute, so check again shortly.')}
+    else{hb=msg('o','Answering in <b>'+health.ms+' ms</b>'+(st&&st.server.hosted?', hosted (Render) behind the Cloudflare Worker.':', running on this computer.'));
+      if(st&&st.server.hosted&&!st.server.proxyKey)hb+=msg('w','<b>SCOUTLY_PROXY_KEY</b> isn’t set, so anyone who finds the server’s address can use it directly. Set it on Render and copy it into Cloudflare as the API_KEY secret.');
+      if(health.ms>8000)hb+=msg('i','That was slow: a hosted server waking up from sleep. Later requests are quicker.')}
+    count(health&&health.ok);
+    cards.push(card('api','build','Scoutly API server',local?'python server.py on this computer':'Render, reached through the Cloudflare Worker',health&&health.ok?(st&&st.server.hosted&&!st.server.proxyKey?'warn':'ok'):'bad',
+      hb+uses([['audit.html','Site Audit'],['keyword-overview.html','Keyword tools'],['indexability.html','Indexability'],['internal-links.html','Internal links'],['content-decay.html','Content decay']])+
+      how('How the live site connects',['On <b>Render</b>: New → Blueprint → pick this repository; it creates <code>scoutly-api</code> from render.yaml.',
+        'Copy the generated <code>SCOUTLY_PROXY_KEY</code> from the service’s Environment tab.',
+        'In <b>Cloudflare</b>: Workers &amp; Pages → scoutly → Settings → Variables and Secrets → add a Secret <code>API_KEY</code> with that value.',
+        'Put the Render address in <code>API_ORIGIN</code> in wrangler.jsonc and push to main.'])));
+    if(st){
+      /* 2. team database */
+      var db=st.database,dstate=db.ok?(db.teamKey&&team&&!team.ok?'warn':'ok'):db.configured?'bad':'off',db_b='';
+      db_b+=msg(db.ok?'o':db.configured?'e':'i',esc(db.message)+(db.ok&&db.ms!=null?' · <b>'+db.ms+' ms</b>':''));
+      if(db.ok&&db.teamKey){
+        if(team&&team.ok)db_b+=msg('o','This browser’s team key works. You can see and save the team’s backlinks, campaigns and tasks.');
+        else if(team&&team.saved)db_b+=msg('e','The team key saved in this browser was refused: '+esc(team.error)+' Paste the current key below.');
+        else db_b+=msg('w','This browser has no team key yet. Paste the one your admin shared to see the team’s data.');
+        db_b+='<form class="keyf" id="keyF"><label class="sr-only" for="tk">Team key</label><input id="tk" type="password" autocomplete="off" spellcheck="false" placeholder="'+(team&&team.ok?'Replace the saved team key':'Paste your team key')+'">'+
+          '<button class="btn sm p" type="submit">Save &amp; test</button>'+(key()?'<button class="btn sm" type="button" id="forget">Forget key</button>':'')+'</form>'}
+      else if(db.ok)db_b+=msg('i','No team key is required on this server, so everyone who can reach it shares the data.');
+      count(db.ok&&(!db.teamKey||(team&&team.ok)));
+      cards.push(card('db','globe','Team database','MongoDB Atlas · shared backlinks, campaigns and tasks',dstate,db_b+
+        uses([['backlinks.html','Backlink Manager'],['campaigns.html','SEO Campaigns'],['action-center.html','Action Center'],['backlink-sites.html','Backlink Sites']])+
+        how('How to connect',['Create a free cluster on <a href="https://www.mongodb.com/cloud/atlas/register" target="_blank" rel="noopener noreferrer">MongoDB Atlas</a> and a database user.',
+          'Network Access → allow <code>0.0.0.0/0</code> (Render’s free plan has no fixed IP address).',
+          'Copy the connection string (<code>mongodb+srv://USER:PASSWORD@….mongodb.net/</code>).',
+          'On Render → scoutly-api → Environment, set <code>MONGODB_URI</code> to it. <code>SCOUTLY_TEAM_KEY</code> is generated by render.yaml; share it with your teammates privately.',
+          local?'Running locally: set <code>MONGODB_URI</code> in your environment, then restart <code>python server.py</code>.':'Save; Render redeploys, then check again here.'])));
+      /* 3. DataForSEO */
+      var p=st.dataforseo,pb=msg(p.ok?'o':p.configured?'e':'i',esc(p.ok?'Connected'+(p.login?' as '+p.login:''):p.message)+(p.ok&&p.balance!=null?' · balance <b>$'+(+p.balance).toFixed(2)+'</b>':''));
+      if(p.ok&&p.balance!=null&&p.balance<1)pb+=msg('w','The balance is almost used up. Top up in the DataForSEO dashboard, or the paid tools will stop.');
+      if(!p.configured)pb+=msg('i','Optional. Without it these tools show their free data and an “API” badge.');
+      count(p.ok);
+      cards.push(card('dfs','pulse','DataForSEO','Paid search data, pay as you go',p.ok?(p.balance!=null&&p.balance<1?'warn':'ok'):p.configured?'bad':'off',pb+
+        uses([['organic-research.html','Organic Research'],['traffic-analytics.html','Traffic Analytics'],['backlink-analytics.html','Backlink Analytics'],['backlink-gap.html','Backlink Gap'],['keyword-magic.html','Keyword volumes'],['settings.html','Usage &amp; costs']])+
+        how('How to connect',['Sign up at <a href="https://app.dataforseo.com/register" target="_blank" rel="noopener noreferrer">DataForSEO</a> and add credit.',
+          'Copy your API login and API password from the dashboard (API Access).',
+          'Set <code>DATAFORSEO_LOGIN</code> and <code>DATAFORSEO_PASSWORD</code> on Render (or in your environment locally), then restart the server.',
+          'Every lookup asks before it spends, and results are cached for 24 hours. Costs per lookup are on the <a href="settings.html">Settings</a> page.'])));
+      /* 4. PageSpeed */
+      var ps=st.pagespeed;count(true);
+      cards.push(card('psi','speed','Google PageSpeed Insights','Lab and field speed data for Core Web Vitals','ok',
+        msg(ps.ownKey?'o':'i',ps.ownKey?'Using your own API key, with its own daily quota.':'Working on Google’s shared quota. Busy times can hit “quota exceeded”; your own free key avoids that.')+
+        uses([['pagespeed.html','Page Speed & Core Web Vitals'],['audit.html','Site Audit']])+
+        (ps.ownKey?'':how('Add your own key (free)',['In <a href="https://console.cloud.google.com/apis/library/pagespeedonline.googleapis.com" target="_blank" rel="noopener noreferrer">Google Cloud</a>, enable the PageSpeed Insights API.',
+          'APIs &amp; Services → Credentials → Create credentials → API key.','Set it as <code>PAGESPEED_API_KEY</code> on Render (or locally), then restart the server.']))))}
+    /* 5. Search Console, imported in this browser */
+    var ranks=store('scoutly.ranks'),snaps=ranks&&ranks.snaps||[],decay=store('scoutly.decay')||{},sites=Object.keys(decay),
+      last=snaps.length?snaps[snaps.length-1].date:'',pages=snaps.filter(function(s){return s.pages&&s.pages.length}).length,gb='';
+    gb+=msg(snaps.length?'o':'i',snaps.length?'<b>'+snaps.length+'</b> Search Console snapshot'+(snaps.length===1?'':'s')+' imported in this browser, the latest for <b>'+esc(last)+'</b>'+(pages>=2?'. Content Decay can compare the last two.':pages===1?'. Import one more with pages to compare traffic in Content Decay.':'.'):
+      'No Search Console data imported in this browser yet.');
+    if(sites.length)gb+=msg('o','Content decay history kept for '+sites.map(function(s){return '<b>'+esc(s.replace(/^https?:\/\/(www\.)?/,''))+'</b>'}).join(', ')+'.');
+    if(last&&(Date.now()-new Date(last).getTime())/864e5>35)gb+=msg('w','The latest import is over a month old. Export a fresh one to keep tracking current.');
+    gb+=msg('i','Scoutly reads Search Console exports, so there’s nothing to sign in to and your data stays in this browser. A direct Google sign-in isn’t available yet.');
+    count(snaps.length>0);
+    cards.push(card('gsc','target','Google Search Console','Your real clicks, impressions and positions',snaps.length?'local':'off',gb+
+      uses([['position-tracking.html','Position Tracking'],['content-decay.html','Content Decay Monitor']])+
+      how('How to import',['Open <a href="https://search.google.com/search-console/performance/search-analytics" target="_blank" rel="noopener noreferrer">Search Console → Performance → Search results</a>.',
+        'For rankings: pick a date range and turn on <b>Average position</b>. For decay: Date → <b>Compare</b> → last 3 months vs previous period.',
+        '<b>Export → Download CSV</b>, then drop the .zip on <a href="position-tracking.html">Position Tracking</a> or <a href="content-decay.html">Content Decay Monitor</a>.'])));
+    $('cards').innerHTML=cards.join('');
+    $('kpis').hidden=false;
+    $('kpis').innerHTML=[['plug','Connected',on+' of '+n,on===n?'Everything is working':(n-on)+' not set up or not working'],
+      ['build','API server',health&&health.ok?'Online':'Offline',health&&health.ok?health.ms+' ms':'Can’t reach it'],
+      ['globe','Team database',st?(st.database.ok?'Connected':st.database.configured?'Error':'Not set up'):'—',st&&st.database.ok?(team&&team.ok?'Your key works':st.database.teamKey?'Needs your team key':'Open to all'):'Data stays in each browser'],
+      ['pulse','DataForSEO',st?(st.dataforseo.ok?'Connected':st.dataforseo.configured?'Error':'Not set up'):'—',st&&st.dataforseo.ok&&st.dataforseo.balance!=null?'$'+(+st.dataforseo.balance).toFixed(2)+' left':'Optional, paid']]
+      .map(function(k){return '<div class="kpi"><small>'+icon(k[0])+k[1]+'</small><b>'+esc(k[2])+'</b><span>'+esc(k[3])+'</span></div>'}).join('');
+    var f=$('keyF');if(f)f.addEventListener('submit',function(e){e.preventDefault();var k=$('tk').value.trim();if(!k)return;
+      try{localStorage.setItem(TK,k)}catch(_){}$('tk').value='';Promise.resolve(checkTeam()).then(function(){render();S.say(team&&team.ok?'Team key saved and working.':'That key was refused.')})});
+    var fg=$('forget');if(fg)fg.onclick=function(){try{localStorage.removeItem(TK)}catch(_){}checkTeam();render();S.say('Team key removed from this browser.')};
+  }
+  $('re').onclick=function(){load(true)};
+  load(false);
+})();
+</script>
+</body>
+</html>

@@ -1167,6 +1167,7 @@ TOOL_ROUTES = {
     "/api/content-decay": lambda q: _decay().run(q.get("site", ""), q.get("limit", "50")),
     "/api/internal-links": lambda q: _ilinks().run(q.get("site", ""), q.get("limit", "60"), q.get("focus", ""), q.get("kw", "")),
     # optional DataForSEO data (provider.py). run=1 calls the API; without it only the cache answers.
+    "/api/integrations": lambda q: _integrations().status(q.get("refresh") == "1"),
     "/api/provider/status": lambda q: _provider().status(q.get("refresh") == "1"),
     "/api/provider/usage": lambda q: _provider().usage(),
     "/api/provider/serp": lambda q: _provider().serp(q.get("q", ""), q.get("gl", "us"), q.get("run") == "1"),
@@ -1246,6 +1247,11 @@ def _schema():
 def _ilinks():
     import internallinks
     return internallinks
+
+
+def _integrations():
+    import integrations
+    return integrations
 
 
 def _decay():
