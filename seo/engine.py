@@ -1164,6 +1164,7 @@ TOOL_ROUTES = {
     "/api/aeo": lambda q: _tools().aeo(q.get("url", ""), q.get("q", "")),
     "/api/sitemaps": lambda q: _index().sitemaps(q.get("site", "")),
     "/api/schema": lambda q: _schema().analyze(url=q.get("url", "")),
+    "/api/content-decay": lambda q: _decay().run(q.get("site", ""), q.get("limit", "50")),
     "/api/internal-links": lambda q: _ilinks().run(q.get("site", ""), q.get("limit", "60"), q.get("focus", ""), q.get("kw", "")),
     # optional DataForSEO data (provider.py). run=1 calls the API; without it only the cache answers.
     "/api/provider/status": lambda q: _provider().status(q.get("refresh") == "1"),
@@ -1178,6 +1179,8 @@ TOOL_ROUTES = {
 
 POST_ROUTES = {
     "/api/indexability": lambda b: _index().check(b.get("urls")),
+    "/api/content-decay": lambda b: _decay().run(str(b.get("site") or ""), str(b.get("limit") or "50"), b.get("traffic") if isinstance(b.get("traffic"), list) else None,
+                                                          b.get("previous") if isinstance(b.get("previous"), list) else None),
     "/api/schema": lambda b: _schema().analyze(url=str(b.get("url") or ""), code=str(b.get("code") or "")),
     "/api/backlinks": lambda b: _tools().backlink_audit(str(b.get("target") or ""), [str(s) for s in b.get("sources") or []], bool(b.get("aliveOnly"))),
     "/api/provider/keywords": lambda b: _provider().keyword_metrics([str(k) for k in b.get("keywords") or []][:5000],
@@ -1243,6 +1246,11 @@ def _schema():
 def _ilinks():
     import internallinks
     return internallinks
+
+
+def _decay():
+    import contentdecay
+    return contentdecay
 
 
 def _links():

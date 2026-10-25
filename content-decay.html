@@ -1,0 +1,229 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Content Decay Monitor — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.qf select{max-width:220px}
+.qbar .qf.full{flex:1 1 100%}
+.drop{display:grid;place-items:center;gap:6px;padding:18px;border:1.5px dashed rgba(47,91,255,.45);background:rgba(47,91,255,.03);text-align:center;font:400 12.5px/1.5 var(--M);color:var(--sl);cursor:pointer}
+.drop.on{background:rgba(47,91,255,.08)}.drop svg{width:22px;height:22px;color:var(--b)}.drop input{display:none}
+.drop.has{border-style:solid;border-color:rgba(23,166,115,.5);background:rgba(23,166,115,.05)}
+.how{font:400 11.5px/1.7 var(--M);color:var(--mu)}.how ol{margin:4px 0 0 18px}.how a{color:var(--b);text-decoration:underline}
+.how summary{cursor:pointer;color:var(--sl)}
+.src{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font:400 12px/1.5 var(--M);color:var(--sl)}
+.src label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.iss{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;align-items:start;padding:12px 20px;border-bottom:1px solid var(--ln);font:400 12.5px/1.6 var(--M);color:var(--sl)}
+.iss:last-child{border-bottom:0}
+.sev{font:600 10px/1.3 var(--M);letter-spacing:.1em;text-transform:uppercase}
+.sev.critical{color:var(--cr)}.sev.warning{color:#a46a00}.sev.notice{color:var(--b)}.sev.good{color:var(--ok)}
+.chk-t{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid var(--ln)}
+.dt td.u{min-width:220px;white-space:normal;overflow-wrap:anywhere}
+.dt td.u a{color:var(--ink)}.dt td.u a:hover{color:var(--b)}
+.dt td .why{display:block;margin-top:4px;font-size:11.5px;color:var(--sl);white-space:normal}
+.dt td.rs{min-width:300px;white-space:normal;font:400 12px/1.6 var(--M);color:var(--sl)}
+.dt td.rs ul{margin:0;padding-left:16px}.dt td.rs li+li{margin-top:2px}
+.dt td.rs details{margin-top:6px}.dt td.rs summary{cursor:pointer;font:600 10px/1.6 var(--M);letter-spacing:.1em;text-transform:uppercase;color:var(--b)}
+.dt td.rs details ul{margin-top:4px;color:var(--ink)}
+.dn{color:var(--cr)}.up{color:var(--ok)}
+.sc{display:inline-block;min-width:28px;margin-left:6px;font:600 11px/1 var(--M);color:var(--mu)}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">Content</p>
+      <h1>Content Decay Monitor</h1>
+      <p class="desc">Find the pages that are losing search traffic or going out of date, and which to refresh first. Scoutly reads when each page was last updated and looks for past years in titles and text. Add a Search Console comparison to see which pages are losing clicks and rankings. Run it again later to see what’s changed.</p>
+    </div>
+    <form class="qbar" id="f" novalidate>
+      <div class="qf"><label for="site">Website</label><input id="site" placeholder="yourwebsite.com" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+      <div class="qf sm"><label for="lim">Pages to check</label><select id="lim"><option value="25">25</option><option value="50" selected>50</option><option value="100">100</option></select></div>
+      <div class="qf full"><label>Search Console traffic <span style="color:var(--mu)">(optional, recommended)</span></label>
+        <label class="drop" id="drop"><input type="file" id="file" accept=".zip,.csv,application/zip,text/csv"><svg class="i"><use href="#i-upload"/></svg><span id="dropT"><b>Drop a Search Console comparison export (.zip or Pages.csv)</b> or click to choose</span></label>
+        <div class="src" id="ptSrc" hidden></div>
+        <details class="how"><summary>How to export a comparison from Search Console</summary><ol>
+          <li>Open <a href="https://search.google.com/search-console/performance/search-analytics" target="_blank" rel="noopener noreferrer">Search Console → Performance → Search results</a>.</li>
+          <li>Click the <b>Date</b> filter → <b>Compare</b> tab → for example <b>Compare last 3 months to previous period</b> → Apply.</li>
+          <li>Open the <b>Pages</b> tab, then <b>Export → Download CSV</b>. Drop the .zip here as it is. Nothing you add is stored on Scoutly’s server.</li></ol></details>
+      </div>
+      <button class="btn p" type="submit" id="go"><svg class="i"><use href="#i-clock"/></svg>Check for decay</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div class="loading" id="load" hidden><span class="spin"></span><span id="loadT">Checking your pages…</span></div>
+    <div id="out" hidden>
+      <div class="res-act no-report"><button class="btn sm" type="button" id="csvB"><svg class="i"><use href="#i-dl"/></svg>Export CSV</button><button class="btn sm" type="button" id="rep"><svg class="i"><use href="#i-dl"/></svg>Download report</button></div>
+      <div class="kpis" id="kpis"></div>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-alert"/></svg></span><div><h2>Summary</h2><p id="issS"></p></div></div><div id="iss"></div></section>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-clock"/></svg></span><div><h2>Pages to refresh</h2><p id="tblS"></p></div></div>
+        <div class="chk-t"><div class="seg" role="group" aria-label="Filter by verdict" id="filt"><button type="button" data-v="" aria-pressed="true">All<span id="n-all"></span></button><button type="button" data-v="refresh" aria-pressed="false">Refresh now<span id="n-refresh"></span></button><button type="button" data-v="review" aria-pressed="false">Review<span id="n-review"></span></button><button type="button" data-v="fresh" aria-pressed="false">Fresh<span id="n-fresh"></span></button><button type="button" data-v="error" aria-pressed="false">Broken<span id="n-error"></span></button></div></div>
+        <div class="dt-wrap"><table class="dt"><thead><tr><th>Page</th><th>Last updated</th><th class="n" id="clH">Clicks</th><th>Why, and what to do</th><th>Verdict</th></tr></thead><tbody id="rows"></tbody></table></div>
+      </section>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  /* /api/content-decay (seo/contentdecay.py): POST {site, limit, traffic:[{url, clicks, clicksBefore, impr, imprBefore, pos, posBefore}], previous:[urls]}.
+     Traffic comes from a Search Console comparison export, or the two latest Pages snapshots in Position Tracking (localStorage scoutly.ranks).
+     Each run's results are kept per site in localStorage (scoutly.decay) to show what changed since the last check. */
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,HK='scoutly.decay';
+  var R=null,prev=null,traffic=null,trafficNote='',filter='';
+  var V={refresh:['Refresh now','bad'],review:['Review','wr'],fresh:['Fresh','ok'],error:['Broken','bad'],unchecked:['Couldn’t check','']};
+  function short(u){return String(u||'').replace(/^https?:\/\/(www\.)?/i,'')}
+  function path(u){try{var x=new URL(u);return (x.pathname+x.search)||'/'}catch(_){return short(u)}}
+  function isUrl(u){return /^(https?:\/\/)?[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?$/i.test(String(u||'').trim())}
+  function plural(n,w){return n.toLocaleString()+' '+w+(n===1?'':'s')}
+  function age(d){if(d==null)return '';if(d<31)return d+' days ago';if(d<365)return Math.round(d/30.4)+' months ago';var y=d/365;return (y<2?'over a year':Math.floor(y)+' years')+' ago'}
+  function key(u){try{var x=new URL(u);return x.host.replace(/^www\./,'').toLowerCase()+(x.pathname.replace(/\/$/,'')||'/')+x.search}catch(_){return u}}
+
+  /* ---- Search Console files (same reader as Position Tracking) */
+  function parseCSV(text){var rows=[],row=[],f='',q=false;text=text.replace(/^﻿/,'');
+    for(var i=0;i<text.length;i++){var c=text[i];if(q){if(c==='"'){if(text[i+1]==='"'){f+='"';i++}else q=false}else f+=c}
+      else if(c==='"')q=true;else if(c===','){row.push(f);f=''}else if(c==='\n'||c==='\r'){if(c==='\r'&&text[i+1]==='\n')i++;row.push(f);f='';if(row.length>1||row[0])rows.push(row);row=[]}else f+=c}
+    if(f||row.length){row.push(f);rows.push(row)}return rows}
+  function num(s){s=String(s||'').replace(/[%\s,]/g,'');var n=parseFloat(s);return isNaN(n)?null:n}
+  function unzip(file){return file.arrayBuffer().then(function(buf){
+    var u=new Uint8Array(buf),dv=new DataView(buf),i=u.length-22,out=[];
+    while(i>=0&&dv.getUint32(i,true)!==0x06054b50)i--;
+    if(i<0)throw new Error(file.name+' isn’t a readable .zip file.');
+    for(var n=dv.getUint16(i+10,true),p=dv.getUint32(i+16,true);n>0;n--){
+      var method=dv.getUint16(p+10,true),size=dv.getUint32(p+20,true),nl=dv.getUint16(p+28,true),off=dv.getUint32(p+42,true);
+      var name=new TextDecoder().decode(u.subarray(p+46,p+46+nl)).split('/').pop();p+=46+nl+dv.getUint16(p+30,true)+dv.getUint16(p+32,true);
+      if(!/^pages\.csv$/i.test(name))continue;
+      var data=u.subarray(off+30+dv.getUint16(off+26,true)+dv.getUint16(off+28,true)).subarray(0,size);
+      if(method===0)out.push(Promise.resolve(new TextDecoder().decode(data)));
+      else if(method===8&&window.DecompressionStream)out.push(new Response(new Blob([data]).stream().pipeThrough(new DecompressionStream('deflate-raw'))).text());
+      else throw new Error('This browser can’t open .zip files. Unzip it and choose Pages.csv instead.');
+    }
+    if(!out.length)throw new Error(file.name+' has no Pages.csv. Export it from Search Console → Performance → Search results.');
+    return out[0]})}
+  /* a comparison export has two columns per metric; the one saying "previous" (or with the earlier dates) is the before period */
+  function fromCSV(text){var r=parseCSV(text);if(!r.length)return null;var h=r[0].map(function(x){return x.toLowerCase().trim()});
+    var page=h.findIndex(function(x){return /^top pages|^page|url|landing/.test(x)});if(page<0)return null;
+    function pair(re){var c=[];h.forEach(function(x,i){if(re.test(x))c.push(i)});if(c.length<2)return [c[0],undefined];
+      var p=c.findIndex(function(i){return /previous|prior|before|vorher|anterior|précédent|precedente|vorige/.test(h[i])});
+      if(p<0){var d=c.map(function(i){return (h[i].match(/\d{4}-\d{2}-\d{2}/g)||[]).pop()||''});if(d[0]&&d[1])p=d[0]<d[1]?0:1;else p=1}
+      return [c[1-p],c[p]]}
+    var cl=pair(/click/),im=pair(/impress/),po=pair(/position/);if(cl[0]==null)return null;
+    return {compare:cl[1]!=null,rows:r.slice(1).filter(function(x){return /^https?:\/\//.test(x[page]||'')}).map(function(x){
+      return {url:x[page].trim(),clicks:num(x[cl[0]])||0,clicksBefore:cl[1]!=null?num(x[cl[1]]):null,impr:im[0]!=null?num(x[im[0]])||0:0,imprBefore:im[1]!=null?num(x[im[1]]):null,
+        pos:po[0]!=null?num(x[po[0]]):null,posBefore:po[1]!=null?num(x[po[1]]):null}})}}
+  function useFile(f){if(!f)return;$('err').textContent='';
+    if(/\.xlsx?$/i.test(f.name))return $('err').textContent='That’s an Excel file. In Search Console choose Export → Download CSV.';
+    (/\.zip$/i.test(f.name)?unzip(f):f.text()).then(function(t){var d=fromCSV(t);
+      if(!d)throw new Error(f.name+' doesn’t look like a Search Console Pages export (it needs Page and Clicks columns).');
+      if(!d.compare)throw new Error('This export covers one date range, so it can’t show what’s falling. In Search Console use Date → Compare, then export again.');
+      if(!d.rows.length)throw new Error('This export has no pages. Pick a longer date range and export again.');
+      /* biggest pages first; the server reads up to 1 MB */
+      traffic=d.rows.sort(function(a,b){return (b.clicks+(b.clicksBefore||0))-(a.clicks+(a.clicksBefore||0))}).slice(0,3000);
+      trafficNote=f.name+' · '+plural(d.rows.length,'page');setDrop();
+      var pt=$('ptUse');if(pt)pt.checked=false})
+    .catch(function(e){$('err').textContent=e.message})}
+  function setDrop(){$('drop').classList.toggle('has',!!traffic&&!($('ptUse')&&$('ptUse').checked));
+    $('dropT').innerHTML=traffic&&trafficNote?'<b>Using '+esc(trafficNote)+'</b> · <a href="#" id="clr" style="color:var(--b)">remove</a>':'<b>Drop a Search Console comparison export (.zip or Pages.csv)</b> or click to choose'}
+  $('drop').addEventListener('click',function(e){if(e.target.id==='clr'){e.preventDefault();traffic=null;trafficNote='';setDrop()}});
+  $('file').addEventListener('change',function(){useFile(this.files[0]);this.value=''});
+  ['dragover','dragenter'].forEach(function(ev){$('drop').addEventListener(ev,function(e){e.preventDefault();this.classList.add('on')})});
+  ['dragleave','drop'].forEach(function(ev){$('drop').addEventListener(ev,function(e){e.preventDefault();this.classList.remove('on');if(e.dataTransfer&&e.dataTransfer.files.length)useFile(e.dataTransfer.files[0])})});
+
+  /* Position Tracking's two latest Pages snapshots work as a comparison too */
+  var pt=(function(){try{var db=JSON.parse(localStorage.getItem('scoutly.ranks')||'{}');var s=(db.snaps||[]).filter(function(x){return x.pages&&x.pages.length});
+    if(s.length<2)return null;var a=s[s.length-2],b=s[s.length-1],m={};a.pages.forEach(function(r){m[r.key]=r});
+    return {from:a.date,to:b.date,rows:b.pages.filter(function(r){return /^https?:\/\//.test(r.key)}).map(function(r){var o=m[r.key];
+      return {url:r.key,clicks:r.clicks,clicksBefore:o?o.clicks:0,impr:r.impr,imprBefore:o?o.impr:0,pos:r.pos,posBefore:o?o.pos:null}})}}catch(_){return null}})();
+  if(pt){$('ptSrc').hidden=false;$('ptSrc').innerHTML='<label><input type="checkbox" id="ptUse"> Or use your Position Tracking snapshots ('+esc(pt.from)+' vs '+esc(pt.to)+', '+plural(pt.rows.length,'page')+')</label>';
+    $('ptUse').onchange=function(){if(this.checked){traffic=null;trafficNote=''}setDrop()}}
+
+  /* ---- history of runs, per site */
+  function hist(){try{return JSON.parse(localStorage.getItem(HK)||'{}')||{}}catch(_){return {}}}
+  /* the last run for the site being entered, so a rerun checks the same pages first */
+  function lastRun(site){var h=hist(),host=short(/^https?:\/\//i.test(site)?site:'https://'+site).split('/')[0].replace(/^www\./,'');
+    var o=Object.keys(h).find(function(k){return short(k).replace(/^www\./,'')===host});return o&&h[o].length?h[o][h[o].length-1]:null}
+  function remember(r){var h=hist(),o=r.origin,pages={};r.pages.forEach(function(p){pages[key(p.final)]={v:p.verdict,s:p.score,u:p.updated,c:p.traffic?p.traffic.clicks:null}});
+    var runs=(h[o]||[]).filter(function(x){return x.at!==r.at});runs.push({at:r.at,pages:pages,urls:r.pages.map(function(p){return p.final})});h[o]=runs.slice(-5);
+    try{localStorage.setItem(HK,JSON.stringify(h))}catch(_){}}
+
+  $('f').addEventListener('submit',function(e){e.preventDefault();$('err').textContent='';
+    var site=$('site').value.trim();
+    if(!site)return $('err').textContent='Enter your website.';
+    if(!isUrl(site))return $('err').textContent='That doesn’t look like a web address.';
+    history.replaceState(null,'','?site='+encodeURIComponent(site));
+    var tr=$('ptUse')&&$('ptUse').checked?pt.rows:traffic,last=lastRun(site);
+    $('out').hidden=true;$('load').hidden=false;$('go').disabled=true;
+    $('loadT').textContent='Checking up to '+$('lim').value+' pages'+(tr?' against your Search Console data':'')+'… this takes up to a minute.';
+    S.post('/api/content-decay',{site:site,limit:+$('lim').value,traffic:tr||null,previous:last?last.urls||[]:[]}).then(function(r){
+      r.at=new Date().toISOString();var runs=hist()[r.origin]||[];prev=runs.length?runs[runs.length-1]:null;
+      R=r;filter='';remember(r);render()}).catch(function(e){$('err').textContent=e.message})
+      .then(function(){$('load').hidden=true;$('go').disabled=false});
+  });
+
+  function change(p){if(!prev)return '';var o=prev.pages[key(p.final)];if(!o)return '<span class="why">New since last check</span>';
+    if(p.updated&&o.u&&p.updated>o.u)return '<span class="why up">Updated since last check</span>';
+    if(o.v!==p.verdict&&o.v!=='unchecked'&&p.verdict!=='unchecked'){var rank={error:0,refresh:1,review:2,fresh:3};return '<span class="why '+(rank[p.verdict]>rank[o.v]?'up':'dn')+'">Was '+V[o.v][0].toLowerCase()+'</span>'}
+    return ''}
+
+  function render(){var P=R.pages,c={refresh:0,review:0,fresh:0,error:0,unchecked:0};P.forEach(function(p){c[p.verdict]++});
+    var lost=P.reduce(function(a,p){return a+(p.traffic&&p.traffic.lost>0?p.traffic.lost:0)},0);
+    $('kpis').innerHTML=[['page','Pages checked',R.checked,R.checked<R.planned?R.checked+' of '+R.planned+' before the time limit':R.dated+' with a date'],
+      ['alert','Refresh now',c.refresh+c.error,c.error?c.error+' broken':'Losing traffic or clearly dated'],
+      ['clock','Review soon',c.review,'Aging, or slipping a little'],
+      R.withTraffic?['trend','Clicks lost',lost.toLocaleString(),'On the pages checked, vs the previous period']:['cal','Typical age',R.medianAge==null?'—':age(R.medianAge),'Median since last update']]
+      .map(function(k){return '<div class="kpi"><small><svg class="i"><use href="#i-'+k[0]+'"/></svg>'+k[1]+'</small><b>'+esc(k[2])+'</b><span>'+esc(k[3])+'</span></div>'}).join('');
+    /* summary */
+    var is=[],titled=P.filter(function(p){return p.titleYear}).length,old=P.filter(function(p){return p.ageDays!=null&&p.ageDays>=730}).length,
+      undated=P.filter(function(p){return p.verdict!=='error'&&p.verdict!=='unchecked'&&p.updated==null}).length;
+    if(c.error)is.push({sev:'critical',text:plural(c.error,'page')+(R.withTraffic?' that had search traffic':'')+' no longer load'+(c.error===1?'s':'')+'. Restore '+(c.error===1?'it':'them')+' or redirect to the closest live page.'});
+    if(c.unchecked)is.push({sev:'notice',text:plural(c.unchecked,'page')+' didn’t answer in time and couldn’t be checked. Run the check again later.'});
+    if(R.withTraffic){var fall=P.filter(function(p){return p.traffic&&p.traffic.lost>=5&&p.traffic.pct>=15}).length;
+      if(fall)is.push({sev:'critical',text:plural(fall,'page')+' lost at least 15% of '+(fall===1?'its':'their')+' clicks, '+lost.toLocaleString()+' clicks in all. Start with the biggest losses at the top of the table.'})}
+    else is.push({sev:'notice',text:'Without Search Console data Scoutly can only judge freshness. Add a comparison export to see which pages are actually losing clicks.'});
+    if(titled)is.push({sev:'warning',text:plural(titled,'page')+' still '+(titled===1?'has':'have')+' a past year in the title or H1. Searchers skip results that look out of date.'});
+    if(old)is.push({sev:'warning',text:plural(old,'page')+(old===1?' hasn’t':' haven’t')+' been updated in over two years.'});
+    if(undated)is.push({sev:'notice',text:plural(undated,'page')+' show'+(undated===1?'s':'')+' no updated or published date that Scoutly could find. A visible date and dateModified in the structured data help search engines and readers judge freshness.'});
+    if(prev){var upd=P.filter(function(p){var o=prev.pages[key(p.final)];return o&&p.updated&&o.u&&p.updated>o.u}).length;
+      var both=P.filter(function(p){return prev.pages[key(p.final)]}).length;
+      is.push({sev:'good',text:'Since your last check on '+new Date(prev.at).toLocaleDateString()+': '+(upd?plural(upd,'page')+' updated':'none of the '+plural(both,'page')+' checked both times have been updated yet')+'.'})}
+    $('issS').textContent=R.withTraffic?'Traffic from your Search Console comparison, freshness from the pages':'Freshness from the pages themselves';
+    $('iss').innerHTML=is.length?is.map(function(x){return '<div class="iss"><span class="sev '+x.sev+'">'+(x.sev==='good'?'Progress':x.sev)+'</span><span>'+esc(x.text)+'</span></div>'}).join(''):'<div class="iss"><span class="sev good">All good</span><span>No decay found on the pages checked.</span></div>';
+    $('tblS').textContent='Worst first · '+short(R.origin)+(R.seconds?' · checked in '+R.seconds+' s':'');
+    ['all','refresh','review','fresh','error'].forEach(function(v){$('n-'+v).textContent=v==='all'?P.length:c[v]});
+    $('clH').hidden=!R.withTraffic;renderRows();$('out').hidden=false}
+
+  function renderRows(){var P=R.pages.filter(function(p){return !filter||p.verdict===filter});
+    $('rows').innerHTML=P.map(function(p){var t=p.traffic,v=V[p.verdict];
+      var upd=p.updated?esc(p.updated)+'<span class="why">'+age(p.ageDays)+' · '+esc(p.updatedFrom)+'</span>':p.verdict==='error'?'—':'<span class="tag">No date</span>';
+      var cl=t&&t.clicksBefore!=null?t.clicks.toLocaleString()+'<span class="why">was '+Math.round(t.clicksBefore).toLocaleString()+(t.pct?' · <b class="'+(t.lost>0?'dn':'up')+'">'+(t.lost>0?'−':'+')+Math.abs(t.pct)+'%</b>':'')+'</span>':'—';
+      var rs=(p.reasons.length?'<ul>'+p.reasons.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul>':'Nothing suggests it’s out of date.')+
+        (p.actions.length?'<details><summary>What to do</summary><ul>'+p.actions.map(function(x){return '<li>'+esc(x)+'</li>'}).join('')+'</ul></details>':'');
+      return '<tr><td class="u"><a href="'+esc(p.final)+'" target="_blank" rel="noopener noreferrer">'+esc(path(p.final))+'</a>'+(p.title||p.h1?'<span class="why">'+esc(p.title||p.h1)+'</span>':'')+change(p)+'</td>'+
+        '<td>'+upd+'</td>'+(R.withTraffic?'<td class="n">'+cl+'</td>':'')+'<td class="rs">'+rs+'</td><td><span class="tag '+v[1]+'">'+v[0]+'</span><span class="sc" title="Decay score, 0–100">'+p.score+'</span></td></tr>'}).join('')||
+      '<tr><td colspan="5" class="meta-note">No pages match this filter.</td></tr>'}
+
+  [].forEach.call(document.querySelectorAll('#filt button'),function(b){b.addEventListener('click',function(){filter=b.dataset.v;
+    [].forEach.call(document.querySelectorAll('#filt button'),function(x){x.setAttribute('aria-pressed',x===b)});renderRows()})});
+  $('csvB').onclick=function(){if(!R)return;
+    S.csv([['Page','Title','Verdict','Decay score','Last updated','Date from','Published','Clicks','Clicks before','Change %','Position','Position before','Past year in title','Words','Reasons','What to do']].concat(R.pages.map(function(p){var t=p.traffic||{};
+      return [p.final,p.title,V[p.verdict][0],p.score,p.updated||'',p.updatedFrom,p.published||'',t.clicks!=null?t.clicks:'',t.clicksBefore!=null?t.clicksBefore:'',t.pct!=null?-t.pct:'',t.pos!=null?t.pos:'',t.posBefore!=null?t.posBefore:'',p.titleYear||'',p.words,p.reasons.join(' '),p.actions.join(' ')]})),
+      'scoutly-content-decay-'+S.slug(R.origin)+'.csv')};
+  $('rep').onclick=function(){if(R)S.report($('out'),{title:'Content decay report',file:'content-decay-'+S.slug(R.origin),
+    meta:[['Website',R.origin],['Pages checked',String(R.checked)],['Traffic data',R.withTraffic?'Search Console comparison':'None (freshness only)']]})};
+
+  if(S.qs('site')){$('site').value=S.qs('site');$('f').requestSubmit()}
+  else{var site=S.read('scoutly.site');if(site)$('site').value=site}
+})();
+</script>
+</body>
+</html>

@@ -86,7 +86,7 @@
       ['writing-assistant.html','pen','SEO Writing Assistant'],
       ['topic-research.html','bulb','Topic Research'],
       ['plagiarism-checker.html','copy','Plagiarism Checker'],
-      ['#','clock','Content Decay Monitor','soon','Content Decay Monitor']]],
+      ['content-decay.html','clock','Content Decay Monitor']]],
     ['AI search visibility',[
       ['ai-search.html','ai','AI Search Visibility'],
       ['aeo-checker.html','geo','AEO & GEO Checker']]],
