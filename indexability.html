@@ -1,0 +1,205 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Indexability &amp; Sitemap Checker — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.mode{flex:1 1 100%;display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.qbar .qf.full{flex:1 1 100%}
+.qf select{max-width:220px}
+.iss{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;align-items:start;padding:12px 20px;border-bottom:1px solid var(--ln);font:400 12.5px/1.6 var(--M);color:var(--sl)}
+.iss:last-child{border-bottom:0}
+.sev{font:600 10px/1.3 var(--M);letter-spacing:.1em;text-transform:uppercase}
+.sev.critical{color:var(--cr)}.sev.warning{color:#a46a00}.sev.notice{color:var(--b)}.sev.good{color:var(--ok)}
+.rb{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0}
+.rb>div{padding:16px 20px;min-width:0}
+.rb>div+div{border-left:1px solid var(--ln)}
+.rb h3{font:600 10px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:var(--mu);margin-bottom:10px}
+.rules{display:grid;gap:4px;font:400 12.5px/1.5 var(--M);max-height:260px;overflow:auto}
+.rules span{overflow-wrap:anywhere}.rules b{font-weight:600}
+.rules .al{color:var(--ok)}.rules .dis{color:var(--cr)}
+details.raw summary{cursor:pointer;padding:11px 20px;border-top:1px solid var(--ln);font:600 10.5px/1 var(--M);letter-spacing:.1em;text-transform:uppercase;color:var(--sl)}
+details.raw pre{margin:0;padding:14px 20px;max-height:340px;overflow:auto;background:#fff;border-top:1px solid var(--ln);font:400 12px/1.6 var(--M);white-space:pre-wrap;overflow-wrap:anywhere}
+.chk-t{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid var(--ln)}
+.chk-t .grow{flex:1}
+.dt td .why{display:block;margin-top:4px;font-size:11.5px;color:var(--sl);white-space:normal}
+.dt td .why+.why{margin-top:2px}
+.dt td.u a{color:var(--ink)}.dt td.u a:hover{color:var(--b)}
+.prog{display:flex;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid var(--ln);font:400 12px/1.5 var(--M);color:var(--sl)}
+.bar{flex:1;max-width:280px;height:4px;background:rgba(10,26,74,.08)}.bar i{display:block;height:100%;background:var(--b);transition:width .3s}
+@media(max-width:760px){.rb{grid-template-columns:minmax(0,1fr)}.rb>div+div{border-left:0;border-top:1px solid var(--ln)}.iss{grid-template-columns:minmax(0,1fr);gap:4px}}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">SEO audit</p>
+      <h1>Indexability &amp; Sitemap Checker</h1>
+      <p class="desc">Find out whether Google can crawl and index your pages. Scoutly reads robots.txt the way Googlebot does, opens every XML sitemap it can find, then checks each URL for errors, redirects, noindex and canonical tags.</p>
+    </div>
+    <form class="qbar" id="f" novalidate>
+      <div class="mode"><div class="seg" role="group" aria-label="What to check"><button type="button" data-mode="site" aria-pressed="true">Website &amp; sitemap</button><button type="button" data-mode="list" aria-pressed="false">List of URLs</button></div></div>
+      <div class="qf" id="siteF"><label for="site">Website or page</label><input id="site" placeholder="yourwebsite.com" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+      <div class="qf sm" id="sampF"><label for="samp">Sitemap URLs to check</label><select id="samp"><option value="25">25</option><option value="50" selected>50</option><option value="100">100</option><option value="200">200</option></select></div>
+      <div class="qf full" id="listF" hidden><label for="list">URLs, one per line (up to 200)</label><textarea id="list" spellcheck="false" autocapitalize="off" placeholder="https://yourwebsite.com/&#10;https://yourwebsite.com/services/&#10;https://yourwebsite.com/blog/post/"></textarea></div>
+      <button class="btn p" type="submit" id="go"><svg class="i"><use href="#i-page"/></svg>Check</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div class="loading" id="load" hidden><span class="spin"></span><span id="loadT">Reading robots.txt and your sitemaps…</span></div>
+    <div id="out" hidden>
+      <div class="res-act no-report"><button class="btn sm" type="button" id="csvB"><svg class="i"><use href="#i-dl"/></svg>Export CSV</button><button class="btn sm" type="button" id="rep"><svg class="i"><use href="#i-dl"/></svg>Download report</button></div>
+      <div class="kpis" id="kpis"></div>
+      <section class="panel" style="margin-top:20px" id="issP"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-alert"/></svg></span><div><h2>What to fix</h2><p id="issS"></p></div></div><div id="iss"></div></section>
+      <section class="panel" style="margin-top:20px" id="chkP"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-check"/></svg></span><div><h2>Can Google index these URLs?</h2><p id="chkS"></p></div></div>
+        <div class="prog" id="prog" hidden><span class="spin"></span><span id="progT"></span><div class="bar"><i id="progB" style="width:0"></i></div></div>
+        <div class="chk-t"><div class="seg" role="group" aria-label="Filter by result" id="filt"><button type="button" data-v="" aria-pressed="true">All<span id="n-all"></span></button><button type="button" data-v="blocked" aria-pressed="false">Not indexable<span id="n-blocked"></span></button><button type="button" data-v="warning" aria-pressed="false">Check these<span id="n-warning"></span></button><button type="button" data-v="indexable" aria-pressed="false">Indexable<span id="n-indexable"></span></button></div></div>
+        <div class="dt-wrap"><table class="dt"><thead><tr><th>URL</th><th>Result</th><th class="n">HTTP</th><th>robots.txt</th><th>Meta robots</th><th>Canonical</th><th id="smH">In sitemap</th></tr></thead><tbody id="rows"></tbody></table></div>
+      </section>
+      <section class="panel" style="margin-top:20px" id="rbP"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-code"/></svg></span><div><h2>robots.txt</h2><p id="rbS"></p></div></div><div class="rb" id="rb"></div><details class="raw" id="rbRaw"><summary>Show the full file</summary><pre id="rbTxt"></pre></details></section>
+      <section class="panel" style="margin-top:20px" id="smP"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-list"/></svg></span><div><h2>Sitemaps</h2><p id="smS"></p></div></div><div class="dt-wrap"><table class="dt"><thead><tr><th>Sitemap file</th><th>Found via</th><th>Type</th><th class="n">URLs</th><th>Last modified</th><th>Problems</th></tr></thead><tbody id="smRows"></tbody></table></div></section>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  /* /api/sitemaps reads robots.txt and the sitemaps; /api/indexability checks up to 20 URLs per call (seo/indexability.py) */
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc;
+  var mode='site',sm=null,items=[],filter='',seq=0,inSm={};
+  var VERD={indexable:['Indexable','ok'],warning:['Check','wr'],blocked:['Not indexable','bad'],unchecked:['Couldn’t check','']};
+  function norm(u){u=String(u||'').trim();return /^https?:\/\//i.test(u)?u:'https://'+u}
+  function key(u){try{var x=new URL(norm(u));return x.protocol+'//'+x.host.toLowerCase()+(x.pathname||'/')+x.search}catch(_){return u}}
+  function short(u){return String(u||'').replace(/^https?:\/\//i,'')}
+  function isUrl(u){return /^(https?:\/\/)?[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?$/i.test(String(u||'').trim())}
+  function plural(n,w){return n.toLocaleString()+' '+w+(n===1?'':'s')}
+
+  [].forEach.call(document.querySelectorAll('[data-mode]'),function(b){b.addEventListener('click',function(){mode=b.dataset.mode;
+    [].forEach.call(document.querySelectorAll('[data-mode]'),function(x){x.setAttribute('aria-pressed',x===b)});
+    $('siteF').hidden=$('sampF').hidden=mode!=='site';$('listF').hidden=mode!=='list';$('err').textContent=''})});
+
+  /* an even spread across the sitemap, so one section (e.g. old blog posts) doesn't fill the sample */
+  function sample(list,n){if(list.length<=n)return list.slice();var out=[],step=list.length/n;for(var i=0;i<n;i++)out.push(list[Math.floor(i*step)]);return out}
+
+  $('f').addEventListener('submit',function(e){e.preventDefault();$('err').textContent='';var my=++seq;
+    if(mode==='list'){
+      var urls=$('list').value.split(/[\s,]+/).map(function(x){return x.trim()}).filter(Boolean),bad=urls.filter(function(u){return !isUrl(u)});
+      if(!urls.length)return $('err').textContent='Paste at least one URL.';
+      if(bad.length)return $('err').textContent='These don’t look like web addresses: '+bad.slice(0,3).join(', ')+(bad.length>3?'…':'');
+      urls=urls.filter(function(u,i){return urls.indexOf(u)===i}).slice(0,200).map(norm);
+      sm=null;inSm={};start(urls,my);return}
+    var site=$('site').value.trim();
+    if(!site)return $('err').textContent='Enter your website or one of its pages.';
+    if(!isUrl(site))return $('err').textContent='That doesn’t look like a web address.';
+    history.replaceState(null,'','?site='+encodeURIComponent(site));
+    $('out').hidden=true;$('load').hidden=false;$('loadT').textContent='Reading robots.txt and your sitemaps… big sites can take up to a minute.';$('go').disabled=true;
+    S.api('/api/sitemaps?site='+encodeURIComponent(site)).then(function(r){if(my!==seq)return;sm=r;inSm={};r.urls.forEach(function(u){inSm[key(u.url)]=1});
+      /* the page that was entered comes first (when it's a page, not just the domain), then a spread of sitemap URLs */
+      var first=norm(site),list=sample(r.urls.map(function(u){return u.url}),+$('samp').value);
+      var path='';try{path=new URL(first).pathname}catch(_){}
+      var urls=[path&&path!=='/'?first:r.origin+'/'].concat(list.filter(function(u){return key(u)!==key(path&&path!=='/'?first:r.origin+'/')}));
+      start(urls,my)}).catch(function(e){if(my!==seq)return;$('load').hidden=true;$('go').disabled=false;$('err').textContent=e.message});
+  });
+
+  function start(urls,my){items=[];filter='';
+    [].forEach.call(document.querySelectorAll('#filt button'),function(x){x.setAttribute('aria-pressed',x.dataset.v==='')});
+    $('load').hidden=true;$('out').hidden=false;$('go').disabled=true;render();
+    var batches=[];for(var i=0;i<urls.length;i+=10)batches.push(urls.slice(i,i+10));
+    $('prog').hidden=false;var done=0;
+    (function step(i){if(my!==seq)return;
+      if(i>=batches.length){$('prog').hidden=true;$('go').disabled=false;render();return}
+      $('progT').textContent='Checking '+(done+1)+'–'+(done+batches[i].length)+' of '+urls.length+' URLs…';$('progB').style.width=(done/urls.length*100)+'%';
+      S.post('/api/indexability',{urls:batches[i]}).then(function(r){if(my!==seq)return;items=items.concat(r.items);done+=batches[i].length;render();step(i+1)})
+        .catch(function(e){if(my!==seq)return;$('prog').hidden=true;$('go').disabled=false;$('err').textContent='Check stopped: '+e.message;render()})})(0);
+  }
+
+  /* problems found across the checked URLs, worst first, plus the site-level ones from the sitemap scan */
+  function issues(){var out=(sm?sm.issues:[]).slice(),c={};
+    function n(t){return items.filter(function(x){return x.reasons.some(function(r){return r.indexOf(t)===0})}).length}
+    /* [reason prefix, severity, one URL, several URLs, what to do] */
+    [['robots.txt stops Google','critical','is blocked by robots.txt','are blocked by robots.txt','Google can’t crawl them. Narrow the Disallow rule, or take them out of the sitemap if they’re meant to be private.'],
+     ['Has a noindex','critical','is set to noindex','are set to noindex','If they should rank, remove the noindex; if not, take them out of the sitemap.'],
+     ['Returns HTTP 4','critical','returns a 4xx error','return a 4xx error','Fix or redirect missing pages and remove them from the sitemap.'],
+     ['Returns HTTP 5','critical','returns a server error','return a server error','Google retries, then drops pages that keep failing.'],
+     ['Redirects','warning','redirects','redirect','List and link the final URL instead, so Google doesn’t have to follow the redirect.'],
+     ['Its canonical points','warning','has a canonical pointing to another URL','have a canonical pointing to another URL','Sitemaps should list only the canonical version of each page.'],
+     ['Has 2','warning','has conflicting canonical tags','have conflicting canonical tags','Keep exactly one canonical tag per page.'],
+     ['Has 3','warning','has conflicting canonical tags','have conflicting canonical tags','Keep exactly one canonical tag per page.'],
+     ['Has nofollow','notice','has a page-wide nofollow','have a page-wide nofollow','Google won’t follow their links; remove it unless that’s intended.'],
+     ['Answered Scoutly with a bot check','notice','answered with a bot check','answered with a bot check','Scoutly couldn’t read them; check them in Search Console’s URL Inspection.'],
+     ['The site rate-limited','notice','couldn’t be checked because the site rate-limited Scoutly','couldn’t be checked because the site rate-limited Scoutly','Run the check again in a minute, or with fewer URLs.'],
+     ['Has no canonical','notice','has no canonical tag','have no canonical tag','A self-referencing canonical keeps duplicate URLs from competing.']].forEach(function(t){var k=n(t[0]);
+       if(k)out.push({sev:t[1],text:plural(k,'checked URL')+' '+(k===1?t[2]:t[3])+'. '+t[4]})});
+    if(sm&&items.length){var notIn=items.filter(function(x){return x.verdict==='indexable'&&!inSm[key(x.final)]&&!inSm[key(x.url)]}).length;
+      if(notIn)out.push({sev:'notice',text:plural(notIn,'indexable URL')+(notIn===1?' isn’t':' aren’t')+' in the sitemap. Add pages you want found.'})}
+    var o={critical:0,warning:1,notice:2};return out.sort(function(a,b){return o[a.sev]-o[b.sev]})}
+
+  function render(){
+    var c={indexable:0,warning:0,blocked:0,unchecked:0};items.forEach(function(x){c[x.verdict]++});
+    var k=[];
+    if(sm){var found=sm.files.filter(function(f){return f.kind}).length;
+      k.push(['code','robots.txt',sm.robots.exists?'Found':sm.robots.blocksAll?'Error':'Missing',sm.robots.exists?plural(sm.robots.rules.length,'rule')+' for '+(sm.robots.agent==='*'?'all crawlers':'Googlebot'):sm.robots.blocksAll?'HTTP '+sm.robots.status:'Everything allowed']);
+      k.push(['list','Sitemap files',found,sm.files.length>found?(sm.files.length-found)+' couldn’t be read':found?'All readable':'None found']);
+      k.push(['page','URLs in sitemaps',sm.total.toLocaleString(),sm.truncated?'First '+sm.urls.length.toLocaleString()+' sampled from':'Unique, on '+short(sm.origin)])}
+    k.push(['check','Indexable',c.indexable,'of '+items.length+' checked'+(c.unchecked?' · '+c.unchecked+' couldn’t be checked':'')]);
+    k.push(['alert','Not indexable',c.blocked,c.warning?c.warning+' more to check':'Errors, redirects, noindex, blocked']);
+    $('kpis').innerHTML=k.map(function(x){return '<div class="kpi"><small><svg class="i"><use href="#i-'+x[0]+'"/></svg>'+x[1]+'</small><b>'+esc(x[2])+'</b><span>'+esc(x[3])+'</span></div>'}).join('');
+    /* issues */
+    var is=issues();$('issS').textContent=is.length?plural(is.length,'issue')+', most serious first':'Nothing to fix';
+    $('iss').innerHTML=is.length?is.map(function(x){return '<div class="iss"><span class="sev '+x.sev+'">'+x.sev+'</span><span>'+esc(x.text)+'</span></div>'}).join(''):
+      '<div class="iss"><span class="sev good">All good</span><span>'+(items.length?'Every checked URL can be indexed.':'No problems found yet.')+'</span></div>';
+    /* URL table */
+    $('chkS').textContent=sm?'The '+(items.length&&key(items[0].url)!==key(sm.origin+'/')?'page you entered':'home page')+' plus '+Math.max(0,items.length-1)+' URLs spread across your sitemap':plural(items.length,'URL')+' from your list';
+    ['all','blocked','warning','indexable'].forEach(function(v){$('n-'+v).textContent=v==='all'?items.length:c[v]});
+    $('smH').hidden=!sm;
+    var shown=items.filter(function(x){return !filter||x.verdict===filter});
+    $('rows').innerHTML=shown.map(function(x){var v=VERD[x.verdict],sm1=inSm[key(x.url)]||inSm[key(x.final)];
+      var canon=x.canonState==='self'?'<span class="tag ok">Self</span>':x.canonState==='other'?'<span class="tag wr" title="'+esc(x.canonical)+'">Other URL</span>':x.canonState==='multiple'?'<span class="tag wr">Conflicting</span>':'<span class="tag">None</span>';
+      var meta=/noindex|none/i.test(x.meta+','+x.header)?'<span class="tag bad">noindex</span>':(x.meta||x.header)?'<span class="tag" title="'+esc([x.meta,x.header].filter(Boolean).join(' · '))+'">'+esc((x.meta||x.header).slice(0,24))+'</span>':'<span class="tag ok">index</span>';
+      return '<tr><td class="u"><a href="'+esc(x.url)+'" target="_blank" rel="noopener noreferrer">'+esc(short(x.url))+'</a>'+x.reasons.map(function(r){return '<span class="why">'+esc(r)+'</span>'}).join('')+'</td>'+
+        '<td><span class="tag '+v[1]+'">'+v[0]+'</span></td><td class="n">'+(x.status||'—')+(x.chain.length?' <span class="tag wr" title="Redirects to '+esc(x.final)+'">→</span>':'')+'</td>'+
+        '<td>'+(x.robots===false?'<span class="tag bad" title="'+esc(x.rule||'')+'">Blocked</span>':x.robots?'<span class="tag ok">Allowed</span>':'—')+'</td><td>'+meta+'</td><td>'+canon+'</td>'+
+        (sm?'<td>'+(sm1?'<span class="tag ok">Yes</span>':'<span class="tag">No</span>')+'</td>':'')+'</tr>'}).join('')||
+      '<tr><td colspan="7" class="meta-note">'+(items.length?'No URLs match this filter.':'Checking…')+'</td></tr>';
+    /* robots.txt and sitemaps (website mode only) */
+    $('rbP').hidden=$('smP').hidden=!sm;$('issP').hidden=false;
+    if(!sm)return;
+    var rb=sm.robots;
+    $('rbS').innerHTML='<a href="'+esc(rb.url)+'" target="_blank" rel="noopener noreferrer" style="color:var(--b)">'+esc(short(rb.url))+'</a> · '+(rb.exists?'HTTP 200':rb.status?'HTTP '+rb.status:'no answer');
+    $('rb').innerHTML='<div><h3>Rules Googlebot follows'+(rb.agent?' (User-agent: '+esc(rb.agent)+')':'')+'</h3><div class="rules">'+(rb.rules.length?rb.rules.map(function(r){return '<span class="'+(r[0]?'al':'dis')+'"><b>'+(r[0]?'Allow':'Disallow')+':</b> '+esc(r[1]||'(empty: allows everything)')+'</span>'}).join(''):
+        '<span>'+(rb.blocksAll?'robots.txt failed, so Google pauses crawling the site.':rb.exists?'No rules apply to Googlebot: everything can be crawled.':'No robots.txt: everything can be crawled.')+'</span>')+'</div></div>'+
+      '<div><h3>Sitemaps listed</h3><div class="rules">'+(rb.sitemaps.length?rb.sitemaps.map(function(s){return '<span>'+esc(s)+'</span>'}).join(''):'<span>None. Add a “Sitemap:” line pointing to your XML sitemap.</span>')+'</div></div>';
+    $('rbRaw').hidden=!rb.text;$('rbTxt').textContent=rb.text;
+    var found=sm.files.filter(function(f){return f.kind}).length;
+    $('smS').textContent=sm.files.length?plural(found,'file')+' read · '+sm.total.toLocaleString()+' unique URLs on '+short(sm.origin):'No sitemap found';
+    $('smRows').innerHTML=sm.files.map(function(f){return '<tr><td class="u"><a href="'+esc(f.url)+'" target="_blank" rel="noopener noreferrer">'+esc(short(f.url))+'</a></td><td>'+esc(f.via==='robots.txt'?'robots.txt':f.via==='index'?'Sitemap index':'Common address')+'</td>'+
+      '<td>'+(f.kind==='index'?'<span class="tag in">Index · '+f.children+' files</span>':f.kind?'<span class="tag">URL list</span>':'<span class="tag bad">Unreadable</span>')+'</td><td class="n">'+(f.kind==='urlset'?f.urls.toLocaleString():'—')+'</td><td>'+esc(f.lastmod||'—')+'</td>'+
+      '<td>'+(f.problems.length?f.problems.map(function(p){return '<span class="why" style="color:var(--cr);margin:0 0 2px">'+esc(p)+'</span>'}).join(''):'<span class="tag ok">OK</span>')+'</td></tr>'}).join('')||
+      '<tr><td colspan="6" class="meta-note">No sitemap found in robots.txt or at the usual addresses (/sitemap.xml, /sitemap_index.xml, /wp-sitemap.xml).</td></tr>';
+  }
+
+  [].forEach.call(document.querySelectorAll('#filt button'),function(b){b.addEventListener('click',function(){filter=b.dataset.v;
+    [].forEach.call(document.querySelectorAll('#filt button'),function(x){x.setAttribute('aria-pressed',x===b)});render()})});
+  $('csvB').onclick=function(){if(!items.length)return S.say('Nothing checked yet.');
+    S.csv([['URL','Result','HTTP status','Final URL','robots.txt','Matching rule','Meta robots','X-Robots-Tag','Canonical','Canonical state'].concat(sm?['In sitemap']:[]).concat(['Notes'])].concat(items.map(function(x){
+      return [x.url,VERD[x.verdict][0],x.status,x.final,x.robots===false?'Blocked':x.robots?'Allowed':'',x.rule||'',x.meta,x.header,x.canonical||'',x.canonState].concat(sm?[inSm[key(x.url)]||inSm[key(x.final)]?'Yes':'No']:[]).concat([x.reasons.join(' ')])})),
+      'scoutly-indexability-'+S.slug(sm?sm.origin:items[0].url)+'.csv')};
+  $('rep').onclick=function(){if(!items.length)return;S.report($('out'),{title:'Indexability & sitemap report',file:'indexability-'+S.slug(sm?sm.origin:items[0].url),
+    meta:[['Website',sm?sm.origin:''],['URLs checked',String(items.length)],['Indexable',String(items.filter(function(x){return x.verdict==='indexable'}).length)]]})};
+
+  if(S.qs('site')){$('site').value=S.qs('site');$('f').requestSubmit()}
+  else{var site=S.read('scoutly.site');if(site)$('site').value=site}
+})();
+</script>
+</body>
+</html>
