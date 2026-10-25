@@ -1320,7 +1320,8 @@ class Handler(SimpleHTTPRequestHandler):
             except Exception as e:  # keep the server alive and tell the page what happened
                 return self._json(500, {"error": f"The audit failed unexpectedly: {e.__class__.__name__}"})
         if u.path == "/api/pagespeed":
-            return self._pagespeed((parse_qs(u.query).get("url") or [""])[0])
+            q = parse_qs(u.query)
+            return self._pagespeed((q.get("url") or [""])[0], (q.get("strategy") or ["mobile"])[0])
         if u.path == "/api/links":
             return self._tool(lambda: _links().list_links())
         if u.path == "/api/campaigns":
@@ -1340,12 +1341,12 @@ class Handler(SimpleHTTPRequestHandler):
             return
         return super().do_GET()
 
-    def _pagespeed(self, target):
-        """Proxy PageSpeed Insights so an API key stays on the server."""
+    def _pagespeed(self, target, strategy="mobile"):
+        """Proxy PageSpeed Insights so an API key stays on the server (strategy: mobile or desktop)."""
         if not re.match(r"^https?://", target or "", re.I):
             return self._json(400, {"error": {"message": "Missing url"}})
         # answer 200 with Google's status in the body: a quota limit is an expected outcome, not a broken request
-        return self._json(200, pagespeed(target))
+        return self._json(200, pagespeed(target, strategy))
 
     def log_message(self, fmt, *args):
         msg = fmt % args

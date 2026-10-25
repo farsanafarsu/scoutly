@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page Speed &amp; Core Web Vitals — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.dev{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin-top:20px}
+.dev .seg button{height:38px;padding:0 16px}
+.dev .seg em{margin-left:8px;font-style:normal;opacity:.75}
+/* score + assessment */
+.top2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);gap:20px;margin-top:20px}
+.score{display:flex;align-items:center;gap:22px;padding:22px}
+.gauge{position:relative;flex:none;width:132px;height:132px}
+.gauge svg{width:100%;height:100%;transform:rotate(-90deg)}
+.gauge circle{fill:none;stroke-width:10}
+.gauge .bg{stroke:rgba(10,26,74,.08)}
+.gauge b{position:absolute;inset:0;display:grid;place-items:center;font:500 40px/1 var(--D)}
+.g-ok{color:var(--ok);stroke:var(--ok)}.g-wa{color:#c27c00;stroke:var(--wa)}.g-cr{color:var(--cr);stroke:var(--cr)}
+.score h3{font:500 15px/1.25 var(--D);letter-spacing:.04em;text-transform:uppercase}
+.score p{margin-top:6px;font:400 12px/1.6 var(--M);color:var(--sl)}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:10px;font:400 11px/1 var(--M);color:var(--mu)}
+.legend i{display:inline-block;width:9px;height:9px;margin-right:5px;vertical-align:-1px}
+.assess{padding:18px 22px}
+.assess .verdict{display:flex;align-items:center;gap:10px;font:500 18px/1.2 var(--D);letter-spacing:.03em;text-transform:uppercase}
+.assess .verdict svg{width:20px;height:20px}
+.assess p{margin-top:8px;font:400 12px/1.6 var(--M);color:var(--sl)}
+.shot{display:flex;gap:18px;align-items:flex-start}
+.shot img{flex:none;width:96px;border:1px solid var(--ln);background:#fff}
+/* metrics */
+.mets{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr))}
+.met{padding:16px 20px;border-right:1px solid var(--ln);border-bottom:1px solid var(--ln);min-width:0}
+.met small{display:flex;align-items:center;gap:8px;font:600 9.5px/1.3 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
+.met small i{width:9px;height:9px;flex:none}
+.met b{display:block;margin-top:9px;font:500 26px/1.05 var(--D)}
+.met span{display:block;margin-top:6px;font:400 11px/1.45 var(--M);color:var(--mu)}
+.met .cwv{margin-left:auto;padding:2px 5px;border:1px solid rgba(47,91,255,.35);color:var(--b);font-size:9px;letter-spacing:.08em}
+.dist{display:flex;height:6px;margin-top:10px;background:rgba(10,26,74,.08);overflow:hidden}
+.dist i{display:block;height:100%}
+.dist-l{display:flex;justify-content:space-between;margin-top:5px;font:400 10.5px/1 var(--M);color:var(--mu)}
+.r-good{color:var(--ok)}.r-ni{color:#c27c00}.r-poor{color:var(--cr)}
+i.r-good,.legend .r-good{background:var(--ok)}i.r-ni,.legend .r-ni{background:var(--wa)}i.r-poor,.legend .r-poor{background:var(--cr)}i.r-none{background:#b4bccd}
+/* opportunities and diagnostics */
+.fix{border-bottom:1px solid var(--ln)}
+.fix:last-child{border-bottom:0}
+.fix summary{display:grid;grid-template-columns:14px minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px 20px;cursor:pointer;list-style:none}
+.fix summary::-webkit-details-marker{display:none}
+.fix summary:hover{background:#fff}
+.fix summary i{width:10px;height:10px}
+.fix summary h4{font:600 14px/1.35 Geist,sans-serif}
+.fix summary h4 em{margin-left:8px;font:400 12px/1 var(--M);font-style:normal;color:var(--cr)}
+.fix .sav{font:500 11px/1.3 var(--M);color:var(--sl);text-align:right;white-space:nowrap}
+.fix .body{padding:0 20px 16px 46px;font:400 12.5px/1.65 var(--M);color:var(--sl)}
+.fix .body a{color:var(--b);text-decoration:underline}
+.fix .body code{padding:1px 4px;background:rgba(10,26,74,.06);font-size:11.5px}
+.fix .dt-wrap{margin-top:10px;max-height:320px;border:1px solid var(--ln);background:var(--card)}
+.fix .dt td{overflow-wrap:anywhere}
+.ok-row{display:flex;gap:10px;align-items:center;padding:9px 20px;border-bottom:1px solid var(--ln);font:400 12.5px/1.4 var(--M);color:var(--sl)}.ok-row svg{color:var(--ok);width:15px;height:15px;flex:none}
+.wait{display:flex;align-items:center;gap:12px;padding:22px;font:400 13px/1.6 var(--M);color:var(--sl)}
+.wait svg{flex:none;width:18px;height:18px;color:var(--cr)}
+.wait a{color:var(--b);text-decoration:underline}
+@media(max-width:900px){.top2{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:520px){.score{flex-direction:column;align-items:flex-start}.shot{flex-direction:column}.fix summary{grid-template-columns:14px minmax(0,1fr)}.fix .sav{grid-column:2;text-align:left}.fix .body{padding-left:20px}}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">SEO audit</p>
+      <h1>Page Speed &amp; Core Web Vitals</h1>
+      <p class="desc">Test how fast a page loads on mobile and desktop. Scoutly runs Google PageSpeed Insights and shows what real Chrome visitors experienced over the last 28 days (Core Web Vitals), the Lighthouse lab test, and what to fix first.</p>
+    </div>
+    <form class="qbar" id="f" novalidate>
+      <div class="qf"><label for="url">Page to test</label><input id="url" placeholder="yourwebsite.com/your-page" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+      <button class="btn p" type="submit" id="go"><svg class="i"><use href="#i-speed"/></svg>Test speed</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div id="out" hidden>
+      <div class="dev">
+        <div class="seg" role="group" aria-label="Device"><button type="button" data-dev="mobile" aria-pressed="true">Mobile<em id="sc-mobile"></em></button><button type="button" data-dev="desktop" aria-pressed="false">Desktop<em id="sc-desktop"></em></button></div>
+        <span class="meta-note" id="tested"></span>
+        <div class="res-act no-report" style="margin:0 0 0 auto"><button class="btn sm" type="button" id="rep" disabled><svg class="i"><use href="#i-dl"/></svg>Download report</button></div>
+      </div>
+      <div id="res"></div>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  /* Google PageSpeed Insights v5 through the server (/api/pagespeed; an API key, if set, stays there).
+     Mobile and desktop run at the same time; each tab shows its result as soon as it arrives. */
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc;
+  var runs={},dev='mobile',url='',seq=0;
+  var TH={lcp:[2500,4000],inp:[200,500],cls:[.1,.25],fcp:[1800,3000],ttfb:[800,1800],tbt:[200,600],si:[3400,5800]};
+  var FIELD=[['lcp','LARGEST_CONTENTFUL_PAINT_MS','Largest Contentful Paint','When the main content appears',1],['inp','INTERACTION_TO_NEXT_PAINT','Interaction to Next Paint','How fast the page reacts to taps and clicks',1],
+    ['cls','CUMULATIVE_LAYOUT_SHIFT_SCORE','Cumulative Layout Shift','How much the layout jumps around',1],['fcp','FIRST_CONTENTFUL_PAINT_MS','First Contentful Paint','When the first text or image appears',0],
+    ['ttfb','EXPERIMENTAL_TIME_TO_FIRST_BYTE','Time to First Byte','How fast the server starts answering',0]];
+  var LAB=[['fcp','first-contentful-paint','First Contentful Paint'],['lcp','largest-contentful-paint','Largest Contentful Paint'],['tbt','total-blocking-time','Total Blocking Time'],
+    ['cls','cumulative-layout-shift','Cumulative Layout Shift'],['si','speed-index','Speed Index']];
+  var RATE={good:'Good',ni:'Needs improvement',poor:'Poor'},CAT={FAST:'good',AVERAGE:'ni',SLOW:'poor'};
+
+  function norm(u){u=u.trim();return /^https?:\/\//i.test(u)?u:'https://'+u}
+  function rate(k,v){if(v==null)return null;return v<=TH[k][0]?'good':v<=TH[k][1]?'ni':'poor'}
+  function fmt(k,v){if(v==null)return '—';return k==='cls'?(+v).toFixed(2):v>=1000?(v/1000).toFixed(1)+' s':Math.round(v)+' ms'}
+  function band(s){return s>=90?'ok':s>=50?'wa':'cr'}
+  function icon(id){return '<svg class="i" aria-hidden="true"><use href="#i-'+id+'"/></svg>'}
+  /* Lighthouse descriptions are Markdown: keep links and inline code, drop the rest */
+  function md(s){return esc(s||'').replace(/\[([^\]]+)\]\((https?:\/\/[^)\s]+)\)/g,'<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>').replace(/`([^`]+)`/g,'<code>$1</code>')}
+  function kb(n){return n>=1048576?(n/1048576).toFixed(1)+' MB':Math.max(1,Math.round(n/1024))+' KB'}
+
+  function run(strategy,u,my){
+    var ctl=window.AbortController?new AbortController():null,to=setTimeout(function(){ctl&&ctl.abort()},110000);
+    runs[strategy]={wait:true};
+    return fetch('/api/pagespeed?strategy='+strategy+'&url='+encodeURIComponent(u),ctl?{signal:ctl.signal}:{})
+      .then(function(r){return r.json().then(function(j){if(!r.ok||j.error){var e=new Error((j.error&&j.error.message)||('HTTP '+r.status));e.status=j.scoutlyStatus||r.status;e.hasKey=j.scoutlyHasKey;throw e}return j})})
+      .then(function(j){if(my!==seq)return;runs[strategy]={data:parse(j)}},
+        function(e){if(my!==seq)return;var m=String(e&&e.name==='AbortError'?'it took too long to answer':(e&&e.message)||e);runs[strategy]={err:m,quota:e&&e.status===429||/quota/i.test(m),hasKey:e&&e.hasKey}})
+      .then(function(){clearTimeout(to);if(my===seq)render()});
+  }
+
+  function parse(j){
+    var lr=j.lighthouseResult||{},a=lr.audits||{},cat=(lr.categories||{}).performance||{};
+    var page=j.loadingExperience||{},site=j.originLoadingExperience||{};
+    var useSite=!(page.metrics&&page.metrics.LARGEST_CONTENTFUL_PAINT_MS)&&site.metrics,fx=useSite?site:page;
+    var field=FIELD.map(function(f){var m=(fx.metrics||{})[f[1]];if(!m)return null;
+      var v=f[0]==='cls'?m.percentile/100:m.percentile,d=(m.distributions||[]).map(function(x){return x.proportion||0});
+      return {k:f[0],name:f[2],what:f[3],core:f[4],v:v,r:CAT[m.category]||rate(f[0],v),d:d}}).filter(Boolean);
+    var lab=LAB.map(function(l){var x=a[l[1]];return x&&x.numericValue!=null?{k:l[0],name:l[2],v:l[0]==='cls'?x.numericValue:x.numericValue,r:rate(l[0],x.numericValue)}:null}).filter(Boolean);
+    /* audits in the performance category, by group: opportunities / insights first, then diagnostics */
+    var fixes=[],passed=0;
+    (cat.auditRefs||[]).forEach(function(ref){var x=a[ref.id];if(!x||ref.group==='metrics'||/hidden/.test(ref.group||''))return;
+      var mode=x.scoreDisplayMode;if(mode==='notApplicable'||mode==='manual'||mode==='error')return;
+      if(x.score==null||x.score>=0.9){if(x.score!=null)passed++;return}
+      var ms=(x.details&&x.details.overallSavingsMs)||0,bytes=(x.details&&x.details.overallSavingsBytes)||0,ms2=x.metricSavings||{};
+      fixes.push({id:ref.id,title:x.title,desc:x.description,display:x.displayValue||'',score:x.score,ms:ms||ms2.LCP||ms2.FCP||0,bytes:bytes,cls:ms2.CLS||0,
+        opp:/opportunit|insight/.test(ref.group||'')||!!ms||!!bytes,details:x.details})});
+    fixes.sort(function(p,q){return (q.opp-p.opp)||(q.ms-p.ms)||(q.bytes-p.bytes)||(p.score-q.score)});
+    var shot=a['final-screenshot']&&a['final-screenshot'].details&&a['final-screenshot'].details.data;
+    return {score:cat.score!=null?Math.round(cat.score*100):null,field:field,fieldScope:fx.metrics?(useSite?'site':'page'):null,overall:CAT[fx.overall_category]||null,
+      lab:lab,fixes:fixes,passed:passed,shot:shot&&/^data:image\//.test(shot)?shot:'',finalUrl:lr.finalDisplayedUrl||lr.finalUrl||j.id||url,
+      when:lr.fetchTime||j.analysisUTCTimestamp||'',lh:lr.lighthouseVersion||''};
+  }
+
+  /* Core Web Vitals pass when LCP, INP and CLS are all good at the 75th percentile (INP may be missing) */
+  function assessment(p){var core=p.field.filter(function(f){return f.core});if(!core.some(function(f){return f.k==='lcp'})||!core.some(function(f){return f.k==='cls'}))return null;
+    return core.every(function(f){return f.r==='good'})?'pass':'fail'}
+
+  function render(){
+    ['mobile','desktop'].forEach(function(d){var r=runs[d]||{};$('sc-'+d).textContent=r.data&&r.data.score!=null?r.data.score:r.wait?'…':r.err?'!':''});
+    var r=runs[dev]||{},el=$('res');
+    $('rep').disabled=!r.data;
+    if(r.wait){el.innerHTML='<section class="panel" style="margin-top:20px"><p class="wait"><span class="spin" aria-hidden="true"></span>Running a '+dev+' Lighthouse test with PageSpeed Insights. This usually takes 15–40 seconds (the first test can take a minute while the server wakes up)…</p></section>';return}
+    if(r.err){el.innerHTML='<section class="panel" style="margin-top:20px"><p class="wait">'+icon('alert')+'<span>'+(r.quota&&!r.hasKey?'Google’s shared PageSpeed quota is used up for today. Add a free API key so tests work every time: create one at <a href="https://developers.google.com/speed/docs/insights/v5/get-started" target="_blank" rel="noopener noreferrer">developers.google.com</a> and set it as <code>PAGESPEED_API_KEY</code> on the server.':r.quota?'The PageSpeed API key has hit its quota. Try again later.':'PageSpeed Insights didn’t return results: '+esc(r.err.slice(0,200))+'.')+'</span></p><div class="pad" style="padding-top:0"><button class="btn sm" type="button" id="retry">Try again</button></div></section>';
+      $('retry').onclick=function(){run(dev,url,seq);render()};return}
+    var p=r.data;if(!p){el.innerHTML='';return}
+    var h='',s=p.score,b=s==null?'cr':band(s),C=2*Math.PI*56;
+    $('tested').textContent=(p.when?'Tested '+new Date(p.when).toLocaleString():'')+(p.lh?' · Lighthouse '+p.lh:'');
+    /* score and assessment */
+    var as=assessment(p);
+    h+='<div class="top2"><section class="panel score"><div class="gauge g-'+b+'"><svg viewBox="0 0 132 132" aria-hidden="true"><circle class="bg" cx="66" cy="66" r="56"/><circle class="g-'+b+'" cx="66" cy="66" r="56" stroke-dasharray="'+C+'" stroke-dashoffset="'+(C*(1-(s||0)/100))+'"/></svg><b>'+(s==null?'—':s)+'</b></div>'+
+      '<div><h3>Performance score · '+(dev==='mobile'?'Mobile':'Desktop')+'</h3><p>Lighthouse lab test of <b style="color:var(--ink);overflow-wrap:anywhere">'+esc(p.finalUrl)+'</b>'+(dev==='mobile'?' on a simulated mid-range phone with a slow 4G connection.':' on a simulated desktop with a fast connection.')+' Scores vary a little between runs.</p>'+
+      '<div class="legend"><span><i class="r-poor"></i>0–49</span><span><i class="r-ni"></i>50–89</span><span><i class="r-good"></i>90–100</span></div></div></section>';
+    h+='<section class="panel assess"><div class="shot">'+(p.shot?'<img src="'+p.shot+'" alt="How the page looked at the end of the test">':'')+'<div>'+
+      '<div class="verdict '+(as==='pass'?'r-good':as==='fail'?'r-poor':'')+'">'+icon(as==='pass'?'check':as==='fail'?'alert':'pulse')+'Core Web Vitals: '+(as==='pass'?'Passed':as==='fail'?'Failed':'No data')+'</div>'+
+      '<p>'+(as?'Based on real Chrome visitors to '+(p.fieldScope==='site'?'this whole site (this page doesn’t get enough traffic for its own data)':'this page')+' over the last 28 days. To pass, LCP, INP and CLS must all be good for at least 75% of visits. This is what Google uses for its page experience signals.':
+        'Google doesn’t have enough real Chrome visits to this page or site to report Core Web Vitals. Use the lab test below as a guide; field data appears once the site gets more traffic.')+'</p></div></div></section></div>';
+    /* field data */
+    if(p.field.length){
+      h+='<section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic">'+icon('chart')+'</span><div><h2>What real visitors experience</h2><p>Chrome UX Report · '+(p.fieldScope==='site'?'whole site':'this page')+' · 75th percentile, last 28 days</p></div></div><div class="mets">'+
+        p.field.map(function(f){var d=f.d.length===3?f.d:[0,0,0];return '<div class="met"><small><i class="r-'+(f.r||'none')+'"></i>'+f.name+(f.core?'<em class="cwv">CWV</em>':'')+'</small><b class="r-'+(f.r||'')+'">'+fmt(f.k,f.v)+'</b><span>'+f.what+' · '+(RATE[f.r]||'')+'</span>'+
+          '<div class="dist" title="Share of visits: good / needs improvement / poor"><i class="r-good" style="width:'+(d[0]*100)+'%"></i><i class="r-ni" style="width:'+(d[1]*100)+'%"></i><i class="r-poor" style="width:'+(d[2]*100)+'%"></i></div>'+
+          '<div class="dist-l"><span class="r-good">'+Math.round(d[0]*100)+'% good</span><span class="r-poor">'+Math.round(d[2]*100)+'% poor</span></div></div>'}).join('')+'</div></section>'}
+    /* lab data */
+    h+='<section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic">'+icon('speed')+'</span><div><h2>Lab test</h2><p>Lighthouse · '+(dev==='mobile'?'simulated mobile':'simulated desktop')+' · one run</p></div></div><div class="mets">'+
+      p.lab.map(function(l){return '<div class="met"><small><i class="r-'+(l.r||'none')+'"></i>'+l.name+'</small><b class="r-'+(l.r||'')+'">'+fmt(l.k,l.v)+'</b><span>'+(RATE[l.r]||'')+'</span></div>'}).join('')+'</div>'+
+      '<p class="panel-n">Total Blocking Time is the lab stand-in for INP, which needs real visitors to measure.</p></section>';
+    /* what to fix */
+    var opp=p.fixes.filter(function(x){return x.opp}),diag=p.fixes.filter(function(x){return !x.opp});
+    function list(xs){return xs.map(function(x){var r=x.score<0.5?'poor':'ni';
+      var sv=[x.ms?'Save ~'+fmt('lcp',x.ms):'',x.bytes?kb(x.bytes):'',x.cls?'CLS −'+(+x.cls).toFixed(2):''].filter(Boolean).join(' · ');
+      return '<details class="fix"><summary><i class="r-'+r+'"></i><h4>'+esc(x.title)+(x.display?'<em>'+esc(x.display)+'</em>':'')+'</h4><span class="sav">'+esc(sv)+'</span></summary><div class="body"><p>'+md(x.desc)+'</p>'+items(x.details)+'</div></details>'}).join('')}
+    if(opp.length)h+='<section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic">'+icon('bulb')+'</span><div><h2>What to fix first</h2><p>Opportunities sorted by the time they could save · '+opp.length+' found</p></div></div>'+list(opp)+'</section>';
+    if(diag.length)h+='<section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic">'+icon('alert')+'</span><div><h2>Diagnostics</h2><p>More detail on how the page loads · '+diag.length+' to look at</p></div></div>'+list(diag)+'</section>';
+    if(!p.fixes.length)h+='<section class="panel" style="margin-top:20px"><div class="ok-row">'+icon('check')+'No opportunities or diagnostics: this page is in great shape.</div></section>';
+    else h+='<p class="meta-note" style="margin-top:12px">'+p.passed+' other checks passed.</p>';
+    el.innerHTML=h;
+  }
+
+  /* the first rows of an audit's table: URLs, sizes, times and page elements */
+  function items(d){if(!d||!d.items||!d.items.length||!d.headings||!d.headings.length)return '';
+    var hs=d.headings.filter(function(x){return x.key&&(x.label||x.text)}).slice(0,4);if(!hs.length)return '';
+    function cell(v,t){if(v==null||v==='')return '';if(typeof v==='object'){if(v.type==='node')return '<code>'+esc((v.nodeLabel||v.snippet||'').slice(0,140))+'</code>';if(v.type==='source-location'||v.url)return esc(String(v.url||'').slice(0,160));if(v.type==='code')return '<code>'+esc(String(v.value).slice(0,140))+'</code>';if(v.type==='text'||v.value!=null)return esc(String(v.value).slice(0,140));return ''}
+      if(t==='bytes')return kb(v);if(t==='ms'||t==='timespanMs')return fmt('lcp',v);if(t==='numeric')return typeof v==='number'?(Math.round(v*100)/100).toLocaleString():esc(v);return esc(String(v).slice(0,160))}
+    var rows=d.items.slice(0,8);
+    return '<div class="dt-wrap"><table class="dt"><thead><tr>'+hs.map(function(x){var t=x.valueType||x.itemType;return '<th'+(t==='bytes'||t==='ms'||t==='timespanMs'||t==='numeric'?' class="n"':'')+'>'+esc(x.label||x.text)+'</th>'}).join('')+'</tr></thead><tbody>'+
+      rows.map(function(it){return '<tr>'+hs.map(function(x){var t=x.valueType||x.itemType;return '<td'+(t==='bytes'||t==='ms'||t==='timespanMs'||t==='numeric'?' class="n"':'')+'>'+cell(it[x.key],t)+'</td>'}).join('')+'</tr>'}).join('')+'</tbody></table></div>'+
+      (d.items.length>rows.length?'<p class="meta-note" style="margin-top:6px">And '+(d.items.length-rows.length)+' more.</p>':'')}
+
+  $('f').addEventListener('submit',function(e){e.preventDefault();$('err').textContent='';var u=$('url').value.trim();
+    if(!u)return $('err').textContent='Add the page you want to test.';
+    if(!/^(https?:\/\/)?[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?$/i.test(u))return $('err').textContent='That doesn’t look like a web address.';
+    url=norm(u);history.replaceState(null,'','?url='+encodeURIComponent(url)+(dev==='desktop'?'&device=desktop':''));
+    var my=++seq;runs={};$('tested').textContent='';$('out').hidden=false;$('go').disabled=true;render();
+    Promise.all([run('mobile',url,my),run('desktop',url,my)]).then(function(){if(my===seq)$('go').disabled=false});
+  });
+  [].forEach.call(document.querySelectorAll('[data-dev]'),function(b){b.addEventListener('click',function(){dev=b.dataset.dev;
+    [].forEach.call(document.querySelectorAll('[data-dev]'),function(x){x.setAttribute('aria-pressed',x===b)});
+    if(url)history.replaceState(null,'','?url='+encodeURIComponent(url)+(dev==='desktop'?'&device=desktop':''));render()})});
+  $('rep').onclick=function(){var p=(runs[dev]||{}).data;if(p)S.report($('res'),{title:'Page speed report ('+dev+')',file:'pagespeed-'+dev+'-'+S.slug(p.finalUrl),meta:[['Page',p.finalUrl],['Device',dev==='mobile'?'Mobile':'Desktop'],['Performance score',p.score==null?'':String(p.score)]]})};
+
+  if(S.qs('device')==='desktop')document.querySelector('[data-dev="desktop"]').click();
+  if(S.qs('url')){$('url').value=S.qs('url');$('f').requestSubmit()}
+  else{var site=S.read('scoutly.site');if(site)$('url').value=site}
+})();
+</script>
+</body>
+</html>
