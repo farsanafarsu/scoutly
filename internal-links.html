@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Internal Link Opportunities — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.qf select{max-width:220px}
+.qbar .qf.half{flex:1 1 300px}
+.iss{display:grid;grid-template-columns:96px minmax(0,1fr);gap:14px;align-items:start;padding:12px 20px;border-bottom:1px solid var(--ln);font:400 12.5px/1.6 var(--M);color:var(--sl)}
+.iss:last-child{border-bottom:0}
+.sev{font:600 10px/1.3 var(--M);letter-spacing:.1em;text-transform:uppercase}
+.sev.critical{color:var(--cr)}.sev.warning{color:#a46a00}.sev.notice{color:var(--b)}.sev.good{color:var(--ok)}
+.chk-t{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:12px 20px;border-bottom:1px solid var(--ln)}
+.chk-t select{height:36px;max-width:340px;min-width:0;flex:0 1 340px}
+.dt td.u{min-width:190px;white-space:normal;overflow-wrap:anywhere}
+.dt td.u a{color:var(--ink)}.dt td.u a:hover{color:var(--b)}
+.dt td .why{display:block;margin-top:4px;font-size:11.5px;color:var(--sl);white-space:normal;overflow-wrap:anywhere}
+.dt td.ctx{min-width:260px;white-space:normal;font:400 12.5px/1.6 var(--M);color:var(--sl)}
+.dt td.ctx mark{background:rgba(47,91,255,.12);color:var(--b);font-weight:600;padding:0 2px;border-bottom:1px solid var(--b)}
+.dt td .cp{margin-top:6px}
+.note{padding:12px 20px;border-bottom:1px solid var(--ln);font:400 12px/1.6 var(--M);color:var(--sl)}
+@media(max-width:760px){.iss{grid-template-columns:minmax(0,1fr);gap:4px}}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph">
+      <p class="lbl">Link building</p>
+      <h1>Internal Link Opportunities</h1>
+      <p class="desc">Find places on your own site where a page already mentions another page’s topic but doesn’t link to it. Scoutly crawls your site, then suggests the page to edit, the words to turn into a link and where they are, with the pages that need links most first.</p>
+    </div>
+    <form class="qbar" id="f" novalidate>
+      <div class="qf"><label for="site">Website</label><input id="site" placeholder="yourwebsite.com" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+      <div class="qf sm"><label for="lim">Pages to crawl</label><select id="lim"><option value="30">30</option><option value="60" selected>60</option><option value="100">100</option><option value="150">150</option></select></div>
+      <div class="qf half"><label for="focus">Page to boost <span style="color:var(--mu)">(optional)</span></label><input id="focus" placeholder="yourwebsite.com/services/your-best-page" inputmode="url" autocapitalize="off" spellcheck="false"></div>
+      <div class="qf half"><label for="kw">Its keywords <span style="color:var(--mu)">(optional, comma-separated)</span></label><input id="kw" placeholder="emergency plumber, boiler repair" autocapitalize="off"></div>
+      <button class="btn p" type="submit" id="go"><svg class="i"><use href="#i-tree"/></svg>Find opportunities</button>
+    </form>
+    <p class="qerr" id="err" role="alert"></p>
+    <div class="loading" id="load" hidden><span class="spin"></span><span id="loadT">Crawling your site…</span></div>
+    <div id="out" hidden>
+      <div class="res-act no-report"><button class="btn sm" type="button" id="csvB"><svg class="i"><use href="#i-dl"/></svg>Export CSV</button><button class="btn sm" type="button" id="rep"><svg class="i"><use href="#i-dl"/></svg>Download report</button></div>
+      <div class="kpis" id="kpis"></div>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-alert"/></svg></span><div><h2>What to fix</h2><p id="issS"></p></div></div><div id="iss"></div></section>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-link"/></svg></span><div><h2>Links to add</h2><p id="oppS"></p></div></div>
+        <div class="chk-t"><div class="seg" role="group" aria-label="Filter by strength" id="filt"><button type="button" data-v="" aria-pressed="true">All<span id="n-all"></span></button><button type="button" data-v="strong" aria-pressed="false">Strong<span id="n-strong"></span></button><button type="button" data-v="good" aria-pressed="false">Good<span id="n-good"></span></button><button type="button" data-v="possible" aria-pressed="false">Possible<span id="n-possible"></span></button></div>
+          <select id="tgt" aria-label="Filter by the page to link to"></select></div>
+        <div class="dt-wrap"><table class="dt"><thead><tr><th>Edit this page</th><th>Turn the highlighted words into a link</th><th>Link to</th><th>Strength</th></tr></thead><tbody id="rows"></tbody></table></div>
+      </section>
+      <section class="panel" style="margin-top:20px"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-page"/></svg></span><div><h2>Internal links per page</h2><p id="pgS"></p></div></div>
+        <div class="chk-t"><div class="seg" role="group" aria-label="Filter pages" id="pfilt"><button type="button" data-v="" aria-pressed="true">All<span id="p-all"></span></button><button type="button" data-v="need" aria-pressed="false">Need links<span id="p-need"></span></button><button type="button" data-v="skip" aria-pressed="false">Skipped<span id="p-skip"></span></button></div></div>
+        <p class="note">“In content” counts other pages linking from their main text; menus, footers and sidebars repeat on every page, so search engines give those links less weight. They’re included in “All links in”.</p>
+        <div class="dt-wrap"><table class="dt"><thead><tr><th>Page</th><th class="n">In content</th><th class="n">All links in</th><th class="n">Links out</th><th class="n">Clicks from home</th><th class="n">Suggestions</th><th>Status</th></tr></thead><tbody id="prows"></tbody></table></div>
+      </section>
+    </div>
+  </main>
+</div>
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  /* /api/internal-links (seo/internallinks.py): crawls the site, then matches each page's title / H1 / slug in other pages' unlinked text */
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc;
+  var R=null,filter='',tgt='',pfilter='';
+  var STR={strong:['Strong','ok'],good:['Good','in'],possible:['Possible','']};
+  function short(u){return String(u||'').replace(/^https?:\/\/(www\.)?/i,'')}
+  function path(u){try{var x=new URL(u);return (x.pathname+x.search)||'/'}catch(_){return short(u)}}
+  function isUrl(u){return /^(https?:\/\/)?[\w-]+(\.[\w-]+)+(:\d+)?(\/\S*)?$/i.test(String(u||'').trim())}
+  function plural(n,w){return n.toLocaleString()+' '+w+(n===1?'':'s')}
+  function pageLink(u,title){return '<a href="'+esc(u)+'" target="_blank" rel="noopener noreferrer">'+esc(path(u))+'</a>'+(title?'<span class="why">'+esc(title)+'</span>':'')}
+  function home(p){return path(p.url)==='/'}
+  function need(p){return !p.skipped&&!home(p)&&(p.orphan||p.inbound<=1||(p.depth!=null&&p.depth>3))}
+
+  $('f').addEventListener('submit',function(e){e.preventDefault();$('err').textContent='';
+    var site=$('site').value.trim(),focus=$('focus').value.trim(),kw=$('kw').value.trim();
+    if(!site)return $('err').textContent='Enter your website.';
+    if(!isUrl(site))return $('err').textContent='That doesn’t look like a web address.';
+    if(focus&&!isUrl(focus))return $('err').textContent='The page to boost doesn’t look like a web address.';
+    if(kw&&!focus)return $('err').textContent='Add the page these keywords belong to, or clear the keywords.';
+    var q='site='+encodeURIComponent(site)+'&limit='+$('lim').value+(focus?'&focus='+encodeURIComponent(focus):'')+(kw?'&kw='+encodeURIComponent(kw):'');
+    history.replaceState(null,'','?'+q);
+    $('out').hidden=true;$('load').hidden=false;$('go').disabled=true;
+    $('loadT').textContent='Crawling up to '+$('lim').value+' pages and reading their links… this takes up to a minute.';
+    S.api('/api/internal-links?'+q).then(function(r){R=r;filter=tgt='';pfilter='';render()}).catch(function(e){$('err').textContent=e.message})
+      .then(function(){$('load').hidden=true;$('go').disabled=false});
+  });
+
+  function issues(){var P=R.pages.filter(function(p){return !p.skipped}),out=[];
+    var orph=P.filter(function(p){return p.orphan}).length,weak=P.filter(function(p){return !home(p)&&!p.orphan&&p.inbound===0}).length,
+      one=P.filter(function(p){return !home(p)&&p.inbound===1}).length,deep=P.filter(function(p){return p.depth!=null&&p.depth>3}).length,
+      dead=P.filter(function(p){return p.outbound===0&&!home(p)}).length;
+    if(orph)out.push({sev:'critical',text:plural(orph,'page')+(orph===1?' has':' have')+' no internal links pointing '+(orph===1?'to it':'to them')+(R.complete?'':' from the pages scanned')+' (found only in the sitemap). Search engines may never find '+(orph===1?'it':'them')+'; link '+(orph===1?'it':'them')+' from related pages.'});
+    if(weak)out.push({sev:'warning',text:plural(weak,'page')+(weak===1?' is':' are')+' only linked from the menu or footer, never from another page’s text. Contextual links tell search engines what a page is about.'});
+    if(deep)out.push({sev:'warning',text:plural(deep,'page')+(deep===1?' is':' are')+' more than 3 clicks from the home page. Link '+(deep===1?'it':'them')+' from pages closer to the top.'});
+    if(one)out.push({sev:'notice',text:plural(one,'page')+(one===1?' has':' have')+' just one in-content link from another page.'});
+    if(dead)out.push({sev:'notice',text:plural(dead,'page')+' link'+(dead===1?'s':'')+' to no other page from '+(dead===1?'its':'their')+' main text. Point readers to a related page or the next step.'});
+    if(!R.complete)out.push({sev:'notice',text:'The site has more pages than were crawled ('+R.scanned+'). Run it again with more pages for fuller results.'});
+    return out}
+
+  function render(){var o=R.opportunities,P=R.pages,usable=P.filter(function(p){return !p.skipped});
+    var c={strong:0,good:0,possible:0};o.forEach(function(x){c[x.strength]++});
+    var orph=usable.filter(function(p){return p.orphan}).length,needN=P.filter(need).length;
+    $('kpis').innerHTML=[['page','Pages crawled',R.scanned,(R.complete?'The whole site':'Site has more')+' · '+R.usable+' usable'],
+      ['link','Links to add',R.total,c.strong?c.strong+' strong':'Matches in your own text'],
+      ['alert','Orphan pages',orph,orph?'No links pointing to them':'Every page is linked'],
+      ['target','Pages needing links',needN,'Few links in or deep in the site']]
+      .map(function(k){return '<div class="kpi"><small><svg class="i"><use href="#i-'+k[0]+'"/></svg>'+k[1]+'</small><b>'+esc(k[2])+'</b><span>'+esc(k[3])+'</span></div>'}).join('');
+    var is=issues();$('issS').textContent=is.length?plural(is.length,'issue')+', most serious first':'Nothing to fix';
+    $('iss').innerHTML=is.length?is.map(function(x){return '<div class="iss"><span class="sev '+x.sev+'">'+x.sev+'</span><span>'+esc(x.text)+'</span></div>'}).join(''):
+      '<div class="iss"><span class="sev good">All good</span><span>Every page crawled has links in from other pages’ text.</span></div>';
+    /* target filter: pages with suggestions, the weakest first */
+    var tg={};o.forEach(function(x){tg[x.target]=tg[x.target]||{n:0,inb:x.targetInbound,t:x.targetTitle};tg[x.target].n++});
+    $('tgt').innerHTML='<option value="">All pages to link to ('+Object.keys(tg).length+')</option>'+Object.keys(tg).sort(function(a,b){return tg[a].inb-tg[b].inb||tg[b].n-tg[a].n})
+      .map(function(u){return '<option value="'+esc(u)+'"'+(u===tgt?' selected':'')+'>'+esc(path(u))+' · '+tg[u].n+'</option>'}).join('');
+    $('tgt').hidden=!!R.focus;
+    $('oppS').textContent=R.focus?'Pages that mention '+path(R.focus)+'’s topic without linking to it':o.length?'Best first: the strongest matches to the pages with the fewest links':'';
+    ['all','strong','good','possible'].forEach(function(v){$('n-'+v).textContent=v==='all'?o.length:c[v]});
+    renderOpps();renderPages();$('out').hidden=false}
+
+  function renderOpps(){var o=R.opportunities.filter(function(x){return (!filter||x.strength===filter)&&(!tgt||x.target===tgt)});
+    $('rows').innerHTML=o.map(function(x,i){var s=STR[x.strength];
+      var why=(x.matched==='keyword'?'Matches your keyword':'Matches its '+x.matched)+(x.templateLinkOnly?' · links there only from the menu or footer now':'');
+      return '<tr><td class="u">'+pageLink(x.source,x.sourceTitle)+'</td>'+
+        '<td class="ctx">'+esc(x.before)+'<mark>'+esc(x.anchor)+'</mark>'+esc(x.after)+'<span class="why">'+esc(why)+'</span><button class="btn sm cp" type="button" data-i="'+R.opportunities.indexOf(x)+'"><svg class="i"><use href="#i-copy"/></svg>Copy link HTML</button></td>'+
+        '<td class="u">'+pageLink(x.target,x.targetTitle)+'<span class="why">'+(x.targetInbound?plural(x.targetInbound,'in-content link')+' now':'No in-content links now')+'</span></td>'+
+        '<td><span class="tag '+s[1]+'">'+s[0]+'</span></td></tr>'}).join('')||
+      '<tr><td colspan="4" class="meta-note">'+(R.opportunities.length?'No suggestions match this filter.':R.focus?'No page mentions this page’s title, H1 or keywords without linking to it. Try adding other keywords people would use for it.':'No unlinked mentions found. Pages either link to each other already or don’t mention each other’s topics.')+'</td></tr>'}
+
+  function renderPages(){var P=R.pages.slice().sort(function(a,b){return (!!a.skipped-!!b.skipped)||(b.orphan-a.orphan)||(a.inbound-b.inbound)||((b.depth==null?9:b.depth)-(a.depth==null?9:a.depth))});
+    var n={all:P.length,need:P.filter(need).length,skip:P.filter(function(p){return p.skipped}).length};
+    $('p-all').textContent=n.all;$('p-need').textContent=n.need;$('p-skip').textContent=n.skip;
+    $('pgS').textContent=plural(R.scanned,'page')+' crawled on '+short(R.origin)+(R.seconds?' in '+R.seconds+' s':'');
+    P=P.filter(function(p){return !pfilter||(pfilter==='need'?need(p):!!p.skipped)});
+    $('prows').innerHTML=P.map(function(p){
+      var st=p.skipped?'<span class="tag" title="Not linked to or from in suggestions">'+esc(p.skipped)+'</span>':home(p)?'<span class="tag in">Home</span>':p.orphan?'<span class="tag bad">Orphan</span>':
+        p.inbound===0?'<span class="tag wr">Menu links only</span>':p.depth!=null&&p.depth>3?'<span class="tag wr">Deep</span>':p.inbound===1?'<span class="tag wr">Weak</span>':'<span class="tag ok">OK</span>';
+      return '<tr><td class="u">'+pageLink(p.url,p.title)+'</td><td class="n">'+(p.skipped?'—':p.inbound)+'</td><td class="n">'+(p.skipped?'—':p.inboundAll)+'</td><td class="n">'+(p.skipped?'—':p.outbound)+'</td>'+
+        '<td class="n">'+(p.depth==null?'<span title="Not reached by following links; found in the sitemap">—</span>':p.depth)+'</td><td class="n">'+(p.opportunities||'—')+'</td><td>'+st+'</td></tr>'}).join('')||
+      '<tr><td colspan="7" class="meta-note">No pages match this filter.</td></tr>'}
+
+  [].forEach.call(document.querySelectorAll('#filt button'),function(b){b.addEventListener('click',function(){filter=b.dataset.v;
+    [].forEach.call(document.querySelectorAll('#filt button'),function(x){x.setAttribute('aria-pressed',x===b)});renderOpps()})});
+  [].forEach.call(document.querySelectorAll('#pfilt button'),function(b){b.addEventListener('click',function(){pfilter=b.dataset.v;
+    [].forEach.call(document.querySelectorAll('#pfilt button'),function(x){x.setAttribute('aria-pressed',x===b)});renderPages()})});
+  $('tgt').onchange=function(){tgt=this.value;renderOpps()};
+  $('rows').addEventListener('click',function(e){var b=e.target.closest('.cp');if(!b)return;var x=R.opportunities[+b.dataset.i];
+    var h='<a href="'+esc(path(x.target))+'">'+esc(x.anchor)+'</a>';
+    (navigator.clipboard?navigator.clipboard.writeText(h):Promise.reject()).then(function(){S.say('Copied. Replace “'+x.anchor+'” on '+path(x.source)+' with it.')},function(){S.say('Couldn’t copy; select the text and copy it by hand.')})});
+  $('csvB').onclick=function(){if(!R)return;
+    S.csv([['Edit this page','Page title','Anchor text','Context','Link to','Target title','Target in-content links','Strength','Matched']].concat(R.opportunities.map(function(x){
+      return [x.source,x.sourceTitle,x.anchor,x.before+'['+x.anchor+']'+x.after,x.target,x.targetTitle,x.targetInbound,STR[x.strength][0],x.matched]})),
+      'scoutly-internal-links-'+S.slug(R.origin)+'.csv')};
+  $('rep').onclick=function(){if(R)S.report($('out'),{title:'Internal link opportunities',file:'internal-links-'+S.slug(R.origin),
+    meta:[['Website',R.origin],['Pages crawled',String(R.scanned)],['Links to add',String(R.total)]].concat(R.focus?[['Page to boost',R.focus]]:[])})};
+
+  if(S.qs('site')){$('site').value=S.qs('site');if(['30','60','100','150'].indexOf(S.qs('limit'))>-1)$('lim').value=S.qs('limit');$('focus').value=S.qs('focus');$('kw').value=S.qs('kw');$('f').requestSubmit()}
+  else{var site=S.read('scoutly.site');if(site)$('site').value=site}
+})();
+</script>
+</body>
+</html>

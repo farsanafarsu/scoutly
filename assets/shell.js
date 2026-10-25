@@ -81,7 +81,7 @@
       ['backlink-audit.html','broken','Backlink Audit'],
       ['backlinks.html','link','Backlink Manager'],
       ['backlink-sites.html','globe','Backlink Sites'],
-      ['#','tree','Internal Link Opportunities','soon','Internal Link Opportunities']]],
+      ['internal-links.html','tree','Internal Link Opportunities']]],
     ['Content',[
       ['writing-assistant.html','pen','SEO Writing Assistant'],
       ['topic-research.html','bulb','Topic Research'],

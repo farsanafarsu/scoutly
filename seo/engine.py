@@ -1164,6 +1164,7 @@ TOOL_ROUTES = {
     "/api/aeo": lambda q: _tools().aeo(q.get("url", ""), q.get("q", "")),
     "/api/sitemaps": lambda q: _index().sitemaps(q.get("site", "")),
     "/api/schema": lambda q: _schema().analyze(url=q.get("url", "")),
+    "/api/internal-links": lambda q: _ilinks().run(q.get("site", ""), q.get("limit", "60"), q.get("focus", ""), q.get("kw", "")),
     # optional DataForSEO data (provider.py). run=1 calls the API; without it only the cache answers.
     "/api/provider/status": lambda q: _provider().status(q.get("refresh") == "1"),
     "/api/provider/usage": lambda q: _provider().usage(),
@@ -1237,6 +1238,11 @@ def _index():
 def _schema():
     import schema
     return schema
+
+
+def _ilinks():
+    import internallinks
+    return internallinks
 
 
 def _links():
