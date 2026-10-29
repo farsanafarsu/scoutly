@@ -1238,6 +1238,7 @@ TASK_GET.update({
 TASK_POST.update({
     "/api/blogs/generate": lambda b, by: _blogs().generate(b.get("batch"), b.get("settings"), b.get("items"), by),
     "/api/blogs/retry": lambda b, by: _blogs().retry(b.get("id"), by),
+    "/api/blogs/create": lambda b, by: _blogs().create(b.get("item"), by),
     "/api/blogs/update": lambda b, by: _blogs().update(b.get("id"), b.get("version"), b.get("changes"), by, bool(b.get("checkpoint"))),
     "/api/blogs/duplicate": lambda b, by: _blogs().duplicate(b.get("id"), by),
     "/api/blogs/delete": lambda b, by: _blogs().delete(b.get("id")),

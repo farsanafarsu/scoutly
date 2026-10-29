@@ -182,6 +182,16 @@ class BlogBank(unittest.TestCase):
             blogbank.get_blog(d["_id"])
         self.assertTrue(blogbank.get_blog(c["id"]))
 
+    def test_write_or_paste_without_ai(self):
+        blogai._anthropic = self._orig[1]
+        os.environ.pop("ANTHROPIC_API_KEY", None)
+        d = blogbank.create({}, "Farsana")["item"]
+        self.assertEqual((d["gen"], d["status"], d["batch"], d["title"], d["html"]), ("done", "in_progress", "Written or pasted by hand", "", ""))
+        r = blogbank.update(d["id"], d["version"], {"title": "My own post", "html": "<h2>Hi</h2><p style='x'>Pasted text</p><script>x</script>"}, "Farsana")["item"]
+        self.assertEqual((r["title"], r["html"]), ("My own post", "<h2>Hi</h2><p>Pasted text</p>"))
+        self.assertEqual(blogbank.list_blogs({"q": "my own"})["items"][0]["id"], d["id"])
+        self.assertFalse(blogbank.get_blog(d["id"])["ai"])
+
     def test_stale_jobs_become_retryable(self):
         d = {"_id": "s1", "ws": "team", "gen": "running", "genAt": "2020-01-01T00:00:00Z", "version": 2, "html": "", "title": "t",
              "brief": {}, "createdAt": "2020-01-01T00:00:00Z", "batchId": "b", "batch": "B"}

@@ -86,6 +86,7 @@
 .tb .sep{width:1px;height:20px;background:var(--ln);margin:0 4px}
 .art{min-height:480px;padding:22px 26px;background:#fff;border:1px solid var(--ln);font:400 16px/1.75 Geist,system-ui,sans-serif;color:#1d2540;outline:0}
 .art:focus{border-color:var(--b)}
+.art:empty:before{content:attr(data-ph);color:var(--mu);pointer-events:none}
 .art h1,.pv h1{font:700 30px/1.25 Geist,sans-serif;margin:0 0 14px}
 .art h2,.pv h2{font:700 23px/1.3 Geist,sans-serif;margin:26px 0 10px}
 .art h3,.pv h3{font:650 19px/1.35 Geist,sans-serif;margin:20px 0 8px}
@@ -158,16 +159,16 @@
       <div>
         <p class="lbl">Content</p>
         <h1>Blog Bank</h1>
-        <p class="desc">Write a weekend’s worth of SEO blogs in one go, keep them as drafts in your team’s database, and copy each one into your website when you need it.</p>
+        <p class="desc">Your blog notepad: write or paste blogs, or generate a weekend’s worth with AI. Every draft is saved in your team’s database, so you can copy it into your website whenever you need it, from any device.</p>
       </div>
-      <div class="ph-act"><button class="btn p" type="button" id="newB"><svg class="i"><use href="#i-plus"/></svg>Generate blogs</button></div>
+      <div class="ph-act"><button class="btn" type="button" id="writeB"><svg class="i"><use href="#i-pen"/></svg>Write or paste a blog</button><button class="btn p" type="button" id="newB"><svg class="i"><use href="#i-wand"/></svg>Generate blogs with AI</button></div>
     </div>
 
     <form class="dbbar" id="dbBar" hidden novalidate>
       <svg class="i" aria-hidden="true"><use href="#i-lock"/></svg><span id="dbMsg"></span>
       <span class="keyf" id="keyF" hidden><label class="sr-only" for="teamKey">Team key</label><input id="teamKey" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your team key"><button class="btn sm p" type="submit">Connect</button></span>
     </form>
-    <p class="note" id="aiNote" hidden><b>AI writing isn’t switched on yet.</b> Saved blogs still open, edit and copy. To generate new ones, whoever runs the Scoutly server adds an Anthropic API key as <code>ANTHROPIC_API_KEY</code>.</p>
+    <p class="note" id="aiNote" hidden><b>AI writing isn’t switched on yet.</b> You can still use “Write or paste a blog” to save your own blogs, and open, edit and copy them any time. To generate blogs with AI, whoever runs the Scoutly server adds an Anthropic API key as <code>ANTHROPIC_API_KEY</code>.</p>
 
     <!-- library -->
     <section id="vLib" hidden>
@@ -230,9 +231,9 @@
               <span class="sep"></span>
               <button type="button" data-cmd="undo" title="Undo">↶</button><button type="button" data-cmd="redo" title="Redo">↷</button><button type="button" data-cmd="removeFormat" title="Clear bold and italic">Clear</button>
             </div>
-            <div class="art" id="art" contenteditable="true" spellcheck="true" aria-label="Article"></div>
+            <div class="art" id="art" contenteditable="true" spellcheck="true" aria-label="Article" data-ph="Type your blog here, or paste it from Word, Google Docs or a website. Headings, lists, links and tables are kept; colours and fonts are removed."></div>
             <div class="under"><span id="wc"></span><span id="target"></span></div>
-            <div class="regen"><b>Rewrite a section with AI</b><select id="secSel" aria-label="Section"></select><input id="secIns" maxlength="300" placeholder="What to change (optional): e.g. shorter, add an example, simpler words"><button class="btn xs" type="button" id="secGo"><svg class="i"><use href="#i-wand"/></svg>Rewrite</button></div>
+            <div class="regen" id="regen"><b>Rewrite a section with AI</b><select id="secSel" aria-label="Section"></select><input id="secIns" maxlength="300" placeholder="What to change (optional): e.g. shorter, add an example, simpler words"><button class="btn xs" type="button" id="secGo"><svg class="i"><use href="#i-wand"/></svg>Rewrite</button></div>
           </div>
           <div class="pv" id="pv" hidden></div>
         </div>
@@ -302,7 +303,7 @@
   function slugify(s){return String(s||'').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g,'').replace(/[^\w\s-]/g,'').replace(/[\s_-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,90)}
   function store(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,JSON.stringify(v))}catch(_){}}
   function load(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(_){return null}}
-  function show(v){var was=!$('vLib').hidden?'lib':!$('vGen').hidden?'gen':!$('vEd').hidden?'ed':'';$('vLib').hidden=v!=='lib';$('vGen').hidden=v!=='gen';$('vEd').hidden=v!=='ed';$('head').hidden=v==='ed';if(was!==v)window.scrollTo(0,0)}
+  function show(v){var was=!$('vLib').hidden?'lib':!$('vGen').hidden?'gen':!$('vEd').hidden?'ed':'';$('vLib').hidden=v!=='lib';$('vGen').hidden=v!=='gen';$('vEd').hidden=v!=='ed';$('head').hidden=v==='ed';$('aiNote').hidden=v!=='lib'||lib.ai;if(was!==v)window.scrollTo(0,0)}
 
   /* the same allow-list the server applies (seo/blogbank.py clean_html): used for pasted text and AI rewrites */
   var KEEP={H2:1,H3:1,H4:1,P:1,UL:1,OL:1,LI:1,STRONG:1,EM:1,A:1,TABLE:1,THEAD:1,TBODY:1,TR:1,TH:1,TD:1,BLOCKQUOTE:1,BR:1},REN={B:'STRONG',I:'EM',H1:'H2',H5:'H4',H6:'H4'},
@@ -379,7 +380,7 @@
   function libQuery(){return {q:$('q').value.trim(),status:lib.status,batch:$('batchF').value,from:$('fromF').value,to:$('toF').value,sort:$('sortF').value}}
   function qs(o){return Object.keys(o).filter(function(k){return o[k]}).map(function(k){return k+'='+encodeURIComponent(o[k])}).join('&')}
   function loadLib(quiet){
-    return call('/api/blogs?'+qs(libQuery())).then(function(r){bar('');lib.items=r.items;lib.batches=r.batches;lib.ai=r.ai;lib.loaded=true;$('aiNote').hidden=r.ai;renderLib();schedule()})
+    return call('/api/blogs?'+qs(libQuery())).then(function(r){bar('');lib.items=r.items;lib.batches=r.batches;lib.ai=r.ai;lib.loaded=true;$('aiNote').hidden=r.ai;$('writeB').className='btn'+(r.ai?'':' p');$('newB').className='btn'+(r.ai?' p':'');renderLib();schedule()})
       .catch(function(e){if(!trouble(e)&&!quiet)$('list').innerHTML='<div class="empty"><h3>Couldn’t load the Blog Bank</h3><p>'+esc(e.message)+'</p><button class="btn" type="button" onclick="location.reload()">Try again</button></div>'})}
   function schedule(){clearTimeout(poll);if(!$('vLib').hidden&&lib.items.some(function(x){return x.gen==='queued'||x.gen==='running'}))poll=setTimeout(function(){loadLib(true)},5000)}
   function renderLib(){
@@ -389,8 +390,8 @@
     var items=lib.items,filtered=!!($('q').value.trim()||lib.status||$('batchF').value||$('fromF').value||$('toF').value);
     $('count').textContent=plural(items.length,'blog');
     if(!items.length){$('list').innerHTML=filtered?'<div class="empty"><h3>No blogs match</h3><p>Try another search, or clear the filters.</p></div>':
-      '<div class="empty"><h3>Your Blog Bank is empty</h3><p>Generate up to 10 blogs at a time. Each is saved here as a draft, ready to copy into your website.</p><button class="btn p" type="button" id="firstB">'+icon('plus')+'Generate your first blogs</button></div>';
-      if($('firstB'))$('firstB').onclick=function(){location.hash='new'};return}
+      '<div class="empty"><h3>Your Blog Bank is empty</h3><p>Write or paste your own blog, or generate up to 10 with AI. Each is saved here as a draft, ready to copy into your website.</p><button class="btn p" type="button" id="firstW">'+icon('pen')+'Write or paste a blog</button> <button class="btn" type="button" id="firstB">'+icon('wand')+'Generate with AI</button></div>';
+      if($('firstB')){$('firstB').onclick=function(){location.hash='new'};$('firstW').onclick=writeNew}return}
     var groups=[];
     if($('sortF').value==='title')groups=[{label:'',items:items}];
     else items.forEach(function(x){var g=groups[groups.length-1];if(!g||g.id!==x.batchId){g={id:x.batchId,label:x.batch,items:[]};groups.push(g)}g.items.push(x)});
@@ -408,7 +409,7 @@
       (x.status==='used'?'<button class="btn xs" type="button" data-act="ready" data-id="'+x.id+'">'+icon('down')+'Mark ready</button>':'<button class="btn xs" type="button" data-act="used" data-id="'+x.id+'">'+icon('check')+'Mark as used</button>')+
       '<button class="btn xs ic" type="button" data-act="dup" data-id="'+x.id+'" aria-label="Duplicate" title="Duplicate">'+icon('copy')+'</button>'+
       '<button class="btn xs ic del" type="button" data-act="del" data-id="'+x.id+'" aria-label="Delete" title="Delete">'+icon('trash')+'</button>';
-    return '<div class="row"><div><h4 data-act="'+(busy||failed?'':'open')+'" data-id="'+x.id+'">'+esc(x.title||x.brief.topic)+'</h4><div class="meta">'+
+    return '<div class="row"><div><h4 data-act="'+(busy||failed?'':'open')+'" data-id="'+x.id+'">'+esc(x.title||x.brief.topic||'Untitled blog')+'</h4><div class="meta">'+
       (busy||failed?'':'<span class="tag '+st[1]+'">'+st[0]+'</span>')+'<span>Keyword: <b>'+esc(x.primaryKeyword)+'</b></span>'+
       (x.gen==='done'?'<span>'+plural(x.wordCount,'word')+'</span>':'')+'<span>'+day(x.createdAt)+' · '+esc(x.createdBy)+'</span>'+
       (x.publishedUrl?'<span><a href="'+esc(x.publishedUrl)+'" target="_blank" rel="noopener noreferrer" style="color:var(--b)">Published ↗</a></span>':'')+'</div>'+
@@ -420,12 +421,16 @@
     else if(a==='used'||a==='ready')call('/api/blogs/update',{id:id,version:x.version,changes:{status:a}}).then(function(){S.say(a==='used'?'Marked as used.':'Marked ready to use.');loadLib()}).catch(function(err){S.say(err.message);loadLib(true)});
     else if(a==='dup')call('/api/blogs/duplicate',{id:id}).then(function(r){S.say('Duplicated. The copy is In progress.');loadLib()}).catch(function(err){S.say(err.message)});
     else if(a==='retry'){b.disabled=true;call('/api/blogs/retry',{id:id}).then(function(){S.say('Writing it again…');loadLib()}).catch(function(err){b.disabled=false;S.say(err.message)})}
-    else if(a==='del'&&confirm('Delete “'+(x.title||x.brief.topic)+'”?\n\nThe draft and its version history are removed for everyone. This can’t be undone.'))
+    else if(a==='del'&&confirm('Delete “'+(x.title||x.brief.topic||'Untitled blog')+'”?\n\nThe draft and its version history are removed for everyone. This can’t be undone.'))
       call('/api/blogs/delete',{id:id}).then(function(){S.say('Blog deleted.');loadLib()}).catch(function(err){S.say(err.message)})});
   var qt;$('q').addEventListener('input',function(){clearTimeout(qt);qt=setTimeout(loadLib,250)});
   ['batchF','fromF','toF','sortF'].forEach(function(k){$(k).addEventListener('change',function(){loadLib()})});
   [].forEach.call(document.querySelectorAll('#stF button'),function(b){b.onclick=function(){lib.status=b.dataset.s;[].forEach.call(document.querySelectorAll('#stF button'),function(x){x.setAttribute('aria-pressed',x===b)});loadLib()}});
   $('newB').onclick=function(){location.hash='new'};
+  /* a blank draft for your own writing (no AI): saved first, then opened in the editor */
+  function writeNew(){var b=$('writeB');b.disabled=true;call('/api/blogs/create',{item:{}}).then(function(r){location.hash='blog='+r.item.id;setTimeout(function(){$('eTitle').focus()},400)})
+    .catch(function(e){if(!trouble(e))S.say(e.message)}).then(function(){b.disabled=false})}
+  $('writeB').onclick=writeNew;
 
   /* ---------- generator */
   var gen={batchId:'',sent:{}};
@@ -489,12 +494,12 @@
     return saving}
   function warn(h){$('eWarn').hidden=!h;$('eWarn').innerHTML=h||''}
   function info(b){return 'Batch: <b>'+esc(b.batch)+'</b><br>Created '+when(b.createdAt)+' by '+esc(b.createdBy)+'<br>Last edited '+when(b.updatedAt)+' by '+esc(b.updatedBy)+
-    (b.brief?'<br>Brief: '+esc([b.brief.location,b.brief.language,b.brief.tone,'~'+b.brief.words+' words'].filter(Boolean).join(' · ')):'')}
+    (b.brief&&b.brief.topic?'<br>Brief: '+esc([b.brief.location,b.brief.language,b.brief.tone,'~'+b.brief.words+' words'].filter(Boolean).join(' · ')):'')}
   function openEd(id){
     show('ed');warn('');blocked=false;dirty=false;preview=false;setPreview();setSaved('Loading…');$('art').innerHTML='';ed=null;
     return call('/api/blogs/item?id='+encodeURIComponent(id)).then(function(r){var b=r.item;
       if(b.gen!=='done'){location.hash='';return S.say(b.gen==='failed'?'That blog failed to generate. Retry it from the Blog Bank.':'That blog is still being written.')}
-      ed=b;fill(b);setSaved('Saved','ok');
+      ed=b;fill(b);setSaved('Saved','ok');$('regen').hidden=!r.ai;
       var bk=load(BK+b.id);
       if(bk&&bk.data&&JSON.stringify(bk.data)!==JSON.stringify(fields()))
         warn('<b>Unsaved changes from '+when(bk.at)+' were found in this browser.</b> '+(bk.version!==b.version?'The blog was saved elsewhere since then, so check before restoring. ':'')+
@@ -559,9 +564,10 @@
   /* basic SEO checks: guidance, not a ranking promise */
   function has(text,kw){text=(text||'').toLowerCase();kw=(kw||'').toLowerCase().trim();if(!kw)return false;if(text.indexOf(kw)>-1)return true;
     var w=kw.split(/\s+/).filter(function(x){return x.length>2});return w.length>0&&w.every(function(x){return text.indexOf(x)>-1})}
-  function checks(b,txt,wc){var kw=b.primaryKeyword,d=dom(b.html),out=[];function c(ok,t,d){out.push([ok,t,d])}
-    c(has(b.title,kw),'Primary keyword in the title',has(b.title,kw)?'“'+kw+'” is in the title.':'Work “'+kw+'” into the title, ideally near the start.');
-    var intro=txt.split(/\s+/).slice(0,100).join(' ');c(has(intro,kw),'Keyword in the introduction',has(intro,kw)?'Used in the first 100 words.':'Mention it naturally in the first paragraph.');
+  function checks(b,txt,wc){var kw=b.primaryKeyword||'',d=dom(b.html),out=[];function c(ok,t,d){out.push([ok,t,d])}
+    var noKw='Add a primary keyword under SEO details to check this.';
+    c(has(b.title,kw),'Primary keyword in the title',!kw.trim()?noKw:has(b.title,kw)?'“'+kw+'” is in the title.':'Work “'+kw+'” into the title, ideally near the start.');
+    var intro=txt.split(/\s+/).slice(0,100).join(' ');c(has(intro,kw),'Keyword in the introduction',!kw.trim()?noKw:has(intro,kw)?'Used in the first 100 words.':'Mention it naturally in the first paragraph.');
     var hs=[].map.call(d.querySelectorAll('h2,h3,h4'),function(h){return +h.nodeName[1]}),h2=hs.filter(function(x){return x===2}).length,skip=hs.some(function(x,i){return x-(i?hs[i-1]:2)>1})||hs[0]>2,kwH=[].some.call(d.querySelectorAll('h2'),function(h){return has(h.textContent,kw)});
     c(h2>=3&&!skip,'Heading structure',h2<3?'Only '+h2+' H2 section'+(h2===1?'':'s')+'. Break the article into 3 or more clear sections.':skip?'A heading level is skipped (e.g. H2 straight to H4). Keep them in order.':h2+' H2 sections'+(kwH?', one with the keyword.':'. Consider the keyword in one H2.'));
     var mt=b.metaTitle.length,md=b.metaDescription.length;

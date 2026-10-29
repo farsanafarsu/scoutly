@@ -291,7 +291,7 @@ def list_blogs(q):
 
 
 def get_blog(bid):
-    return {"item": _out(_get(bid))}
+    return {"item": _out(_get(bid)), "ai": blogai.configured()}
 
 
 def versions(bid):
@@ -383,6 +383,24 @@ def update(bid, version, changes, by, checkpoint=False):
     if content_changed and due:
         new["snapAt"] = time.time()
     return {"item": _out(_save(d, new, by, "Before an edit", snapshot=content_changed and due))}
+
+
+MANUAL_BATCH = ("manual", "Written or pasted by hand")
+
+
+def create(item, by):
+    """A draft you write or paste yourself (no AI): saved straight away, ready to edit and copy."""
+    blogs, _ = _collections()
+    item = item or {}
+    t = now_iso()
+    title = _text(item.get("title"), 200)
+    d = {"_id": os.urandom(8).hex(), "ws": WS, "batchId": MANUAL_BATCH[0], "batch": MANUAL_BATCH[1], "brief": {}, "status": "in_progress",
+         "gen": "done", "genError": "", "genAt": t, "title": title, "html": str(item.get("html") or ""),
+         "primaryKeyword": _text(item.get("primaryKeyword"), 120), "secondaryKeywords": [], "metaTitle": "", "metaDescription": "",
+         "slug": slugify(title), "faqs": [], "internalLinks": [], "imageAlts": [], "publishedUrl": "", "usedAt": "",
+         "createdAt": t, "updatedAt": t, "createdBy": _actor(by), "updatedBy": _actor(by), "version": 1, "snapAt": 0}
+    _db(lambda: blogs.insert_one(_finish(d)))
+    return {"item": _out(d)}
 
 
 def duplicate(bid, by):
