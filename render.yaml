@@ -1,5 +1,5 @@
 # Render Blueprint for the Scoutly API (seo/engine.py). The live site's Cloudflare Worker forwards /api/* here.
-# Standard library only, plus pymongo for the team's shared backlinks.
+# Standard library only, plus pymongo for the team database and anthropic for the Blog Bank's AI writing.
 services:
   - type: web
     name: scoutly-api
@@ -24,4 +24,12 @@ services:
         generateValue: true
       # optional: a free Google key gives PageSpeed its own quota
       - key: PAGESPEED_API_KEY
+        sync: false
+      # Blog Bank AI writing (an Anthropic API key); without it, saved blogs still open, edit and copy
+      - key: ANTHROPIC_API_KEY
+        sync: false
+      # optional: the model and effort for blog writing (defaults claude-opus-5-5, medium)
+      - key: SCOUTLY_AI_MODEL
+        sync: false
+      - key: SCOUTLY_AI_EFFORT
         sync: false

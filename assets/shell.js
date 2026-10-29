@@ -51,6 +51,7 @@
     copy:'<path d="M9 9h11v11H9zM5 15H4V4h11v1"/>',
     code:'<path d="M8 7l-5 5 5 5M16 7l5 5-5 5M14 4l-4 16"/>',
     tree:'<path d="M5 4h5v5H5zM14 15h5v5h-5zM14 4h5v5h-5zM7.5 9v8.5H14M10 6.5h4"/>',
+    bank:'<path d="M4 4h4v16H4zM10 4h4v16h-4zM15.5 5.5l3.9-1 3.6 14.5-3.9 1z"/>',
     plug:'<path d="M9 3v5M15 3v5M6 8h12v3a6 6 0 0 1-12 0zM12 17v4"/>'
   };
   var sprite='<svg width="0" height="0" style="position:absolute" aria-hidden="true">'+Object.keys(I).map(function(k){return '<symbol id="i-'+k+'" viewBox="0 0 24 24">'+I[k]+'</symbol>'}).join('')+'</svg>';
@@ -83,6 +84,7 @@
       ['backlink-sites.html','globe','Backlink Sites'],
       ['internal-links.html','tree','Internal Link Opportunities']]],
     ['Content',[
+      ['blog-bank.html','bank','Blog Bank'],
       ['writing-assistant.html','pen','SEO Writing Assistant'],
       ['topic-research.html','bulb','Topic Research'],
       ['plagiarism-checker.html','copy','Plagiarism Checker'],

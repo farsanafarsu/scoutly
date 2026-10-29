@@ -1228,6 +1228,28 @@ TASK_POST = {
     "/api/tasks/verify": lambda b, by: _jobs().verify(b.get("id"), by),
 }
 
+# Blog Bank (blogbank.py, blogai.py): saved AI blog drafts, also keyed to who is acting.
+TASK_GET.update({
+    "/api/blogs": lambda q, by: _blogs().list_blogs(q),
+    "/api/blogs/item": lambda q, by: _blogs().get_blog(q.get("id")),
+    "/api/blogs/versions": lambda q, by: _blogs().versions(q.get("id")),
+    "/api/blogs/version": lambda q, by: _blogs().get_version(q.get("id"), q.get("v") or 0),
+})
+TASK_POST.update({
+    "/api/blogs/generate": lambda b, by: _blogs().generate(b.get("batch"), b.get("settings"), b.get("items"), by),
+    "/api/blogs/retry": lambda b, by: _blogs().retry(b.get("id"), by),
+    "/api/blogs/update": lambda b, by: _blogs().update(b.get("id"), b.get("version"), b.get("changes"), by, bool(b.get("checkpoint"))),
+    "/api/blogs/duplicate": lambda b, by: _blogs().duplicate(b.get("id"), by),
+    "/api/blogs/delete": lambda b, by: _blogs().delete(b.get("id")),
+    "/api/blogs/restore": lambda b, by: _blogs().restore(b.get("id"), b.get("v") or 0, b.get("version"), by),
+    "/api/blogs/section": lambda b, by: _blogs().rewrite_section(b.get("id"), b.get("html"), b.get("instruction"), by),
+})
+
+
+def _blogs():
+    import blogbank
+    return blogbank
+
 
 def _provider():
     import provider
@@ -1304,12 +1326,15 @@ class Handler(SimpleHTTPRequestHandler):
         if PROXY_KEY and not hmac.compare_digest(self.headers.get("X-Scoutly-Key", ""), PROXY_KEY):
             self._json(403, {"error": "This Scoutly server only answers requests from the Scoutly site."})
             return True
-        team = next((w for p, w in (("/api/links", "backlinks"), ("/api/campaigns", "campaigns"), ("/api/tasks", "tasks")) if path == p or path.startswith(p + "/")), None)
+        team = next((w for p, w in (("/api/links", "backlinks"), ("/api/campaigns", "campaigns"), ("/api/tasks", "tasks"), ("/api/blogs", "blogs")) if path == p or path.startswith(p + "/")), None)
         if team == "tasks" and not _tasks().configured():
             self._json(200, {"error": "The team database isn't set up on the server yet (MONGODB_URI). The Action Center keeps tasks only in the database.", "notConfigured": True})
             return True
+        if team == "blogs" and not _blogs().configured():
+            self._json(200, {"error": "The team database isn't set up on the server yet (MONGODB_URI). The Blog Bank keeps drafts only in the database, so they're there on every device.", "notConfigured": True})
+            return True
         if team:
-            if team != "tasks" and not os.environ.get("MONGODB_URI", "").strip():
+            if team not in ("tasks", "blogs") and not os.environ.get("MONGODB_URI", "").strip():
                 self._json(200, {"error": f"The team database isn't set up on the server yet, so {team} are saved in this browser.", "notConfigured": True})
                 return True
             if API_ONLY and not TEAM_KEY:

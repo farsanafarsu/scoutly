@@ -70,3 +70,15 @@ Without a team key, a hosted server keeps the shared list switched off, so nobod
 - **Not available:** email notifications, because there's no email service.
 - **Try it locally:** set `SCOUTLY_DEV_MEMORY_DB=1` to keep tasks in memory (lost when the server stops), or use the `scoutly-memory-db` launch config.
 - **Tests:** `python -m unittest discover tests`
+
+### Blog Bank
+
+`blog-bank.html` drafts up to 10 SEO blogs at a time with AI, saves them, and lets you edit and copy them into a website later. The server side is `seo/blogbank.py` (storage, background generation, HTML clean-up) and `seo/blogai.py` (the Anthropic API calls). The routes are under `/api/blogs/*` in `seo/engine.py`.
+
+- **Storage:** drafts are kept only in the team database (`MONGODB_URI`), in the `blogs` and `blog_versions` collections, so they're the same on every device and survive logging out. Earlier versions are kept on every Save, every 10 minutes while autosaving, and before AI rewrites or restores (the last 25 per blog).
+- **Access:** the same `SCOUTLY_TEAM_KEY` as the backlinks and Action Center. Drafts belong to the team workspace; there are no per-user accounts yet, so everyone with the key sees every draft, and the "created by" name comes from the browser.
+- **AI writing:** set `ANTHROPIC_API_KEY` on Render. It stays on the server. Optional: `SCOUTLY_AI_MODEL` (default `claude-opus-5-5`) and `SCOUTLY_AI_EFFORT` (default `medium`). Each blog is one streamed request that returns JSON matching a schema; refusals are retried server-side on Anthropic's recommended fallback model.
+- **Limits:** 10 blogs per batch, 3 written at a time, at most 40 blogs and 60 section rewrites an hour per server (a guard against runaway costs). Each blog is saved as a draft before it's written, so a failure only affects that blog, and it can be retried on its own. If the server restarts mid-batch, unfinished blogs show as failed after 25 minutes and can be retried.
+- **Internal links:** when a website is given, the generator reads its sitemap (the Indexability checker's code) and only suggests real URLs from it.
+- **Try it locally:** `SCOUTLY_DEV_MEMORY_DB=1` keeps drafts in memory. Without `ANTHROPIC_API_KEY` generation is off, but everything else works.
+- **Tests:** `python -m unittest tests.test_blog_bank` (no database or AI calls needed).

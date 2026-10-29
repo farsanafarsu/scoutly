@@ -1,2 +1,3 @@
-# The API server (seo/engine.py) is standard library only, apart from the team database:
+# The API server (seo/engine.py) is standard library only, apart from the team database and the Blog Bank's AI writing:
 pymongo>=4.10,<5
+anthropic>=1.17,<2

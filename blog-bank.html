@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blog Bank — Scoutly</title>
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#eef1f7">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="assets/app.css">
+<style>
+.ph-act{display:flex;gap:10px;flex-wrap:wrap}
+.dbbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;margin-top:18px;padding:12px 16px;background:rgba(47,91,255,.05);border:1px solid rgba(47,91,255,.3);font:400 12.5px/1.6 var(--M);color:var(--sl)}
+.dbbar>svg{flex:none;width:16px;height:16px;color:var(--b)}
+.dbbar #dbMsg{flex:1 1 320px}
+.keyf{display:flex;gap:8px}.keyf input{width:240px;height:34px;padding:0 10px;border:1px solid var(--ln);border-radius:3px;background:#fff;font:400 13px/1 var(--M)}
+.note{margin-top:14px;padding:11px 16px;border:1px solid rgba(245,165,36,.5);background:rgba(245,165,36,.07);font:400 12.5px/1.6 var(--M);color:var(--sl)}
+.note b{color:var(--ink)}
+/* library */
+.lt{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:20px}
+.lt .search{position:relative;flex:1 1 260px}
+.lt .search svg{position:absolute;left:12px;top:50%;width:16px;height:16px;transform:translateY(-50%);color:var(--mu)}
+.lt input,.lt select{height:38px;padding:0 12px;border:1px solid var(--ln);border-radius:3px;background:#fff;font:400 13px/1 var(--M);color:var(--ink)}
+.lt .search input{width:100%;padding-left:36px}
+.lt label.d{display:flex;align-items:center;gap:6px;font:600 10px/1 var(--M);letter-spacing:.1em;text-transform:uppercase;color:var(--mu)}
+.lt label.d input{width:140px;padding:0 8px}
+.count{font:500 11px/1 var(--M);letter-spacing:.1em;text-transform:uppercase;color:var(--mu);margin-left:auto}
+.batch{margin-top:22px}
+.batch>h3{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px;margin-bottom:10px;font:500 15px/1.2 var(--D);letter-spacing:.04em;text-transform:uppercase}
+.batch>h3 span{font:400 11.5px/1 var(--M);letter-spacing:0;text-transform:none;color:var(--mu)}
+.rows{background:var(--card);border:1px solid var(--ln);box-shadow:0 40px 80px -60px rgba(10,26,74,.5)}
+.row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 18px;align-items:center;padding:14px 18px;border-bottom:1px solid var(--ln)}
+.row:last-child{border-bottom:0}
+.row:hover{background:#fff}
+.row h4{font:600 15px/1.35 Geist,sans-serif;cursor:pointer;overflow-wrap:anywhere}
+.row h4:hover{color:var(--b)}
+.row .meta{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:5px;font:400 11.5px/1.5 var(--M);color:var(--mu)}
+.row .meta b{color:var(--sl);font-weight:500}
+.row .err{margin-top:6px;font:400 12px/1.5 var(--M);color:var(--cr)}
+.row .acts{display:flex;flex-wrap:wrap;gap:6px;justify-content:flex-end}
+.btn.xs{height:32px;padding:0 10px;font-size:10px;gap:6px}
+.btn.xs svg{width:13px;height:13px}
+.btn.ic{width:32px;padding:0}
+.btn.del:hover{background:var(--cr);border-color:var(--cr)}
+.gen-st{display:inline-flex;align-items:center;gap:8px;font:500 11.5px/1 var(--M);color:var(--b)}
+.gen-st .spin{width:14px;height:14px}
+.empty{margin-top:22px;padding:40px 24px;text-align:center;background:var(--card);border:1px solid var(--ln);font:400 13px/1.7 var(--M);color:var(--sl)}
+.empty h3{font:500 20px/1.2 var(--D);text-transform:uppercase;color:var(--ink);margin-bottom:8px}
+.empty .btn{margin-top:16px}
+/* generator */
+.gform{margin-top:20px}
+.gform .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;padding:18px 20px}
+.f{display:grid;gap:6px;min-width:0}
+.f.w{grid-column:1/-1}
+.f label{font:600 10px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:var(--sl)}
+.f label i{color:var(--cr);font-style:normal}
+.f input,.f select,.f textarea{width:100%;height:42px;padding:0 12px;border:1px solid var(--ln);border-radius:3px;background:#fff;color:var(--ink);font:400 13.5px/1.4 var(--M)}
+.f textarea{height:auto;min-height:74px;padding:10px 12px;resize:vertical}
+.f input:focus,.f select:focus,.f textarea:focus{outline:0;border-color:var(--b);box-shadow:0 0 0 3px rgba(47,91,255,.12)}
+.f small{font:400 11px/1.4 var(--M);color:var(--mu)}
+.topics{width:100%;border-collapse:collapse}
+.topics th{padding:10px 12px;text-align:left;font:500 10px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu);border-bottom:1px solid var(--ln)}
+.topics td{padding:8px 12px;border-bottom:1px solid var(--ln);vertical-align:middle}
+.topics td.n{width:28px;font:500 12px/1 var(--M);color:var(--mu)}
+.topics input{width:100%;height:38px;padding:0 10px;border:1px solid var(--ln);border-radius:3px;background:#fff;font:400 13px/1.3 var(--M)}
+.topics td.a{width:1%;white-space:nowrap}
+.topics tr.sent input{background:transparent;color:var(--mu)}
+.gfoot{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:14px 20px;border-top:1px solid var(--ln)}
+.gfoot .meta-note{flex:1 1 260px}
+/* editor */
+.ebar{position:sticky;top:68px;z-index:20;display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;margin:0 -28px;padding:10px 28px;background:rgba(238,241,247,.92);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--ln)}
+.ebar select{height:32px;padding:0 8px;border:1px solid var(--ln);border-radius:3px;background:#fff;font:500 11.5px/1 var(--M)}
+.saved{font:400 11.5px/1.3 var(--M);color:var(--mu)}
+.saved.bad{color:var(--cr)}.saved.ok{color:var(--ok)}
+.ebar .grow{flex:1}
+.elayout{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:20px;margin-top:18px;align-items:start}
+.ttl{width:100%;padding:6px 0;border:0;border-bottom:2px solid var(--ln);background:transparent;font:500 clamp(22px,3vw,32px)/1.2 var(--D);color:var(--ink)}
+.ttl:focus{outline:0;border-color:var(--b)}
+.tb{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-top:14px;padding:6px;background:var(--card);border:1px solid var(--ln);border-bottom:0}
+.tb button,.tb select{height:30px;min-width:30px;padding:0 8px;border:1px solid transparent;border-radius:3px;background:none;font:600 12px/1 var(--M);color:var(--sl);cursor:pointer}
+.tb select{border-color:var(--ln);background:#fff}
+.tb button:hover{border-color:var(--ln);background:#fff;color:var(--ink)}
+.tb .sep{width:1px;height:20px;background:var(--ln);margin:0 4px}
+.art{min-height:480px;padding:22px 26px;background:#fff;border:1px solid var(--ln);font:400 16px/1.75 Geist,system-ui,sans-serif;color:#1d2540;outline:0}
+.art:focus{border-color:var(--b)}
+.art h1,.pv h1{font:700 30px/1.25 Geist,sans-serif;margin:0 0 14px}
+.art h2,.pv h2{font:700 23px/1.3 Geist,sans-serif;margin:26px 0 10px}
+.art h3,.pv h3{font:650 19px/1.35 Geist,sans-serif;margin:20px 0 8px}
+.art h4,.pv h4{font:600 16.5px/1.4 Geist,sans-serif;margin:16px 0 6px}
+.art p,.pv p{margin:0 0 14px}
+.art ul,.art ol,.pv ul,.pv ol{margin:0 0 14px;padding-left:24px}
+.art ul,.pv ul{list-style:disc}.art ol,.pv ol{list-style:decimal}
+.art li,.pv li{margin:3px 0}
+.art a,.pv a{color:var(--b);text-decoration:underline}
+.art table,.pv table{border-collapse:collapse;margin:0 0 16px;width:100%}
+.art th,.art td,.pv th,.pv td{border:1px solid #cdd3e0;padding:7px 10px;text-align:left;vertical-align:top}
+.art th,.pv th{background:#f3f5fa}
+.art blockquote,.pv blockquote{margin:0 0 14px;padding:4px 16px;border-left:3px solid var(--b);color:var(--sl)}
+.pv{padding:28px 32px;background:#fff;border:1px solid var(--ln);font:400 16px/1.75 Geist,system-ui,sans-serif;color:#1d2540;margin-top:14px}
+.under{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;padding:10px 0;font:400 12px/1.5 var(--M);color:var(--mu)}
+.regen{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:6px;padding:12px 14px;background:var(--card);border:1px solid var(--ln)}
+.regen b{font:600 10px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--sl)}
+.regen select,.regen input{height:34px;padding:0 10px;border:1px solid var(--ln);border-radius:3px;background:#fff;font:400 12.5px/1 var(--M);min-width:0}
+.regen select{flex:1 1 200px}.regen input{flex:2 1 220px}
+.eside{display:grid;gap:16px;position:sticky;top:130px;max-height:calc(100vh - 146px);overflow:auto;padding-bottom:4px}
+.eside .panel-h{padding:12px 16px}
+.eside .panel-h h2{font-size:13.5px}
+.cps{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:12px 16px}
+.cps .btn{height:34px;min-width:0;font-size:9.5px;gap:6px;padding:0 8px;justify-content:flex-start;overflow:hidden;text-overflow:ellipsis}
+.cps .btn svg{width:13px;height:13px;flex:none}
+.cps .btn.p{grid-column:1/-1;justify-content:center;height:40px;font-size:10.5px}
+.eside .f{padding:0 16px 12px}
+.eside .f:first-of-type{padding-top:12px}
+.eside .f input,.eside .f textarea{height:36px;font-size:12.5px}
+.eside .f textarea{height:auto;min-height:64px}
+.cnt{float:right;font:400 10.5px/1 var(--M);letter-spacing:0;text-transform:none;color:var(--mu)}
+.cnt.bad{color:var(--cr)}
+.chk{display:grid;grid-template-columns:16px minmax(0,1fr);gap:8px;padding:8px 16px;border-top:1px solid var(--ln);font:400 12px/1.5 var(--M);color:var(--sl)}
+.chk svg{width:14px;height:14px;margin-top:3px}
+.chk.ok svg{color:var(--ok)}.chk.wr svg{color:var(--wa)}
+.chk b{color:var(--ink);font-weight:600}
+.faq{display:grid;gap:6px;padding:10px 16px;border-top:1px solid var(--ln)}
+.faq input,.faq textarea{width:100%;padding:7px 9px;border:1px solid var(--ln);border-radius:3px;background:#fff;font:400 12.5px/1.45 var(--M);color:var(--ink)}
+.faq input{font-weight:600}
+.faq textarea{min-height:60px;resize:vertical}
+.faq .x{justify-self:end;border:0;background:none;font:500 11px/1 var(--M);color:var(--mu);cursor:pointer}.faq .x:hover{color:var(--cr)}
+.sug{padding:9px 16px;border-top:1px solid var(--ln);font:400 12px/1.5 var(--M);color:var(--sl);overflow-wrap:anywhere}
+.sug b{display:block;color:var(--ink);font-weight:600}
+.sug a{color:var(--b)}
+.pad2{padding:10px 16px}
+.info{padding:10px 16px;font:400 11.5px/1.7 var(--M);color:var(--mu)}
+/* dialogs */
+.dlg{width:min(680px,calc(100% - 32px));max-height:calc(100% - 32px);padding:0;border:0;background:transparent;color:var(--ink)}
+.dlg::backdrop{background:rgba(5,10,31,.6);backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}
+.dlg-c{background:var(--card);border:1px solid var(--ln);box-shadow:0 40px 80px -30px rgba(5,10,31,.6)}
+.dlg-h{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--ln)}
+.dlg-h h2{flex:1;font:500 17px/1.2 var(--D);text-transform:uppercase}
+.dlg-h .x{width:34px;height:34px;display:grid;place-items:center;border:1px solid var(--ln);background:none;cursor:pointer}
+.dlg-b{padding:16px 20px;max-height:62vh;overflow:auto;font:400 12.5px/1.6 var(--M);color:var(--sl)}
+.dlg-b textarea{width:100%;min-height:300px;padding:10px;border:1px solid var(--ln);background:#fff;font:400 12px/1.55 var(--M);color:var(--ink)}
+.dlg-f{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:10px;padding:12px 20px 18px}
+.ver{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--ln)}
+.ver b{color:var(--ink)}
+.vprev{max-height:320px;overflow:auto;margin-top:10px;padding:16px;border:1px solid var(--ln)}
+@media(max-width:1100px){.elayout{grid-template-columns:minmax(0,1fr)}.eside{position:static;max-height:none}}
+@media(max-width:700px){.ebar{margin:0 -16px;padding:10px 16px}.row{grid-template-columns:minmax(0,1fr)}.row .acts{justify-content:flex-start}.art{padding:16px}.topics td{padding:6px}.topics th:nth-child(4),.topics td:nth-child(4){display:none}}
+</style>
+</head>
+<body>
+<script src="assets/shell.js"></script>
+<div class="main">
+  <script>Shell.top()</script>
+  <main class="page">
+    <div class="ph" id="head">
+      <div>
+        <p class="lbl">Content</p>
+        <h1>Blog Bank</h1>
+        <p class="desc">Write a weekend’s worth of SEO blogs in one go, keep them as drafts in your team’s database, and copy each one into your website when you need it.</p>
+      </div>
+      <div class="ph-act"><button class="btn p" type="button" id="newB"><svg class="i"><use href="#i-plus"/></svg>Generate blogs</button></div>
+    </div>
+
+    <form class="dbbar" id="dbBar" hidden novalidate>
+      <svg class="i" aria-hidden="true"><use href="#i-lock"/></svg><span id="dbMsg"></span>
+      <span class="keyf" id="keyF" hidden><label class="sr-only" for="teamKey">Team key</label><input id="teamKey" type="password" autocomplete="off" spellcheck="false" placeholder="Paste your team key"><button class="btn sm p" type="submit">Connect</button></span>
+    </form>
+    <p class="note" id="aiNote" hidden><b>AI writing isn’t switched on yet.</b> Saved blogs still open, edit and copy. To generate new ones, whoever runs the Scoutly server adds an Anthropic API key as <code>ANTHROPIC_API_KEY</code>.</p>
+
+    <!-- library -->
+    <section id="vLib" hidden>
+      <div class="lt">
+        <label class="search"><span class="sr-only">Search blogs</span><svg class="i" aria-hidden="true"><use href="#i-search"/></svg><input id="q" type="search" placeholder="Search by title or keyword…" autocomplete="off"></label>
+        <div class="seg" role="group" aria-label="Filter by status" id="stF"><button type="button" data-s="" aria-pressed="true">All</button><button type="button" data-s="ready" aria-pressed="false">Ready to use</button><button type="button" data-s="in_progress" aria-pressed="false">In progress</button><button type="button" data-s="used" aria-pressed="false">Used</button></div>
+        <select id="batchF" aria-label="Batch"><option value="">All batches</option></select>
+        <label class="d">From<input id="fromF" type="date"></label><label class="d">To<input id="toF" type="date"></label>
+        <select id="sortF" aria-label="Sort"><option value="newest">Newest first</option><option value="oldest">Oldest first</option><option value="title">Title A–Z</option></select>
+        <span class="count" id="count"></span>
+      </div>
+      <div id="list"><div class="loading"><span class="spin"></span>Loading your blogs…</div></div>
+    </section>
+
+    <!-- bulk generator -->
+    <section id="vGen" hidden>
+      <form class="panel gform" id="gForm" novalidate>
+        <div class="panel-h"><span class="ic"><svg class="i"><use href="#i-wand"/></svg></span><div><h2>Generate blogs in bulk</h2><p>Up to 10 at a time. Each one is saved as a draft the moment it’s written.</p></div></div>
+        <div class="grid">
+          <div class="f w"><label for="gBatch">Batch name</label><input id="gBatch" maxlength="80"><small>Groups this session’s blogs in the Blog Bank.</small></div>
+          <div class="f"><label for="gLoc">Target location</label><input id="gLoc" placeholder="e.g. Kochi, India" maxlength="120"></div>
+          <div class="f"><label for="gLang">Language</label><input id="gLang" list="langs" value="English" maxlength="60"><datalist id="langs"><option>English</option><option>English (UK)</option><option>English (US)</option><option>Hindi</option><option>Malayalam</option><option>Tamil</option><option>Arabic</option><option>Spanish</option><option>French</option><option>German</option></datalist></div>
+          <div class="f"><label for="gAud">Target audience</label><input id="gAud" placeholder="e.g. clinic owners and practice managers" maxlength="200"></div>
+          <div class="f"><label for="gWords">Word count</label><select id="gWords"><option value="800">About 800</option><option value="1200">About 1,200</option><option value="1500" selected>About 1,500</option><option value="2000">About 2,000</option><option value="2500">About 2,500</option></select></div>
+          <div class="f"><label for="gTone">Tone</label><select id="gTone"><option>Professional</option><option>Friendly</option><option>Conversational</option><option>Authoritative</option><option>Educational</option><option>Persuasive</option><option>Witty</option></select></div>
+          <div class="f"><label for="gSite">Website (for internal links)</label><input id="gSite" placeholder="yourwebsite.com" inputmode="url" autocapitalize="off" spellcheck="false"><small>Scoutly reads its sitemap so link suggestions point to real pages.</small></div>
+          <div class="f w"><label for="gBrand">Brand or business details</label><textarea id="gBrand" maxlength="1500" placeholder="Who you are, what you offer, where you work, what makes you different, and the call to action you want (e.g. “Book a free consultation”)."></textarea></div>
+        </div>
+        <table class="topics"><thead><tr><th>#</th><th>Blog topic <i style="color:var(--cr);font-style:normal">*</i></th><th>Primary keyword <i style="color:var(--cr);font-style:normal">*</i></th><th>Notes (optional)</th><th></th></tr></thead><tbody id="tRows"></tbody></table>
+        <div class="gfoot"><button class="btn sm" type="button" id="addRow"><svg class="i"><use href="#i-plus"/></svg>Add topic</button><p class="meta-note" id="gNote"></p><button class="btn" type="button" id="gCancel">Back to Blog Bank</button><button class="btn p" type="submit" id="gAll"><svg class="i"><use href="#i-wand"/></svg>Generate all</button></div>
+        <p class="qerr" id="gErr" role="alert" style="padding:0 20px 14px"></p>
+      </form>
+    </section>
+
+    <!-- editor -->
+    <section id="vEd" hidden>
+      <div class="ebar">
+        <button class="btn xs" type="button" id="back"><svg class="i" style="transform:rotate(90deg)"><use href="#i-down"/></svg>Blog Bank</button>
+        <select id="eStatus" aria-label="Status"><option value="ready">Ready to use</option><option value="in_progress">In progress</option><option value="used">Used</option></select>
+        <span class="saved" id="saved" aria-live="polite"></span>
+        <span class="grow"></span>
+        <button class="btn xs" type="button" id="prevB"><svg class="i"><use href="#i-page"/></svg><span>Preview</span></button>
+        <button class="btn xs" type="button" id="histB"><svg class="i"><use href="#i-clock"/></svg>History</button>
+        <button class="btn xs p" type="button" id="saveB"><svg class="i"><use href="#i-check"/></svg>Save</button>
+      </div>
+      <div class="note" id="eWarn" hidden></div>
+      <div class="elayout">
+        <div>
+          <label class="sr-only" for="eTitle">Title</label><input class="ttl" id="eTitle" maxlength="200" placeholder="Blog title">
+          <div id="editWrap">
+            <div class="tb" role="toolbar" aria-label="Formatting">
+              <select id="fmt" aria-label="Text style"><option value="p">Paragraph</option><option value="h2">Heading 2</option><option value="h3">Heading 3</option><option value="h4">Heading 4</option></select>
+              <span class="sep"></span>
+              <button type="button" data-cmd="bold" title="Bold (Ctrl+B)"><b>B</b></button><button type="button" data-cmd="italic" title="Italic (Ctrl+I)"><i>I</i></button>
+              <span class="sep"></span>
+              <button type="button" data-cmd="insertUnorderedList" title="Bulleted list">• List</button><button type="button" data-cmd="insertOrderedList" title="Numbered list">1. List</button>
+              <button type="button" data-cmd="formatBlock:blockquote" title="Quote">“ ”</button>
+              <span class="sep"></span>
+              <button type="button" id="linkB" title="Add a link">Link</button><button type="button" data-cmd="unlink" title="Remove link">Unlink</button><button type="button" id="tableB" title="Insert a table">Table</button>
+              <span class="sep"></span>
+              <button type="button" data-cmd="undo" title="Undo">↶</button><button type="button" data-cmd="redo" title="Redo">↷</button><button type="button" data-cmd="removeFormat" title="Clear bold and italic">Clear</button>
+            </div>
+            <div class="art" id="art" contenteditable="true" spellcheck="true" aria-label="Article"></div>
+            <div class="under"><span id="wc"></span><span id="target"></span></div>
+            <div class="regen"><b>Rewrite a section with AI</b><select id="secSel" aria-label="Section"></select><input id="secIns" maxlength="300" placeholder="What to change (optional): e.g. shorter, add an example, simpler words"><button class="btn xs" type="button" id="secGo"><svg class="i"><use href="#i-wand"/></svg>Rewrite</button></div>
+          </div>
+          <div class="pv" id="pv" hidden></div>
+        </div>
+        <aside class="eside">
+          <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-copy"/></svg></span><div><h2>Copy</h2><p>Paste straight into your website</p></div></div>
+            <div class="cps">
+              <button class="btn p" type="button" data-copy="all"><svg class="i"><use href="#i-copy"/></svg>Copy entire blog</button>
+              <button class="btn" type="button" data-copy="title"><svg class="i"><use href="#i-copy"/></svg>Title</button>
+              <button class="btn" type="button" data-copy="body"><svg class="i"><use href="#i-copy"/></svg>Article body</button>
+              <button class="btn" type="button" data-copy="html"><svg class="i"><use href="#i-code"/></svg>HTML</button>
+              <button class="btn" type="button" data-copy="md"><svg class="i"><use href="#i-page"/></svg>Markdown</button>
+              <button class="btn" type="button" data-copy="metaTitle"><svg class="i"><use href="#i-copy"/></svg>Meta title</button>
+              <button class="btn" type="button" data-copy="metaDescription"><svg class="i"><use href="#i-copy"/></svg>Meta description</button>
+              <button class="btn" type="button" data-copy="slug"><svg class="i"><use href="#i-link"/></svg>URL slug</button>
+              <button class="btn" type="button" data-copy="faqs"><svg class="i"><use href="#i-list"/></svg>FAQs</button>
+            </div></section>
+          <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-check"/></svg></span><div><h2>SEO checklist</h2><p id="chkS"></p></div></div><div id="chks"></div><p class="info">Suggestions to make the draft stronger. No checklist can guarantee rankings.</p></section>
+          <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-target"/></svg></span><div><h2>SEO details</h2></div></div>
+            <div class="f"><label for="eMT">Meta title <span class="cnt" id="cMT"></span></label><input id="eMT" maxlength="120"></div>
+            <div class="f"><label for="eMD">Meta description <span class="cnt" id="cMD"></span></label><textarea id="eMD" maxlength="320"></textarea></div>
+            <div class="f"><label for="eSlug">URL slug</label><input id="eSlug" maxlength="90" autocapitalize="off" spellcheck="false"></div>
+            <div class="f"><label for="eKw">Primary keyword</label><input id="eKw" maxlength="120"></div>
+            <div class="f"><label for="eKw2">Secondary keywords <small>(comma separated)</small></label><textarea id="eKw2"></textarea></div>
+            <div class="f"><label for="ePub">Published URL (optional)</label><input id="ePub" maxlength="500" inputmode="url" placeholder="https://yourwebsite.com/blog/…" autocapitalize="off" spellcheck="false"></div>
+          </section>
+          <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-list"/></svg></span><div><h2>FAQs</h2><p>Added under the article when you copy it</p></div><button class="btn xs" type="button" id="faqAdd" style="margin-left:auto"><svg class="i"><use href="#i-plus"/></svg>Add</button></div><div id="faqs"></div></section>
+          <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-link"/></svg></span><div><h2>Internal links</h2><p>Suggested pages to link to</p></div></div><div id="links"></div></section>
+          <section class="panel"><div class="panel-h"><span class="ic"><svg class="i"><use href="#i-bulb"/></svg></span><div><h2>Images &amp; alt text</h2><p>Suggestions for where to add images</p></div></div><div id="alts"></div></section>
+          <section class="panel"><div class="info" id="eInfo"></div></section>
+        </aside>
+      </div>
+    </section>
+  </main>
+</div>
+
+<dialog class="dlg" id="cpDlg" aria-labelledby="cpH"><div class="dlg-c"><div class="dlg-h"><h2 id="cpH">Copy by hand</h2><button class="x" type="button" data-close aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></div>
+  <div class="dlg-b"><p id="cpWhy" style="margin-bottom:10px">Your browser didn’t allow automatic copying. The text below is selected: press Ctrl+C (⌘C on a Mac) to copy it.</p><textarea id="cpTxt" readonly></textarea></div>
+  <div class="dlg-f"><button class="btn" type="button" data-close>Done</button></div></div></dialog>
+<dialog class="dlg" id="hDlg" aria-labelledby="hH"><div class="dlg-c"><div class="dlg-h"><h2 id="hH">Version history</h2><button class="x" type="button" data-close aria-label="Close"><svg class="i"><use href="#i-x"/></svg></button></div>
+  <div class="dlg-b" id="hBody"></div><div class="dlg-f"><button class="btn" type="button" data-close>Close</button></div></div></dialog>
+
+<script src="assets/app.js"></script>
+<script>
+(function(){
+  /* Blog Bank: drafts live in the team database (/api/blogs, seo/blogbank.py); AI writing runs on the server (seo/blogai.py).
+     The URL hash picks the view: #new is the generator, #blog=<id> the editor, anything else the library. */
+  var $=function(i){return document.getElementById(i)},S=window.Scoutly,esc=S.esc,TK='scoutly.teamKey',PREF='scoutly.blogSettings',BK='scoutly.blogDraft.';
+  var STS={ready:['Ready to use','ok'],in_progress:['In progress','wr'],used:['Used','']};
+  var lib={items:[],batches:[],status:'',ai:true,loaded:false},poll=null,ed=null;
+
+  /* ---------- server calls (same team key as the Backlink Manager and Action Center) */
+  function key(){try{return localStorage.getItem(TK)||''}catch(_){return ''}}
+  function call(path,body){var o={headers:{'X-Scoutly-Team':key(),'X-Scoutly-User':S.user.name}};
+    if(body!==undefined){o.method='POST';o.headers['Content-Type']='application/json';o.body=JSON.stringify(body)}
+    return fetch(path,o).then(function(r){return r.json().catch(function(){throw new Error('The Scoutly server sent an unexpected answer. Try again in a moment.')})},function(){throw new Error('The Scoutly server isn’t reachable. Your work in this tab is kept; try again in a moment.')})
+      .then(function(j){if(j.error){var e=new Error(typeof j.error==='string'?j.error:j.error.message);e.needKey=!!j.needKey;e.notConfigured=!!j.notConfigured;e.conflict=!!j.conflict;throw e}return j})}
+  function bar(msg,ask){$('dbBar').hidden=!msg;$('dbMsg').textContent=msg||'';$('keyF').hidden=!ask}
+  function trouble(e){if(e.needKey){bar(key()?'That team key didn’t work. Paste the current one.':'The Blog Bank is saved in your team’s database. Paste the team key once to open it; ask whoever set Scoutly up for it.',true);return true}
+    if(e.notConfigured&&!/AI writing/.test(e.message)){bar(e.message,false);return true}return false}
+  $('dbBar').addEventListener('submit',function(e){e.preventDefault();var k=$('teamKey').value.trim();if(!k)return $('teamKey').focus();try{localStorage.setItem(TK,k)}catch(_){}$('teamKey').value='';bar('');route()});
+
+  /* ---------- helpers */
+  function icon(id){return '<svg class="i" aria-hidden="true"><use href="#i-'+id+'"/></svg>'}
+  function day(iso){var d=new Date(iso);return isNaN(d)?'':d.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'})}
+  function when(iso){var d=new Date(iso);return isNaN(d)?'':d.toLocaleString(undefined,{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'})}
+  function plural(n,w){return n.toLocaleString()+' '+w+(n===1?'':'s')}
+  function slugify(s){return String(s||'').toLowerCase().normalize('NFKD').replace(/[̀-ͯ]/g,'').replace(/[^\w\s-]/g,'').replace(/[\s_-]+/g,'-').replace(/^-+|-+$/g,'').slice(0,90)}
+  function store(k,v){try{v==null?localStorage.removeItem(k):localStorage.setItem(k,JSON.stringify(v))}catch(_){}}
+  function load(k){try{return JSON.parse(localStorage.getItem(k)||'null')}catch(_){return null}}
+  function show(v){var was=!$('vLib').hidden?'lib':!$('vGen').hidden?'gen':!$('vEd').hidden?'ed':'';$('vLib').hidden=v!=='lib';$('vGen').hidden=v!=='gen';$('vEd').hidden=v!=='ed';$('head').hidden=v==='ed';if(was!==v)window.scrollTo(0,0)}
+
+  /* the same allow-list the server applies (seo/blogbank.py clean_html): used for pasted text and AI rewrites */
+  var KEEP={H2:1,H3:1,H4:1,P:1,UL:1,OL:1,LI:1,STRONG:1,EM:1,A:1,TABLE:1,THEAD:1,TBODY:1,TR:1,TH:1,TD:1,BLOCKQUOTE:1,BR:1},REN={B:'STRONG',I:'EM',H1:'H2',H5:'H4',H6:'H4'},
+    DROP={SCRIPT:1,STYLE:1,TEMPLATE:1,NOSCRIPT:1,IFRAME:1,OBJECT:1,SVG:1,MATH:1,HEAD:1,TITLE:1,BUTTON:1,SELECT:1,TEXTAREA:1,META:1,LINK:1};
+  function cleanNode(src,dst){[].forEach.call(src.childNodes,function(n){
+    if(n.nodeType===3){dst.appendChild(document.createTextNode(n.nodeValue));return}
+    if(n.nodeType!==1||DROP[n.nodeName])return;
+    var t=REN[n.nodeName]||n.nodeName;
+    if(!KEEP[t]){cleanNode(n,dst);if(/^(DIV|SECTION|ARTICLE)$/.test(n.nodeName)&&dst.lastChild&&dst.lastChild.nodeType===3)dst.appendChild(document.createElement('br'));return}
+    var e=document.createElement(t);
+    if(t==='A'){var h=(n.getAttribute('href')||'').trim();if(/^(https?:\/\/|mailto:|\/|#)/i.test(h)&&!/^\/\//.test(h))e.setAttribute('href',h)}
+    if((t==='TD'||t==='TH')){['colspan','rowspan'].forEach(function(a){var v=n.getAttribute(a);if(/^\d{1,2}$/.test(v||''))e.setAttribute(a,v)})}
+    dst.appendChild(e);if(t!=='BR')cleanNode(n,e)})}
+  function clean(html){var doc=new DOMParser().parseFromString('<body>'+html+'</body>','text/html'),out=document.createElement('div');cleanNode(doc.body,out);
+    [].forEach.call(out.querySelectorAll('p,h2,h3,h4,li,strong,em'),function(e){if(!e.textContent.trim()&&!e.querySelector('br,a'))e.remove()});return out.innerHTML.trim()}
+
+  /* ---------- exports: HTML, Markdown and plain text from the article markup */
+  function faqHtml(faqs){faqs=(faqs||[]).filter(function(f){return f.q&&f.a});if(!faqs.length)return '';
+    return '<h2>Frequently asked questions</h2>\n'+faqs.map(function(f){return '<h3>'+esc(f.q)+'</h3>\n<p>'+esc(f.a)+'</p>'}).join('\n')}
+  function prettyHtml(h){return h.replace(/\s*(<\/?(h[1-4]|p|ul|ol|li|table|thead|tbody|tr|blockquote|article)\b[^>]*>)\s*/g,function(m,tag){return /^<\/?(li|tr|thead|tbody)\b/.test(tag)?'\n  '+tag:'\n'+tag}).replace(/\n(<\/(p|h[1-4]|blockquote)>)/g,'$1').replace(/\n  (<\/(li|tr)>)/g,'$1').replace(/\n{2,}/g,'\n').trim()}
+  function fullHtml(b){return '<article>\n<h1>'+esc(b.title)+'</h1>\n'+b.html+'\n'+faqHtml(b.faqs)+'\n</article>'}
+  function dom(h){var d=document.createElement('div');d.innerHTML=h;return d}
+  function walk(node,md){var out='';[].forEach.call(node.childNodes,function(n){out+=part(n,md,0)});return out.replace(/\n{3,}/g,'\n\n').trim()}
+  function inline(n,md){var s='';[].forEach.call(n.childNodes,function(c){
+      if(c.nodeType===3){s+=c.nodeValue.replace(/\s+/g,' ');return}if(c.nodeType!==1)return;
+      var t=inline(c,md);
+      if(c.nodeName==='BR')s+=md?'  \n':'\n';
+      else if(c.nodeName==='STRONG'||c.nodeName==='B')s+=md&&t.trim()?'**'+t.trim()+'**':t;
+      else if(c.nodeName==='EM'||c.nodeName==='I')s+=md&&t.trim()?'*'+t.trim()+'*':t;
+      else if(c.nodeName==='A'){var h=c.getAttribute('href');s+=md&&h?'['+t+']('+h+')':t}
+      else if(c.nodeName==='UL'||c.nodeName==='OL')s+='\n'+list(c,md,1).replace(/\n$/,'');
+      else s+=t});return s}
+  function list(n,md,depth){var i=0,s='';[].forEach.call(n.children,function(li){if(li.nodeName!=='LI')return;i++;
+      s+=new Array(depth).join('   ')+(n.nodeName==='OL'?i+'. ':md?'- ':'• ')+inline(li,md).trim()+'\n'});return s}
+  function part(n,md){
+    if(n.nodeType===3)return n.nodeValue.trim()?n.nodeValue.trim()+'\n\n':'';
+    if(n.nodeType!==1)return '';
+    var name=n.nodeName,t;
+    if(/^H[1-4]$/.test(name)){t=inline(n,md).trim();return (md?new Array(+name[1]+1).join('#')+' ':'')+t+'\n\n'}
+    if(name==='P')return inline(n,md).trim()+'\n\n';
+    if(name==='UL'||name==='OL')return list(n,md,1)+'\n';
+    if(name==='BLOCKQUOTE')return inline(n,md).trim().split('\n').map(function(l){return (md?'> ':'    ')+l}).join('\n')+'\n\n';
+    if(name==='TABLE'){var rows=[].map.call(n.querySelectorAll('tr'),function(tr){return [].map.call(tr.children,function(c){return inline(c,md).trim().replace(/\|/g,'\\|')})});
+      if(!rows.length)return '';var w=Math.max.apply(null,rows.map(function(r){return r.length}));
+      if(!md)return rows.map(function(r){return r.join(' | ')}).join('\n')+'\n\n';
+      return rows.map(function(r,i){while(r.length<w)r.push('');return '| '+r.join(' | ')+' |'+(i===0?'\n|'+new Array(w+1).join(' --- |'):'')}).join('\n')+'\n\n'}
+    if(name==='ARTICLE'||name==='DIV')return walk(n,md)+'\n\n';
+    return inline(n,md)+'\n\n'}
+  function toMd(h){return walk(dom(h),true)}
+  function toText(h){return walk(dom(h),false)}
+
+  /* clipboard: rich HTML + plain text where the browser allows it, otherwise plain text, otherwise a box to copy from */
+  function clip(text,html,what){
+    var ok=function(){S.say('Copied successfully: '+what+'.')},fail=function(){manual(text,what)};
+    try{
+      if(html&&navigator.clipboard&&navigator.clipboard.write&&window.ClipboardItem)
+        return navigator.clipboard.write([new ClipboardItem({'text/html':new Blob([html],{type:'text/html'}),'text/plain':new Blob([text],{type:'text/plain'})})])
+          .then(ok,function(){return navigator.clipboard.writeText(text).then(ok,fail)});
+      if(navigator.clipboard&&navigator.clipboard.writeText)return navigator.clipboard.writeText(text).then(ok,fail);
+    }catch(_){}
+    fail();return Promise.resolve()}
+  function manual(text,what){$('cpH').textContent='Copy '+what;$('cpTxt').value=text;$('cpDlg').showModal();setTimeout(function(){$('cpTxt').focus();$('cpTxt').select()},30)}
+  [].forEach.call(document.querySelectorAll('[data-close]'),function(b){b.onclick=function(){b.closest('dialog').close()}});
+
+  function copyBlog(b,kind){
+    var faqs=faqHtml(b.faqs),full=fullHtml(b);
+    var C={all:[toText(full),full,'the entire blog'],title:[b.title,'','the title'],body:[toText(b.html),b.html,'the article body'],
+      html:[prettyHtml(full),'','the HTML version'],md:[toMd(full),'','the Markdown version'],metaTitle:[b.metaTitle,'','the meta title'],
+      metaDescription:[b.metaDescription,'','the meta description'],slug:[b.slug,'','the URL slug'],faqs:[toText(faqs),faqs,'the FAQs']}[kind];
+    if(!C[0])return S.say('There’s nothing to copy for '+C[2]+' yet.');
+    return clip(C[0],C[1],C[2])}
+
+  /* ---------- library */
+  function libQuery(){return {q:$('q').value.trim(),status:lib.status,batch:$('batchF').value,from:$('fromF').value,to:$('toF').value,sort:$('sortF').value}}
+  function qs(o){return Object.keys(o).filter(function(k){return o[k]}).map(function(k){return k+'='+encodeURIComponent(o[k])}).join('&')}
+  function loadLib(quiet){
+    return call('/api/blogs?'+qs(libQuery())).then(function(r){bar('');lib.items=r.items;lib.batches=r.batches;lib.ai=r.ai;lib.loaded=true;$('aiNote').hidden=r.ai;renderLib();schedule()})
+      .catch(function(e){if(!trouble(e)&&!quiet)$('list').innerHTML='<div class="empty"><h3>Couldn’t load the Blog Bank</h3><p>'+esc(e.message)+'</p><button class="btn" type="button" onclick="location.reload()">Try again</button></div>'})}
+  function schedule(){clearTimeout(poll);if(!$('vLib').hidden&&lib.items.some(function(x){return x.gen==='queued'||x.gen==='running'}))poll=setTimeout(function(){loadLib(true)},5000)}
+  function renderLib(){
+    var cur=$('batchF').value;
+    $('batchF').innerHTML='<option value="">All batches</option>'+lib.batches.map(function(b){return '<option value="'+esc(b.id)+'">'+esc(b.label)+' ('+b.count+')</option>'}).join('');
+    $('batchF').value=lib.batches.some(function(b){return b.id===cur})?cur:'';
+    var items=lib.items,filtered=!!($('q').value.trim()||lib.status||$('batchF').value||$('fromF').value||$('toF').value);
+    $('count').textContent=plural(items.length,'blog');
+    if(!items.length){$('list').innerHTML=filtered?'<div class="empty"><h3>No blogs match</h3><p>Try another search, or clear the filters.</p></div>':
+      '<div class="empty"><h3>Your Blog Bank is empty</h3><p>Generate up to 10 blogs at a time. Each is saved here as a draft, ready to copy into your website.</p><button class="btn p" type="button" id="firstB">'+icon('plus')+'Generate your first blogs</button></div>';
+      if($('firstB'))$('firstB').onclick=function(){location.hash='new'};return}
+    var groups=[];
+    if($('sortF').value==='title')groups=[{label:'',items:items}];
+    else items.forEach(function(x){var g=groups[groups.length-1];if(!g||g.id!==x.batchId){g={id:x.batchId,label:x.batch,items:[]};groups.push(g)}g.items.push(x)});
+    $('list').innerHTML=groups.map(function(g){
+      var c={ready:0,used:0,gen:0,failed:0};g.items.forEach(function(x){if(x.gen==='queued'||x.gen==='running')c.gen++;else if(x.gen==='failed')c.failed++;else if(x.status==='used')c.used++;else c.ready++});
+      return '<div class="batch">'+(g.label?'<h3>'+esc(g.label)+'<span>'+[plural(g.items.length,'blog'),c.gen?c.gen+' being written':'',c.failed?c.failed+' failed':'',c.used?c.used+' used':''].filter(Boolean).join(' · ')+'</span></h3>':'')+
+        '<div class="rows">'+g.items.map(row).join('')+'</div></div>'}).join('');
+  }
+  function row(x){
+    var busy=x.gen==='queued'||x.gen==='running',failed=x.gen==='failed',st=STS[x.status]||STS.ready;
+    var acts=busy?'<span class="gen-st"><span class="spin"></span>'+(x.gen==='queued'?'Waiting its turn…':'Writing… usually 1–3 minutes')+'</span>':
+      failed?'<button class="btn xs p" type="button" data-act="retry" data-id="'+x.id+'">'+icon('wand')+'Retry</button><button class="btn xs ic del" type="button" data-act="del" data-id="'+x.id+'" aria-label="Delete">'+icon('trash')+'</button>':
+      '<button class="btn xs" type="button" data-act="open" data-id="'+x.id+'">'+icon('edit')+'Open</button>'+
+      '<button class="btn xs" type="button" data-act="copy" data-id="'+x.id+'">'+icon('copy')+'Copy blog</button>'+
+      (x.status==='used'?'<button class="btn xs" type="button" data-act="ready" data-id="'+x.id+'">'+icon('down')+'Mark ready</button>':'<button class="btn xs" type="button" data-act="used" data-id="'+x.id+'">'+icon('check')+'Mark as used</button>')+
+      '<button class="btn xs ic" type="button" data-act="dup" data-id="'+x.id+'" aria-label="Duplicate" title="Duplicate">'+icon('copy')+'</button>'+
+      '<button class="btn xs ic del" type="button" data-act="del" data-id="'+x.id+'" aria-label="Delete" title="Delete">'+icon('trash')+'</button>';
+    return '<div class="row"><div><h4 data-act="'+(busy||failed?'':'open')+'" data-id="'+x.id+'">'+esc(x.title||x.brief.topic)+'</h4><div class="meta">'+
+      (busy||failed?'':'<span class="tag '+st[1]+'">'+st[0]+'</span>')+'<span>Keyword: <b>'+esc(x.primaryKeyword)+'</b></span>'+
+      (x.gen==='done'?'<span>'+plural(x.wordCount,'word')+'</span>':'')+'<span>'+day(x.createdAt)+' · '+esc(x.createdBy)+'</span>'+
+      (x.publishedUrl?'<span><a href="'+esc(x.publishedUrl)+'" target="_blank" rel="noopener noreferrer" style="color:var(--b)">Published ↗</a></span>':'')+'</div>'+
+      (failed?'<p class="err">'+esc(x.genError||'Generation failed.')+'</p>':'')+'</div><div class="acts">'+acts+'</div></div>'}
+  $('list').addEventListener('click',function(e){var b=e.target.closest('[data-act]');if(!b||!b.dataset.act)return;var id=b.dataset.id,x=lib.items.find(function(i){return i.id===id});if(!x)return;
+    var a=b.dataset.act;
+    if(a==='open')location.hash='blog='+id;
+    else if(a==='copy')call('/api/blogs/item?id='+id).then(function(r){return copyBlog(r.item,'all')}).catch(function(err){S.say(err.message)});
+    else if(a==='used'||a==='ready')call('/api/blogs/update',{id:id,version:x.version,changes:{status:a}}).then(function(){S.say(a==='used'?'Marked as used.':'Marked ready to use.');loadLib()}).catch(function(err){S.say(err.message);loadLib(true)});
+    else if(a==='dup')call('/api/blogs/duplicate',{id:id}).then(function(r){S.say('Duplicated. The copy is In progress.');loadLib()}).catch(function(err){S.say(err.message)});
+    else if(a==='retry'){b.disabled=true;call('/api/blogs/retry',{id:id}).then(function(){S.say('Writing it again…');loadLib()}).catch(function(err){b.disabled=false;S.say(err.message)})}
+    else if(a==='del'&&confirm('Delete “'+(x.title||x.brief.topic)+'”?\n\nThe draft and its version history are removed for everyone. This can’t be undone.'))
+      call('/api/blogs/delete',{id:id}).then(function(){S.say('Blog deleted.');loadLib()}).catch(function(err){S.say(err.message)})});
+  var qt;$('q').addEventListener('input',function(){clearTimeout(qt);qt=setTimeout(loadLib,250)});
+  ['batchF','fromF','toF','sortF'].forEach(function(k){$(k).addEventListener('change',function(){loadLib()})});
+  [].forEach.call(document.querySelectorAll('#stF button'),function(b){b.onclick=function(){lib.status=b.dataset.s;[].forEach.call(document.querySelectorAll('#stF button'),function(x){x.setAttribute('aria-pressed',x===b)});loadLib()}});
+  $('newB').onclick=function(){location.hash='new'};
+
+  /* ---------- generator */
+  var gen={batchId:'',sent:{}};
+  function newRow(t,k,n){var tr=document.createElement('tr');
+    tr.innerHTML='<td class="n"></td><td><input class="t" maxlength="200" placeholder="e.g. How to choose a dentist in Kochi" aria-label="Topic"></td><td><input class="k" maxlength="120" placeholder="e.g. dentist in kochi" aria-label="Primary keyword"></td>'+
+      '<td><input class="o" maxlength="500" placeholder="Angle, points to include…" aria-label="Notes"></td><td class="a"><button class="btn xs" type="button" data-one>'+icon('wand')+'Generate</button> <button class="btn xs ic" type="button" data-rm aria-label="Remove">'+icon('x')+'</button></td>';
+    tr.querySelector('.t').value=t||'';tr.querySelector('.k').value=k||'';tr.querySelector('.o').value=n||'';$('tRows').appendChild(tr);numberRows()}
+  function numberRows(){var rows=$('tRows').children;[].forEach.call(rows,function(r,i){r.firstChild.textContent=i+1});$('addRow').disabled=rows.length>=10;
+    var todo=[].filter.call(rows,function(r){return !r.classList.contains('sent')&&(r.querySelector('.t').value.trim()||r.querySelector('.k').value.trim())}).length;
+    $('gAll').lastChild.textContent=todo?'Generate all ('+todo+')':'Generate all';
+    $('gNote').textContent=rows.length+' of 10 topics. Each blog takes about 1–3 minutes; three are written at a time.'}
+  $('addRow').onclick=function(){if($('tRows').children.length<10){newRow();$('tRows').lastChild.querySelector('.t').focus()}};
+  $('tRows').addEventListener('input',numberRows);
+  $('tRows').addEventListener('click',function(e){var tr=e.target.closest('tr');if(!tr)return;
+    if(e.target.closest('[data-rm]')){if(tr.classList.contains('sent')||$('tRows').children.length>1)tr.remove();else tr.querySelectorAll('input').forEach(function(i){i.value=''});numberRows()}
+    if(e.target.closest('[data-one]'))send([tr],false)});
+  function settings(){return {location:$('gLoc').value.trim(),language:$('gLang').value.trim(),audience:$('gAud').value.trim(),words:+$('gWords').value,tone:$('gTone').value,website:$('gSite').value.trim(),brand:$('gBrand').value.trim()}}
+  function openGen(){
+    var p=load(PREF)||{};$('gLoc').value=p.location||'';$('gLang').value=p.language||'English';$('gAud').value=p.audience||'';$('gWords').value=p.words||1500;$('gTone').value=p.tone||'Professional';$('gSite').value=p.website||S.read('scoutly.site')||'';$('gBrand').value=p.brand||'';
+    if(!gen.batchId||!$('tRows').children.length){gen.batchId=Math.random().toString(16).slice(2,14);$('tRows').innerHTML='';for(var i=0;i<3;i++)newRow();
+      $('gBatch').value='Weekend batch · '+new Date().toLocaleDateString(undefined,{weekday:'short',day:'numeric',month:'short',year:'numeric'})}
+    $('gErr').textContent='';numberRows();show('gen');setTimeout(function(){$('tRows').querySelector('.t').focus()},30)}
+  function send(rows,all){$('gErr').textContent='';
+    rows=rows.filter(function(r){return !r.classList.contains('sent')});
+    var items=rows.map(function(r){return {topic:r.querySelector('.t').value.trim(),keyword:r.querySelector('.k').value.trim(),notes:r.querySelector('.o').value.trim(),row:r}}).filter(function(x){return x.topic||x.keyword});
+    if(!items.length)return $('gErr').textContent=all?'Add at least one topic with a primary keyword.':'Add a topic and a primary keyword in this row first.';
+    var bad=items.find(function(x){return !x.topic||!x.keyword});
+    if(bad){(bad.topic?bad.row.querySelector('.k'):bad.row.querySelector('.t')).focus();return $('gErr').textContent='Each blog needs a topic and a primary keyword.'}
+    var s=settings();store(PREF,s);
+    var btns=[$('gAll')].concat(items.map(function(x){return x.row.querySelector('[data-one]')}));btns.forEach(function(b){b.disabled=true});
+    call('/api/blogs/generate',{batch:{id:gen.batchId,label:$('gBatch').value.trim()},settings:s,items:items.map(function(x){return {topic:x.topic,keyword:x.keyword,notes:x.notes}})})
+      .then(function(r){items.forEach(function(x){x.row.classList.add('sent');x.row.querySelectorAll('input').forEach(function(i){i.readOnly=true});x.row.querySelector('.a').innerHTML='<span class="tag ok">'+icon('check')+'Saved · writing</span>'});
+        numberRows();S.say(plural(r.items.length,'blog')+' saved as drafts and being written.');
+        var left=[].some.call($('tRows').children,function(t){return !t.classList.contains('sent')&&t.querySelector('.t').value.trim()});
+        if(all||!left){var id=gen.batchId;gen.batchId='';$('batchF').value='';location.hash='';setTimeout(function(){loadLib().then(function(){$('batchF').value=id;loadLib()})},0)}})
+      .catch(function(e){if(!trouble(e))$('gErr').textContent=e.message})
+      .then(function(){btns.forEach(function(b){if(b.isConnected)b.disabled=false})})}
+  $('gForm').addEventListener('submit',function(e){e.preventDefault();send([].slice.call($('tRows').children),true)});
+  $('gCancel').onclick=function(){location.hash=''};
+
+  /* ---------- editor */
+  var dirty=false,saving=null,timer=null,blocked=false,preview=false;
+  function fields(){return {title:$('eTitle').value.trim(),html:clean($('art').innerHTML),metaTitle:$('eMT').value.trim(),metaDescription:$('eMD').value.trim(),
+    slug:slugify($('eSlug').value),primaryKeyword:$('eKw').value.trim(),secondaryKeywords:$('eKw2').value.split(',').map(function(s){return s.trim()}).filter(Boolean),
+    publishedUrl:$('ePub').value.trim(),status:$('eStatus').value,faqs:readFaqs()}}
+  function current(){return Object.assign({},ed,fields())}
+  function setSaved(t,cls){$('saved').textContent=t;$('saved').className='saved'+(cls?' '+cls:'')}
+  function changed(){if(!ed)return;dirty=true;store(BK+ed.id,{version:ed.version,at:new Date().toISOString(),data:fields()});setSaved('Unsaved changes');clearTimeout(timer);if(!blocked)timer=setTimeout(function(){save(false)},2500);refresh()}
+  function save(checkpoint){
+    if(!ed||blocked)return Promise.resolve();
+    if(saving)return saving.then(function(){return dirty||checkpoint?save(checkpoint):null});
+    if(!dirty&&!checkpoint)return Promise.resolve();
+    var f=fields();if(f.publishedUrl&&!/^https?:\/\/\S+\.\S+/i.test(f.publishedUrl)){setSaved('Published URL needs to start with https://','bad');return Promise.resolve()}
+    clearTimeout(timer);dirty=false;setSaved('Saving…');
+    saving=call('/api/blogs/update',{id:ed.id,version:ed.version,changes:f,checkpoint:!!checkpoint}).then(function(r){
+        ed=r.item;saving=null;if(!dirty){store(BK+ed.id,null);setSaved('Saved '+new Date().toLocaleTimeString(undefined,{hour:'2-digit',minute:'2-digit'}),'ok')}$('eInfo').innerHTML=info(ed)})
+      .catch(function(e){saving=null;dirty=true;
+        if(e.conflict){blocked=true;warn('<b>This blog was changed somewhere else</b> (another tab, device or teammate). Autosave is paused and your text is kept in this browser. <button class="btn xs" type="button" id="rl">Load the latest</button> <button class="btn xs" type="button" id="cpMine">Copy my version</button>');
+          $('rl').onclick=function(){store(BK+ed.id,null);blocked=false;dirty=false;openEd(ed.id)};$('cpMine').onclick=function(){copyBlog(current(),'all')};setSaved('Not saved','bad')}
+        else if(!trouble(e)){setSaved('Not saved yet: '+e.message+' Retrying…','bad');timer=setTimeout(function(){save(false)},8000)}});
+    return saving}
+  function warn(h){$('eWarn').hidden=!h;$('eWarn').innerHTML=h||''}
+  function info(b){return 'Batch: <b>'+esc(b.batch)+'</b><br>Created '+when(b.createdAt)+' by '+esc(b.createdBy)+'<br>Last edited '+when(b.updatedAt)+' by '+esc(b.updatedBy)+
+    (b.brief?'<br>Brief: '+esc([b.brief.location,b.brief.language,b.brief.tone,'~'+b.brief.words+' words'].filter(Boolean).join(' · ')):'')}
+  function openEd(id){
+    show('ed');warn('');blocked=false;dirty=false;preview=false;setPreview();setSaved('Loading…');$('art').innerHTML='';ed=null;
+    return call('/api/blogs/item?id='+encodeURIComponent(id)).then(function(r){var b=r.item;
+      if(b.gen!=='done'){location.hash='';return S.say(b.gen==='failed'?'That blog failed to generate. Retry it from the Blog Bank.':'That blog is still being written.')}
+      ed=b;fill(b);setSaved('Saved','ok');
+      var bk=load(BK+b.id);
+      if(bk&&bk.data&&JSON.stringify(bk.data)!==JSON.stringify(fields()))
+        warn('<b>Unsaved changes from '+when(bk.at)+' were found in this browser.</b> '+(bk.version!==b.version?'The blog was saved elsewhere since then, so check before restoring. ':'')+
+          '<button class="btn xs" type="button" id="bkUse">Restore my changes</button> <button class="btn xs" type="button" id="bkDrop">Discard them</button>'),
+        $('bkUse').onclick=function(){fill(Object.assign({},b,bk.data));warn('');changed()},$('bkDrop').onclick=function(){store(BK+b.id,null);warn('')};
+      else store(BK+b.id,null)})
+      .catch(function(e){if(!trouble(e)){setSaved(e.message,'bad');warn(esc(e.message)+' <button class="btn xs" type="button" onclick="location.hash=\'\'">Back to Blog Bank</button>')}})}
+  function fill(b){$('eTitle').value=b.title||'';$('art').innerHTML=b.html||'';$('eMT').value=b.metaTitle||'';$('eMD').value=b.metaDescription||'';$('eSlug').value=b.slug||'';
+    $('eKw').value=b.primaryKeyword||'';$('eKw2').value=(b.secondaryKeywords||[]).join(', ');$('ePub').value=b.publishedUrl||'';$('eStatus').value=b.status||'ready';
+    renderFaqs(b.faqs||[]);
+    $('links').innerHTML=(b.internalLinks||[]).map(function(l){return '<div class="sug"><b>“'+esc(l.anchor)+'”</b>'+(l.url?'<a href="'+esc(l.url)+'" target="_blank" rel="noopener noreferrer">'+esc(l.url)+'</a>':'')+(l.why?'<br>'+esc(l.why):'')+'</div>'}).join('')||'<p class="info">No suggestions saved for this blog.</p>';
+    $('alts').innerHTML=(b.imageAlts||[]).map(function(a){return '<div class="sug"><b>'+esc(a.where)+'</b>Alt text: '+esc(a.alt)+'</div>'}).join('')||'<p class="info">No suggestions saved for this blog.</p>';
+    $('eInfo').innerHTML=info(b);refresh()}
+  function renderFaqs(f){$('faqs').innerHTML=f.map(function(x){return '<div class="faq"><input value="'+esc(x.q)+'" placeholder="Question" aria-label="Question"><textarea placeholder="Answer" aria-label="Answer">'+esc(x.a)+'</textarea><button class="x" type="button">Remove</button></div>'}).join('')||'<p class="info">No FAQs. Add a few questions people ask about this topic.</p>'}
+  function readFaqs(){return [].map.call($('faqs').querySelectorAll('.faq'),function(d){return {q:d.querySelector('input').value.trim(),a:d.querySelector('textarea').value.trim()}}).filter(function(x){return x.q||x.a})}
+  $('faqAdd').onclick=function(){var f=readFaqs();f.push({q:'',a:''});renderFaqs(f);$('faqs').lastChild.querySelector('input').focus()};
+  $('faqs').addEventListener('click',function(e){if(e.target.classList.contains('x')){e.target.parentNode.remove();if(!$('faqs').children.length)renderFaqs([]);changed()}});
+  $('faqs').addEventListener('input',changed);
+  ['eTitle','eMT','eMD','eSlug','eKw','eKw2','ePub'].forEach(function(k){$(k).addEventListener('input',changed)});
+  $('eSlug').addEventListener('blur',function(){var s=slugify(this.value);if(s!==this.value){this.value=s;changed()}});
+  $('eStatus').addEventListener('change',function(){changed();save(false)});
+  $('art').addEventListener('input',changed);
+  /* pasted content goes through the same allow-list, so Word or web formatting can't sneak in */
+  $('art').addEventListener('paste',function(e){var d=e.clipboardData;if(!d)return;e.preventDefault();var h=d.getData('text/html');
+    if(h)document.execCommand('insertHTML',false,clean(h));else document.execCommand('insertText',false,d.getData('text/plain'))});
+  [].forEach.call(document.querySelectorAll('.tb [data-cmd]'),function(b){b.addEventListener('mousedown',function(e){e.preventDefault()});b.onclick=function(){var c=b.dataset.cmd.split(':');
+    $('art').focus();document.execCommand(c[0],false,c[1]?'<'+c[1]+'>':null);changed()}});
+  $('fmt').onchange=function(){$('art').focus();document.execCommand('formatBlock',false,'<'+this.value+'>');this.value='p';changed()};
+  $('linkB').addEventListener('mousedown',function(e){e.preventDefault()});
+  $('linkB').onclick=function(){var sel=window.getSelection();if(!sel.rangeCount||sel.isCollapsed||!$('art').contains(sel.anchorNode))return S.say('Select the words to link first.');
+    var u=(prompt('Link address (https://… or a page on your site like /services/)','https://')||'').trim();if(!u||u==='https://')return;
+    if(!/^(https?:\/\/\S+\.\S+|\/\S*|mailto:\S+)$/i.test(u))return S.say('That doesn’t look like a web address.');document.execCommand('createLink',false,u);changed()};
+  $('tableB').addEventListener('mousedown',function(e){e.preventDefault()});
+  $('tableB').onclick=function(){$('art').focus();document.execCommand('insertHTML',false,'<table><thead><tr><th>Heading</th><th>Heading</th><th>Heading</th></tr></thead><tbody><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr><tr><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr></tbody></table><p><br></p>');changed()};
+  function setPreview(){$('editWrap').hidden=preview;$('pv').hidden=!preview;$('prevB').lastChild.textContent=preview?'Edit':'Preview';$('eTitle').hidden=preview;
+    if(preview){var b=current();$('pv').innerHTML='<h1>'+esc(b.title)+'</h1>'+b.html+faqHtml(b.faqs)}}
+  $('prevB').onclick=function(){preview=!preview;setPreview()};
+  $('saveB').onclick=function(){if(blocked)return S.say('Resolve the warning above first.');save(true).then(function(){if(!dirty&&!blocked)S.say('Saved.')})};
+  $('back').onclick=function(){location.hash=''};
+  [].forEach.call(document.querySelectorAll('[data-copy]'),function(b){b.onclick=function(){copyBlog(current(),b.dataset.copy)}});
+  window.addEventListener('beforeunload',function(e){if(ed&&(dirty||saving)){save(false);e.preventDefault();e.returnValue=''}});
+  document.addEventListener('keydown',function(e){if(ed&&!$('vEd').hidden&&(e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='s'){e.preventDefault();$('saveB').click()}});
+
+  /* sections are an H2 plus everything up to the next H2 */
+  function sections(){var out=[],cur=null;[].forEach.call($('art').children,function(n){if(n.nodeName==='H2'){cur={h:n,nodes:[n]};out.push(cur)}else if(cur)cur.nodes.push(n)});return out}
+  function refresh(){if(!ed)return;var b=current(),txt=toText(b.html),wc=(txt.match(/[^\W_]+(?:['’-][^\W_]+)*/g)||[]).length;
+    $('wc').textContent=plural(wc,'word')+' in the article'+((b.faqs||[]).length?' + '+plural(b.faqs.length,'FAQ'):'');
+    $('target').textContent=b.brief&&b.brief.words?'Target: about '+b.brief.words.toLocaleString():'';
+    var mt=b.metaTitle.length,md=b.metaDescription.length;$('cMT').textContent=mt+' / 60';$('cMT').className='cnt'+(mt>60||(mt&&mt<30)?' bad':'');$('cMD').textContent=md+' / 155';$('cMD').className='cnt'+(md>160||(md&&md<110)?' bad':'');
+    var secs=sections(),sel=$('secSel').value;$('secSel').innerHTML=secs.length?secs.map(function(s,i){return '<option value="'+i+'">'+esc(s.h.textContent.trim().slice(0,80)||'(empty heading)')+'</option>'}).join(''):'<option value="">Add H2 headings to pick a section</option>';
+    if(sel&&+sel<secs.length)$('secSel').value=sel;
+    checks(b,txt,wc)}
+  $('secGo').onclick=function(){var secs=sections(),s=secs[+$('secSel').value];if(!s)return S.say('Pick a section first.');
+    var btn=this,html=s.nodes.map(function(n){return n.outerHTML}).join('');btn.disabled=true;setSaved('Rewriting the section… about 20–60 seconds');
+    save(false).then(function(){return call('/api/blogs/section',{id:ed.id,html:html,instruction:$('secIns').value.trim()})}).then(function(r){
+        var cur=sections()[+$('secSel').value];if(!cur||cur.h!==s.h)return S.say('The section moved while it was being rewritten, so nothing was replaced.');
+        var frag=document.createElement('div');frag.innerHTML=clean(r.html);var first=cur.nodes[0];
+        while(frag.firstChild)first.parentNode.insertBefore(frag.firstChild,first);cur.nodes.forEach(function(n){n.remove()});
+        $('secIns').value='';changed();save(true);S.say('Section rewritten. The previous text is in History if you want it back.')})
+      .catch(function(e){if(!trouble(e)){S.say(e.message);setSaved(e.message,'bad')}}).then(function(){btn.disabled=false})};
+
+  /* basic SEO checks: guidance, not a ranking promise */
+  function has(text,kw){text=(text||'').toLowerCase();kw=(kw||'').toLowerCase().trim();if(!kw)return false;if(text.indexOf(kw)>-1)return true;
+    var w=kw.split(/\s+/).filter(function(x){return x.length>2});return w.length>0&&w.every(function(x){return text.indexOf(x)>-1})}
+  function checks(b,txt,wc){var kw=b.primaryKeyword,d=dom(b.html),out=[];function c(ok,t,d){out.push([ok,t,d])}
+    c(has(b.title,kw),'Primary keyword in the title',has(b.title,kw)?'“'+kw+'” is in the title.':'Work “'+kw+'” into the title, ideally near the start.');
+    var intro=txt.split(/\s+/).slice(0,100).join(' ');c(has(intro,kw),'Keyword in the introduction',has(intro,kw)?'Used in the first 100 words.':'Mention it naturally in the first paragraph.');
+    var hs=[].map.call(d.querySelectorAll('h2,h3,h4'),function(h){return +h.nodeName[1]}),h2=hs.filter(function(x){return x===2}).length,skip=hs.some(function(x,i){return x-(i?hs[i-1]:2)>1})||hs[0]>2,kwH=[].some.call(d.querySelectorAll('h2'),function(h){return has(h.textContent,kw)});
+    c(h2>=3&&!skip,'Heading structure',h2<3?'Only '+h2+' H2 section'+(h2===1?'':'s')+'. Break the article into 3 or more clear sections.':skip?'A heading level is skipped (e.g. H2 straight to H4). Keep them in order.':h2+' H2 sections'+(kwH?', one with the keyword.':'. Consider the keyword in one H2.'));
+    var mt=b.metaTitle.length,md=b.metaDescription.length;
+    c(mt>=30&&mt<=60&&md>=110&&md<=160,'Meta title and description',!mt||!md?'Add '+(!mt?'a meta title':'')+(!mt&&!md?' and ':'')+(!md?'a meta description':'')+'.':'Title '+mt+' characters (aim 50–60), description '+md+' (aim 140–155).');
+    var host='';try{host=new URL(b.brief&&b.brief.website||'x:').hostname.replace(/^www\./,'')}catch(_){}
+    var il=[].filter.call(d.querySelectorAll('a[href]'),function(a){var h=a.getAttribute('href');if(/^\//.test(h))return true;try{return host&&new URL(h).hostname.replace(/^www\./,'')===host}catch(_){return false}}).length;
+    c(il>=2,'Internal links',il>=2?il+' links to your own pages.':(il?'Only one link':'No links')+' to your own pages. Add 2–4 (see the suggestions below).');
+    var sents=txt.split(/[.!?]+\s/).filter(function(s){return s.trim().split(/\s+/).length>2}),avg=sents.length?Math.round(wc/sents.length):0,
+      longP=[].filter.call(d.querySelectorAll('p'),function(p){return p.textContent.split(/\s+/).length>120}).length;
+    c(avg&&avg<=22&&!longP,'Readability',!avg?'Not enough text yet.':'Sentences average '+avg+' words'+(avg>22?' (aim for under 20)':'')+(longP?'; '+longP+' paragraph'+(longP===1?' is':'s are')+' over 120 words, so split '+(longP===1?'it':'them'):'')+'.');
+    var fq=(b.faqs||[]).filter(function(f){return f.q&&f.a}).length;c(fq>=3,'FAQ coverage',fq>=3?fq+' questions answered.':'Add '+(3-fq)+' more FAQ'+(3-fq===1?'':'s')+': questions people really ask.');
+    var tgt=b.brief&&b.brief.words||1000;c(wc>=Math.min(tgt*0.85,tgt-150)&&wc>=600,'Content length',wc+' words'+(wc<600?': thin for a blog post; aim for 800 or more.':wc<tgt*0.85?', below the '+tgt.toLocaleString()+'-word target.':', on target.'));
+    var n=out.filter(function(x){return x[0]}).length;$('chkS').textContent=n+' of '+out.length+' look good';
+    $('chks').innerHTML=out.map(function(x){return '<div class="chk '+(x[0]?'ok':'wr')+'">'+icon(x[0]?'check':'alert')+'<span><b>'+x[1]+'</b><br>'+esc(x[2])+'</span></div>'}).join('')}
+
+  /* version history */
+  $('histB').onclick=function(){if(!ed)return;$('hBody').innerHTML='<div class="loading"><span class="spin"></span>Loading…</div>';$('hDlg').showModal();
+    save(false).then(function(){return call('/api/blogs/versions?id='+ed.id)}).then(function(r){
+      $('hBody').innerHTML=r.items.length?'<p>Earlier versions are kept when you save, every 10 minutes while autosaving, and before AI rewrites or restores. Restoring keeps your current text as a version too.</p>'+
+        r.items.map(function(v){return '<div class="ver"><span><b>'+when(v.savedAt)+'</b> · '+esc(v.savedBy)+'<br>'+esc(v.title)+' · '+plural(v.words,'word')+(v.why?' · '+esc(v.why):'')+'</span><span><button class="btn xs" type="button" data-v="'+v.v+'" data-do="see">View</button> <button class="btn xs p" type="button" data-v="'+v.v+'" data-do="restore">Restore</button></span></div>'}).join('')+'<div id="vprev"></div>':
+        '<p>No earlier versions yet. They’re kept as you edit (every 10 minutes while autosaving, and on every Save).</p>'}).catch(function(e){$('hBody').innerHTML='<p class="qerr">'+esc(e.message)+'</p>'})};
+  $('hBody').addEventListener('click',function(e){var b=e.target.closest('[data-v]');if(!b)return;var v=b.dataset.v;
+    if(b.dataset.do==='see')call('/api/blogs/version?id='+ed.id+'&v='+v).then(function(r){$('vprev').innerHTML='<div class="vprev pv"><h1>'+esc(r.item.title)+'</h1>'+r.item.html+'</div>'}).catch(function(err){S.say(err.message)});
+    else if(confirm('Restore this version? Your current text is kept in History first.'))save(false).then(function(){return call('/api/blogs/restore',{id:ed.id,v:+v,version:ed.version})})
+      .then(function(r){ed=r.item;fill(ed);dirty=false;store(BK+ed.id,null);setSaved('Restored','ok');$('hDlg').close();S.say('Version restored.')}).catch(function(err){S.say(err.message)})});
+
+  /* ---------- routing */
+  function route(){var h=location.hash.replace(/^#/,'');clearTimeout(poll);
+    var leave=ed&&!/^blog=/.test(h)?save(false):Promise.resolve();
+    leave.then(function(){if(!/^blog=/.test(h))ed=null;
+      if(h==='new'){openGen();return}
+      var m=h.match(/^blog=([\w-]{1,40})$/);if(m){openEd(m[1]);return}
+      show('lib');loadLib()})}
+  window.addEventListener('hashchange',route);
+  route();
+})();
+</script>
+</body>
+</html>
