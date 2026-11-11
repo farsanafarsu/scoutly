@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Scoutly – SEO Audit Tool, Backlink Checker &amp; AI Search Visibility</title>
-<meta name="description" content="Audit your website, find broken links, analyze backlinks, research keywords, and explore SEO and AI search visibility with Scoutly.">
+<title>Scoutly – All-in-One SEO Management Workspace</title>
+<meta name="description" content="Scoutly is an all-in-one SEO management workspace. Discover keyword opportunities, manage backlinks, track rankings, audit your website and analyse competitors from one place.">
 <link rel="canonical" href="https://scoutly.example/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#eef1f7">
@@ -12,8 +12,8 @@
 <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Scoutly">
-<meta property="og:title" content="Scoutly – SEO Audit Tool, Backlink Checker &amp; AI Search Visibility">
-<meta property="og:description" content="Audit your website, find broken links, analyze backlinks, research keywords, and explore SEO and AI search visibility with Scoutly.">
+<meta property="og:title" content="Scoutly – All-in-One SEO Management Workspace">
+<meta property="og:description" content="SEO is complicated enough. Managing it shouldn’t be. Keyword research, backlinks, rankings, audits and competitors in one workspace.">
 <meta property="og:url" content="https://scoutly.example/">
 <meta property="og:image" content="https://scoutly.example/assets/og-image.jpg">
 <meta property="og:image:width" content="1200">
@@ -130,11 +130,11 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}ul,o
 .hx-top{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center}
 .hx-pill{display:inline-flex;align-items:center;gap:10px;padding:5px 14px 5px 5px;border:1px solid rgba(47,91,255,.2);border-radius:999px;background:rgba(255,255,255,.62);box-shadow:0 12px 30px -18px rgba(47,91,255,.55);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font:500 13px/1 var(--T);color:var(--sl);transition:border-color .25s,transform .25s}
 .hx-pill:hover{border-color:var(--b);transform:translateY(-1px)}
-.hx-pill b{display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--b);color:#fff;font:600 10px/1 var(--M);letter-spacing:.14em;text-transform:uppercase}
+.hx-pill b{flex:none;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;padding:6px 10px;border-radius:999px;background:var(--b);color:#fff;font:600 10px/1 var(--M);letter-spacing:.14em;text-transform:uppercase}
 .hx-pill b:before{content:"";width:6px;height:6px;border-radius:50%;background:#fff;animation:hxping 2s ease-out infinite}
 .hx-pill em{font-style:normal;color:var(--b);transition:transform .25s}.hx-pill:hover em{transform:translateX(3px)}
 @keyframes hxping{0%{box-shadow:0 0 0 0 rgba(255,255,255,.8)}100%{box-shadow:0 0 0 7px rgba(255,255,255,0)}}
-.hx-h1{margin-top:26px;font:600 clamp(36px,5.3vw,88px)/.96 var(--D);letter-spacing:-.045em;text-transform:uppercase;color:var(--ink)}
+.hx-h1{margin-top:26px;font:600 clamp(34px,4.7vw,78px)/.98 var(--D);letter-spacing:-.045em;text-transform:uppercase;color:var(--ink)}
 .hx-l{display:block}
 .hx-w{display:inline-block}
 .hx-h1 em{font-style:normal;padding-right:.04em;background:linear-gradient(100deg,#2f5bff 0%,#5ac8fa 30%,#7a5cff 60%,#2f5bff 90%);background-size:240% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:hxsheen 7s linear infinite}
@@ -153,99 +153,95 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}ul,o
 .js .hx-fu{opacity:0;transform:translateY(18px);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d)}
 .js .hx-stage{opacity:0;transition:opacity 1.4s ease .55s}
 .hx-in .hx-w,.hx-in .hx-fu{opacity:1;transform:none;filter:none}.hx-in .hx-stage{opacity:1}
-/* stage: tilted back, straightens as you scroll (--rx, --ry, --sc set by JS) */
-.hx-stage{--gp:32px;position:relative;z-index:1;margin-top:56px;padding:0 calc(var(--gp)*(1 - var(--e,0)));perspective:2200px;perspective-origin:50% 0;transform:translateY(var(--ey,0px))}
-.hx-scene{position:relative;max-width:calc(1120px + (100% - 1120px)*var(--e,0));margin:0 auto;transform-style:preserve-3d;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) scale(var(--sc,1));transform-origin:50% 0;will-change:transform}
-.hx-win{--rh:74px;position:relative;display:flex;flex-direction:column;overflow:hidden;border-radius:calc(var(--wr,18px)*(1 - var(--e,0)));background:rgba(255,255,255,.74);border:1px solid rgba(255,255,255,.9);box-shadow:0 0 0 1px rgba(10,26,74,.08),0 60px 120px -40px rgba(10,26,74,.4),0 40px 90px -50px rgba(47,91,255,.6);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);text-align:left}
-.hx-win:before{content:"";position:absolute;inset:0;z-index:0;background:radial-gradient(520px circle at var(--px,50%) var(--py,0%),rgba(90,200,250,.16),transparent 60%);pointer-events:none}
-.hx-win>*{position:relative}
-.hx-bar{display:flex;align-items:center;gap:16px;padding:14px 18px;border-bottom:1px solid rgba(10,26,74,.07)}
-.hx-dots{display:flex;gap:7px}.hx-dots i{width:10px;height:10px;border-radius:50%;background:#dfe4ee}
-.hx-q{flex:1;max-width:580px;margin:0 auto;display:flex;align-items:center;gap:10px;height:42px;padding:0 18px;border-radius:999px;background:#fff;border:1px solid rgba(10,26,74,.1);box-shadow:0 6px 16px -10px rgba(10,26,74,.3);font:400 15px/1 var(--T);color:var(--ink);white-space:nowrap;overflow:hidden}
-.hx-q svg{flex:none;width:16px;height:16px;color:var(--mu)}
-.hx-caret{flex:none;width:1.5px;height:18px;margin-left:-8px;background:var(--b);animation:hxblink 1s steps(1) infinite}
-@keyframes hxblink{50%{opacity:0}}
-.hx-tag{font:500 10px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
-.hx-body{flex:1;display:grid;grid-template-columns:minmax(0,1.4fr) minmax(0,1fr)}
-.hx-res{padding:20px 22px 22px;border-right:1px solid rgba(10,26,74,.07)}
-.hx-k{display:flex;align-items:center;gap:8px;font:500 10.5px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
-.hx-list{position:relative;height:calc(5*var(--rh));margin-top:12px}
-.hx-list li{position:absolute;left:0;right:0;top:0;height:calc(var(--rh) - 8px);display:grid;grid-template-columns:24px 34px minmax(0,1fr);gap:12px;align-items:center;padding:0 54px 0 12px;border-radius:12px;transform:translateY(calc(var(--p,0)*var(--rh)));transition:transform 1s cubic-bezier(.65,0,.25,1),opacity .5s ease var(--d,0s),background .5s,box-shadow .5s}
-.hx-rank{font:600 13px/1 var(--M);color:var(--mu)}
-.hx-fav{display:grid;place-items:center;width:34px;height:34px;border-radius:9px;background:var(--c);color:#fff;font:600 14px/1 var(--D);font-style:normal}
-.hx-list li div{display:grid;gap:5px;min-width:0}
-.hx-dom{font:400 12px/1 var(--T);color:var(--mu)}
-.hx-ttl{overflow:hidden;font:600 15px/1.25 var(--T);color:#1c2a5e;white-space:nowrap;text-overflow:ellipsis}
-.hx-sn{display:block;width:var(--w,80%);height:7px;border-radius:4px;background:linear-gradient(90deg,#e3e8f2,#eef1f7)}
-.hx-list .me{z-index:2;background:linear-gradient(90deg,rgba(47,91,255,.11),rgba(90,200,250,.05));box-shadow:inset 0 0 0 1px rgba(47,91,255,.3),0 18px 34px -20px rgba(47,91,255,.7)}
-.hx-list .me .hx-ttl,.hx-list .me .hx-rank,.hx-list .me .hx-dom{color:var(--b)}
-.hx-up{position:absolute;right:12px;top:50%;margin-top:-11px;padding:5px 8px;border-radius:999px;background:rgba(23,166,115,.13);font:600 11px/1 var(--M);color:var(--ok);opacity:0;transform:scale(.6);transition:opacity .4s,transform .5s cubic-bezier(.2,1.4,.4,1)}
-.me.up .hx-up{opacity:1;transform:none}
-.hx-ai{padding:20px 22px 22px;background:linear-gradient(180deg,rgba(122,92,255,.06),rgba(47,91,255,.02))}
-.hx-ai .hx-k{color:#6a4fe0}.hx-spark{font-size:13px;letter-spacing:0}
-.hx-ans{position:relative;min-height:8.4em;margin-top:14px;font:400 15px/1.7 var(--T);color:var(--ink)}
-.hx-ans .wd{opacity:0;filter:blur(5px);transition:opacity .35s,filter .35s}.hx-ans .wd.on{opacity:1;filter:none}
-.hx-ans:before{content:"";position:absolute;left:0;right:0;top:4px;height:62px;opacity:0;background:linear-gradient(90deg,#e6e9f3 0%,#f4f6fb 50%,#e6e9f3 100%) 0 0/200% 12px,linear-gradient(90deg,#e6e9f3,#e6e9f3) 0 25px/86% 12px no-repeat,linear-gradient(90deg,#e6e9f3,#e6e9f3) 0 50px/62% 12px no-repeat;background-repeat:repeat-x,no-repeat,no-repeat;border-radius:6px;transition:opacity .3s;animation:hxshim 1.4s linear infinite}
-.think .hx-ans:before{opacity:1}
-@keyframes hxshim{to{background-position:-200% 0,0 25px,0 50px}}
-.hx-cites{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.hx-cites span{display:inline-flex;align-items:center;gap:7px;padding:7px 11px 7px 7px;border-radius:999px;background:#fff;border:1px solid rgba(10,26,74,.1);font:500 11.5px/1 var(--T);color:var(--sl);transition:opacity .45s,transform .5s cubic-bezier(.2,1.2,.4,1),border-color .4s,color .4s,box-shadow .4s}
-.hx-cites span i{display:grid;place-items:center;width:17px;height:17px;border-radius:50%;background:#eef1f7;font:600 9.5px/1 var(--M);font-style:normal;color:var(--sl)}
-.hx-cites .hit{border-color:var(--b);color:var(--b);box-shadow:0 0 0 4px rgba(47,91,255,.12),0 10px 24px -10px rgba(47,91,255,.7)}.hx-cites .hit i{background:var(--b);color:#fff}
-.js .hx-cites span{opacity:0;transform:translateY(8px) scale(.94)}.js .hx-cites.on span{opacity:1;transform:none}
-.hx-cites span:nth-child(2){transition-delay:.12s}.hx-cites span:nth-child(3){transition-delay:.24s}
-.js .typing .hx-list li{opacity:0}
-.hx-beam{position:absolute;inset:0;z-index:3;width:100%;height:100%;overflow:visible;pointer-events:none}
-.hx-beam path{fill:none;stroke:url(#hxBg);stroke-width:2;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:1;filter:drop-shadow(0 0 6px rgba(90,200,250,.9));transition:stroke-dashoffset 1s cubic-bezier(.4,0,.2,1)}
-.hx-beam circle{fill:#fff;stroke:var(--b);stroke-width:2;opacity:0;transition:opacity .3s .8s}
-.hx-beam.on path{stroke-dashoffset:0}.hx-beam.on circle{opacity:1}
-.hx-foot{display:flex;align-items:center;gap:14px;padding:12px 18px;border-top:1px solid rgba(10,26,74,.07);font:500 11.5px/1 var(--M);color:var(--sl)}
-.hx-live{flex:none;width:7px;height:7px;border-radius:50%;background:var(--ok);animation:hxlive 2s ease-out infinite}
+/* hero CTAs */
+.hx-acts{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 14px;margin-top:36px}
+.hx-acts .btn{height:54px;padding:0 26px;border-radius:999px}
+.hx-acts .btn.p{box-shadow:0 14px 30px -12px rgba(47,91,255,.9)}
+.btn.gh{background:rgba(255,255,255,.72);border-color:rgba(10,26,74,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.btn.gh:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+.hx-play{display:grid;place-items:center;width:24px;height:24px;margin-left:-8px;border-radius:50%;background:var(--b);color:#fff;transition:transform .25s}.hx-play svg{width:11px;height:11px;margin-left:2px}
+.btn.gh:hover .hx-play{transform:scale(1.1)}
+.hx-trust{margin-top:26px}
 @keyframes hxlive{0%{box-shadow:0 0 0 0 rgba(23,166,115,.5)}100%{box-shadow:0 0 0 8px rgba(23,166,115,0)}}
-.hx-meter{flex:1;max-width:220px;height:5px;margin-left:auto;border-radius:3px;background:rgba(10,26,74,.08);overflow:hidden}.hx-meter i{display:block;height:100%;width:var(--s,64%);background:linear-gradient(90deg,var(--b),var(--sky));transition:width .8s cubic-bezier(.2,.8,.2,1)}
-.hx-score{white-space:nowrap}.hx-score b{font:600 16px/1 var(--D);color:var(--ink)}
-/* scroll story: the window pins, grows to fill the screen (--e: 0..1), then scrolling drives search → site scan → fixes → climb → AI answer */
+@keyframes hxbob{50%{translate:0 -10px}}
 .hx{overflow:clip}
 .hx-aurora,.hx-bg,.hx-grid{bottom:auto;height:110vh}
-.hx-float{opacity:calc(1 - var(--e,0))}
-.hx-story{position:relative;height:450vh;margin-top:56px}.hx-story .hx-stage{margin-top:0}
-.hx-pin{position:sticky;top:max(76px,calc(50vh - 300px))}
-.hx-side{display:grid}.hx-side>*{grid-area:1/1;transition:opacity .5s,transform .6s cubic-bezier(.2,.8,.2,1)}
-.js .hx-ai{opacity:0;transform:translateY(12px);pointer-events:none}
-.js .ai-on .hx-ai{opacity:1;transform:none;pointer-events:auto}.js .ai-on .hx-audit{opacity:0;transform:translateY(-12px)}
-.hx-audit{padding:20px 22px 22px}
-.hx-scan-dot{width:7px;height:7px;border-radius:50%;background:var(--sky);animation:hxlive 1.6s ease-out infinite}
-.hx-site{position:relative;height:118px;margin-top:12px;border:1px solid rgba(10,26,74,.08);border-radius:10px;background:#fff;overflow:hidden}
-.hx-site i{position:absolute;border-radius:3px;background:#e6eaf3}
-.hx-site .w1{left:6%;top:10%;width:15%;height:8px;background:#cfd8ee}.hx-site .w2{left:56%;top:11%;width:36%;height:6px}
-.hx-site .w3{left:6%;top:30%;width:46%;height:11px;background:#d6deef}.hx-site .w4{left:6%;top:45%;width:38%;height:7px}
-.hx-site .w5{left:6%;top:57%;width:17%;height:12px;background:#c9d6ff}.hx-site .w6{left:60%;top:28%;width:32%;height:40%;background:linear-gradient(135deg,#dbe3f6,#eef1f7)}
-.hx-site .w7{left:6%;top:76%;width:27%;height:15%}.hx-site .w8{left:37%;top:76%;width:27%;height:15%}
-.hx-sl{position:absolute;left:0;right:0;top:calc(var(--sy,1)*100%);height:30px;margin-top:-30px;background:linear-gradient(transparent,rgba(90,200,250,.3));border-bottom:1.5px solid var(--sky);opacity:var(--so,0);pointer-events:none}
-.mk{position:absolute;z-index:1;display:grid;place-items:center;width:18px;height:18px;margin:-9px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 4px rgba(23,166,115,.2);font:700 9.5px/1 var(--M);color:#fff;transition:transform .45s cubic-bezier(.2,1.6,.4,1),background .4s,box-shadow .4s}
-.js .mk{background:var(--cr);box-shadow:0 0 0 4px rgba(229,72,77,.22);transform:scale(0)}.js .mk.on{transform:scale(1)}.js .mk.ok{background:var(--ok);box-shadow:0 0 0 4px rgba(23,166,115,.2)}
-.hx-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-top:12px}
-.hx-stats span{padding:8px 10px;border-radius:8px;background:rgba(10,26,74,.035);font:500 10.5px/1 var(--M);color:var(--mu);white-space:nowrap}.hx-stats b{display:block;margin-bottom:5px;font:600 17px/1 var(--D);color:var(--ink)}
-.hx-iss{display:grid;gap:5px;margin-top:12px}
-.hx-iss li{display:flex;align-items:center;gap:10px;padding:6px 10px;border-radius:8px;background:rgba(23,166,115,.07);font:500 12.5px/1.2 var(--T);color:var(--ink);transition:opacity .35s,transform .45s cubic-bezier(.2,.8,.2,1),background .4s}
-.hx-iss li span{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.hx-iss .sv{min-width:54px;justify-content:center}
-.hx-iss li i{font:600 10px/1 var(--M);font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--ok)}
-.js .hx-iss li{opacity:0;transform:translateX(12px);background:rgba(229,72,77,.05)}.js .hx-iss li.on{opacity:1;transform:none}.js .hx-iss li.ok{background:rgba(23,166,115,.07)}
-.js .hx-iss li i{font-size:0}.js .hx-iss li i:before{content:"Found";font-size:10px;color:var(--cr)}.js .hx-iss li.ok i:before{content:"Fixed ✓";color:var(--ok)}
-@media(max-width:900px){.hx-pin{top:72px}.hx-res,.hx-side{grid-area:1/1;transition:opacity .45s}.hx-res{border-bottom:0}
-  .js .show-side .hx-res,.js .hx-win:not(.show-side) .hx-side{opacity:0;pointer-events:none}}
-/* fix chips floating in front of the window */
-.hx-float li{position:absolute;left:var(--x);top:var(--y);z-index:4;display:flex;align-items:center;gap:9px;padding:11px 15px 11px 11px;border-radius:13px;background:rgba(255,255,255,.92);border:1px solid rgba(10,26,74,.08);box-shadow:0 26px 50px -22px rgba(10,26,74,.45);font:500 13px/1 var(--T);color:var(--ink);white-space:nowrap;transform:translateZ(var(--z));animation:hxbob 7s ease-in-out infinite;animation-delay:var(--dl);transition:opacity .5s,scale .5s cubic-bezier(.2,1.4,.4,1)}
-.hx-float li:before{content:"✓";display:grid;place-items:center;width:22px;height:22px;border-radius:7px;background:rgba(23,166,115,.14);color:var(--ok);font-weight:700;font-size:12px}
-.hx-float small{font:500 11px/1 var(--M);color:var(--mu)}
-.js .hx-float li{opacity:.0;scale:.85}.js .fix li{opacity:1;scale:1}
-.fix li:nth-child(2){transition-delay:.15s}.fix li:nth-child(3){transition-delay:.3s}.fix li:nth-child(4){transition-delay:.45s}
-@keyframes hxbob{50%{translate:0 -12px}}
-.hx-float li:nth-child(odd){left:auto;right:calc(100% - 34px)}.hx-float li:nth-child(even){left:calc(100% - 34px)}
-@media(max-width:1260px){.hx-float li:nth-child(n+3){display:none}.hx-float li:nth-child(1){right:auto;left:3%;top:-26px}.hx-float li:nth-child(2){left:auto;right:3%;top:-26px}}
-@media(max-width:900px){.hx-body{grid-template-columns:minmax(0,1fr)}.hx-res{border-right:0;border-bottom:1px solid rgba(10,26,74,.07)}.hx-float,.hx-tag,.hx-beam{display:none}.hx-ans{min-height:6.8em}}
-@media(max-width:600px){.hx{padding:104px 0 70px}.hx-stage{--gp:12px;margin-top:48px}.hx-win{--rh:64px;--wr:14px}.hx-list li{grid-template-columns:18px 28px minmax(0,1fr);gap:10px;padding:0 44px 0 8px}.hx-fav{width:28px;height:28px}.hx-ttl{font-size:13.5px}.hx-bar{padding:10px}.hx-dots{display:none}.hx-q{font-size:13px;padding:0 12px}.hx-form.scan{border-radius:18px;padding:6px}.hx-ic{display:none}.hx-res,.hx-ai{padding:16px 14px}.hx-meter{display:none}}
+/* hero stage: scattered SEO work (exports, spreadsheets, tabs, a to-do note) flies into one Scoutly workspace as you scroll.
+   --k (0..1) per slot and --p (0..1) for the window are set by JS; without JS everything rests assembled */
+.cv-story{position:relative;height:210vh;margin-top:64px}
+.cv-pin{position:sticky;top:max(84px,calc(50vh - 320px))}
+.cv-stage{position:relative;z-index:1;padding:0 32px;perspective:2200px;perspective-origin:50% 0}
+.js .cv-stage{opacity:0;transition:opacity 1.3s ease .5s}.hx-in .cv-stage{opacity:1}
+.cv-scene{position:relative;max-width:1120px;margin:0 auto;transform:rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) scale(var(--sc,1));transform-origin:50% 0;will-change:transform}
+.cv-win{--p:1;position:relative;display:grid;grid-template-columns:178px minmax(0,1fr);border-radius:18px;background:rgba(255,255,255,calc(.28 + .46*var(--p)));border:1px solid rgba(255,255,255,.9);box-shadow:0 0 0 1px rgba(10,26,74,.08),0 60px 120px -40px rgba(10,26,74,calc(.12 + .28*var(--p))),0 40px 90px -50px rgba(47,91,255,.6);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);text-align:left}
+.cv-win:before{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(520px circle at var(--px,50%) var(--py,0%),rgba(90,200,250,.16),transparent 60%);pointer-events:none}
+.cv-win>*{position:relative}
+.cv-bar,.cv-side,.cv-hi,.cv-foot{opacity:calc(.35 + .65*var(--p))}
+.cv-bar{grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:13px 18px;border-bottom:1px solid rgba(10,26,74,.07)}
+.cv-dots{display:flex;gap:7px}.cv-dots i{width:10px;height:10px;border-radius:50%;background:#dfe4ee}
+.cv-url{flex:1;max-width:420px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:8px;height:34px;padding:0 14px;border-radius:999px;background:#fff;border:1px solid rgba(10,26,74,.1);box-shadow:0 6px 16px -10px rgba(10,26,74,.3);font:500 12px/1 var(--M);color:var(--sl);white-space:nowrap}
+.cv-tag{font:500 10px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu);white-space:nowrap}
+.cv-side{display:flex;flex-direction:column;gap:2px;padding:16px 10px;border-right:1px solid rgba(10,26,74,.07)}
+.cv-side span{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;font:500 12.5px/1 var(--T);color:var(--mu);transition:background .4s,color .4s}
+.cv-side span:before{content:"";flex:none;width:8px;height:8px;border-radius:3px;border:1.5px solid currentColor;transition:background .4s,border-color .4s}
+.cv-side span:after{content:"✓";margin-left:auto;font:700 10px/1 var(--M);color:var(--ok);opacity:0;transform:scale(.4);transition:opacity .3s,transform .45s cubic-bezier(.2,1.6,.4,1)}
+.cv-side .on{color:var(--ink);background:rgba(47,91,255,.07)}.cv-side .on:before{background:var(--b);border-color:var(--b)}.cv-side .on:after{opacity:1;transform:none}
+.cv-main{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;padding:16px;align-content:start}
+.cv-hi{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:2px 2px 4px}
+.cv-hi b{display:block;font:600 17px/1.1 var(--D);color:var(--ink)}.cv-hi div span{display:block;margin-top:6px;font:400 12.5px/1 var(--T);color:var(--mu)}
+.cv-tabs{display:inline-flex;align-items:center;gap:8px;padding:7px 11px;border-radius:999px;background:rgba(229,72,77,.08);font:500 11px/1 var(--M);color:var(--cr);white-space:nowrap;transition:background .4s,color .4s}
+.cv-tabs i{width:6px;height:6px;border-radius:50%;background:currentColor}
+.cv-win.calm .cv-tabs{background:rgba(23,166,115,.1);color:var(--ok)}
+.cv-foot{grid-column:1/-1;display:flex;align-items:center;gap:14px;padding:12px 18px;border-top:1px solid rgba(10,26,74,.07);font:500 11.5px/1 var(--M);color:var(--sl)}
+.cv-live{flex:none;width:7px;height:7px;border-radius:50%;background:var(--wa);transition:background .4s}.cv-win.calm .cv-live{background:var(--ok);animation:hxlive 2s ease-out infinite}
+.cv-meter{flex:1;max-width:220px;height:5px;margin-left:auto;border-radius:3px;background:rgba(10,26,74,.08);overflow:hidden}.cv-meter i{display:block;height:100%;width:var(--s,100%);background:linear-gradient(90deg,var(--b),var(--sky))}
+.cv-n{white-space:nowrap}.cv-n b{font:600 15px/1 var(--D);color:var(--ink)}
+/* a slot holds one piece; the dashed outline is the empty place waiting for it */
+.sl{--k:1;position:relative;z-index:2;grid-column:span 2;min-width:0;border-radius:12px}
+.sl:before{content:"";position:absolute;inset:0;border-radius:12px;border:1.5px dashed rgba(47,91,255,.32);opacity:calc(1 - var(--k));pointer-events:none}
+.pc{position:relative;height:100%;overflow:hidden;padding:12px 14px 13px;border-radius:12px;background:#fff;border:1px solid rgba(10,26,74,.08);box-shadow:0 calc(4px + 26px*(1 - var(--k))) calc(14px + 40px*(1 - var(--k))) -12px rgba(10,26,74,.38);transform:translate3d(calc(var(--sx,0px)*(1 - var(--k))*var(--spread,1)),calc(var(--sy,0px)*(1 - var(--k))*var(--spread,1)),0) rotate(calc(var(--sr,0deg)*(1 - var(--k)))) scale(calc(.94 + .06*var(--k)));transition:border-color .4s}
+.pc:before{content:"";position:absolute;inset:0;background:var(--tint,transparent);opacity:calc(1 - var(--k));pointer-events:none}
+.pc>*{position:relative}
+.sl.got .pc{border-color:rgba(47,91,255,.2)}
+/* each piece arrives as someone else's file and leaves as a Scoutly module */
+.pc-h{display:grid;height:20px;margin-bottom:9px}
+.pc-h>span{grid-area:1/1;display:flex;align-items:center;gap:8px;min-width:0;white-space:nowrap;overflow:hidden}
+.pc-h .pc-src{opacity:calc(1 - var(--k)*2.2);font:500 11.5px/1 var(--M);color:var(--sl)}
+.pc-h .pc-in{opacity:calc((var(--k) - .55)*2.2);font:600 12.5px/1 var(--T);color:var(--ink)}
+.pc-in em{margin-left:auto;padding-left:8px;font:500 10.5px/1 var(--M);font-style:normal;color:var(--mu)}
+.fi{flex:none;display:grid;place-items:center;height:18px;padding:0 5px;border-radius:4px;background:var(--c);color:#fff;font:700 8.5px/1 var(--M);font-style:normal;letter-spacing:.04em}
+.mi{flex:none;width:18px;height:18px;border-radius:6px;background:var(--c);box-shadow:inset 0 0 0 4.5px rgba(255,255,255,.4)}
+.pc-kw li,.pc-bl li,.pc-td li{display:grid;align-items:center;gap:10px;padding:6px 0;border-top:1px solid rgba(10,26,74,.06);font:400 12px/1.2 var(--T);color:var(--sl)}
+.pc-kw li{grid-template-columns:minmax(0,1fr) auto 24px}.pc-bl li{grid-template-columns:minmax(0,1fr) auto}
+.pc-kw span,.pc-bl span,.pc-td span{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.pc-kw b{font:500 11px/1 var(--M);color:var(--ink)}
+.kd{display:grid;place-items:center;height:18px;border-radius:5px;font:600 10px/1 var(--M);font-style:normal}.kd.l{background:rgba(23,166,115,.12);color:var(--ok)}.kd.m{background:rgba(245,165,36,.15);color:#b97600}.kd.h{background:rgba(229,72,77,.1);color:var(--cr)}
+.st{padding:4px 7px;border-radius:999px;font:600 9.5px/1 var(--M);font-style:normal;letter-spacing:.06em;text-transform:uppercase}.st.lv{background:rgba(23,166,115,.12);color:var(--ok)}.st.pd{background:rgba(245,165,36,.15);color:#b97600}.st.lo{background:rgba(229,72,77,.1);color:var(--cr)}
+.pc-rk{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding-top:4px}
+.pc-rk b{display:block;font:600 30px/1 var(--D);letter-spacing:-.02em;color:var(--ink)}.pc-rk p span{display:block;margin-top:7px;font:500 10.5px/1 var(--M);color:var(--mu);white-space:nowrap}
+.pc-rk svg{flex:1;max-width:58%;height:56px;overflow:visible}.pc-rk path{fill:none;stroke:#7a5cff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}.pc-rk .ar{fill:rgba(122,92,255,.1);stroke:none}
+.pc-au{display:flex;align-items:center;gap:14px;padding-top:2px}
+.pc-ring{position:relative;flex:none;width:60px;height:60px}.pc-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.pc-ring circle{fill:none;stroke:rgba(10,26,74,.08);stroke-width:4}.pc-ring .v{stroke:var(--ok);stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:calc((100 - 92*var(--k))*1px)}
+.pc-ring b{position:absolute;inset:0;display:grid;place-items:center;font:600 17px/1 var(--D);color:var(--ink)}
+.pc-au li{display:flex;align-items:center;gap:8px;padding:3px 0;font:400 12px/1.3 var(--T);color:var(--sl);white-space:nowrap}.pc-au li:before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--ok)}.pc-au li.wn:before{background:var(--wa)}
+.pc-cp li{display:grid;grid-template-columns:minmax(0,92px) minmax(0,1fr) 20px;align-items:center;gap:8px;padding:4px 0;font:400 11.5px/1.2 var(--T);color:var(--sl)}
+.pc-cp span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.pc-cp b{font:500 10.5px/1 var(--M);color:var(--ink);text-align:right}
+.pc-cp i{height:6px;border-radius:3px;background:rgba(10,26,74,.07);overflow:hidden}.pc-cp i:after{content:"";display:block;width:calc(var(--w)*var(--k));height:100%;border-radius:3px;background:#9aa6c4}.pc-cp .me i:after{background:linear-gradient(90deg,var(--b),var(--sky))}.pc-cp .me span{color:var(--b);font-weight:600}
+.pc-td li{grid-template-columns:14px minmax(0,1fr) auto}
+.pc-td li:before{content:"";width:14px;height:14px;border-radius:4px;border:1.5px solid rgba(10,26,74,.22);box-sizing:border-box}
+.pc-td li.dn span{color:var(--mu);text-decoration:line-through}.pc-td li.dn:before{border-color:var(--ok);background:var(--ok) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4 8-9'/%3E%3C/svg%3E") center/10px no-repeat}
+.pc-td em{font:600 9.5px/1 var(--M);font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--mu)}.pc-td em.hi{color:var(--cr)}
+/* the noise around the window: what scattered SEO work feels like; it fades as the pieces land */
+.cv-noise{opacity:var(--no,1);transition:none}
+.cv-noise li{position:absolute;left:var(--x);top:var(--y);z-index:3;display:flex;align-items:center;gap:9px;padding:9px 13px 9px 9px;border-radius:11px;background:rgba(255,255,255,.94);border:1px solid rgba(229,72,77,.22);box-shadow:0 22px 44px -22px rgba(10,26,74,.5);font:500 12.5px/1 var(--T);color:var(--ink);white-space:nowrap;animation:hxbob 6.5s ease-in-out infinite;animation-delay:var(--dl,0s)}
+.cv-noise li:before{content:"!";display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:rgba(229,72,77,.13);color:var(--cr);font:700 11px/1 var(--M)}
+@media(max-width:1260px){.cv-noise li:nth-child(n+3){display:none}}
+@media(max-width:900px){.cv-story{height:auto;margin-top:48px}.cv-pin{position:relative;top:0}.cv-win{grid-template-columns:minmax(0,1fr)}.cv-side,.cv-noise,.cv-tag{display:none}
+  .cv-main{grid-template-columns:repeat(2,minmax(0,1fr))}.sl{grid-column:span 1;--spread:.4}}
+@media(max-width:600px){.hx{padding:104px 0 48px}.hx-acts .btn{flex:1 1 100%}.cv-stage{padding:0 12px}.cv-main{grid-template-columns:minmax(0,1fr);padding:12px;gap:10px}.sl{--spread:.22}.sl[data-m="cp"],.sl[data-m="ds"]{display:none}
+  .cv-hi div span,.cv-dots,.cv-n{display:none}.cv-bar{padding:10px}.cv-url{font-size:11px}.cv-meter{max-width:none}}
+@media(prefers-reduced-motion:reduce){.cv-noise li{animation:none}}
 .scan{display:flex;align-items:center;gap:6px;max-width:600px;margin-top:28px;padding:5px;background:rgba(255,255,255,.75);border:1px solid var(--ln);border-radius:4px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);transition:border-color .2s}
 .scan:focus-within{border-color:var(--b)}
 .scan input{flex:1;min-width:0;height:44px;padding:0 12px;border:0;background:none;color:var(--ink);font:400 16.5px/1 var(--T)}.scan input::placeholder{color:var(--mu)}.scan input:focus{outline:0}
@@ -387,54 +383,200 @@ code{font:400 12.5px var(--M)}
 .anat li{counter-increment:a;padding:24px;border-right:1px solid rgba(255,255,255,.08)}.anat li:last-child{border-right:0}
 .anat li:before{content:"0" counter(a);display:block;margin-bottom:16px;font:500 26px/1 var(--D);color:var(--sky)}
 .anat b{display:block;font:600 12px/1.3 var(--M);letter-spacing:.1em;text-transform:uppercase}.anat span{display:block;margin-top:8px;font:400 14px/1.65 var(--T);color:rgba(214,224,255,.65)}
-/* workspace */
-.ws{position:relative;padding:240px 0 140px;overflow:hidden}
-.ws:before{content:"";position:absolute;left:0;right:0;top:0;height:300px;background:linear-gradient(180deg,var(--bg) 0%,#9aa6c4 30%,#26304f 62%,var(--nv) 100%);pointer-events:none}
-.ws>*{position:relative}
 #faq{padding-top:260px}
 #faq:after{content:"";position:absolute;left:0;right:0;top:0;height:280px;background:linear-gradient(180deg,var(--nv) 0%,#26304f 34%,#9aa6c4 68%,var(--bg) 100%);pointer-events:none}
 #faq>*{z-index:1}
-.mq{display:grid;gap:6px;margin-bottom:90px;white-space:nowrap}
-.mq-r{font:500 clamp(54px,9vw,150px)/1 var(--D);letter-spacing:.02em;color:#fff;will-change:transform}.mq-r.o{color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.35)}
-.ws-h{text-align:center}.ws-h .lbl{margin:0 auto}.ws-h .dh{margin-left:auto;margin-right:auto;text-align:center}.ws-h .dh .l2{padding-left:0}.ws-h .dh .l2:before{display:none}
-.ws-lede{max-width:560px;margin:20px auto 0;font:400 17px/1.6 var(--T);color:rgba(214,224,255,.76)}
-.ws-fine{margin-top:10px;font:400 11.5px/1.6 var(--M);color:rgba(214,224,255,.42)}
-.dash-wrap{position:relative;perspective:1600px;margin-top:70px;padding:0 32px}
-/* the dashboard animates in once it tilts into view (.live); without JS everything shows at rest */
-.dash{position:relative;display:grid;grid-template-columns:210px 1fr;max-width:1100px;margin:0 auto;border:1px solid rgba(127,160,255,.2);border-radius:10px;overflow:hidden;background:linear-gradient(180deg,#0d1840,#070e27);box-shadow:inset 0 0 0 1px rgba(255,255,255,.03),0 80px 140px -50px rgba(47,91,255,.65);transform-origin:50% 0;font-family:var(--M)}
-.d-bar{grid-column:1/-1;display:flex;align-items:center;gap:16px;padding:11px 16px;border-bottom:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.02);font-size:11px;color:rgba(214,224,255,.45)}
-.d-bar span{display:flex;gap:6px}.d-bar span i{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.14)}
-.d-bar em{flex:1;max-width:340px;margin:0 auto;padding:6px 12px;border-radius:5px;background:rgba(255,255,255,.05);font-style:normal;text-align:center}
-.d-live{display:flex;align-items:center;gap:7px;font-weight:500;color:var(--sky)}.d-live:before{content:"";width:6px;height:6px;border-radius:50%;background:var(--sky);box-shadow:0 0 8px var(--sky)}
-.d-side{display:flex;flex-direction:column;gap:2px;padding:20px 12px;border-right:1px solid rgba(255,255,255,.07);font-size:12px;color:rgba(214,224,255,.55)}
-.d-side span{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:5px}.d-side span:before{content:"";width:7px;height:7px;border:1.5px solid currentColor;border-radius:2px;opacity:.6}
-.d-side .on{background:linear-gradient(90deg,rgba(47,91,255,.32),rgba(47,91,255,.06));color:#fff;box-shadow:inset 2px 0 0 var(--sky)}.d-side .on:before{background:var(--sky);border-color:var(--sky);opacity:1}
-.d-plan{margin-top:auto;padding:14px 10px 0;border-top:1px solid rgba(255,255,255,.07);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(214,224,255,.38)}
-.d-logo{display:flex;align-items:center;gap:8px;margin:0 0 14px 6px;font:600 13px var(--D);letter-spacing:.1em;text-transform:uppercase;color:#fff}
-.d-main{display:grid;gap:14px;padding:22px}
-.d-top{display:flex;justify-content:space-between;align-items:center;gap:16px}.d-top b{display:block;font:600 19px var(--D);color:#fff}.d-top div>span{display:block;margin-top:6px;font-size:11px;color:rgba(214,224,255,.45)}
-.d-score{display:flex;align-items:center;gap:10px}.d-score svg{width:46px;height:46px;transform:rotate(-90deg)}
-.d-score circle{fill:none;stroke:rgba(255,255,255,.08);stroke-width:4}.d-score .v{stroke:var(--sky);stroke-linecap:round;stroke-dasharray:119.4;stroke-dashoffset:26.3;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1)}
-.d-score b{font:600 26px/1 var(--D);color:#fff}.d-score span{font-size:10px;line-height:1.3;letter-spacing:.08em;text-transform:uppercase;color:rgba(214,224,255,.5)}
-.d-cards{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
-.d-cards>div{padding:16px;border:1px solid rgba(255,255,255,.08);border-radius:7px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.01))}
-.d-n{display:block;margin-top:14px;font:600 34px/1 var(--D);color:#fff}.d-cards p{margin-top:6px;font-size:11px;color:rgba(214,224,255,.5)}
-.d-cards i{display:block;height:4px;margin-top:14px;border-radius:2px;background:rgba(255,255,255,.07);overflow:hidden}.d-cards i:after{content:"";display:block;width:var(--w);height:100%;background:linear-gradient(90deg,var(--b),var(--sky));transition:width 1.4s cubic-bezier(.2,.8,.2,1) .2s}
-.d-chart{padding:14px 14px 10px;border:1px solid rgba(255,255,255,.08);border-radius:7px;background:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px) 0 36px/100% 28px}
-.d-ch{display:flex;justify-content:space-between;gap:12px;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:rgba(214,224,255,.5)}
-.d-leg{display:flex;align-items:center;gap:8px}.d-leg i{width:12px;height:2px;background:var(--sky)}.d-leg i.o{margin-left:8px;background:repeating-linear-gradient(90deg,rgba(255,170,90,.85) 0 3px,transparent 3px 5px)}
-.d-chart svg{display:block;width:100%;height:120px;margin-top:10px;overflow:visible;transition:clip-path 1.8s cubic-bezier(.4,0,.2,1) .2s;clip-path:inset(-4px -4px -4px -4px)}
-.d-chart .ln{fill:none;stroke:#5ac8fa;stroke-width:2.5;vector-effect:non-scaling-stroke}.d-chart .op{fill:none;stroke:rgba(255,170,90,.75);stroke-width:1.5;stroke-dasharray:4 4;vector-effect:non-scaling-stroke}
-.d-list{display:grid;gap:6px}.d-list>div{display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid rgba(255,255,255,.07);border-radius:6px;font-size:12.5px;color:rgba(214,224,255,.75);transition:opacity .5s,transform .6s cubic-bezier(.2,.8,.2,1)}
-.d-list span{flex:1}.d-list b{font-weight:500;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sky)}
-.d-list>div:nth-child(2){transition-delay:.15s}.d-list>div:nth-child(3){transition-delay:.3s}
-.js .dash:not(.live) .d-score .v{stroke-dashoffset:119.4}.js .dash:not(.live) .d-cards i:after{width:0}.js .dash:not(.live) .d-chart svg{clip-path:inset(-4px 100% -4px -4px)}.js .dash:not(.live) .d-list>div{opacity:0;transform:translateX(-12px)}
-/* what the real audit checks, drifting beside the dashboard */
-.ws-chips li{position:absolute;z-index:2;display:flex;align-items:center;gap:10px;padding:12px 16px;border:1px solid rgba(127,160,255,.25);border-radius:8px;background:rgba(10,20,52,.78);box-shadow:0 24px 50px -20px rgba(0,0,0,.7);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);font:500 12px/1 var(--M);color:rgba(214,224,255,.8);white-space:nowrap;will-change:transform}
-.ws-chips b{font:600 18px/1 var(--D);color:#fff}
-.ws-chips li:nth-child(1){left:max(16px,calc(50% - 650px));top:38%}.ws-chips li:nth-child(2){right:max(16px,calc(50% - 650px));top:58%}.ws-chips li:nth-child(3){left:max(16px,calc(50% - 610px));bottom:10%}
-@media(max-width:1100px){.ws-chips{display:none}}
-@media(max-width:960px){.dash{grid-template-columns:minmax(0,1fr)}.d-main{min-width:0}.dash-wrap{padding:0 18px}.d-bar em,.d-score span{display:none}.d-top{align-items:flex-start}}
+/* fades between light and dark sections */
+.fade{height:240px;pointer-events:none}
+.fade-dk{background:linear-gradient(180deg,var(--bg) 0%,#9aa6c4 30%,#26304f 62%,var(--nv) 100%)}
+.fade-lt{background:linear-gradient(180deg,var(--nv) 0%,#26304f 34%,#9aa6c4 68%,var(--bg) 100%)}
+/* ===== the problem: each statement brings its tool forward on the desk; "Sound familiar?" lets them all pile up (data-on 0..4) ===== */
+.pb{padding:110px 0 120px}
+.pb .two{grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);align-items:start}
+.pb-steps{margin-top:44px}
+.pb-steps li{display:flex;align-items:center;gap:18px;padding:22px 0;border-top:1px solid var(--ln);font:500 clamp(19px,1.75vw,27px)/1.25 var(--D);letter-spacing:-.015em;color:var(--ink);transition:color .45s}
+.pb-steps li:last-child{border-bottom:1px solid var(--ln)}
+.pb-steps b{font-weight:600}
+.pb-steps .ic{flex:none;display:grid;place-items:center;width:46px;height:46px;border-radius:13px;background:var(--c);color:#fff;font:600 10.5px/1 var(--M);letter-spacing:.05em;box-shadow:0 12px 24px -12px var(--c);transition:background .45s,color .45s,box-shadow .45s,transform .5s cubic-bezier(.2,1.4,.4,1)}
+.js .pb-steps li:not(.on){color:var(--mu)}
+.js .pb-steps li:not(.on) .ic{background:#fff;color:var(--mu);box-shadow:inset 0 0 0 1px var(--ln)}
+.js .pb-steps li.on .ic{transform:rotate(-6deg) scale(1.06)}
+@media(min-width:961px){.pb-steps li{min-height:118px}.pb-end{padding-bottom:170px}}
+.pb-end{margin-top:56px}
+.pb-q{font:600 clamp(36px,4.3vw,66px)/1 var(--D);letter-spacing:-.04em;text-transform:uppercase;color:var(--ink)}
+.pb-q em{font-style:normal;background:linear-gradient(100deg,#e5484d 0%,#f5a524 45%,#e5484d 90%);background-size:240% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:hxsheen 7s linear infinite}
+.pb-tx{max-width:500px;margin-top:20px;font:400 18px/1.6 var(--T);color:var(--sl)}
+.pb-vis{position:sticky;top:110px}
+.pb-cap{margin-top:14px;font:400 12px/1.5 var(--M);color:var(--mu);text-align:center}
+.desk{position:relative;height:clamp(440px,38vw,540px);border-radius:18px;overflow:hidden;background:radial-gradient(60% 50% at 70% 30%,rgba(47,91,255,.08),transparent 70%),linear-gradient(180deg,#f8f9fc,#e8ecf5);border:1px solid var(--ln);box-shadow:0 50px 100px -50px rgba(10,26,74,.45)}
+.desk-tabs{display:flex;gap:3px;padding:9px 9px 0;background:#dde3ee}
+.desk-tabs span{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:6px;padding:8px;border-radius:8px 8px 0 0;background:#e8ecf3;font:500 10.5px/1 var(--T);color:var(--sl);white-space:nowrap;overflow:hidden;transition:background .35s,color .35s}
+.desk-tabs span i{flex:none;width:9px;height:9px;border-radius:3px;background:var(--c)}
+.desk-tabs span.on{background:#f8f9fc;color:var(--ink)}
+.desk-n{position:absolute;right:12px;bottom:12px;z-index:9;display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:var(--nv);color:#fff;font:500 11px/1 var(--M);box-shadow:0 12px 26px -12px rgba(5,10,31,.8)}
+.desk-n i{width:6px;height:6px;border-radius:50%;background:var(--cr);animation:hxping 2s ease-out infinite}
+.pw{position:absolute;left:var(--x);top:var(--y);width:var(--w);border-radius:12px;background:#fff;border:1px solid rgba(10,26,74,.1);box-shadow:0 24px 50px -26px rgba(10,26,74,.5);transform:rotate(var(--r));transition:transform .65s cubic-bezier(.2,.8,.2,1),opacity .5s,filter .5s,box-shadow .5s}
+.pw-h{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid rgba(10,26,74,.07);border-radius:12px 12px 0 0;background:linear-gradient(180deg,#fff,#f6f8fb);font:500 11px/1 var(--M);color:var(--sl);white-space:nowrap;overflow:hidden}
+.pw-h i{flex:none;width:10px;height:10px;border-radius:3px;background:var(--c)}
+.pw-b{padding:12px}
+.pw-search{display:flex;align-items:center;height:30px;padding:0 10px;border-radius:7px;border:1px solid rgba(10,26,74,.12);font:400 12px/1 var(--T);color:var(--ink)}
+.pw-search span{width:1.5px;height:14px;margin-left:2px;background:var(--b);animation:hxblink 1s steps(1) infinite}
+@keyframes hxblink{50%{opacity:0}}
+.pw-rows{margin-top:8px}.pw-rows li{display:flex;justify-content:space-between;gap:10px;padding:6px 2px;border-top:1px solid rgba(10,26,74,.06);font:400 11.5px/1.2 var(--T);color:var(--sl)}.pw-rows b{font:500 11px/1 var(--M);color:var(--ink)}
+.pw-sheet{display:grid;grid-template-columns:22px repeat(3,minmax(0,1fr));font:400 10.5px/1 var(--M);color:var(--sl)}
+.pw-sheet span{padding:7px 6px;border-right:1px solid rgba(10,26,74,.07);border-bottom:1px solid rgba(10,26,74,.07);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pw-sheet .xh,.pw-sheet .rn{background:#eef3ef;color:#4b6b57;text-align:center}
+.pw-sheet .bad{background:rgba(229,72,77,.08);color:var(--cr)}.pw-sheet .q{color:#b97600}
+.pw-chart svg{display:block;width:100%;height:70px;overflow:visible}.pw-chart path{fill:none;stroke:#7a5cff;stroke-width:2;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.pw-chart p{display:flex;justify-content:space-between;margin-top:8px;font:400 11px/1 var(--M);color:var(--mu)}.pw-chart b{color:var(--ink);font-weight:500}
+.pw-warn{display:inline-flex;padding:5px 8px;border-radius:6px;background:rgba(245,165,36,.14);font:600 11px/1 var(--M);color:#b97600}
+.pw-ln{display:block;width:var(--w);height:7px;margin-top:9px;border-radius:4px;background:linear-gradient(90deg,#e3e8f2,#eef1f7)}
+/* the active tool comes forward; the rest blur back */
+.js .desk .pw{opacity:.6;filter:saturate(.5) blur(.5px)}
+.js .desk .pw.on{z-index:5;opacity:1;filter:none;transform:rotate(0deg) translateY(-8px) scale(1.04);box-shadow:0 0 0 2px var(--c),0 40px 70px -30px rgba(10,26,74,.55)}
+.js .desk.chaos .pw{opacity:1;filter:none;animation:pwjolt 2.8s ease-in-out infinite;animation-delay:var(--dl,0s)}
+@keyframes pwjolt{0%,100%{translate:0 0}25%{translate:-4px 3px}50%{translate:3px -4px}75%{translate:-2px -2px}}
+.desk-toast{position:absolute;z-index:8;display:flex;align-items:center;gap:9px;padding:10px 14px 10px 10px;border-radius:11px;background:var(--nv);color:#fff;font:500 12.5px/1 var(--T);white-space:nowrap;box-shadow:0 24px 44px -20px rgba(5,10,31,.8);opacity:0;transform:translateY(10px) scale(.94);transition:opacity .4s,transform .5s cubic-bezier(.2,1.4,.4,1)}
+.desk-toast:before{content:"!";display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--cr);font:700 11px/1 var(--M)}
+.desk-toast.t1{left:8%;top:40%}.desk-toast.t2{right:6%;top:24%;transition-delay:.25s}.desk-toast.t3{left:24%;bottom:12%;transition-delay:.5s}
+.desk.chaos .desk-toast{opacity:1;transform:none}
+@media(max-width:960px){.pb .two{grid-template-columns:minmax(0,1fr)}.pb-vis{position:relative;top:0;margin-top:8px}.desk{height:440px}}
+@media(max-width:600px){.desk{height:400px}.pw{--w:78%!important}.pw[data-i="1"],.pw[data-i="3"]{left:auto!important;right:4%}.desk-tabs span:nth-child(n+5){display:none}.desk-toast.t2{display:none}}
+@media(prefers-reduced-motion:reduce){.pb-q em{animation:none}.js .desk.chaos .pw{animation:none}}
+/* ===== the turning point: pinned; the question lights word by word, then Scoutly appears and its six tools settle into orbit ===== */
+.tp{position:relative;background:var(--nv);color:#fff}
+.js .tp{height:300vh}
+.tp-pin{position:relative;height:100vh;height:100svh;min-height:620px;overflow:hidden;display:grid;place-items:center;text-align:center}
+.js .tp-pin{position:sticky;top:0}
+.tp-pin:before{content:"";position:absolute;inset:0;background:radial-gradient(45% 45% at 50% 50%,rgba(47,91,255,.24),transparent 70%),radial-gradient(30% 30% at 80% 20%,rgba(122,92,255,.14),transparent 70%)}
+.tp-pin:after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(127,160,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(127,160,255,.06) 1px,transparent 1px);background-size:64px 64px;background-position:center;-webkit-mask-image:radial-gradient(45% 50% at 50% 50%,#000,transparent);mask-image:radial-gradient(45% 50% at 50% 50%,#000,transparent);pointer-events:none}
+.tp-a,.tp-b{grid-area:1/1;position:relative;z-index:2;will-change:opacity,transform}
+.tp-a{max-width:1080px;padding:0 24px}
+.tp-q{margin-top:26px;font:600 clamp(34px,5.2vw,86px)/1 var(--D);letter-spacing:-.045em;text-transform:uppercase;color:#fff}
+.tp-q em{font-style:normal}
+.tp-q .tw{color:rgba(214,224,255,.16);transition:color .35s}
+.tp-q .tw.lit{color:#fff}
+.tp-q em .tw.lit{color:transparent;background:linear-gradient(100deg,#5ac8fa,#a9bcff 55%,#fff);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 .25em rgba(90,200,250,.45))}
+.tp-hint{display:inline-flex;flex-direction:column;align-items:center;gap:12px;margin-top:44px;font:500 10.5px/1 var(--M);letter-spacing:.16em;text-transform:uppercase;color:rgba(214,224,255,.45)}
+.tp-hint:after{content:"";width:1px;height:44px;background:linear-gradient(var(--sky),transparent);animation:tphint 1.8s ease-in-out infinite;transform-origin:top}
+@keyframes tphint{0%{transform:scaleY(0)}50%{transform:scaleY(1)}100%{transform:scaleY(1);opacity:0}}
+.js .tp-b{opacity:0}
+.tp-b{--m:1;display:grid;grid-template-columns:auto minmax(0,520px);gap:64px;align-items:center;justify-content:center;max-width:1160px;padding:0 32px;text-align:left}
+.orb{--R:150px;position:relative;width:calc(var(--R)*2 + 130px);aspect-ratio:1}
+.orb-ring{position:absolute;inset:65px;border:1px solid rgba(127,160,255,.2);border-radius:50%;opacity:var(--m)}
+.orb-ring.r2{inset:14px;border-style:dashed;border-color:rgba(127,160,255,.14);animation:orbspin 70s linear infinite}
+@keyframes orbspin{to{transform:rotate(360deg)}}
+.orb-core{position:absolute;left:50%;top:50%;width:116px;height:116px;margin:-58px;border-radius:33px;box-shadow:0 0 calc(90px*var(--m)) calc(12px*var(--m)) rgba(47,91,255,.55),0 0 0 calc(10px*var(--m)) rgba(90,200,250,.06);opacity:var(--m);transform:scale(calc(.55 + .45*var(--m))) rotate(calc((1 - var(--m))*-25deg))}
+.orb-core img{display:block;width:100%;height:100%}
+.orb-c{--k:1;position:absolute;left:50%;top:50%;transform:rotate(var(--a)) translateX(calc(var(--R)*(1 + (1 - var(--k))*1.5))) rotate(calc(-1*var(--a)));opacity:var(--k)}
+.orb-c>span{display:flex;align-items:center;gap:8px;padding:9px 13px 9px 9px;border-radius:999px;background:rgba(12,22,60,.88);border:1px solid rgba(127,160,255,.28);box-shadow:0 16px 34px -16px #000;font:500 12.5px/1 var(--T);color:#e6ecff;white-space:nowrap;transform:translate(-50%,-50%)}
+.orb-c i{width:18px;height:18px;border-radius:50%;background:var(--c);box-shadow:0 0 12px var(--c),inset 0 0 0 4px rgba(255,255,255,.3)}
+.tp-why{font:600 clamp(30px,3.4vw,56px)/1.02 var(--D);letter-spacing:-.035em;text-transform:uppercase;opacity:var(--k,1);transform:translateY(calc((1 - var(--k,1))*26px))}
+.tp-why b{font-weight:600;background:linear-gradient(100deg,#5ac8fa,#2f5bff 45%,#a98bff 80%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.tp-tx{margin-top:24px;max-width:480px;font:400 clamp(16px,1.25vw,19px)/1.65 var(--T);color:rgba(214,224,255,.76);opacity:var(--k,1);transform:translateY(calc((1 - var(--k,1))*22px))}
+.tp-tx b{color:#fff;font-weight:600}
+/* reduced motion and no JS: both halves simply stack */
+.js .tp.tp-static,html:not(.js) .tp{height:auto}
+.tp-static .tp-pin,html:not(.js) .tp-pin{position:relative;height:auto;min-height:0;gap:96px;padding:130px 0}
+.tp-static .tp-a,.tp-static .tp-b,html:not(.js) .tp-a,html:not(.js) .tp-b{grid-area:auto;opacity:1!important;transform:none!important}
+.tp-static .tp-hint,html:not(.js) .tp-hint{display:none}
+@media(max-width:960px){.tp-b{grid-template-columns:minmax(0,1fr);gap:20px;justify-items:center;text-align:center;padding:0 20px}.orb{--R:100px}.orb-core{width:88px;height:88px;margin:-44px;border-radius:25px}.orb-c>span{padding:7px 10px 7px 7px;font-size:11px}.orb-c i{width:14px;height:14px}.tp-tx{margin:16px auto 0}}
+@media(max-width:400px){.orb{--R:86px}.orb-c>span{font-size:10.5px}}
+@media(prefers-reduced-motion:reduce){.orb-ring.r2,.tp-hint:after{animation:none}}
+/* ===== the ecosystem: a bento of the six tools, each with a small live preview ===== */
+.eco{padding:60px 0 150px;overflow:hidden}
+.eco.dk.sec:before{background:radial-gradient(45% 22% at 80% 34%,rgba(47,91,255,.2),transparent 70%),radial-gradient(40% 30% at 10% 55%,rgba(90,200,250,.08),transparent 70%)}
+.fade-lt+.meet{padding-top:40px}
+.eco .fh-h{color:#fff}
+.eco .fh-sub{color:rgba(214,224,255,.7)}
+.eco .hx-pill{background:rgba(255,255,255,.05);border-color:rgba(127,160,255,.3);color:rgba(214,224,255,.8);box-shadow:none}
+.bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px;margin-top:60px}
+.bx{--mx:50%;--my:0%;position:relative;grid-column:span 2;display:flex;flex-direction:column;min-width:0;padding:22px 22px 24px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.015));border:1px solid rgba(127,160,255,.16);overflow:hidden;transition:border-color .35s,box-shadow .45s,transform .45s cubic-bezier(.2,.8,.2,1)}
+.js .bx[data-rv]{transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .45s}
+.js .bento .bx.in:nth-child(3n+2){transition-delay:.1s}.js .bento .bx.in:nth-child(3n){transition-delay:.2s}.js .bento .bx.in:hover{transition-delay:0s}
+.bx:before{content:"";position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx) var(--my),color-mix(in srgb,var(--c) 16%,transparent),transparent 65%);opacity:0;transition:opacity .4s;pointer-events:none}
+.bx:after{content:"";position:absolute;left:24px;right:24px;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--c),transparent);opacity:.55}
+.bx>*{position:relative}
+.bx:hover,.js .bx[data-rv].in:hover{border-color:color-mix(in srgb,var(--c) 45%,transparent);box-shadow:0 40px 80px -40px color-mix(in srgb,var(--c) 60%,transparent);transform:translateY(-4px)}
+.bx:hover:before{opacity:1}
+.bx.au,.bx.cp{grid-column:span 3}
+.bx-top{display:flex;align-items:center;gap:12px}
+.bx-ic{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 32%,transparent)}
+.bx-ic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.bx-ix{margin-left:auto;font:500 11px/1 var(--M);letter-spacing:.14em;color:rgba(214,224,255,.4)}
+.bx h3{margin-top:22px;font:500 21px/1.15 var(--D);letter-spacing:.02em;text-transform:uppercase;color:#fff}
+.bx p{margin-top:9px;font:400 15px/1.6 var(--T);color:rgba(214,224,255,.7)}
+.bx-a{display:inline-flex;align-items:center;gap:8px;margin-top:18px;font:600 11px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--c);transition:gap .25s}
+.bx .bx-a,.bx .ds-copy{position:static}
+.bx-a:after{content:"";position:absolute;inset:0;z-index:3;border-radius:inherit}
+.bx:hover .bx-a{gap:12px}
+.bx-a:focus-visible{outline:none}.bx:focus-within{outline:2px solid var(--sky);outline-offset:3px}
+/* previews */
+.bx-viz{flex:1;display:flex;flex-direction:column;justify-content:center;margin-top:20px;padding:14px;border-radius:13px;background:rgba(5,10,31,.5);border:1px solid rgba(127,160,255,.12);font:400 12.5px/1.2 var(--T);color:rgba(214,224,255,.78)}
+.bx .v-q{margin:0;display:flex;align-items:center;gap:8px;height:32px;padding:0 11px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(127,160,255,.18);color:#fff}
+.v-q svg{width:14px;height:14px;fill:none;stroke:rgba(214,224,255,.5);stroke-width:2}.v-q i{width:1.5px;height:14px;margin-left:-6px;background:var(--sky);animation:hxblink 1s steps(1) infinite}
+.v-kw ul,.v-bl ul{margin-top:6px}
+.v-kw li,.v-bl li{display:grid;align-items:center;gap:10px;padding:8px 2px;border-bottom:1px solid rgba(127,160,255,.08)}
+.v-kw li{grid-template-columns:minmax(0,1fr) auto 26px}.v-bl li{grid-template-columns:22px minmax(0,1fr) auto}
+.v-kw li:last-child,.v-bl li:last-child{border-bottom:0}
+.v-kw span,.v-bl span{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.v-kw b{font:500 11.5px/1 var(--M);color:#fff}
+.v-kw .kd.l{background:rgba(61,219,165,.14);color:#3ddba5}.v-kw .kd.m{background:rgba(245,181,61,.15);color:#f5b53d}.v-kw .kd.h{background:rgba(255,107,111,.14);color:#ff8a8d}
+.fv{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,.08);font:600 10px/1 var(--D);font-style:normal;color:#fff}
+.v-bl .st.lv{background:rgba(61,219,165,.14);color:#3ddba5}.v-bl .st.pd{background:rgba(245,181,61,.15);color:#f5b53d}.v-bl .st.lo{background:rgba(255,107,111,.14);color:#ff8a8d}
+.v-bl p{display:flex;align-items:baseline;gap:8px;margin-bottom:6px;font:500 10.5px/1 var(--M);letter-spacing:.08em;text-transform:uppercase;color:rgba(214,224,255,.5)}.v-bl p b{font:600 22px/1 var(--D);letter-spacing:0;color:#fff}.v-bl p em{margin-left:auto;font-style:normal;color:#3ddba5}
+.v-rk{position:relative;min-height:150px}
+.v-rk svg{display:block;width:100%;height:110px;overflow:visible}
+.v-rk .gr path{stroke:rgba(127,160,255,.1);stroke-width:1;vector-effect:non-scaling-stroke}
+.v-rk .ar{fill:url(#rkG)}
+.v-rk .ln{fill:none;stroke:#a98bff;stroke-width:2.5;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:0;transition:stroke-dashoffset 1.8s cubic-bezier(.4,0,.2,1) .3s}
+.v-rk .ar{transition:opacity 1s ease 1.2s}
+.v-rk .pt{position:absolute;padding:4px 7px;border-radius:6px;font:600 11px/1 var(--M);transition:opacity .5s,transform .6s cubic-bezier(.2,1.4,.4,1)}
+.v-rk .pt.a{left:12px;bottom:12px;background:rgba(255,255,255,.07);color:rgba(214,224,255,.65)}
+.v-rk .pt.b{right:12px;top:10px;background:#a98bff;color:#0a0f2c;transition-delay:1.9s;box-shadow:0 0 18px rgba(169,139,255,.6)}
+.v-rk .pt.b:after{content:" ▲ 11";font-weight:500}
+.js .bx:not(.in) .v-rk .ln{stroke-dashoffset:1}.js .bx:not(.in) .v-rk .ar{opacity:0}.js .bx:not(.in) .v-rk .pt.b{opacity:0;transform:scale(.6)}
+.v-au{flex-direction:row;align-items:center;justify-content:flex-start;gap:22px}
+.v-ring{position:relative;flex:none;width:104px;height:104px}.v-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.v-ring circle{fill:none;stroke:rgba(255,255,255,.08);stroke-width:3.5}.v-ring .v{stroke:#f5b53d;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:8;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1) .3s;filter:drop-shadow(0 0 6px rgba(245,181,61,.55))}
+.v-ring b{position:absolute;inset:0;display:grid;place-content:center;text-align:center;font:600 30px/1 var(--D);color:#fff}.v-ring b small{display:block;margin-top:5px;font:500 9.5px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:rgba(214,224,255,.5)}
+.js .bx:not(.in) .v-ring .v{stroke-dashoffset:100}
+.v-au ul{flex:1;min-width:0;display:grid;gap:7px}
+.v-au li{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:9px;background:rgba(255,255,255,.04);white-space:nowrap;transition:opacity .5s,transform .6s cubic-bezier(.2,.8,.2,1)}
+.v-au li:before{content:"";flex:none;width:7px;height:7px;border-radius:50%;background:#3ddba5;box-shadow:0 0 8px #3ddba5}.v-au li.wn:before{background:#f5b53d;box-shadow:0 0 8px #f5b53d}
+.v-au li em{margin-left:auto;font:500 10.5px/1 var(--M);font-style:normal;color:rgba(214,224,255,.5)}
+.v-au li:nth-child(2){transition-delay:.12s}.v-au li:nth-child(3){transition-delay:.24s}
+.js .bx:not(.in) .v-au li{opacity:0;transform:translateX(14px)}
+.v-cp ul{display:grid;gap:12px}
+.v-cp li{display:grid;grid-template-columns:minmax(0,130px) minmax(0,1fr) 26px;align-items:center;gap:12px}
+.v-cp span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.v-cp b{font:500 11.5px/1 var(--M);color:#fff;text-align:right}
+.v-cp i{height:8px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden}
+.v-cp i:after{content:"";display:block;width:var(--w);height:100%;border-radius:4px;background:rgba(214,224,255,.32);transition:width 1.4s cubic-bezier(.2,.8,.2,1) .3s}
+.v-cp .me span{color:#4fd1e8;font-weight:600}.v-cp .me i:after{background:linear-gradient(90deg,#2f5bff,#4fd1e8);box-shadow:0 0 12px rgba(79,209,232,.5)}
+.js .bx:not(.in) .v-cp i:after{width:0}
+.bx .v-gap{display:flex;align-items:center;gap:10px;margin-top:16px;padding-top:14px;border-top:1px solid rgba(127,160,255,.1);font:400 13px/1.3 var(--T);color:rgba(214,224,255,.7)}.v-gap b{font:600 20px/1 var(--D);color:#4fd1e8}
+.bx.ds{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,2fr);gap:40px;align-items:center}
+.bx.ds .bx-viz{margin-top:0}
+.v-ds{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;padding:12px}
+.ds-k{position:relative;padding:16px 14px 14px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(127,160,255,.1);overflow:hidden;transition:opacity .5s,transform .6s cubic-bezier(.2,.8,.2,1)}
+.ds-k:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--c);box-shadow:0 0 12px var(--c)}
+.ds-k span{display:block;font:500 10px/1.3 var(--M);letter-spacing:.08em;text-transform:uppercase;color:rgba(214,224,255,.5)}
+.ds-k b{display:block;margin-top:12px;font:600 30px/1 var(--D);letter-spacing:-.02em;color:#fff}
+.ds-k em{display:block;margin-top:8px;font:500 10.5px/1 var(--M);font-style:normal;color:var(--c)}
+.ds-k:nth-child(2){transition-delay:.08s}.ds-k:nth-child(3){transition-delay:.16s}.ds-k:nth-child(4){transition-delay:.24s}.ds-k:nth-child(5){transition-delay:.32s}
+.js .bx:not(.in) .ds-k{opacity:0;transform:translateY(14px)}
+.bx .ds-note{grid-column:1/-1;margin:2px 0 0;font:400 11px/1.4 var(--M);color:rgba(214,224,255,.4)}
+@media(max-width:1100px){.bento{grid-template-columns:repeat(2,minmax(0,1fr))}.bx,.bx.au,.bx.cp{grid-column:span 1}.bx.ds{grid-column:1/-1;grid-template-columns:minmax(0,1fr);gap:22px}.v-ds{grid-template-columns:repeat(3,minmax(0,1fr))}.v-ds .ds-k:nth-child(n+4){grid-column:span 1}}
+@media(max-width:640px){.bento{grid-template-columns:minmax(0,1fr)}.v-ds{grid-template-columns:repeat(2,minmax(0,1fr))}.v-ds .ds-k:last-of-type{grid-column:1/-1}.v-au{flex-direction:column;align-items:stretch}.v-ring{margin:0 auto}.v-cp li{grid-template-columns:minmax(0,108px) minmax(0,1fr) 24px}}
+@media(prefers-reduced-motion:reduce){.v-q i{animation:none}}
+/* ===== philosophy (horizontal cards) ===== */
+.hz-tx{max-width:440px;margin-top:22px;font:400 16.5px/1.65 var(--T);color:rgba(214,224,255,.74)}.hz-tx b{color:#fff;font-weight:600}
+.hz-pil{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
+.hz-pil li{padding:8px 12px;border:1px solid rgba(127,160,255,.3);border-radius:999px;font:500 10.5px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--sky)}
+.hc-t{align-self:flex-start;margin-top:14px;padding:6px 9px;border-radius:999px;background:rgba(47,91,255,.1);font:600 10px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--b)}
+.hc.hl{background:linear-gradient(150deg,#3a64ff,#1a36b8);color:#fff}
+.hc.hl .ix{color:var(--sky)}.hc.hl p{color:rgba(230,236,255,.82)}.hc.hl .hc-t{background:rgba(255,255,255,.14);color:#fff}.hc.hl i{background:repeating-linear-gradient(90deg,#fff 0 2px,transparent 2px 5px)}
+.fin .acts .btn{height:54px;padding:0 26px}
 /* horizontal cards */
 .hz{position:relative}
 .hz-pin{position:relative;overflow:hidden;padding:110px 0}
@@ -537,18 +679,6 @@ code{font:400 12.5px var(--M)}
   .d-main,.d-list{grid-template-columns:minmax(0,1fr)}.d-main{padding:16px}.d-top{flex-wrap:wrap}.d-top b{font-size:16px}.d-ch{flex-wrap:wrap}.d-list>div{gap:8px}.d-list span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 }
 @media(max-width:400px){.hd-in{gap:10px}.logo{gap:7px;letter-spacing:.06em}.act{gap:6px}.act .btn.d{padding:0 10px;letter-spacing:.06em}}
-/* landscape phones: compact the hero demo so the whole window fits under the header while it's pinned */
-@media(max-height:520px) and (orientation:landscape){
-  .hx-pin{top:70px}.hx-win{--rh:38px}
-  .hx-bar{padding:6px 12px}.hx-q{height:32px;font-size:13px}.hx-dots,.hx-site,.hx-dom,.hx-sn{display:none}
-  .hx-res,.hx-audit,.hx-ai{padding:10px 14px}.hx-list{margin-top:6px}.hx-list li{grid-template-columns:18px 24px minmax(0,1fr);gap:10px}.hx-fav{width:24px;height:24px;font-size:12px}.hx-ttl{font-size:13px}
-  .hx-stats,.hx-iss{margin-top:8px}.hx-iss{gap:3px}.hx-iss li{padding:4px 10px}
-  .hx-ans{min-height:0;margin-top:8px;font-size:14px;line-height:1.55}.hx-cites{margin-top:8px}.hx-foot{padding:8px 14px}
-}
-@media(max-height:400px) and (orientation:landscape){
-  .hx-win{--rh:34px}.hx-ttl{font-size:12.5px}.hx-k{font-size:10.5px}.hx-iss li{padding:3px 10px}
-  .hx-stats span{padding:5px 8px}.hx-stats b{margin-bottom:3px;font-size:14px}.hx-ans{font-size:13px;line-height:1.5}
-}
 
 /* without JavaScript: plain stacked layout */
 html:not(.js) .tn-pin{height:auto;display:block;padding:100px 0}html:not(.js) .tn-st{margin:0 auto 56px}html:not(.js) .tn-count{display:none}
@@ -603,97 +733,216 @@ requestAnimationFrame(frame);
 <header class="hd" id="nav">
   <div class="w hd-in">
     <a href="./" class="logo" aria-label="Scoutly home"><img src="assets/scoutly-mark.svg" alt="" width="30" height="30"><span>Scoutly</span></a>
-    <nav class="nl" id="navLinks" aria-label="Primary"><a href="#features">Features</a><i aria-hidden="true">/</i><a href="#how">How it works</a><i aria-hidden="true">/</i><a href="website-seo-audit/">SEO audit</a><i aria-hidden="true">/</i><a href="ai-search-visibility/">AI search</a><i aria-hidden="true">/</i><a href="#faq">FAQ</a><i aria-hidden="true">/</i><a href="seo-glossary/">Glossary</a></nav>
+    <nav class="nl" id="navLinks" aria-label="Primary"><a href="#problem">Why Scoutly</a><i aria-hidden="true">/</i><a href="#features">Features</a><i aria-hidden="true">/</i><a href="#how">How it works</a><i aria-hidden="true">/</i><a href="website-seo-audit/">SEO audit</a><i aria-hidden="true">/</i><a href="ai-search-visibility/">AI search</a><i aria-hidden="true">/</i><a href="#faq">FAQ</a><i aria-hidden="true">/</i><a href="seo-glossary/">Glossary</a></nav>
     <div class="act"><a class="btn sm" href="login.html?mode=login">Log in</a><button class="btn sm d" type="button" id="demoOpen" aria-haspopup="dialog">Book a demo</button><button class="nav-burger" id="navBurger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="navLinks"><i></i><i></i><i></i></button></div>
   </div>
 </header>
 <main id="main">
 
-<!-- 1. HERO: a live search results stage -->
+<!-- 1. HERO: scattered SEO work comes together into one workspace -->
 <section class="hx" id="scan" aria-labelledby="heroTitle">
   <canvas class="hx-aurora" id="hxAurora" aria-hidden="true"></canvas>
   <div class="hx-bg" aria-hidden="true"></div>
   <div class="hx-grid" aria-hidden="true"></div>
   <div class="w hx-top">
-    <a class="hx-pill hx-fu" style="--d:.05s" href="website-seo-audit/"><b>Live</b><span>Website audits now run on a real crawl</span><em aria-hidden="true">→</em></a>
-    <h1 class="hx-h1" id="heroTitle"><span class="hx-l"><span class="hx-w" style="--i:1">Get</span> <span class="hx-w" style="--i:2">found</span> <span class="hx-w" style="--i:3">on</span> <span class="hx-w" style="--i:4">Google.</span></span> <span class="hx-l"><span class="hx-w" style="--i:6">Get</span> <span class="hx-w" style="--i:7">discovered</span> <span class="hx-w" style="--i:8">by</span> <span class="hx-w" style="--i:9"><em>AI.</em></span></span></h1>
-    <p class="hx-sub hx-fu" style="--d:.75s">Audit your site, fix what holds it back, and see how you show up in search results <b>and</b> AI answers. One workspace for SEO, AEO and GEO.</p>
-    <form class="scan hx-form hx-fu" style="--d:.9s" id="hxForm" action="login.html" method="get" data-scan data-msg="hxMsg" novalidate>
-      <svg class="hx-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg>
-      <label class="sr-only" for="hxSite">Enter your website URL</label>
-      <input id="hxSite" name="site" type="text" placeholder="Enter your website URL" autocomplete="url" inputmode="url" autocapitalize="off" spellcheck="false" aria-describedby="hxMsg hxEarly">
-      <button class="btn p" type="submit">Scan your site free <span aria-hidden="true">→</span></button>
-    </form>
-    <p class="msg" id="hxMsg" role="status" aria-live="polite"></p>
-    <ul class="hx-trust hx-fu" style="--d:1.05s" aria-label="What the free audit checks"><li>Crawls up to 25 pages</li><li>Checks up to 120 links</li><li>Core Web Vitals included</li></ul>
-    <p class="note hx-fu" style="--d:1.1s" id="hxEarly">Create a free account to run the audit and save your results.</p>
+    <a class="hx-pill hx-fu" style="--d:.05s" href="#features"><b>Early access</b><span>The all-in-one SEO workspace</span><em aria-hidden="true">→</em></a>
+    <h1 class="hx-h1" id="heroTitle"><span class="hx-l"><span class="hx-w" style="--i:1">SEO</span> <span class="hx-w" style="--i:2">is</span> <span class="hx-w" style="--i:3">complicated</span> <span class="hx-w" style="--i:4">enough.</span></span> <span class="hx-l"><span class="hx-w" style="--i:6">Managing</span> <span class="hx-w" style="--i:7">it</span> <span class="hx-w" style="--i:8"><em>shouldn’t</em></span> <span class="hx-w" style="--i:9"><em>be.</em></span></span></h1>
+    <p class="hx-sub hx-fu" style="--d:.75s">Meet <b>Scoutly</b> — your all-in-one SEO management workspace. Discover opportunities, manage backlinks, track rankings, analyse competitors, and make smarter SEO decisions from one place.</p>
+    <div class="hx-acts hx-fu" style="--d:.9s">
+      <a class="btn p" href="#features">Explore Scoutly <span aria-hidden="true">→</span></a>
+      <a class="btn gh" href="#how"><span class="hx-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4.5v15l13-7.5z" fill="currentColor"/></svg></span>See How It Works</a>
+    </div>
+    <ul class="hx-trust hx-fu" style="--d:1.05s" aria-label="Scoutly at a glance"><li>Six SEO tools, one workspace</li><li>Free early-access account</li></ul>
   </div>
 
-  <div class="hx-story" id="hxStory"><div class="hx-pin">
-  <div class="hx-stage" aria-hidden="true">
-    <div class="hx-scene" id="hxScene">
-      <div class="hx-win" id="hxWin">
-        <div class="hx-bar"><span class="hx-dots"><i></i><i></i><i></i></span><div class="hx-q"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span id="hxQ">how to fix broken links on my website</span><b class="hx-caret"></b></div><span class="hx-tag">Illustrative demo</span></div>
-        <div class="hx-body">
-          <div class="hx-res">
-            <p class="hx-k">Search results</p>
-            <ol class="hx-list" id="hxList">
-              <li class="me" style="--p:0;--d:.32s"><b class="hx-rank">1</b><i class="hx-fav" style="--c:linear-gradient(135deg,#2f5bff,#5ac8fa)">Y</i><div><span class="hx-dom">yourwebsite.com</span><span class="hx-ttl">Fix broken links in 3 steps, with a free checker</span><span class="hx-sn" style="--w:84%"></span></div><span class="hx-up">▲ 4</span></li>
-              <li style="--p:1;--d:0s"><b class="hx-rank">2</b><i class="hx-fav" style="--c:#f5a524">G</i><div><span class="hx-dom">guide-hub.example</span><span class="hx-ttl">Broken links: what they are and why they matter</span><span class="hx-sn" style="--w:78%"></span></div></li>
-              <li style="--p:2;--d:.08s"><b class="hx-rank">3</b><i class="hx-fav" style="--c:#17a673">W</i><div><span class="hx-dom">webdocs.example</span><span class="hx-ttl">How to find 404 errors on any website</span><span class="hx-sn" style="--w:70%"></span></div></li>
-              <li style="--p:3;--d:.16s"><b class="hx-rank">4</b><i class="hx-fav" style="--c:#7a5cff">M</i><div><span class="hx-dom">marketing-blog.example</span><span class="hx-ttl">Redirects explained for beginners</span><span class="hx-sn" style="--w:88%"></span></div></li>
-              <li style="--p:4;--d:.24s"><b class="hx-rank">5</b><i class="hx-fav" style="--c:#e5484d">S</i><div><span class="hx-dom">seo-weekly.example</span><span class="hx-ttl">10 link-building mistakes to avoid</span><span class="hx-sn" style="--w:66%"></span></div></li>
-            </ol>
-          </div>
-          <div class="hx-side">
-          <div class="hx-audit" id="hxAudit">
-            <p class="hx-k"><span class="hx-scan-dot"></span>Site audit · yourwebsite.com</p>
-            <div class="hx-site" id="hxWire"><i class="w1"></i><i class="w2"></i><i class="w3"></i><i class="w4"></i><i class="w5"></i><i class="w6"></i><i class="w7"></i><i class="w8"></i>
-              <span class="hx-sl"></span>
-              <b class="mk" style="left:78%;top:13%">1</b><b class="mk" style="left:12%;top:36%">2</b><b class="mk" style="left:30%;top:80%">3</b><b class="mk" style="left:70%;top:48%">4</b><b class="mk" style="left:88%;top:82%">5</b></div>
-            <div class="hx-stats"><span><b id="hxPages">25</b>/25 pages</span><span><b id="hxLinks">120</b>/120 links</span><span><b id="hxIss">5</b> issues</span></div>
-            <ol class="hx-iss" id="hxIssues">
-              <li><em class="sv cr">404</em><span>/journal: page not found</span><i>Fixed</i></li>
-              <li><em class="sv wr">Title</em><span>Missing title tag on /services</span><i>Fixed</i></li>
-              <li><em class="sv wr">Alt</em><span>6 images missing alt text</span><i>Fixed</i></li>
-              <li><em class="sv in">LCP</em><span>Hero image loads in 3.9s</span><i>Fixed</i></li>
-              <li><em class="sv in">Schema</em><span>No structured data found</span><i>Fixed</i></li>
-            </ol>
-          </div>
-          <div class="hx-ai" id="hxAi">
-            <p class="hx-k"><span class="hx-spark">✦</span>AI answer</p>
-            <p class="hx-ans" id="hxAns">Crawl your site to list every link that returns a 404 or server error. Update or redirect each one, then crawl again to confirm the fix.</p>
-            <div class="hx-cites on" id="hxCites"><span><i>1</i>guide-hub.example</span><span class="me hit"><i>2</i>yourwebsite.com</span><span><i>3</i>webdocs.example</span></div>
-          </div>
-          </div>
+  <div class="cv-story" id="cvStory"><div class="cv-pin">
+  <div class="cv-stage" id="cvStage" aria-hidden="true">
+    <div class="cv-scene" id="cvScene">
+      <ul class="cv-noise" id="cvNoise">
+        <li style="--x:-5%;--y:9%;--dl:0s">Tab 14 of 14</li>
+        <li style="--x:87%;--y:4%;--dl:-2s">Which sheet is the latest?</li>
+        <li style="--x:-6%;--y:84%;--dl:-3.5s">Session expired · log in again</li>
+        <li style="--x:86%;--y:90%;--dl:-5s">Export limit reached</li>
+      </ul>
+      <div class="cv-win" id="cvWin">
+        <div class="cv-bar"><span class="cv-dots"><i></i><i></i><i></i></span><span class="cv-url"><img src="assets/scoutly-mark.svg" alt="" width="14" height="14">app.scoutly · workspace</span><span class="cv-tag">Illustrative demo</span></div>
+        <div class="cv-side"><span data-m="ds">Dashboard</span><span data-m="kw">Keywords</span><span data-m="bl">Backlinks</span><span data-m="rk">Rankings</span><span data-m="au">Site audit</span><span data-m="cp">Competitors</span></div>
+        <div class="cv-main">
+          <div class="cv-hi"><div><b>yourwebsite.com</b><span>SEO overview · every tool in one view</span></div><span class="cv-tabs"><i></i><b id="cvTabs">14 tabs</b> open</span></div>
+
+          <div class="sl" data-m="kw" style="--sx:-340px;--sy:40px;--sr:-9deg"><div class="pc" style="--tint:rgba(23,166,115,.13)">
+            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#17a673">CSV</i>keywords_export (3).csv</span><span class="pc-in"><i class="mi" style="--c:#2f5bff"></i>Keyword Research<em>248 saved</em></span></div>
+            <ul class="pc-kw"><li><span>seo management tool</span><b>2.4k</b><em class="kd m">38</em></li><li><span>backlink tracker</span><b>1.9k</b><em class="kd l">24</em></li><li><span>rank tracking software</span><b>1.3k</b><em class="kd h">61</em></li></ul>
+          </div></div>
+
+          <div class="sl" data-m="bl" style="--sx:110px;--sy:-30px;--sr:7deg"><div class="pc" style="--tint:rgba(29,122,76,.12)">
+            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#1d7a4c">XLS</i>backlinks_FINAL_v3.xlsx</span><span class="pc-in"><i class="mi" style="--c:#17a673"></i>Backlink Manager<em>184 links</em></span></div>
+            <ul class="pc-bl"><li><span>industry-blog.example</span><em class="st lv">Live</em></li><li><span>partner-site.example</span><em class="st pd">Pending</em></li><li><span>old-directory.example</span><em class="st lo">Lost</em></li></ul>
+          </div></div>
+
+          <div class="sl" data-m="rk" style="--sx:370px;--sy:80px;--sr:11deg"><div class="pc" style="--tint:rgba(122,92,255,.1)">
+            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#7a5cff">TAB</i>rank-tracker · another login</span><span class="pc-in"><i class="mi" style="--c:#7a5cff"></i>Rank Tracking<em>▲ 2.1</em></span></div>
+            <div class="pc-rk"><p><b>8.4</b><span>Avg. position</span></p><svg viewBox="0 0 120 56" preserveAspectRatio="none"><path class="ar" d="M0 46 L20 42 L40 44 L60 30 L80 26 L100 14 L120 8 L120 56 L0 56Z"/><path d="M0 46 L20 42 L40 44 L60 30 L80 26 L100 14 L120 8"/></svg></div>
+          </div></div>
+
+          <div class="sl" data-m="au" style="--sx:-390px;--sy:50px;--sr:6deg"><div class="pc" style="--tint:rgba(229,72,77,.08)">
+            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#e5484d">PDF</i>audit-report-march.pdf</span><span class="pc-in"><i class="mi" style="--c:#f5a524"></i>Website Audit<em>25 pages</em></span></div>
+            <div class="pc-au"><div class="pc-ring"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19"/><circle class="v" cx="22" cy="22" r="19" pathLength="100"/></svg><b>92</b></div><ul><li>Indexable pages</li><li class="wn">2 broken links</li><li>Core Web Vitals</li></ul></div>
+          </div></div>
+
+          <div class="sl" data-m="cp" style="--sx:-60px;--sy:130px;--sr:-7deg"><div class="pc" style="--tint:rgba(90,200,250,.13)">
+            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#0ea5c6">TAB</i>competitor research · tab 9</span><span class="pc-in"><i class="mi" style="--c:#0ea5c6"></i>Competitor Analysis<em>3 sites</em></span></div>
+            <ul class="pc-cp"><li class="me"><span>yourwebsite.com</span><i style="--w:62%"></i><b>62</b></li><li><span>rival-one.example</span><i style="--w:74%"></i><b>74</b></li><li><span>rival-two.example</span><i style="--w:48%"></i><b>48</b></li></ul>
+          </div></div>
+
+          <div class="sl" data-m="ds" style="--sx:350px;--sy:120px;--sr:-12deg"><div class="pc" style="--tint:rgba(255,214,90,.34)">
+            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#d49a00">NOTE</i>TODO.txt</span><span class="pc-in"><i class="mi" style="--c:#0a1230"></i>Next actions<em>Dashboard</em></span></div>
+            <ul class="pc-td"><li><span>Redirect /journal (404)</span><em class="hi">High</em></li><li><span>Follow up on guest post</span><em>Med</em></li><li class="dn"><span>Rewrite /pricing title</span><em>Done</em></li></ul>
+          </div></div>
         </div>
-        <div class="hx-foot"><span class="hx-live"></span><span id="hxStatus">Cited in the AI answer</span><span class="hx-meter"><i id="hxMeter" style="--s:94%"></i></span><span class="hx-score">Health <b id="hxScore">94</b></span></div>
-        <svg class="hx-beam" id="hxBeam"><defs><linearGradient id="hxBg" x1="0" x2="1"><stop offset="0" stop-color="#2f5bff"/><stop offset="1" stop-color="#5ac8fa"/></linearGradient></defs><path pathLength="1" d=""/><circle r="4" cx="-10" cy="-10"/></svg>
+        <div class="cv-foot"><span class="cv-live"></span><span id="cvStatus">Everything in one place</span><span class="cv-meter"><i id="cvMeter"></i></span><span class="cv-n"><b>6</b> tools · <b>1</b> workspace</span></div>
       </div>
-      <ul class="hx-float fix"><li style="--x:-7%;--y:24%;--z:110px;--dl:0s">Title tag fixed</li><li style="--x:86%;--y:12%;--z:150px;--dl:-2s">404 → 301 redirected</li><li style="--x:-5%;--y:68%;--z:70px;--dl:-4s">Schema valid <small>JSON-LD</small></li><li style="--x:88%;--y:60%;--z:120px;--dl:-5.5s">LCP 1.8s <small>good</small></li></ul>
     </div>
   </div>
   </div></div>
 </section>
 
-<!-- 2. TOOLKIT -->
-<section class="sec ft-sec" id="features" aria-labelledby="featTitle"><div class="w">
-  <div class="fh">
-    <p class="hx-pill fh-pill" data-rv><b>Toolkit</b><span>Six tools · one workspace</span></p>
-    <h2 class="fh-h" id="featTitle"><span class="fh-l" data-rv>Everything you need to</span> <span class="fh-l" data-rv>improve your <em>discoverability.</em></span></h2>
-    <p class="fh-sub" data-rv>From the first crawl to ongoing backlink analysis, Scoutly brings your most important SEO workflows into one place.</p>
-    <ul class="fh-steps" data-rv aria-label="How the tools connect"><li>Audit</li><li>Fix</li><li>Grow links</li><li>Research</li><li>Get cited</li></ul>
+<!-- 2. THE PROBLEM: every SEO professional knows this -->
+<section class="sec pb" id="problem" aria-labelledby="pbTitle"><div class="w two">
+  <div>
+    <p class="lbl" data-rv>Every SEO professional knows this</p>
+    <h2 class="dh sm" id="pbTitle"><span data-scr>Your SEO work is everywhere.</span> <span class="l2" data-scr>Your data shouldn’t be.</span></h2>
+    <ol class="pb-steps" aria-label="Where SEO work usually lives">
+      <li data-pb="0" style="--c:#2f5bff"><span class="ic" aria-hidden="true">KW</span><span><b>Keyword research</b> in one tool.</span></li>
+      <li data-pb="1" style="--c:#17a673"><span class="ic" aria-hidden="true">XLS</span><span><b>Backlinks</b> in spreadsheets.</span></li>
+      <li data-pb="2" style="--c:#7a5cff"><span class="ic" aria-hidden="true">#1</span><span><b>Rankings</b> somewhere else.</span></li>
+      <li data-pb="3" style="--c:#f5a524"><span class="ic" aria-hidden="true">PDF</span><span><b>Website audits</b> in another platform.</span></li>
+    </ol>
+    <div class="pb-end" data-pb="4">
+      <p class="pb-q" data-rv>Sound <em>familiar?</em></p>
+      <p class="pb-tx" data-rv>Managing SEO shouldn’t mean switching between multiple tools and manually tracking everything.</p>
+    </div>
   </div>
-  <div class="spec fx">
-    <article class="sp"><span class="ix" data-scr>01 /</span><h3 data-scr>Website SEO audit</h3><p>Find technical and on-page SEO problems, inspect page metadata, check indexability signals, and review issues that deserve attention.</p><a href="website-seo-audit/">Explore Website Audits →</a></article>
-    <article class="sp"><span class="ix" data-scr>02 /</span><h3 data-scr>Backlink checker</h3><p>Analyze available backlink data, review referring domains, identify potentially lost links, and discover websites that may offer relevant link-building opportunities.</p><a href="backlink-checker/">Explore Backlinks →</a></article>
-    <article class="sp"><span class="ix" data-scr>03 /</span><h3 data-scr>Broken link checker</h3><p>Find broken internal and external links, identify error pages, and prioritize repairs that improve navigation and website maintenance.</p><a href="broken-link-checker/">Find Broken Links →</a></article>
-    <article class="sp"><span class="ix" data-scr>04 /</span><h3 data-scr>Keyword research</h3><p>Discover relevant keyword ideas, investigate search intent, evaluate ranking opportunities, and organize topics for your content strategy.</p><a href="keyword-research/">Explore Keyword Research →</a></article>
-    <article class="sp"><span class="ix" data-scr>05 /</span><h3 data-scr>Competitor SEO analysis</h3><p>Investigate competing websites, compare available keyword data, and identify backlink prospects and content gaps worth exploring.</p><a href="competitor-analysis/">Analyze Competitors →</a></article>
-    <article class="sp"><span class="ix" data-scr>06 /</span><h3 data-scr>AEO and GEO visibility</h3><p>Evaluate content readiness for answer engines and generative search. Track brand mentions and citations where supported data sources make measurement possible.</p><a href="ai-search-visibility/">Explore AI Search Visibility →</a></article>
+  <div class="pb-vis" data-rv>
+    <div class="desk" id="desk" aria-hidden="true">
+      <div class="desk-tabs"><span data-t="0" style="--c:#2f5bff"><i></i>Keyword tool</span><span data-t="1" style="--c:#17a673"><i></i>backlinks_FINAL_v3</span><span data-t="2" style="--c:#7a5cff"><i></i>Rank tracker</span><span data-t="3" style="--c:#f5a524"><i></i>Audit report</span><span style="--c:#9aa6c4"><i></i>Client notes</span><span style="--c:#9aa6c4"><i></i>Reporting</span><span style="--c:#9aa6c4"><i></i>Untitled</span></div>
+      <div class="pw" data-i="0" style="--x:4%;--y:62px;--w:54%;--r:-3deg;--c:#2f5bff;--dl:0s">
+        <p class="pw-h"><i></i>keyword-tool · tab 3</p>
+        <div class="pw-b"><p class="pw-search">seo management<span></span></p><ul class="pw-rows"><li>seo management tool<b>2.4k</b></li><li>seo dashboard<b>1.6k</b></li><li>seo workspace<b>880</b></li></ul></div>
+      </div>
+      <div class="pw" data-i="1" style="--x:41%;--y:86px;--w:56%;--r:3deg;--c:#17a673;--dl:-.7s">
+        <p class="pw-h"><i></i>backlinks_FINAL_v3.xlsx</p>
+        <div class="pw-sheet"><span class="xh"></span><span class="xh">A</span><span class="xh">B</span><span class="xh">C</span><span class="rn">1</span><span>blog-one.example</span><span>live</span><span></span><span class="rn">2</span><span>partner.example</span><span class="bad">lost?</span><span class="q">check??</span><span class="rn">3</span><span>directory.example</span><span>live</span><span class="q">follow up</span><span class="rn">4</span><span>news-site.example</span><span class="bad">404</span><span></span></div>
+      </div>
+      <div class="pw" data-i="2" style="--x:6%;--y:55%;--w:46%;--r:2.5deg;--c:#7a5cff;--dl:-1.4s">
+        <p class="pw-h"><i></i>rank-tracker · another login</p>
+        <div class="pw-b pw-chart"><svg viewBox="0 0 200 70" preserveAspectRatio="none"><path d="M0 50 L25 44 L50 54 L75 38 L100 48 L125 30 L150 42 L175 26 L200 34"/></svg><p><span>Position</span><b>14 → 11</b></p></div>
+      </div>
+      <div class="pw" data-i="3" style="--x:50%;--y:51%;--w:46%;--r:-4deg;--c:#f5a524;--dl:-2.1s">
+        <p class="pw-h"><i></i>audit-report-march.pdf</p>
+        <div class="pw-b"><p class="pw-warn">⚠ 37 issues found</p><span class="pw-ln" style="--w:92%"></span><span class="pw-ln" style="--w:74%"></span><span class="pw-ln" style="--w:84%"></span><span class="pw-ln" style="--w:56%"></span></div>
+      </div>
+      <p class="desk-toast t1">Which spreadsheet is the latest?</p>
+      <p class="desk-toast t2">Session expired · log in again</p>
+      <p class="desk-toast t3">Did anyone update the rankings?</p>
+      <span class="desk-n"><i></i><b id="deskN">7</b>&nbsp;tabs open</span>
+    </div>
+    <p class="pb-cap">Illustration: one SEO week, spread across four tools.</p>
   </div>
-  <p class="fine" data-rv>Scoutly is in early access. Each feature page explains how the tool works, what data it relies on and where it stands today. See the <a href="about/#product-status">product status overview</a>.</p>
 </div></section>
+
+<div class="fade fade-dk" aria-hidden="true"></div>
+<!-- 3. THE TURNING POINT: pinned; the question lights up, then Scoutly appears -->
+<section class="tp dk" id="turn" aria-labelledby="tpQ">
+  <div class="tp-pin">
+    <div class="tp-a" id="tpA">
+      <p class="lbl lt">The turning point</p>
+      <h2 class="tp-q" id="tpQ">What if everything you need for SEO was in <em>one place?</em></h2>
+      <p class="tp-hint" aria-hidden="true">Keep scrolling</p>
+    </div>
+    <div class="tp-b" id="tpB">
+      <div class="orb" aria-hidden="true">
+        <span class="orb-ring r2"></span><span class="orb-ring"></span>
+        <span class="orb-core"><img src="assets/scoutly-mark.svg" alt="" width="64" height="64"></span>
+        <span class="orb-c" style="--a:-90deg;--c:#6f8dff"><span><i></i>Keywords</span></span>
+        <span class="orb-c" style="--a:-30deg;--c:#3ddba5"><span><i></i>Backlinks</span></span>
+        <span class="orb-c" style="--a:30deg;--c:#a98bff"><span><i></i>Rankings</span></span>
+        <span class="orb-c" style="--a:90deg;--c:#f5b53d"><span><i></i>Site audit</span></span>
+        <span class="orb-c" style="--a:150deg;--c:#4fd1e8"><span><i></i>Competitors</span></span>
+        <span class="orb-c" style="--a:210deg;--c:#5ac8fa"><span><i></i>Dashboard</span></span>
+      </div>
+      <div>
+        <p class="tp-why" id="tpWhy">That’s why we’re building <b>Scoutly.</b></p>
+        <p class="tp-tx" id="tpTx">A smarter SEO management platform designed to bring your essential SEO workflows together — helping you <b>spend less time managing data</b> and more time improving performance.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 4. THE SCOUTLY ECOSYSTEM -->
+<section class="sec eco dk" id="features" aria-labelledby="featTitle"><div class="w">
+  <div class="fh">
+    <p class="hx-pill fh-pill" data-rv><b>Ecosystem</b><span>Six tools · one workspace</span></p>
+    <h2 class="fh-h" id="featTitle"><span class="fh-l" data-rv>Everything your SEO</span> <span class="fh-l" data-rv>workflow <em>needs.</em></span></h2>
+    <p class="fh-sub" data-rv>Six focused tools in one workspace, from the first keyword idea to the fix that moves your rankings.</p>
+  </div>
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="rkG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a98bff" stop-opacity=".35"/><stop offset="1" stop-color="#a98bff" stop-opacity="0"/></linearGradient></defs></svg>
+  <div class="bento">
+    <article class="bx kw" data-rv style="--c:#6f8dff">
+      <div class="bx-top"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span><span class="bx-ix" aria-hidden="true">01</span></div>
+      <div class="bx-viz v-kw" aria-hidden="true"><p class="v-q"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>seo management<i></i></p><ul><li><span>seo management tool</span><b>2.4k</b><em class="kd m">38</em></li><li><span>backlink tracker</span><b>1.9k</b><em class="kd l">24</em></li><li><span>rank tracking software</span><b>1.3k</b><em class="kd h">61</em></li></ul></div>
+      <h3>Keyword Research</h3>
+      <p>Discover and organise keyword opportunities.</p>
+      <a class="bx-a" href="keyword-research/">Explore keywords <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="bx bl" data-rv style="--c:#3ddba5">
+      <div class="bx-top"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg></span><span class="bx-ix" aria-hidden="true">02</span></div>
+      <div class="bx-viz v-bl" aria-hidden="true"><p><b>184</b>backlinks<em>+12 this week</em></p><ul><li><i class="fv">I</i><span>industry-blog.example</span><em class="st lv">Live</em></li><li><i class="fv">P</i><span>partner-site.example</span><em class="st pd">Pending</em></li><li><i class="fv">D</i><span>old-directory.example</span><em class="st lo">Lost</em></li></ul></div>
+      <h3>Backlink Manager</h3>
+      <p>Save, organise, and monitor backlink opportunities.</p>
+      <a class="bx-a" href="backlinks.html">Open the Backlink Manager <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="bx rk" data-rv style="--c:#a98bff">
+      <div class="bx-top"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><span class="bx-ix" aria-hidden="true">03</span></div>
+      <div class="bx-viz v-rk" aria-hidden="true"><svg viewBox="0 0 240 110" preserveAspectRatio="none"><g class="gr"><path d="M0 22H240M0 55H240M0 88H240"/></g><path class="ar" d="M0 96 C30 92 50 84 80 80 S130 62 160 50 S210 26 240 14 L240 110 L0 110Z"/><path class="ln" pathLength="1" d="M0 96 C30 92 50 84 80 80 S130 62 160 50 S210 26 240 14"/></svg><span class="pt a">#14</span><span class="pt b">#3</span></div>
+      <h3>Rank Tracking</h3>
+      <p>Keep track of keyword performance.</p>
+      <a class="bx-a" href="position-tracking.html">Open Rank Tracking <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="bx au" data-rv style="--c:#f5b53d">
+      <div class="bx-top"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></span><span class="bx-ix" aria-hidden="true">04</span></div>
+      <div class="bx-viz v-au" aria-hidden="true"><div class="v-ring"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19"/><circle class="v" cx="22" cy="22" r="19" pathLength="100"/></svg><b>92<small>Health</small></b></div><ul><li>Indexability<em>Pass</em></li><li class="wn">Broken links<em>2 found</em></li><li>Core Web Vitals<em>Good</em></li></ul></div>
+      <h3>Website Audit</h3>
+      <p>Identify technical SEO issues.</p>
+      <a class="bx-a" href="website-seo-audit/">Explore the Website Audit <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="bx cp" data-rv style="--c:#4fd1e8">
+      <div class="bx-top"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg></span><span class="bx-ix" aria-hidden="true">05</span></div>
+      <div class="bx-viz v-cp" aria-hidden="true"><ul><li class="me"><span>yourwebsite.com</span><i style="--w:62%"></i><b>62</b></li><li><span>rival-one.example</span><i style="--w:74%"></i><b>74</b></li><li><span>rival-two.example</span><i style="--w:48%"></i><b>48</b></li></ul><p class="v-gap"><b>37</b>keyword gaps worth exploring</p></div>
+      <h3>Competitor Analysis</h3>
+      <p>Understand competitor strategies and opportunities.</p>
+      <a class="bx-a" href="competitor-analysis/">Explore Competitor Analysis <span aria-hidden="true">→</span></a>
+    </article>
+    <article class="bx ds" data-rv style="--c:#5ac8fa">
+      <div class="ds-copy">
+        <div class="bx-top"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span><span class="bx-ix" aria-hidden="true">06</span></div>
+        <h3>SEO Dashboard</h3>
+        <p>Bring your important SEO insights together.</p>
+        <a class="bx-a" href="dashboard.html">Open the SEO Dashboard <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="bx-viz v-ds" aria-hidden="true">
+        <div class="ds-k" style="--c:#6f8dff"><span>Keywords tracked</span><b data-to="248">248</b><em>Keyword Research</em></div>
+        <div class="ds-k" style="--c:#3ddba5"><span>Backlinks</span><b data-to="184">184</b><em>Backlink Manager</em></div>
+        <div class="ds-k" style="--c:#a98bff"><span>Avg. position</span><b>8.4</b><em>Rank Tracking</em></div>
+        <div class="ds-k" style="--c:#f5b53d"><span>Site health</span><b data-to="92">92</b><em>Website Audit</em></div>
+        <div class="ds-k" style="--c:#4fd1e8"><span>Keyword gaps</span><b data-to="37">37</b><em>Competitor Analysis</em></div>
+        <p class="ds-note">Illustrative preview with sample data.</p>
+      </div>
+    </article>
+  </div>
+  <p class="fine" data-rv>Scoutly is in early access. Each tool page explains how it works, what data it relies on and where it stands today. See the <a href="about/#product-status">product status overview</a>.</p>
+</div></section>
+<div class="fade fade-lt" aria-hidden="true"></div>
 
 <!-- 3. MEET SCOUTLY -->
 <section class="sec meet" id="meet" aria-labelledby="meetTitle"><div class="w two">
@@ -760,43 +1009,23 @@ requestAnimationFrame(frame);
   </div>
 </section>
 
-<!-- 5. WORKSPACE (dark marquee + dashboard) -->
-<section class="ws dk" id="workspace" aria-labelledby="wsTitle">
-  <div class="mq" aria-hidden="true"><div class="mq-r" data-dir="1">SCOUTLY ✦ SEO ✦ AEO ✦ GEO ✦ SCOUTLY ✦ SEO ✦ AEO ✦ GEO ✦</div><div class="mq-r o" data-dir="-1">AUDIT — LINKS — KEYWORDS — AI VISIBILITY — AUDIT — LINKS — KEYWORDS —</div></div>
-  <div class="w ws-h">
-    <p class="lbl" data-rv>Inside the workspace</p>
-    <h2 class="dh sm" id="wsTitle"><span data-scr>One workspace for</span> <span class="l2" data-scr>every search signal.</span></h2>
-    <p class="ws-lede" data-rv>Audits, links, keywords and AI visibility in one organized view.</p>
-    <p class="ws-fine" data-rv>Illustrative preview with sample data. The layout may change before launch.</p>
-  </div>
-  <div class="dash-wrap">
-  <ul class="ws-chips" aria-hidden="true"><li data-y="70"><b>25</b>pages crawled</li><li data-y="-50"><b>120</b>links checked</li><li data-y="40"><b>CWV</b>Core Web Vitals</li></ul>
-  <div class="dash" id="dash" aria-hidden="true">
-    <div class="d-bar"><span><i></i><i></i><i></i></span><em>app.scoutly · overview</em><b class="d-live">Sample data</b></div>
-    <aside class="d-side"><b class="d-logo"><img src="assets/scoutly-mark.svg" alt="" width="20" height="20">Scoutly</b><span class="on">Overview</span><span>Site audit</span><span>Broken links</span><span>Backlinks</span><span>Keywords</span><span>AI visibility</span><p class="d-plan">Early access</p></aside>
-    <div class="d-main">
-      <div class="d-top"><div><b>yourwebsite.com</b><span>Last audit · 25 pages · 120 links</span></div><div class="d-score"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19"/><circle class="v" cx="22" cy="22" r="19"/></svg><b data-to="78">78</b><span>Health<br>score</span></div></div>
-      <div class="d-cards"><div><em class="sv cr">Critical</em><b class="d-n" data-to="3">03</b><p>Fix these first</p><i style="--w:28%"></i></div><div><em class="sv wr">Improvements</em><b class="d-n" data-to="12">12</b><p>Worth fixing soon</p><i style="--w:64%"></i></div><div><em class="sv in">Opportunities</em><b class="d-n" data-to="24">24</b><p>Room to grow</p><i style="--w:82%"></i></div></div>
-      <div class="d-chart"><div class="d-ch"><span>Issues across audits · illustrative</span><span class="d-leg"><i></i>Resolved<i class="o"></i>Open</span></div><svg viewBox="0 0 400 120" preserveAspectRatio="none"><defs><linearGradient id="dg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5ac8fa" stop-opacity=".4"/><stop offset="1" stop-color="#5ac8fa" stop-opacity="0"/></linearGradient></defs><path d="M0 98 C30 94 45 86 70 88 S120 74 150 70 S200 72 230 56 S290 46 320 36 S370 24 400 18 L400 120 L0 120Z" fill="url(#dg)"/><path class="ln" d="M0 98 C30 94 45 86 70 88 S120 74 150 70 S200 72 230 56 S290 46 320 36 S370 24 400 18"/><path class="op" d="M0 30 C40 34 70 40 110 52 S180 66 220 76 S300 88 340 92 S380 96 400 98"/></svg></div>
-      <div class="d-list"><div><em class="sv cr">404</em><span>/journal → /journal-old</span><b>Fix →</b></div><div><em class="sv wr">LCP</em><span>Hero image is slow to load</span><b>Fix →</b></div><div><em class="sv in">ALT</em><span>Product images missing alt text</span><b>Fix →</b></div></div>
-    </div>
-  </div></div>
-</section>
-
-<!-- 6. WHO (horizontal cards) -->
+<div class="fade fade-dk" aria-hidden="true"></div>
+<!-- 6. THE SCOUTLY PHILOSOPHY (horizontal cards) -->
 <section class="hz dk" id="who" aria-labelledby="whoTitle">
   <div class="hz-pin">
     <div class="w hz-in">
       <div class="hz-h">
-        <p class="lbl">Who Scoutly is for</p>
-        <h2 class="dh sm" id="whoTitle"><span data-scr>Built for everyone working</span> <span class="l2" data-scr>to grow online visibility.</span></h2>
-        <a class="btn p" href="#start">Get started <span aria-hidden="true">→</span></a>
+        <p class="lbl">The Scoutly philosophy</p>
+        <h2 class="dh sm" id="whoTitle"><span data-scr>Built for people who believe</span> <span class="l2" data-scr>SEO should be smarter.</span></h2>
+        <p class="hz-tx">Whether you’re an SEO beginner, freelancer, agency, or business owner, Scoutly aims to make SEO management more <b>organised</b>, <b>accessible</b>, and <b>actionable</b>.</p>
+        <a class="btn p" href="#start">Get Early Access <span aria-hidden="true">→</span></a>
       </div>
       <div class="hz-cl"><div class="hz-track" id="hzTrack">
-        <article class="hc"><span class="ix">01 —</span><h3>Business owners</h3><p>Understand website health, improve discoverability, and find the most important SEO tasks for your business.</p><i aria-hidden="true"></i></article>
-        <article class="hc"><span class="ix">02 —</span><h3>SEO professionals</h3><p>Investigate technical issues, organize audit findings, and identify keyword and backlink opportunities.</p><i aria-hidden="true"></i></article>
-        <article class="hc"><span class="ix">03 —</span><h3>Digital marketing agencies</h3><p>Manage multiple client websites, repeat audits, review competitors, and prepare evidence-based reports.</p><i aria-hidden="true"></i></article>
-        <article class="hc"><span class="ix">04 —</span><h3>Content creators and publishers</h3><p>Find content optimization opportunities, improve internal linking, and make useful information easier to discover.</p><i aria-hidden="true"></i></article>
+        <article class="hc"><span class="ix">01 —</span><span class="hc-t">Accessible</span><h3>SEO beginners</h3><p>Start with plain-language findings instead of jargon, and see what matters and why it matters.</p><i aria-hidden="true"></i></article>
+        <article class="hc"><span class="ix">02 —</span><span class="hc-t">Organised</span><h3>Freelancers</h3><p>Keep each client’s keywords, backlinks and rankings in one place, with less admin between the work that counts.</p><i aria-hidden="true"></i></article>
+        <article class="hc"><span class="ix">03 —</span><span class="hc-t">Organised</span><h3>Agencies</h3><p>Bring audits, link building, rank tracking and competitor research for client sites into one shared workspace.</p><i aria-hidden="true"></i></article>
+        <article class="hc"><span class="ix">04 —</span><span class="hc-t">Actionable</span><h3>Business owners</h3><p>Understand how your website is doing and which SEO tasks deserve your attention first.</p><i aria-hidden="true"></i></article>
+        <article class="hc hl"><span class="ix">05 —</span><span class="hc-t">The idea</span><h3>Smarter, not harder</h3><p>Less time switching tools and tracking data by hand. More time for the decisions that improve performance.</p><i aria-hidden="true"></i></article>
       </div></div>
     </div>
   </div>
@@ -812,23 +1041,18 @@ requestAnimationFrame(frame);
 <section class="fin dk" id="start" aria-labelledby="ctaTitle"><div class="w">
   <div class="fin-g">
     <div>
-      <p class="lbl" data-rv>Start your first audit</p>
-      <h2 class="dh" id="ctaTitle"><span data-scr>Your next SEO opportunity</span> <span class="l2" data-scr>is waiting to be <span class="fnd">found.</span></span><span class="fin-lens" aria-hidden="true"></span></h2>
-      <p class="tx" data-rv>Discover what’s working, uncover what’s missing, and build a clearer path to better search visibility with Scoutly.</p>
-      <form class="scan" id="cf" action="login.html" method="get" data-scan data-msg="cm" novalidate data-rv>
-        <label class="sr-only" for="site">Enter your website URL</label>
-        <input id="site" name="site" type="text" placeholder="Enter your website URL" autocomplete="url" inputmode="url" autocapitalize="off" spellcheck="false" aria-describedby="cm">
-        <button class="btn p" type="submit">Scan Your Website <span aria-hidden="true">→</span></button>
-      </form>
-      <p class="msg" id="cm" role="status" aria-live="polite"></p>
-      <p class="fine">Start with your website. Discover what to improve next.</p>
+      <p class="lbl" data-rv>Get early access</p>
+      <h2 class="dh" id="ctaTitle"><span data-scr>Less SEO chaos.</span> <span class="l2" data-scr>More strategic <span class="fnd">growth.</span></span><span class="fin-lens" aria-hidden="true"></span></h2>
+      <p class="tx" data-rv>Your next SEO workflow starts with Scoutly.</p>
+      <div class="acts" data-rv><a class="btn p" href="login.html">Get Early Access <span aria-hidden="true">→</span></a><a class="btn" href="#features">Explore Scoutly</a></div>
+      <p class="fine">Free account during early access. Pricing and any limits will be published before they apply.</p>
     </div>
-    <div class="cnt" data-rv><p class="lbl lt">In one workspace</p><b class="cnt-n" id="cntN" data-to="6">06</b><span>SEO tools, from audits to AI visibility</span></div>
+    <div class="cnt" data-rv><p class="lbl lt">In one workspace</p><b class="cnt-n" id="cntN" data-to="6">06</b><span>SEO tools, from keyword research to your dashboard</span></div>
   </div>
   <div class="fin-row">
-    <div data-rv><b>▢ Scan your website</b><p>Enter a URL and choose the audit or research workflow you need.</p></div>
-    <div data-rv><b>▢ Review findings</b><p>See what was detected, why it matters and how to verify it.</p></div>
-    <div data-rv><b>▢ Track progress</b><p>Compare results across audits as you fix issues.</p></div>
+    <div data-rv><b>▢ Discover</b><p>Find keyword opportunities and see what competitors are doing.</p></div>
+    <div data-rv><b>▢ Organise</b><p>Keep backlinks, rankings and audits together, not spread across spreadsheets.</p></div>
+    <div data-rv><b>▢ Act</b><p>Know what to fix first, then track the results.</p></div>
   </div>
 </div></section>
 </main>
@@ -931,8 +1155,8 @@ if('IntersectionObserver' in window){
   var io=new IntersectionObserver(function(es){es.forEach(function(e){if(!e.isIntersecting)return;var t=e.target;io.unobserve(t);
     if(t.hasAttribute('data-rv'))t.classList.add('in');
     if(t.hasAttribute('data-scr')){if(ready)scr(t);else pend.push(t)}
-    if(t.id==='cntN')count(t)})},{rootMargin:'0px 0px -12% 0px'});
-  q('[data-rv],.sec [data-scr],.fin [data-scr],.ws [data-scr],.ft [data-scr],.hz [data-scr],#cntN').forEach(function(el){io.observe(el)});
+    if(t.id==='cntN')count(t);if(t.classList.contains('ds'))q('[data-to]',t).forEach(count)})},{rootMargin:'0px 0px -12% 0px'});
+  q('[data-rv],.sec [data-scr],.fin [data-scr],.ft [data-scr],.hz [data-scr],#cntN').forEach(function(el){io.observe(el)});
 }else q('[data-rv]').forEach(function(e){e.classList.add('in')});
 function count(el){if(RM)return;var to=+el.dataset.to,t0=performance.now();(function f(now){var p=clamp((now-t0)/1400,0,1),v=Math.round(to*(1-Math.pow(1-p,3)));el.textContent=(v<10?'0':'')+v;if(p<1)requestAnimationFrame(f)})(t0)}
 
@@ -954,71 +1178,65 @@ if('IntersectionObserver' in window)new IntersectionObserver(function(es){var v=
   if(v&&!cCounted){cCounted=true;count($('casePg'));count($('caseLk'))}
   cs.classList.toggle('play',v&&!cManual&&!RM)},{threshold:.35}).observe(cs);
 
-/* ---------- 1. hero: a search results page where your site climbs to #1 and gets cited by AI ---------- */
-var hx=$('scan'),scene=$('hxScene'),win=$('hxWin'),qEl=$('hxQ'),list=$('hxList'),rows=q('li',list),me=rows[0],others=rows.slice(1);
-var ans=$('hxAns'),aiBox=$('hxAi'),cites=$('hxCites'),citeMe=q('.me',cites)[0],beam=$('hxBeam'),bPath=q('path',beam)[0],bDot=q('circle',beam)[0];
-var stat=$('hxStatus'),score=$('hxScore'),meter=$('hxMeter'),flo=q('.hx-float',hx)[0];
-var story=$('hxStory'),wire=$('hxWire'),marks=q('.mk',wire),issues=q('li',$('hxIssues')),pagesEl=$('hxPages'),linksEl=$('hxLinks'),issEl=$('hxIss');
-var QUERY=qEl.textContent,words=ans.textContent.trim().split(/\s+/);
-ans.innerHTML=words.map(function(w){return '<span class="wd">'+w+'</span>'}).join(' ');var wds=q('.wd',ans);
-function place(order){order.forEach(function(r,i){r.style.setProperty('--p',i);q('.hx-rank',r)[0].textContent=i+1})}
-/* position in window coordinates (the window is 3D-transformed, so use layout offsets, not screen rects) */
-function rel(el){var x=0,y=0;while(el&&el!==win){x+=el.offsetLeft;y+=el.offsetTop;el=el.offsetParent}return{x:x,y:y}}
-function drawBeam(){var W=win.offsetWidth,H=win.offsetHeight,lp=rel(list),cp=rel(citeMe);
-  var x1=lp.x+list.offsetWidth-8,y1=lp.y+me.offsetHeight/2,x2=cp.x,y2=cp.y+citeMe.offsetHeight/2;
-  beam.setAttribute('viewBox','0 0 '+W+' '+H);
-  bPath.setAttribute('d','M'+x1+' '+y1+' C'+(x1+90)+' '+y1+' '+(x2-90)+' '+y2+' '+x2+' '+y2);
-  bDot.setAttribute('cx',x2);bDot.setAttribute('cy',y2)}
-/* the whole demo is a pure function of scroll progress p (0..1), so scrolling back rewinds it */
-var last={};
-function once(k,v,fn){if(last[k]!==v){last[k]=v;fn(v)}}
+/* ---------- 1. hero: scattered SEO work (exports, spreadsheets, tabs, a to-do note) flies into one Scoutly workspace ---------- */
 function band(p,a,b){return clamp((p-a)/(b-a),0,1)}
-var ORDER=[others.concat([me]),[others[0],others[1],me,others[2],others[3]],[me].concat(others)];
-var STATUS=['Searching','Scoutly audit · crawling yourwebsite.com','Fixing issues · re-crawling','Climbing the results','Writing the AI answer','Cited in the AI answer'];
-function storyAt(p){
-  once('q',Math.round(QUERY.length*band(p,.02,.12)),function(n){qEl.textContent=QUERY.slice(0,n)});
-  once('typing',p<.13,function(v){win.classList.toggle('typing',v)});
-  var sc=band(p,.16,.48),fx=band(p,.5,.64);
-  wire.style.setProperty('--sy',sc.toFixed(3));wire.style.setProperty('--so',sc>0&&sc<1?1:0);
-  once('pages',Math.round(25*sc),function(v){pagesEl.textContent=v});
-  once('links',Math.round(120*sc),function(v){linksEl.textContent=v});
-  var found=0;for(var k=0;k<5;k++)if(sc>=(k+.6)/5.6)found++;
-  var fixed=Math.min(5,Math.floor(fx*5.001));
-  once('iss',found*10+fixed,function(){issues.forEach(function(li,k){li.classList.toggle('on',k<found);li.classList.toggle('ok',k<fixed)});
-    marks.forEach(function(m,k){m.classList.toggle('on',k<found);m.classList.toggle('ok',k<fixed)});issEl.textContent=found-fixed});
-  once('h',Math.round(64+30*fx),function(v){score.textContent=v;meter.style.setProperty('--s',v+'%')});
-  once('fix',p>.5,function(v){flo.classList.toggle('fix',v)});
-  once('pos',p<.68?0:p<.74?1:2,function(v){place(ORDER[v]);me.classList.toggle('up',v===2)});
-  once('ai',p>.78,function(v){win.classList.toggle('ai-on',v)});
-  once('side',(p>=.14&&p<.68)||p>=.78,function(v){win.classList.toggle('show-side',v)});
-  var wn=Math.round(words.length*band(p,.81,.92));
-  once('think',p>.78&&wn===0,function(v){aiBox.classList.toggle('think',v)});
-  once('w',wn,function(n){wds.forEach(function(e,i){e.classList.toggle('on',i<n)})});
-  once('cites',p>.925,function(v){cites.classList.toggle('on',v)});
-  once('hit',p>.95,function(v){citeMe.classList.toggle('hit',v);if(v)drawBeam();beam.classList.toggle('on',v)});
-  once('st',p<.14?0:p<.5?1:p<.66?2:p<.78?3:p<.95?4:5,function(v){stat.textContent=STATUS[v]})}
-/* scroll + pointer: the window starts tilted back and straightens as you scroll; it leans toward the pointer */
-var hxP=0,hmx=0,hmy=0,tmx=0,tmy=0,hxVis=true;
-addEventListener('pointermove',function(e){tmx=e.clientX/innerWidth-.5;tmy=e.clientY/innerHeight-.5;var r=win.getBoundingClientRect();win.style.setProperty('--px',(e.clientX-r.left)+'px');win.style.setProperty('--py',(e.clientY-r.top)+'px')},{passive:true});
-/* enter: once the window pins, scrolling grows it to fill the screen below the nav before the story carries on.
-   Scroll distance into the story: [0,sA) is the approach (typing the query), [sA,sA+sE) the enter, the rest plays the story */
-var pin=q('.hx-pin',hx)[0],stage=q('.hx-stage',hx)[0],hd=$('nav'),sS=0,tS=0,sA=1,sE=1,sL=1,top0=0,h0=0;
-function heroScroll(){var r=hx.getBoundingClientRect(),sr=story.getBoundingClientRect(),vh=innerHeight;hxVis=r.bottom>0&&r.top<vh;hxP=clamp(-r.top/(vh*.55),0,1);
-  sA=Math.max(1,vh*.9-top0);sE=RM?0:vh*.7;sL=Math.max(1,sr.height-(vh-hd.offsetHeight)-sE-vh*.15);tS=vh*.9-sr.top}
-function heroSize(){top0=parseFloat(getComputedStyle(pin).top)||0;win.style.minHeight='';h0=win.offsetHeight;delete last.e}
-function enter(e){once('e',Math.round(e*1000),function(k){e=k/1000;stage.style.setProperty('--e',e);
-  stage.style.setProperty('--ey',((hd.offsetHeight-top0)*e).toFixed(1)+'px');
-  win.style.minHeight=e?(h0+(innerHeight-hd.offsetHeight-h0)*e).toFixed(1)+'px':''})}
-heroSize();addEventListener('resize',heroSize);
-(function tilt(){requestAnimationFrame(tilt);if(!hxVis)return;hmx+=(tmx-hmx)*.06;hmy+=(tmy-hmy)*.06;
-  sS+=(tS-sS)*(RM?1:.12);
-  var e=RM?0:ss(0,1,(sS-sA)/sE),p=sS<sA?.14*sS/sA:sS<sA+sE?.14:.14+.86*(sS-sA-sE)/sL;
-  var mob=innerWidth<=900,rx=RM?0:((mob?12:24)*(1-ss(0,1,hxP))-hmy*3)*(1-e),ry=RM?0:hmx*5*(1-e),sc=RM?1:.92+.08*ss(0,1,hxP);
-  scene.style.setProperty('--rx',rx.toFixed(2)+'deg');scene.style.setProperty('--ry',ry.toFixed(2)+'deg');scene.style.setProperty('--sc',(sc+(1-sc)*e).toFixed(3));
-  enter(e);storyAt(clamp(p,0,1))})();
+var hx=$('scan'),cvStory=$('cvStory'),cvStage=$('cvStage'),cvScene=$('cvScene'),cvWin=$('cvWin'),slots=q('.sl',cvWin);
+var cvTabs=$('cvTabs'),cvStat=$('cvStatus'),cvMeter=$('cvMeter'),cvNoise=$('cvNoise'),cvSide={};
+q('.cv-side [data-m]',cvWin).forEach(function(s){cvSide[s.dataset.m]=s});
+var hmx=0,hmy=0,tmx=0,tmy=0,hxVis=true,cvT=0,cvS=0,cvLast={};
+addEventListener('pointermove',function(e){tmx=e.clientX/innerWidth-.5;tmy=e.clientY/innerHeight-.5;var r=cvWin.getBoundingClientRect();cvWin.style.setProperty('--px',(e.clientX-r.left)+'px');cvWin.style.setProperty('--py',(e.clientY-r.top)+'px')},{passive:true});
+/* progress: pinned (wide screens) it runs through the story's scroll; stacked (phones) it follows the stage rising into view */
+function heroScroll(){var r=hx.getBoundingClientRect(),vh=innerHeight;hxVis=r.bottom>0&&r.top<vh;
+  var sr=cvStory.getBoundingClientRect(),d=sr.height-vh;
+  cvT=d>vh*.3?clamp((vh*.8-sr.top)/(vh*.8+d*.75),0,1):clamp((vh*.95-cvStage.getBoundingClientRect().top)/(vh*.7),0,1)}
+function cvSet(k,v,fn){if(cvLast[k]!==v){cvLast[k]=v;fn(v)}}
+/* the whole scene is a pure function of p (0..1), so scrolling back scatters it again */
+function cvAt(p){
+  slots.forEach(function(s,i){var k=(RM?1:ss(i*.08,i*.08+.5,p)).toFixed(3);
+    cvSet('k'+i,k,function(v){s.style.setProperty('--k',v)});
+    cvSet('g'+i,k>.97,function(v){s.classList.toggle('got',v);var it=cvSide[s.dataset.m];if(it)it.classList.toggle('on',v)})});
+  cvSet('p',p.toFixed(3),function(v){cvWin.style.setProperty('--p',v);cvMeter.style.setProperty('--s',(v*100).toFixed(1)+'%')});
+  cvSet('no',(1-ss(0,.35,p)).toFixed(3),function(v){cvNoise.style.setProperty('--no',v)});
+  cvSet('tabs',Math.round(14-13*ss(.02,.92,p)),function(n){cvTabs.textContent=n+(n===1?' tab':' tabs')});
+  cvSet('st',p<.04?0:p<.96?1:2,function(v){cvStat.textContent=['Scattered across 6 tools','Bringing it together…','Everything in one place'][v];cvWin.classList.toggle('calm',v===2)})}
+(function tilt(){requestAnimationFrame(tilt);if(!hxVis)return;hmx+=(tmx-hmx)*.06;hmy+=(tmy-hmy)*.06;cvS+=(cvT-cvS)*(RM?1:.1);
+  var p=RM?1:cvS,mob=innerWidth<=900,rx=RM?0:((mob?6:16)*(1-p)-hmy*3*(1-p*.5)),ry=RM?0:hmx*6*(1-p*.5);
+  cvScene.style.setProperty('--rx',rx.toFixed(2)+'deg');cvScene.style.setProperty('--ry',ry.toFixed(2)+'deg');cvScene.style.setProperty('--sc',(RM?1:.95+.05*p).toFixed(3));
+  cvAt(p)})();
 /* the headline animates in once the preloader clears */
 function heroIntro(){hx.classList.add('hx-in')}
-addEventListener('resize',function(){if(beam.classList.contains('on'))drawBeam()});
+
+/* ---------- 2. the problem: each statement brings its tool forward; "Sound familiar?" lets them all pile up ---------- */
+var desk=$('desk'),pbSteps=q('[data-pb]'),pws=q('.pw',desk),dTabs=q('[data-t]',desk),pbOn=-1,pbAuto=null;
+function pbSet(n){if(n===pbOn)return;pbOn=n;desk.classList.toggle('chaos',n>=4);
+  pws.forEach(function(w,i){w.classList.toggle('on',i===n)});dTabs.forEach(function(t,i){t.classList.toggle('on',i===n)});
+  pbSteps.forEach(function(s){var i=+s.dataset.pb;s.classList.toggle('on',i===n||(n>=4&&i<4))})}
+pbSet(0);
+if('IntersectionObserver' in window){
+  /* wide screens: the desk is sticky beside the list, so the statement crossing mid-screen leads */
+  var pbIo=new IntersectionObserver(function(es){if(innerWidth<=960)return;es.forEach(function(e){if(e.isIntersecting)pbSet(+e.target.dataset.pb)})},{rootMargin:'-42% 0px -48% 0px'});
+  pbSteps.forEach(function(s){pbIo.observe(s)});
+  /* phones: the desk sits below the list, so it plays through the tools by itself while on screen */
+  new IntersectionObserver(function(es){clearInterval(pbAuto);pbAuto=null;
+    if(es[0].isIntersecting&&innerWidth<=960&&!RM)pbAuto=setInterval(function(){pbSet((pbOn+1)%5)},1900)},{threshold:.45}).observe(desk);
+}
+
+/* ---------- 3. turning point: the question lights up word by word, then Scoutly appears and its tools settle into orbit ---------- */
+var tp=$('turn'),tpQ=$('tpQ'),tpA=$('tpA'),tpB=$('tpB'),tpChips=q('.orb-c',tp),tpWhy=$('tpWhy'),tpTx=$('tpTx');
+(function(){var tw=document.createTreeWalker(tpQ,NodeFilter.SHOW_TEXT),ns=[],t;while((t=tw.nextNode()))ns.push(t);
+  ns.forEach(function(t){var f=document.createDocumentFragment();t.nodeValue.split(/(\s+)/).forEach(function(w){if(!w)return;
+    if(/^\s+$/.test(w)){f.appendChild(document.createTextNode(w));return}var s=document.createElement('span');s.className='tw';s.textContent=w;f.appendChild(s)});
+    t.parentNode.replaceChild(f,t)})})();
+var tpW=q('.tw',tpQ),tpStatic=RM,tpLast={};
+if(tpStatic){tp.classList.add('tp-static');tpW.forEach(function(w){w.classList.add('lit')})}
+function turn(){if(tpStatic)return;var r=tp.getBoundingClientRect();if(r.bottom<-50||r.top>innerHeight+50)return;var p=prog(tp);
+  var n=Math.round(tpW.length*band(p,.03,.34));if(tpLast.n!==n){tpLast.n=n;tpW.forEach(function(w,i){w.classList.toggle('lit',i<n)})}
+  var x=ss(.4,.52,p);tpA.style.opacity=(1-x).toFixed(3);tpA.style.transform='translateY('+(-60*x).toFixed(1)+'px) scale('+(1-.06*x).toFixed(3)+')';
+  tpB.style.opacity=x.toFixed(3);tpB.style.transform='translateY('+(40*(1-x)).toFixed(1)+'px)';
+  tpA.style.visibility=x>=1?'hidden':'';tpB.style.visibility=x<=0?'hidden':'';
+  tpB.style.setProperty('--m',ss(.46,.6,p).toFixed(3));
+  tpChips.forEach(function(c,i){c.style.setProperty('--k',ss(.52+i*.045,.68+i*.045,p).toFixed(3))});
+  tpWhy.style.setProperty('--k',ss(.56,.68,p).toFixed(3));tpTx.style.setProperty('--k',ss(.68,.82,p).toFixed(3))}
 
 /* aurora: slow-moving brand colour fields behind the hero (WebGL, half resolution, paused off-screen) */
 (function(){var cv=$('hxAurora'),gl=cv.getContext('webgl',{antialias:false,alpha:false});if(!gl)return;
@@ -1059,30 +1277,12 @@ function tunnel(p){var W=field.clientWidth,H=field.clientHeight;
     c.el.style.transform='translate3d('+x.toFixed(1)+'px,'+y.toFixed(1)+'px,0) scale('+s.toFixed(3)+') rotate('+(c.rot*(1-z)).toFixed(1)+'deg)';c.el.style.opacity=o.toFixed(3)});
   var s2=Math.min(4,Math.floor(p*5.3));if(s2!==tstage){tstage=s2;tst.forEach(function(e,i){e.classList.toggle('on',i===s2)});num.textContent='0'+s2;q('[data-scr]',tst[s2]).forEach(function(e){scr(e)})}}
 
-/* ---------- 3. workspace: marquee + dashboard tilt ---------- */
-var ws=$('workspace'),mq=q('.mq-r'),dash=$('dash'),wsChips=q('.ws-chips li'),dNums=q('[data-to]',dash);
-if(!RM)dNums.forEach(function(n){n.textContent='00'});
-function workspace(){var r=ws.getBoundingClientRect(),vh=innerHeight;if(r.bottom<0||r.top>vh)return;
-  var p=clamp((vh-r.top)/(r.height+vh),0,1);mq.forEach(function(m){var dir=+m.dataset.dir;m.style.transform='translate3d('+((dir>0?-.1:-.45)+p*.35*dir)*100+'%,0,0)'});
-  var dr=dash.getBoundingClientRect(),k=clamp((vh-dr.top)/(vh*.85),0,1),e=1-Math.pow(1-k,3);
-  dash.style.transform=RM?'':'rotateX('+(38*(1-e)).toFixed(2)+'deg) scale('+(.88+.12*e).toFixed(3)+') translateY('+(60*(1-e)).toFixed(1)+'px)';dash.style.opacity=(.3+.7*e).toFixed(3);
-  /* numbers count up, bars fill and the chart draws once the dashboard is mostly upright */
-  if(!dash.classList.contains('live')&&(RM||e>.55)){dash.classList.add('live');dNums.forEach(count)}
-  var d=clamp((vh-dr.top)/(vh+dr.height),0,1)-.5;
-  wsChips.forEach(function(c){c.style.transform=RM?'':'translate3d(0,'+(d*+c.dataset.y*2).toFixed(1)+'px,0)';c.style.opacity=RM?1:clamp(e*1.6-.4,0,1).toFixed(3)})}
-
 /* ---------- 4. audiences: cards slide sideways while pinned ---------- */
 var hz=$('who'),track=$('hzTrack');
 function horizontal(){if(innerWidth<961){track.style.transform='';return}var p=prog(hz),max=track.scrollWidth-track.clientWidth;track.style.transform='translate3d('+(-max*ss(.05,.92,p)).toFixed(1)+'px,0,0)'}
 
-/* ---------- 5. features: blocks rise in, then columns drift up and down against each other ---------- */
-var fxCards=q('.fx .sp'),fxGrid=fxCards.length&&fxCards[0].parentNode;
-function features(){var vh=innerHeight,cols=Math.max(1,getComputedStyle(fxGrid).gridTemplateColumns.split(' ').length),gr=fxGrid.getBoundingClientRect();
-  var d=clamp((vh-gr.top)/(vh+gr.height),0,1)-.5,amp=cols>1?(innerWidth>960?70:40):0;
-  fxCards.forEach(function(c,i){var top=gr.top+c.offsetTop,raw=(vh*.98-top)/(vh*.4)-(i%cols)*.12,col=i%cols;
-    var s=clamp((raw-.55)/.6,0,1),st=c.style;st.setProperty('--e',RM?1:ss(0,1,raw).toFixed(3));st.setProperty('--t',RM?1:ss(.35,1.05,raw).toFixed(3));
-    st.setProperty('--s',s.toFixed(3));st.setProperty('--so',RM?0:Math.sin(s*Math.PI).toFixed(3));
-    st.setProperty('--py',RM?'0px':((col%2?1:-1)*d*2*amp).toFixed(1)+'px')})}
+/* ---------- 5. ecosystem: a soft spotlight follows the pointer across each tool card ---------- */
+q('.bx').forEach(function(b){b.addEventListener('pointermove',function(e){var r=b.getBoundingClientRect();b.style.setProperty('--mx',(e.clientX-r.left).toFixed(0)+'px');b.style.setProperty('--my',(e.clientY-r.top).toFixed(0)+'px')},{passive:true})});
 
 /* ---------- footer: the wordmark lights up under the cursor; on touch it sweeps by itself ---------- */
 var ftEl=$('ft'),ftMark=$('ftMark'),ftC=$('ftC'),ftX=-300,ftY=95,ftTX=-300,ftTY=95,ftHover=false,ftVis=false;
@@ -1097,7 +1297,7 @@ ftMark.addEventListener('pointerleave',function(){ftHover=false});
 var queued=false;
 function frame(){queued=false;hdTheme();
   heroScroll();
-  if(tnVis||tstage<0)tunnel(prog(tn));workspace();horizontal();if(fxCards.length)features()}
+  if(tnVis||tstage<0)tunnel(prog(tn));turn();horizontal()}
 function req(){if(!queued){queued=true;requestAnimationFrame(frame)}}
 addEventListener('scroll',req,{passive:true});addEventListener('resize',req);
 if(!RM)(function idle(){requestAnimationFrame(idle);if(tnVis){drift+=.0006;tunnel(prog(tn))}})();
