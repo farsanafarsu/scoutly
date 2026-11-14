@@ -470,21 +470,6 @@ html:not(.js) .ax-lines li,.ax.ax-static .ax-lines li{position:static;grid-area:
 .tp-why b{font-weight:600;background:linear-gradient(100deg,#5ac8fa,#2f5bff 45%,#a98bff 80%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .tp-tx{margin-top:24px;max-width:480px;font:400 clamp(16px,1.25vw,19px)/1.65 var(--T);color:rgba(214,224,255,.76);opacity:var(--k,1);transform:translateY(calc((1 - var(--k,1))*22px))}
 .tp-tx b{color:#fff;font-weight:600}
-/* turning point, spotlight style: a beam of light from above, a glowing headline and faded SEO symbols drifting in the dark
-   (--tpp 0..1 scroll progress, --tx 0..1 hand-over to Scoutly; set by JS) */
-.tp-pin:before{background:radial-gradient(38% 30% at 50% 0%,rgba(90,200,250,.2),transparent 70%),radial-gradient(45% 45% at 50% 58%,rgba(47,91,255,.15),transparent 70%)}
-.tp-beam{position:absolute;left:50%;top:-6%;z-index:1;width:min(1000px,110vw);height:88%;transform:translateX(-50%);background:conic-gradient(from 180deg at 50% 0%,transparent 154deg,rgba(90,200,250,.16) 167deg,rgba(205,228,255,.46) 180deg,rgba(90,200,250,.16) 193deg,transparent 206deg);filter:blur(14px);-webkit-mask-image:linear-gradient(#000 25%,transparent 95%);mask-image:linear-gradient(#000 25%,transparent 95%);opacity:calc(1 - var(--tx,0)*.5);pointer-events:none}
-.tp-syms li{position:absolute;left:var(--x);top:var(--y);z-index:1;font:500 clamp(18px,2vw,30px)/1 var(--M);color:rgba(190,210,255,.15);white-space:nowrap;transform:translateY(calc(var(--tpp,0)*var(--dy,0px))) rotate(var(--r,0deg));opacity:calc(1 - var(--tx,0)*.55);pointer-events:none}
-.tp-syms .bx{padding:8px 12px;border:2px solid rgba(190,210,255,.15);border-radius:7px}
-.tp-syms .lg{font-size:clamp(26px,3.2vw,46px)}
-.tp-dots li{position:absolute;left:var(--x);top:var(--y);z-index:1;width:3px;height:3px;border-radius:50%;background:#d6e4ff;box-shadow:0 0 8px 2px rgba(150,190,255,.6);animation:twk 3.2s ease-in-out infinite;animation-delay:var(--dl,0s)}
-@keyframes twk{50%{opacity:.15;transform:scale(.5)}}
-.tp-q .tw.lit{color:#fff;text-shadow:0 0 24px rgba(150,185,255,.55),0 0 60px rgba(90,200,250,.25)}
-.tp-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 18px;margin:28px auto 0;max-width:980px;font:500 13px/1 var(--T);color:rgba(214,224,255,.66)}
-.tp-badges li{display:inline-flex;align-items:center;gap:8px}
-.tp-badges i{width:14px;height:14px;border-radius:4px;border:1.6px solid var(--c);box-shadow:0 0 10px color-mix(in srgb,var(--c) 55%,transparent)}
-@media(max-width:700px){.tp-syms li:nth-child(n+6){display:none}.tp-badges li:nth-child(n+4){display:none}}
-@media(prefers-reduced-motion:reduce){.tp-dots li{animation:none}}
 /* reduced motion and no JS: both halves simply stack */
 .js .tp.tp-static,html:not(.js) .tp{height:auto}
 .tp-static .tp-pin,html:not(.js) .tp-pin{position:relative;height:auto;min-height:0;gap:96px;padding:130px 0}
@@ -857,13 +842,9 @@ requestAnimationFrame(frame);
 <!-- 3. THE TURNING POINT: pinned; the question lights up, then Scoutly appears -->
 <section class="tp dk" id="turn" aria-labelledby="tpQ">
   <div class="tp-pin">
-    <div class="tp-beam" aria-hidden="true"></div>
-    <ul class="tp-syms" aria-hidden="true"><li style="--x:12%;--y:24%;--dy:-60px">404</li><li class="bx" style="--x:19%;--y:58%;--dy:-90px;--r:-12deg">#3</li><li style="--x:7%;--y:74%;--dy:-40px">&lt;h1&gt;</li><li style="--x:21%;--y:9%;--dy:-30px">+42</li><li style="--x:80%;--y:8%;--dy:-70px">LCP 2.1s</li><li class="bx" style="--x:85%;--y:42%;--dy:-110px;--r:10deg">301</li><li style="--x:72%;--y:70%;--dy:-50px">KD 38</li><li style="--x:88%;--y:82%;--dy:-80px">alt=""</li><li style="--x:60%;--y:86%;--dy:-60px">200 OK</li><li class="lg" style="--x:3%;--y:44%;--dy:-120px">↗184</li></ul>
-    <ul class="tp-dots" aria-hidden="true"><li style="--x:24%;--y:34%;--dl:0s"></li><li style="--x:68%;--y:30%;--dl:-1s"></li><li style="--x:41%;--y:78%;--dl:-2s"></li><li style="--x:82%;--y:58%;--dl:-.5s"></li><li style="--x:15%;--y:88%;--dl:-1.5s"></li><li style="--x:55%;--y:18%;--dl:-2.5s"></li><li style="--x:93%;--y:28%;--dl:-.8s"></li></ul>
     <div class="tp-a" id="tpA">
       <p class="lbl lt">The turning point</p>
       <h2 class="tp-q" id="tpQ">What if everything you need for SEO was in <em>one place?</em></h2>
-      <ul class="tp-badges" aria-label="Six tools in Scoutly"><li><i style="--c:#6f8dff"></i>Keyword research</li><li><i style="--c:#3ddba5"></i>Backlink manager</li><li><i style="--c:#a98bff"></i>Rank tracking</li><li><i style="--c:#f5b53d"></i>Website audit</li><li><i style="--c:#4fd1e8"></i>Competitor analysis</li><li><i style="--c:#5ac8fa"></i>SEO dashboard</li></ul>
       <p class="tp-hint" aria-hidden="true">Keep scrolling</p>
     </div>
     <div class="tp-b" id="tpB">
@@ -1226,7 +1207,7 @@ var tpW=q('.tw',tpQ),tpStatic=RM,tpLast={};
 if(tpStatic){tp.classList.add('tp-static');tpW.forEach(function(w){w.classList.add('lit')})}
 function turn(){if(tpStatic)return;var r=tp.getBoundingClientRect();if(r.bottom<-50||r.top>innerHeight+50)return;var p=prog(tp);
   var n=Math.round(tpW.length*band(p,.03,.34));if(tpLast.n!==n){tpLast.n=n;tpW.forEach(function(w,i){w.classList.toggle('lit',i<n)})}
-  var x=ss(.4,.52,p);tp.style.setProperty('--tpp',p.toFixed(3));tp.style.setProperty('--tx',x.toFixed(3));tpA.style.opacity=(1-x).toFixed(3);tpA.style.transform='translateY('+(-60*x).toFixed(1)+'px) scale('+(1-.06*x).toFixed(3)+')';
+  var x=ss(.4,.52,p);tpA.style.opacity=(1-x).toFixed(3);tpA.style.transform='translateY('+(-60*x).toFixed(1)+'px) scale('+(1-.06*x).toFixed(3)+')';
   tpB.style.opacity=x.toFixed(3);tpB.style.transform='translateY('+(40*(1-x)).toFixed(1)+'px)';
   tpA.style.visibility=x>=1?'hidden':'';tpB.style.visibility=x<=0?'hidden':'';
   tpB.style.setProperty('--m',ss(.46,.6,p).toFixed(3));
