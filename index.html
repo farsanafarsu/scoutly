@@ -479,7 +479,7 @@ html:not(.js) .ax-lines li,.ax.ax-static .ax-lines li{position:static;grid-area:
 @media(max-width:400px){.orb{--R:86px}.orb-c>span{font-size:10.5px}}
 @media(prefers-reduced-motion:reduce){.orb-ring.r2,.tp-hint:after{animation:none}}
 /* ===== the ecosystem: a bento of the six tools, each with a small live preview ===== */
-.eco{padding:60px 0 60px;overflow:hidden}
+.eco{padding:60px 0 60px;overflow:clip}
 .eco.dk.sec:before{background:radial-gradient(45% 22% at 80% 34%,rgba(47,91,255,.2),transparent 70%),radial-gradient(40% 30% at 10% 55%,rgba(90,200,250,.08),transparent 70%)}
 .fade-lt+.meet{padding-top:40px}
 .eco .fh-h{color:#fff}
@@ -501,10 +501,12 @@ html:not(.js) .ax-lines li,.ax.ax-static .ax-lines li{position:static;grid-area:
 .ex-tabs [aria-selected="true"] .ex-tx span{max-height:60px;margin-top:6px;opacity:1}
 .ex-bar{position:absolute;left:18px;right:18px;bottom:0;height:2px;background:rgba(127,160,255,.1);border-radius:1px}
 .ex-bar i{display:block;width:0;height:100%;border-radius:1px;background:linear-gradient(90deg,var(--c),#fff)}
-.ex-tabs [aria-selected="true"] .ex-bar i{width:100%}
-.ex.play [aria-selected="true"] .ex-bar i{animation:exfill 5.5s linear}
-.ex.play:hover [aria-selected="true"] .ex-bar i,.ex.play:focus-within [aria-selected="true"] .ex-bar i{animation-play-state:paused}
-@keyframes exfill{from{width:0}}
+.ex-tabs [aria-selected="true"] .ex-bar i{width:calc(var(--bp,1)*100%)}
+/* scroll-driven: the explorer pins inside a tall track; --lp (0..1 through the current tool) lets the visual drift */
+.js .ex-track{height:440vh}
+.js .ex-track .ex{position:sticky;top:max(84px,calc(50vh - 290px))}
+.ex-track.ex-static{height:auto}.ex-track.ex-static .ex{position:static}
+.ex-v.on .ex-art{transform:translateY(calc((.5 - var(--lp,.5))*18px));transition:transform .2s linear}
 /* the stage */
 .ex-stage{position:relative;display:grid;min-height:480px;border-radius:22px;background:radial-gradient(70% 60% at 70% 20%,rgba(47,91,255,.18),transparent 70%),linear-gradient(180deg,#0d1640,#070d29);border:1px solid rgba(127,160,255,.18);box-shadow:0 60px 110px -50px rgba(0,0,0,.8),0 40px 90px -60px rgba(47,91,255,.7);overflow:hidden}
 .ex-stage:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(127,160,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(127,160,255,.05) 1px,transparent 1px);background-size:32px 32px;-webkit-mask-image:radial-gradient(75% 70% at 50% 50%,#000,transparent);mask-image:radial-gradient(75% 70% at 50% 50%,#000,transparent);pointer-events:none}
@@ -587,7 +589,7 @@ html:not(.js) .ax-lines li,.ax.ax-static .ax-lines li{position:static;grid-area:
 .ex-v:not(.on) .xd>div{opacity:0;transform:translateY(16px)}
 .xd>div:nth-child(2){transition-delay:.08s}.xd>div:nth-child(3){transition-delay:.16s}.xd>div:nth-child(4){transition-delay:.24s}.xd>div:nth-child(5){transition-delay:.32s}
 @media(max-width:1000px){.ex{grid-template-columns:minmax(0,1fr)}.ex-tabs{grid-auto-flow:column;grid-auto-columns:max-content;overflow-x:auto;gap:8px;padding-bottom:4px;scrollbar-width:none}
-  .ex-tabs button{grid-template-columns:auto auto;align-items:center;padding:10px 14px}.ex-tx span{display:none}.ex-bar{opacity:0}.ex-tx b{font-size:14px}.ex-ix{width:28px;height:28px}}
+  .ex-tabs button{grid-template-columns:auto auto;align-items:center;padding:10px 14px}.ex-tx span{display:none}.ex-bar{left:14px;right:14px}.ex-tx b{font-size:14px}.ex-ix{width:28px;height:28px}}
 @media(max-width:640px){.ex-stage{min-height:440px}.ex-v{padding:16px}.ex-hd a{padding:8px 10px;font-size:10px}.ex-hd em{display:none}.ex-art{min-height:320px}
   .xa{grid-template-columns:minmax(0,1fr);gap:18px;justify-items:center}.xa-ring{width:150px;height:150px}.xa-bars{width:100%}.xa-ring b{font-size:40px}
   .xc{grid-template-columns:minmax(0,1fr)}.xd{grid-template-columns:repeat(2,minmax(0,1fr))}.xd .w3,.xd .w2{grid-column:span 1}.xd b{font-size:26px}.xd svg{display:none}.xn-me{width:100px;height:100px;margin:-50px}.xn-me b{font-size:24px}.xn-n{font-size:10.5px;padding:6px 9px}}
@@ -903,7 +905,7 @@ requestAnimationFrame(frame);
     <p class="fh-sub" data-rv>Six focused tools in one workspace, from the first keyword idea to the fix that moves your rankings.</p>
   </div>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="rkG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a98bff" stop-opacity=".35"/><stop offset="1" stop-color="#a98bff" stop-opacity="0"/></linearGradient></defs></svg>
-  <div class="ex" id="ex">
+  <div class="ex-track" id="exTrack"><div class="ex" id="ex">
     <div class="ex-tabs" role="tablist" aria-label="Scoutly tools" aria-orientation="vertical">
       <button type="button" role="tab" id="exT0" aria-selected="true" aria-controls="exP" style="--c:#6f8dff"><span class="ex-ix">01</span><span class="ex-tx"><b>Keyword Research</b><span>Discover and organise keyword opportunities.</span></span><i class="ex-bar" aria-hidden="true"><i></i></i></button>
       <button type="button" role="tab" id="exT1" aria-selected="false" aria-controls="exP" tabindex="-1" style="--c:#3ddba5"><span class="ex-ix">02</span><span class="ex-tx"><b>Backlink Manager</b><span>Save, organise, and monitor backlink opportunities.</span></span><i class="ex-bar" aria-hidden="true"><i></i></i></button>
@@ -920,7 +922,7 @@ requestAnimationFrame(frame);
       <div class="ex-v" style="--c:#4fd1e8"><div class="ex-hd"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg></span><div><b>Competitor Analysis</b><br><em>Illustrative preview</em></div><a href="competitor-analysis/">Explore competitors <span aria-hidden="true">→</span></a></div><div class="ex-art"><div class="xc"><svg viewBox="0 0 360 290"><circle cx="135" cy="160" r="105" fill="rgba(47,91,255,.42)"/><circle cx="238" cy="118" r="88" fill="rgba(79,209,232,.32)"/><circle cx="230" cy="208" r="72" fill="rgba(169,139,255,.32)"/><text x="105" y="168">You</text><text x="268" y="98">Rival one</text><text x="252" y="238">Rival two</text></svg><div><p class="xc-gap">37</p><p>keyword gaps your rivals rank for, and you don’t yet</p><ul><li style="--c:#2f5bff">yourwebsite.com · 412 keywords</li><li style="--c:#4fd1e8">rival-one.example · 538 keywords</li><li style="--c:#a98bff">rival-two.example · 301 keywords</li></ul></div></div><p class="ex-note">Sample data</p></div></div>
       <div class="ex-v" style="--c:#5ac8fa"><div class="ex-hd"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span><div><b>SEO Dashboard</b><br><em>Illustrative preview</em></div><a href="dashboard.html">Open the dashboard <span aria-hidden="true">→</span></a></div><div class="ex-art"><div class="xd"><div class="w3" style="--c:#5ac8fa"><span>Search visibility</span><b>68%</b><em>▲ 4.2 this month</em><svg viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 24 L15 22 L30 25 L45 16 L60 18 L75 10 L90 11 L100 4"/></svg></div><div class="w3" style="--c:#6f8dff"><span>Keywords tracked</span><b>248</b><em>▲ 32 new</em><svg viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 26 L15 23 L30 20 L45 21 L60 14 L75 15 L90 8 L100 6"/></svg></div><div class="w2" style="--c:#3ddba5"><span>Backlinks</span><b>184</b><em>▲ 12</em></div><div class="w2" style="--c:#a98bff"><span>Avg. position</span><b>8.4</b><em>▲ 2.1</em></div><div class="w2" style="--c:#f5b53d"><span>Site health</span><b>92</b><em>▲ 3</em></div></div><p class="ex-note">Sample data</p></div></div>
     </div>
-  </div>
+  </div></div>
   <p class="fine" data-rv>Scoutly is in early access. Each tool page explains how it works, what data it relies on and where it stands today. See the <a href="about/#product-status">product status overview</a>.</p>
 </div></section>
 <div class="fade fade-lt" aria-hidden="true"></div>
@@ -1251,15 +1253,24 @@ function tunnel(p){var W=field.clientWidth,H=field.clientHeight;
 var hz=$('who'),track=$('hzTrack');
 function horizontal(){if(innerWidth<961){track.style.transform='';return}var p=prog(hz),max=track.scrollWidth-track.clientWidth;track.style.transform='translate3d('+(-max*ss(.05,.92,p)).toFixed(1)+'px,0,0)'}
 
-/* ---------- 5. ecosystem: the explorer advances on its own while in view; a click or an arrow key hands control to the tabs ---------- */
-var exEl=$('ex'),exTabs=q('[role="tab"]',exEl),exVs=q('.ex-v',exEl),exP=$('exP'),exI=0,exManual=false;
-function exGo(n,focus){exI=n;exTabs.forEach(function(t,i){t.setAttribute('aria-selected',i===n);t.tabIndex=i===n?0:-1});
-  exVs.forEach(function(v,i){v.classList.toggle('on',i===n)});exP.setAttribute('aria-labelledby',exTabs[n].id);if(focus)exTabs[n].focus()}
-function exTake(n,focus){exManual=true;exEl.classList.remove('play');exGo(n,focus)}
-exTabs.forEach(function(t,i){t.addEventListener('click',function(){exTake(i)})});
-q('.ex-tabs',exEl)[0].addEventListener('keydown',function(e){var k={ArrowDown:1,ArrowRight:1,ArrowUp:-1,ArrowLeft:-1}[e.key];if(!k)return;e.preventDefault();exTake((exI+k+exTabs.length)%exTabs.length,true)});
-exEl.addEventListener('animationend',function(e){if(e.animationName==='exfill')exGo((exI+1)%exTabs.length)});
-if('IntersectionObserver' in window)new IntersectionObserver(function(es){exEl.classList.toggle('play',es[0].isIntersecting&&!exManual&&!RM)},{threshold:.3}).observe(exEl);
+/* ---------- 5. ecosystem: the explorer follows the scroll. The section pins and each stretch of scrolling belongs to one tool;
+   the active tab's bar fills as you go, and a click or an arrow key scrolls to that tool's stretch ---------- */
+var exEl=$('ex'),exTrack=$('exTrack'),exTabs=q('[role="tab"]',exEl),exVs=q('.ex-v',exEl),exP=$('exP'),exList=q('.ex-tabs',exEl)[0],exI=-1,exPin=!RM;
+if(!exPin)exTrack.classList.add('ex-static');
+function exGo(n,focus){if(n!==exI){exI=n;exTabs.forEach(function(t,i){t.setAttribute('aria-selected',i===n);t.tabIndex=i===n?0:-1});
+    exVs.forEach(function(v,i){v.classList.toggle('on',i===n)});exP.setAttribute('aria-labelledby',exTabs[n].id);
+    /* phones: keep the active tool in view in the sideways row */
+    if(exList.scrollWidth>exList.clientWidth+4)exList.scrollTo({left:Math.max(0,exTabs[n].offsetLeft-16),behavior:RM?'auto':'smooth'})}
+  if(focus)exTabs[n].focus({preventScroll:true})}
+function exScroll(){if(!exPin)return;var r=exTrack.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;
+  var p=prog(exTrack)*exTabs.length,n=Math.min(exTabs.length-1,Math.floor(p)),f=n===exTabs.length-1&&p>=exTabs.length?1:clamp(p-n,0,1);
+  exGo(n);exTabs[n].style.setProperty('--bp',f.toFixed(3));exP.style.setProperty('--lp',f.toFixed(3))}
+function exJump(n,focus){if(!exPin){exGo(n,focus);return}
+  var top=exTrack.getBoundingClientRect().top+scrollY,d=exTrack.offsetHeight-innerHeight;
+  scrollTo({top:top+d*(n+.08)/exTabs.length,behavior:'smooth'});exGo(n,focus)}
+exGo(0);
+exTabs.forEach(function(t,i){t.addEventListener('click',function(){exJump(i)})});
+exList.addEventListener('keydown',function(e){var k={ArrowDown:1,ArrowRight:1,ArrowUp:-1,ArrowLeft:-1}[e.key];if(!k)return;e.preventDefault();exJump((exI+k+exTabs.length)%exTabs.length,true)});
 
 /* ---------- footer: the wordmark lights up under the cursor; on touch it sweeps by itself ---------- */
 var ftEl=$('ft'),ftMark=$('ftMark'),ftC=$('ftC'),ftX=-300,ftY=95,ftTX=-300,ftTY=95,ftHover=false,ftVis=false;
@@ -1274,7 +1285,7 @@ ftMark.addEventListener('pointerleave',function(){ftHover=false});
 var queued=false;
 function frame(){queued=false;hdTheme();
   heroScroll();
-  if(tnVis||tstage<0)tunnel(prog(tn));turn();horizontal();pbScroll()}
+  if(tnVis||tstage<0)tunnel(prog(tn));turn();horizontal();pbScroll();exScroll()}
 function req(){if(!queued){queued=true;requestAnimationFrame(frame)}}
 addEventListener('scroll',req,{passive:true});addEventListener('resize',req);
 if(!RM)(function idle(){requestAnimationFrame(idle);if(tnVis){drift+=.0006;tunnel(prog(tn))}})();
