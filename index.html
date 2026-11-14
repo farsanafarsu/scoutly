@@ -161,12 +161,41 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}ul,o
 .js .hx-fu{opacity:0;transform:translateY(18px);transition:opacity .9s ease,transform 1s cubic-bezier(.2,.8,.2,1);transition-delay:var(--d)}
 .js .hx-stage{opacity:0;transition:opacity 1.4s ease .55s}
 .hx-in .hx-w,.hx-in .hx-fu{opacity:1;transform:none;filter:none}.hx-in .hx-stage{opacity:1}
+/* ===== dark hero with a glowing horizon arc: the workspace rises out of it, and the light builds as the pieces come together (--lit 0..1, set by JS) ===== */
+.hx{--lit:0;background:var(--nv);color:#fff}
+.hx:after{display:none}
+.hx-bg{background:radial-gradient(40% 30% at 18% 10%,rgba(122,92,255,.16),transparent 70%),radial-gradient(40% 32% at 84% 8%,rgba(90,200,250,.12),transparent 70%)}
+.hx-grid{background-image:linear-gradient(rgba(127,160,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(127,160,255,.05) 1px,transparent 1px)}
+/* a soft beam of light falling from the top left */
+.hx-rays{position:absolute;left:-10%;top:-20%;z-index:-1;width:70%;height:90vh;background:linear-gradient(118deg,rgba(170,195,255,.13) 0%,rgba(170,195,255,.04) 30%,transparent 55%);filter:blur(18px);transform:skewX(-12deg);pointer-events:none}
+.hx-h1{text-transform:none;font-weight:500;font-size:clamp(40px,5.4vw,84px);line-height:1.04;color:#fff}
+.hx-h1 em{background:linear-gradient(100deg,#fff 0%,#b9ccff 35%,#5ac8fa 70%,#a98bff 100%);background-size:200% 100%;-webkit-background-clip:text;background-clip:text}
+.hx-sub{color:rgba(214,224,255,.7)}.hx-sub b{color:#fff}
+.hx-pill{background:rgba(255,255,255,.05);border-color:rgba(127,160,255,.25);color:rgba(214,224,255,.85);box-shadow:none}
+.hx-pill span:after{content:" ›";color:rgba(214,224,255,.6)}
+.hx-pill em{display:none}
+.hx-trust{color:rgba(214,224,255,.62)}
+.hx-acts .btn{height:50px}
+.hx .cv-story{margin-top:clamp(110px,10vw,150px)}
+/* the horizon: a huge disc whose upper rim glows; its lower half fades away behind the workspace */
+.hx-orb{position:absolute;left:50%;top:-110px;z-index:-1;width:min(1560px,165%);aspect-ratio:1;border-radius:50%;transform:translateX(-50%) scale(calc(.96 + .04*var(--lit)));
+  background:radial-gradient(55% 32% at 50% 0%,rgba(47,91,255,calc(.18 + .4*var(--lit))),transparent 72%),radial-gradient(70% 50% at 50% 8%,rgba(122,92,255,calc(.06 + .16*var(--lit))),transparent 70%),#040919;
+  box-shadow:0 0 0 1.5px rgba(205,222,255,calc(.25 + .55*var(--lit))),0 -24px 90px -10px rgba(90,200,250,calc(.18 + .5*var(--lit))),0 -70px 220px rgba(47,91,255,calc(.14 + .42*var(--lit)));
+  -webkit-mask-image:linear-gradient(#000 0%,#000 26%,transparent 50%);mask-image:linear-gradient(#000 0%,#000 26%,transparent 50%);pointer-events:none}
+/* the thick coloured band of light along the rim */
+.hx-orb:before{content:"";position:absolute;inset:0;border-radius:50%;padding:clamp(18px,2.4vw,34px);background:linear-gradient(90deg,#7a5cff 0%,#2f5bff 22%,#5ac8fa 42%,#c9e4ff 50%,#5ac8fa 58%,#2f5bff 78%,#7a5cff 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0);filter:blur(9px);opacity:calc(.35 + .65*var(--lit))}
+/* a crisp white rim along the very top */
+.hx-orb:after{content:"";position:absolute;inset:-1px;border-radius:50%;border:2px solid transparent;border-top-color:rgba(255,255,255,calc(.45 + .55*var(--lit)));filter:drop-shadow(0 -2px 6px rgba(201,228,255,.9))}
+.hx .cv-win{background:rgba(246,248,252,calc(.6 + .38*var(--p)));border-color:rgba(255,255,255,.55);box-shadow:0 0 0 1px rgba(127,160,255,.25),0 60px 120px -40px rgba(0,0,0,.8),0 -10px 60px -20px rgba(90,200,250,calc(.2 + .4*var(--p)))}
+.kd{display:grid;place-items:center;height:18px;border-radius:5px;font:600 10px/1 var(--M);font-style:normal}
+.st{padding:4px 7px;border-radius:999px;font:600 9.5px/1 var(--M);font-style:normal;letter-spacing:.06em;text-transform:uppercase}
+@media(max-width:900px){.hx-orb{top:-60px;width:190%}}
 /* hero CTAs */
 .hx-acts{display:flex;flex-wrap:wrap;justify-content:center;gap:12px 14px;margin-top:36px}
 .hx-acts .btn{height:54px;padding:0 26px;border-radius:999px}
 .hx-acts .btn.p{box-shadow:0 14px 30px -12px rgba(47,91,255,.9)}
-.btn.gh{background:rgba(255,255,255,.72);border-color:rgba(10,26,74,.14);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-.btn.gh:hover{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.gh{background:rgba(255,255,255,.05);border-color:rgba(255,255,255,.2);color:#fff;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.btn.gh:hover{background:#fff;border-color:#fff;color:var(--nv)}
 .hx-play{display:grid;place-items:center;width:24px;height:24px;margin-left:-8px;border-radius:50%;background:var(--b);color:#fff;transition:transform .25s}.hx-play svg{width:11px;height:11px;margin-left:2px}
 .btn.gh:hover .hx-play{transform:scale(1.1)}
 .hx-trust{margin-top:26px}
@@ -780,17 +809,18 @@ requestAnimationFrame(frame);
 <main id="main">
 
 <!-- 1. HERO: scattered SEO work comes together into one workspace -->
-<section class="hx" id="scan" aria-labelledby="heroTitle">
+<section class="hx dk" id="scan" aria-labelledby="heroTitle">
   <canvas class="hx-aurora" id="hxAurora" aria-hidden="true"></canvas>
   <div class="hx-bg" aria-hidden="true"></div>
   <div class="hx-grid" aria-hidden="true"></div>
+  <div class="hx-rays" aria-hidden="true"></div>
   <div class="w hx-top">
     <a class="hx-pill hx-fu" style="--d:.05s" href="#features"><b>Early access</b><span>The all-in-one SEO workspace</span><em aria-hidden="true">→</em></a>
     <h1 class="hx-h1" id="heroTitle"><span class="hx-l"><span class="hx-w" style="--i:1">SEO</span> <span class="hx-w" style="--i:2">is</span> <span class="hx-w" style="--i:3">complicated</span> <span class="hx-w" style="--i:4">enough.</span></span> <span class="hx-l"><span class="hx-w" style="--i:6">Managing</span> <span class="hx-w" style="--i:7">it</span> <span class="hx-w" style="--i:8"><em>shouldn’t</em></span> <span class="hx-w" style="--i:9"><em>be.</em></span></span></h1>
     <p class="hx-sub hx-fu" style="--d:.75s">Meet <b>Scoutly</b> — your all-in-one SEO management workspace. Discover opportunities, manage backlinks, track rankings, analyse competitors, and make smarter SEO decisions from one place.</p>
     <div class="hx-acts hx-fu" style="--d:.9s">
-      <a class="btn p" href="#features">Explore Scoutly <span aria-hidden="true">→</span></a>
       <a class="btn gh" href="#how"><span class="hx-play" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M6 4.5v15l13-7.5z" fill="currentColor"/></svg></span>See How It Works</a>
+      <a class="btn p" href="#features">Explore Scoutly <span aria-hidden="true">→</span></a>
     </div>
     <ul class="hx-trust hx-fu" style="--d:1.05s" aria-label="Scoutly at a glance"><li>Six SEO tools, one workspace</li><li>Free early-access account</li></ul>
   </div>
@@ -798,6 +828,7 @@ requestAnimationFrame(frame);
   <div class="cv-story" id="cvStory"><div class="cv-pin">
   <div class="cv-stage" id="cvStage" aria-hidden="true">
     <div class="cv-scene" id="cvScene">
+      <div class="hx-orb" aria-hidden="true"></div>
       <ul class="cv-noise" id="cvNoise">
         <li style="--x:-5%;--y:9%;--dl:0s">Tab 14 of 14</li>
         <li style="--x:87%;--y:4%;--dl:-2s">Which sheet is the latest?</li>
@@ -856,6 +887,8 @@ requestAnimationFrame(frame);
   </div>
   </div></div>
 </section>
+
+<div class="fade fade-lt" aria-hidden="true"></div>
 
 <!-- 2. THE PROBLEM: every SEO professional knows this -->
 <section class="sec pb" id="problem" aria-labelledby="pbTitle"><div class="w two">
@@ -1259,7 +1292,7 @@ function cvAt(p){
   cvSet('st',p<.04?0:p<.96?1:2,function(v){cvStat.textContent=['Scattered across 6 tools','Bringing it together…','Everything in one place'][v];cvWin.classList.toggle('calm',v===2)})}
 (function tilt(){requestAnimationFrame(tilt);if(!hxVis)return;hmx+=(tmx-hmx)*.06;hmy+=(tmy-hmy)*.06;cvS+=(cvT-cvS)*(RM?1:.1);
   var p=RM?1:cvS,mob=innerWidth<=900,rx=RM?0:((mob?6:16)*(1-p)-hmy*3*(1-p*.5)),ry=RM?0:hmx*6*(1-p*.5);
-  cvScene.style.setProperty('--rx',rx.toFixed(2)+'deg');cvScene.style.setProperty('--ry',ry.toFixed(2)+'deg');cvScene.style.setProperty('--sc',(RM?1:.95+.05*p).toFixed(3));
+  cvScene.style.setProperty('--rx',rx.toFixed(2)+'deg');cvScene.style.setProperty('--ry',ry.toFixed(2)+'deg');cvScene.style.setProperty('--sc',(RM?1:.95+.05*p).toFixed(3));hx.style.setProperty('--lit',(RM?1:p).toFixed(3));
   cvAt(p)})();
 /* the headline animates in once the preloader clears */
 function heroIntro(){hx.classList.add('hx-in')}
@@ -1311,7 +1344,7 @@ function turn(){if(tpStatic)return;var r=tp.getBoundingClientRect();if(r.bottom<
     'float fb(vec2 p){float v=0.,a=.5;for(int k=0;k<5;k++){v+=a*n(p);p*=2.02;a*=.5;}return v;}',
     'void main(){vec2 uv=gl_FragCoord.xy/r;vec2 p=uv*vec2(r.x/r.y,1.)*1.6;',
     ' float q=fb(p+vec2(t*.035,t*.02));float w=fb(p*1.3+q*1.8-vec2(t*.03,-t*.025)+m*.25);',
-    ' vec3 c=vec3(.933,.945,.969);',
+    ' vec3 c=vec3(.02,.035,.1);',
     ' float top=smoothstep(.15,1.,uv.y);',
     ' c=mix(c,vec3(.353,.784,.98),smoothstep(.48,.85,w)*.42*top);',
     ' c=mix(c,vec3(.478,.361,1.),smoothstep(.55,.9,fb(p*.9-vec2(t*.02,0.)+w))*.26*top);',
