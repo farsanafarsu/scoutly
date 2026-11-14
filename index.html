@@ -286,7 +286,7 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}ul,o
 .msg{min-height:20px;margin-top:8px;font:500 12px/1.5 var(--M);color:var(--b)}.msg.err{color:var(--cr)}.dk .msg{color:var(--sky)}.dk .msg.err{color:#ff9a9d}
 .note{font:400 13px/1.65 var(--T);color:var(--mu)}
 /* meet */
-/* meet: a case file that maps the site (explore), flags issues with evidence (investigate), then ranks the fixes (act) */
+/* meet: copy beside the X-ray lens */
 .meet{overflow:hidden}
 .meet .two{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr)}
 .meet .dh{font-size:clamp(26px,2.3vw,38px);max-width:640px}
@@ -297,88 +297,71 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}ul,o
 .meet-ev b{color:var(--ink);font-weight:600}
 .meet-acts{display:flex;flex-wrap:wrap;align-items:center;gap:16px 26px;margin-top:34px}
 .meet-link{font:600 11px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--b);border-bottom:1px solid currentColor;padding-bottom:4px}
-.case{--cl:rgba(127,160,255,.16);--bad:#ff6b6f;--warn:#f5b53d;--good:#3ddba5;position:relative;overflow:hidden;border-radius:18px;background:radial-gradient(90% 70% at 85% 0%,rgba(47,91,255,.32),transparent 60%),radial-gradient(60% 60% at 0% 100%,rgba(90,200,250,.1),transparent 60%),var(--nv);border:1px solid var(--cl);box-shadow:0 60px 110px -50px rgba(10,26,74,.7),0 40px 90px -60px rgba(47,91,255,.8);color:#e6ecff}
-.case:before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(127,160,255,.06) 1px,transparent 1px) 0 0/28px 28px,linear-gradient(90deg,rgba(127,160,255,.06) 1px,transparent 1px) 0 0/28px 28px;-webkit-mask:radial-gradient(75% 65% at 50% 45%,#000,transparent);mask:radial-gradient(75% 65% at 50% 45%,#000,transparent);pointer-events:none}
-.case>*{position:relative}
-.case-hd{display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--cl);font:500 10.5px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:rgba(214,224,255,.5);white-space:nowrap}
-.case-hd b{font-weight:500;color:#fff}
-.case-st{display:inline-flex;align-items:center;gap:8px;margin-left:auto;padding:6px 10px;border:1px solid currentColor;border-radius:999px;color:var(--sky);transition:color .4s}
-.case-st i{width:6px;height:6px;border-radius:50%;background:currentColor;animation:cping 1.6s ease-out infinite}
-.case-st b{color:inherit}
+/* the X-ray lens: a website mockup; under the lens it turns into a blueprint of its code with the hidden issues marked.
+   The lens tours the issues by itself, follows the pointer on hover, and each issue it passes over is "found" */
+.xr{position:relative;border-radius:20px;background:#fff;border:1px solid rgba(10,26,74,.1);box-shadow:0 70px 120px -50px rgba(10,26,74,.55),0 40px 90px -60px rgba(47,91,255,.7);overflow:hidden}
+.xr-bar{display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid rgba(10,26,74,.07);background:linear-gradient(180deg,#fff,#f6f8fb)}
+.xr-url{flex:1;max-width:360px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:8px;height:32px;border-radius:999px;background:#f1f4f9;border:1px solid rgba(10,26,74,.08);font:500 12px/1 var(--M);color:var(--sl)}
+.xr-url:before{content:"";width:9px;height:11px;border:1.6px solid var(--ok);border-radius:3px 3px 2px 2px;box-sizing:border-box}
+.xr-st{display:inline-flex;align-items:center;gap:8px;padding:6px 11px;border-radius:999px;background:rgba(229,72,77,.08);font:500 11px/1 var(--M);color:var(--cr);white-space:nowrap;transition:background .4s,color .4s}
+.xr-st i{width:6px;height:6px;border-radius:50%;background:currentColor;animation:cping 1.6s ease-out infinite}
+.xr-st b{font-weight:600}
 @keyframes cping{0%{box-shadow:0 0 0 0 currentColor}100%{box-shadow:0 0 0 7px transparent}}
-.case[data-step="1"] .case-st{color:var(--bad)}.case[data-step="2"] .case-st{color:var(--good)}
-.case-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-bottom:1px solid var(--cl)}
-.case-tabs button{position:relative;display:flex;align-items:baseline;gap:10px;padding:16px 18px 17px;border:0;background:none;color:rgba(214,224,255,.48);font:600 13px/1 var(--D);letter-spacing:.06em;text-transform:uppercase;text-align:left;cursor:pointer;transition:color .3s,background .3s}
-.case-tabs button+button{border-left:1px solid var(--cl)}
-.case-tabs button:hover{color:#fff}
-.case-tabs button:focus-visible{outline:2px solid var(--sky);outline-offset:-2px}
-.case-tabs i{font:500 10.5px/1 var(--M);font-style:normal;letter-spacing:.1em;color:rgba(127,160,255,.55);transition:color .3s}
-.case-tabs [aria-selected="true"]{color:#fff;background:rgba(127,160,255,.07)}.case-tabs [aria-selected="true"] i{color:var(--sky)}
-.ct-bar{position:absolute;left:0;right:0;bottom:-1px;height:2px}
-.ct-bar span{display:block;width:0;height:100%;background:linear-gradient(90deg,var(--b),var(--sky))}
-.case-tabs [aria-selected="true"] .ct-bar span{width:100%}
-.case.play [aria-selected="true"] .ct-bar span{animation:ctfill 6s linear}
-.case.play:hover [aria-selected="true"] .ct-bar span,.case.play:focus-within [aria-selected="true"] .ct-bar span{animation-play-state:paused}
-@keyframes ctfill{from{width:0}}
-.case-stage{position:relative;aspect-ratio:520/300;overflow:hidden}
-.case-map{position:absolute;inset:0;width:100%;height:100%;overflow:visible;transform-origin:0 50%;transition:transform .9s cubic-bezier(.2,.8,.2,1),opacity .6s}
-.case[data-step="2"] .case-map{transform:translateX(3%) scale(.56)}
-.cm-e{fill:none;stroke:rgba(127,160,255,.38);stroke-width:1.2}
-.cm-x{fill:none;stroke:rgba(127,160,255,.38);stroke-width:1.4;stroke-dasharray:4 4;transition:stroke .5s}
-.cm-l{stroke:var(--bad);stroke-width:1.2;stroke-dasharray:2 3;opacity:0;transition:opacity .4s}
-.case[data-step="1"] .cm-x{stroke:var(--bad);animation:cmflow 1s linear infinite}.case[data-step="1"] .cm-l{opacity:1}
-.case[data-step="2"] .cm-x{stroke:var(--good);stroke-dasharray:none}
-@keyframes cmflow{to{stroke-dashoffset:-16}}
-.cm-n{transform-box:fill-box;transform-origin:center;transition:opacity .45s calc(var(--i)*.05s),transform .6s cubic-bezier(.2,1.4,.4,1) calc(var(--i)*.09s + .15s)}
-.cm-n rect{fill:#0c1846;stroke:rgba(127,160,255,.45);stroke-width:1;transition:fill .45s,stroke .45s}
-.cm-n.home rect{fill:var(--b);stroke:var(--sky)}
-.cm-n text{font:500 10px var(--M);fill:rgba(214,224,255,.86);text-anchor:middle}
-.cm-n.home text{fill:#fff}
-.cm-b{opacity:0;transform:scale(0);transform-box:fill-box;transform-origin:center;transition:opacity .3s,transform .45s cubic-bezier(.2,1.6,.4,1)}
-.cm-b circle:not(.cm-pulse){fill:var(--c)}.cm-b text{font:700 9px var(--M);fill:#fff;text-anchor:middle}
-.cm-b .ok,.case[data-step="2"] .cm-b .bang{opacity:0}.case[data-step="2"] .cm-b .ok{opacity:1}
-.cm-n.bad{--c:var(--bad)}.cm-n.warn{--c:var(--warn)}
-.case[data-step="1"] .cm-n:not(.bad):not(.warn):not(.home){opacity:.4}
-.case[data-step="1"] .cm-n.bad rect,.case[data-step="1"] .cm-n.warn rect{stroke:var(--c);fill:color-mix(in srgb,var(--c) 18%,#0c1846)}
-.case[data-step="2"] .cm-n.bad rect,.case[data-step="2"] .cm-n.warn rect{stroke:var(--good);fill:color-mix(in srgb,var(--good) 16%,#0c1846)}
-.case[data-step="1"] .cm-b,.case[data-step="2"] .cm-b{opacity:1;transform:none}
-.case[data-step="2"] .cm-b circle:not(.cm-pulse){fill:var(--good)}
-.cm-pulse{fill:none;stroke:var(--c);stroke-width:1.5;opacity:0;transform-box:fill-box;transform-origin:center}
-.case[data-step="1"] .cm-pulse{animation:cmping 1.8s ease-out infinite}
-@keyframes cmping{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(2.6)}}
-.cm-scan{fill:none;stroke:var(--sky);stroke-width:1;opacity:0;transform-box:fill-box;transform-origin:center}
-.case.play[data-step="0"] .cm-scan{animation:cmscan 2.4s ease-out infinite}.case.play[data-step="0"] .cm-scan+.cm-scan{animation-delay:1.2s}
-@keyframes cmscan{0%{opacity:.7;transform:scale(1)}100%{opacity:0;transform:scale(9)}}
-.case-ev{position:absolute;left:67.5%;top:62%;width:30%;padding:12px 14px;border:1px solid rgba(255,107,111,.4);border-radius:10px;background:rgba(10,14,40,.92);box-shadow:0 20px 40px -20px #000;font:400 12px/1.5 var(--T);color:rgba(214,224,255,.75);opacity:0;transform:translateY(10px);transition:opacity .4s,transform .5s cubic-bezier(.2,.8,.2,1);pointer-events:none}
-.case-ev p:first-child{margin-bottom:6px;font:600 11px/1 var(--M);letter-spacing:.06em;color:var(--bad)}
-.case-ev code{font:500 11px var(--M);color:#fff}
-.case[data-step="1"] .case-ev{opacity:1;transform:none;transition-delay:.35s}
-.case-plan{position:absolute;right:16px;top:50%;width:44%;display:grid;gap:8px;transform:translateY(-50%)}
-.case-plan li{display:grid;grid-template-columns:22px minmax(0,1fr) auto;align-items:center;gap:10px;padding:10px 12px;border:1px solid var(--cl);border-radius:10px;background:rgba(255,255,255,.04);opacity:0;transform:translateX(24px);transition:opacity .4s,transform .55s cubic-bezier(.2,.8,.2,1)}
-.case-plan li>b{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:rgba(61,219,165,.15);font:600 11px/1 var(--M);color:var(--good)}
-.case-plan strong{display:block;overflow:hidden;font:600 13px/1.3 var(--T);color:#fff;white-space:nowrap;text-overflow:ellipsis}
-.case-plan span{display:block;overflow:hidden;font:400 11.5px/1.4 var(--T);color:rgba(214,224,255,.55);white-space:nowrap;text-overflow:ellipsis}
-.case-plan em{padding:4px 7px;border-radius:5px;font:600 9.5px/1 var(--M);font-style:normal;letter-spacing:.08em;text-transform:uppercase;color:var(--c);background:color-mix(in srgb,var(--c) 14%,transparent)}
-.case-plan .hi{--c:var(--bad)}.case-plan .md{--c:var(--warn)}.case-plan .lo{--c:var(--sky)}
-.case[data-step="2"] .case-plan li{opacity:1;transform:none}
-.case[data-step="2"] .case-plan li:nth-child(1){transition-delay:.3s}.case[data-step="2"] .case-plan li:nth-child(2){transition-delay:.42s}.case[data-step="2"] .case-plan li:nth-child(3){transition-delay:.54s}
-.case-ft{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;padding:16px 18px;border-top:1px solid var(--cl)}
-.case-copy{flex:1 1 260px;font:400 14.5px/1.55 var(--T);color:rgba(214,224,255,.82)}
-.case-stats{display:flex;gap:18px;font:500 10px/1 var(--M);letter-spacing:.1em;text-transform:uppercase;color:rgba(214,224,255,.45)}
-.case-stats b{display:block;margin-bottom:5px;font:600 18px/1 var(--D);letter-spacing:0;color:#fff;transition:color .4s}
-.case[data-step="1"] #caseIss{color:var(--bad)}.case[data-step="2"] #caseIss{color:var(--good)}
-/* before it scrolls in, the map is unbuilt: links draw, then pages pop in */
-.js .case:not(.in) .cm-n{opacity:0;transform:scale(.5)}
-.cm-e{stroke-dasharray:1;transition:stroke-dashoffset 1.1s cubic-bezier(.4,0,.2,1) .1s}
-.cm-x{transition:stroke .5s,opacity .5s 1s}
-.js .case:not(.in) .cm-e{stroke-dashoffset:1}
-.js .case:not(.in) .cm-x{opacity:0}
+.xr.done .xr-st{background:rgba(23,166,115,.1);color:var(--ok)}
+.xr-stage{--x:50%;--y:40%;--r:90px;position:relative;aspect-ratio:16/10;overflow:hidden;cursor:none;touch-action:pan-y;background:linear-gradient(180deg,#fbfcfe,#f2f5fa)}
+.xr-site,.xr-ray{position:absolute;inset:0}
+.xr-site .b,.xr-ray .b{position:absolute;display:block}
+/* the website */
+.xr-site .k-nav{background:#fff;border-bottom:1px solid rgba(10,26,74,.07)}
+.xr-site .k-logo{border-radius:5px;background:linear-gradient(90deg,#2f5bff,#5ac8fa)}
+.xr-site .k-link{border-radius:3px;background:#d9dfea}
+.xr-site .k-cta{border-radius:999px;background:var(--ink)}
+.xr-site .k-h1{border-radius:6px;background:#1c2a5e}
+.xr-site .k-p{border-radius:3px;background:#cdd5e4}
+.xr-site .k-btn{border-radius:999px;background:var(--b);box-shadow:0 8px 18px -8px rgba(47,91,255,.8)}
+.xr-site .k-img{border-radius:12px;background:radial-gradient(30% 30% at 70% 30%,#fff7d6,transparent 70%),linear-gradient(160deg,#b9c8ff 0%,#d9c8ff 50%,#c5ecff 100%);overflow:hidden}
+.xr-site .k-img:after{content:"";position:absolute;left:-10%;right:-10%;bottom:-30%;height:70%;border-radius:50% 50% 0 0;background:linear-gradient(180deg,#8fa6f5,#7a8ff0)}
+.xr-site .k-card{border-radius:12px;background:#fff;box-shadow:0 14px 30px -18px rgba(10,26,74,.45);border:1px solid rgba(10,26,74,.05)}
+.xr-site .k-cimg{border-radius:8px;background:linear-gradient(135deg,#dfe7ff,#efe3ff)}
+.xr-site .k-ct{border-radius:3px;background:#d6dcea}
+.xr-site .k-foot{border-radius:3px;background:#d9dfea}
+/* the blueprint under the lens */
+.xr-ray{background:linear-gradient(rgba(127,160,255,.08) 1px,transparent 1px) 0 0/22px 22px,linear-gradient(90deg,rgba(127,160,255,.08) 1px,transparent 1px) 0 0/22px 22px,radial-gradient(80% 80% at 50% 40%,#0f1d55,#070d2c);clip-path:circle(var(--r) at var(--x) var(--y))}
+.xr-ray .b{border:1px dashed rgba(127,160,255,.5);border-radius:4px;background:rgba(127,160,255,.04);box-shadow:none}
+.xr-ray .b:after{display:none}
+.xr-ray .b[data-l]:before{content:attr(data-l);position:absolute;left:0;bottom:calc(100% + 3px);font:500 9.5px/1 var(--M);color:#8fb0ff;white-space:nowrap}
+.xr-ray .b.k-nav{border-width:0 0 1px;border-radius:0}
+.xr-ray .b[data-iss]{border:1.5px solid var(--c);background:color-mix(in srgb,var(--c) 14%,transparent);box-shadow:0 0 18px color-mix(in srgb,var(--c) 45%,transparent)}
+.xr-ray .b[data-iss]:before{padding:4px 7px;border-radius:5px;background:var(--c);color:#fff;font-weight:600;bottom:calc(100% + 5px)}
+.xr-ray .b.lo:before{top:calc(100% + 5px);bottom:auto}
+.xr-ray .b[data-iss]:after{content:"";display:block;position:absolute;right:-5px;top:-5px;width:10px;height:10px;border-radius:50%;background:var(--c);animation:xrping 1.6s ease-out infinite}
+@keyframes xrping{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--c) 70%,transparent)}100%{box-shadow:0 0 0 10px transparent}}
+/* the lens */
+.xr-lens{position:absolute;left:var(--x);top:var(--y);z-index:3;width:calc(var(--r)*2);height:calc(var(--r)*2);border-radius:50%;transform:translate(-50%,-50%);border:3px solid #fff;box-shadow:0 0 0 1px rgba(10,26,74,.18),0 24px 60px -12px rgba(5,10,31,.6),0 0 40px rgba(90,200,250,.35),inset 0 0 30px rgba(90,200,250,.35);pointer-events:none}
+.xr-lens:before{content:"";position:absolute;inset:6px;border-radius:50%;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.28),transparent 45%);border:1px solid rgba(90,200,250,.4)}
+.xr-lens:after{content:"";position:absolute;left:84%;top:84%;width:calc(var(--r)*.62);height:12px;border-radius:7px;background:linear-gradient(180deg,#fff,#cfd8ea);box-shadow:0 10px 20px -8px rgba(5,10,31,.7);transform:rotate(45deg);transform-origin:0 50%}
+.xr-ret{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px;border-radius:50%;border:1.5px solid rgba(143,176,255,.8)}
+.xr-hint{position:absolute;left:50%;bottom:12px;translate:-50% 0;z-index:4;padding:7px 11px;border-radius:999px;background:rgba(5,10,31,.82);color:#fff;font:500 10.5px/1 var(--M);letter-spacing:.08em;text-transform:uppercase;transition:opacity .5s;pointer-events:none}
+.xr.touched .xr-hint{opacity:0}
+/* findings */
+.xr-finds{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid rgba(10,26,74,.07)}
+.xr-finds li+li{border-left:1px solid rgba(10,26,74,.07)}
+.xr-finds button{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;width:100%;height:100%;padding:14px 16px 15px;border:0;background:none;text-align:left;cursor:pointer;transition:background .35s}
+.xr-finds button:hover{background:#f6f8fc}
+.xr-finds button:focus-visible{outline:2px solid var(--b);outline-offset:-2px}
+.xr-finds button:before{content:"";position:absolute;left:0;right:0;top:-1px;height:2px;background:var(--c);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.xr-finds em{display:inline-flex;align-items:center;gap:6px;font:600 9.5px/1 var(--M);font-style:normal;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);transition:color .35s}
+.xr-finds em:before{content:"";width:7px;height:7px;border-radius:50%;border:1.5px solid currentColor;box-sizing:border-box;transition:background .35s}
+.xr-finds b{font:600 13.5px/1.2 var(--T);color:var(--mu);transition:color .35s}
+.xr-finds span{font:400 12px/1.35 var(--T);color:var(--mu);opacity:.7;transition:opacity .35s}
+.xr-finds .found em{color:var(--c)}.xr-finds .found em:before{background:var(--c)}
+.xr-finds .found b{color:var(--ink)}.xr-finds .found span{opacity:1;color:var(--sl)}
+.xr-finds .on{background:color-mix(in srgb,var(--c) 7%,#fff)}.xr-finds .on:before{transform:none}
+html:not(.js) .xr-lens,html:not(.js) .xr-hint{display:none}
 @media(max-width:960px){.meet .two{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:600px){.case-hd .case-id{display:none}.case-tabs button{flex-direction:column;gap:6px;padding:14px 12px 15px;font-size:12px}
-  .case-stage{aspect-ratio:auto;height:330px}.case-map{inset:12px 0 auto;height:auto}.cm-l{display:none}
-  .cm-n text{font-size:13px}.case-ev{left:12px;right:12px;top:auto;bottom:14px;width:auto}
-  .case[data-step="2"] .case-map{transform:none;opacity:.12}.case-plan{left:12px;right:12px;width:auto}}
-@media(prefers-reduced-motion:reduce){.case *{animation:none!important;transition-duration:.01s!important;transition-delay:0s!important}}
+@media(max-width:600px){.xr-finds{grid-template-columns:repeat(2,minmax(0,1fr))}.xr-finds li:nth-child(3){border-left:0}.xr-finds li:nth-child(n+3){border-top:1px solid rgba(10,26,74,.07)}
+  .xr-bar .cv-dots,.xr-url:before{display:none}.xr-ray .b[data-l]:not([data-iss]):before{display:none}.xr-ray .b[data-iss]:before{font-size:8.5px;padding:3px 5px}.xr-hint{display:none}}
+@media(prefers-reduced-motion:reduce){.xr-st i,.xr-ray .b[data-iss]:after{animation:none}}
 /* tunnel */
 .tn{position:relative;background:var(--bg)}
 .js .tn{height:460vh}
@@ -729,7 +712,7 @@ code{font:400 12.5px var(--M)}
 @media(max-width:600px){.scope-chips li:nth-child(2n){display:none}.scope-chips li{font-size:10px;padding:7px 9px}.spec,.dark3,.pri,.tgrid,.anat,.fin-row,.d-cards{grid-template-columns:1fr}.sp{min-height:0}.sp h3{padding-top:24px}.scan{flex-direction:column;align-items:stretch}.scan .btn{width:100%}.faq .a{padding-right:0}.tn-chip{width:46px;height:46px;margin:-23px;font-size:11px}.tn-chip small{display:none}}
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.hx-float li,.hx-h1 em,.hx-caret{animation:none}.js [data-rv]{transition-duration:.01s}}
 /* ===== phones, small phones and short landscape screens ===== */
-@media(max-width:1024px){.lbl,.hx-k,.ft-st{font-size:11.5px}.hd .btn.sm{font-size:11px}.hx-pill b,.case-hd b,.case-tabs i{font-size:11px}}
+@media(max-width:1024px){.lbl,.hx-k,.ft-st{font-size:11.5px}.hd .btn.sm{font-size:11px}.hx-pill b{font-size:11px}}
 @media(max-width:600px){
   .sp a{display:inline-flex;margin-top:6px;padding:12px 0}.meet-link{display:inline-block;padding-top:14px}.ft-up{padding:12px 0;margin-top:14px}.ft nav a{padding:10px 0}
   .scan input{flex:none}  /* in the stacked form, flex:1 collapsed the field to its text height */
@@ -1034,41 +1017,34 @@ requestAnimationFrame(frame);
     <div class="meet-acts" data-rv><a class="btn p" href="#start">Let Scoutly Investigate <span aria-hidden="true">→</span></a><a class="meet-link" href="#how">See how it works →</a></div>
   </div>
 
-  <div class="case" id="case" data-step="0" data-rv>
-    <div class="case-hd"><span class="case-id">Case file <b>#0142</b></span><b>yourwebsite.com</b><span class="case-st" aria-hidden="true"><i></i><b id="caseSt">Crawling</b></span></div>
-    <div class="case-tabs" role="tablist" aria-label="How Scoutly investigates a site">
-      <button type="button" role="tab" id="caseT0" aria-selected="true" aria-controls="caseCopy"><i>01</i>Explore<span class="ct-bar"><span></span></span></button>
-      <button type="button" role="tab" id="caseT1" aria-selected="false" aria-controls="caseCopy" tabindex="-1"><i>02</i>Investigate<span class="ct-bar"><span></span></span></button>
-      <button type="button" role="tab" id="caseT2" aria-selected="false" aria-controls="caseCopy" tabindex="-1"><i>03</i>Act<span class="ct-bar"><span></span></span></button>
+  <div class="xr" id="xr" data-rv>
+    <div class="xr-bar"><span class="cv-dots"><i></i><i></i><i></i></span><span class="xr-url">yourwebsite.com</span><span class="xr-st" id="xrSt"><i></i><span><b id="xrN">0</b>/4 issues found</span></span></div>
+    <div class="xr-stage" id="xrStage" aria-hidden="true">
+      <div class="xr-site">
+        <i class="b k-nav" style="left:0;top:0;width:100%;height:9%" data-l="<nav>"></i>
+        <i class="b k-logo lo" data-iss="0" style="left:4%;top:2.6%;width:11%;height:3.8%;--c:#e5484d" data-l="<title> missing"></i>
+        <i class="b k-link" style="left:50%;top:3.6%;width:7%;height:1.8%"></i><i class="b k-link" style="left:60%;top:3.6%;width:7%;height:1.8%"></i><i class="b k-link" style="left:70%;top:3.6%;width:7%;height:1.8%"></i>
+        <i class="b k-cta" style="left:83%;top:2.4%;width:13%;height:4.2%" data-l="<a.cta>"></i>
+        <i class="b k-h1" style="left:5%;top:17%;width:42%;height:5.4%" data-l="<h1>"></i><i class="b k-h1" style="left:5%;top:24.4%;width:31%;height:5.4%"></i>
+        <i class="b k-p" style="left:5%;top:34%;width:40%;height:1.9%" data-l="<p>"></i><i class="b k-p" style="left:5%;top:38%;width:33%;height:1.9%"></i>
+        <i class="b k-btn" style="left:5%;top:45%;width:15%;height:6%" data-l="<button>"></i>
+        <i class="b k-img" data-iss="1" style="left:55%;top:15%;width:40%;height:40%;--c:#f5a524" data-l="LCP 3.9s · hero.jpg 2.4 MB"></i>
+        <i class="b k-card" style="left:5%;top:62%;width:27%;height:27%" data-l="<article>"></i><i class="b k-card" style="left:36.5%;top:62%;width:27%;height:27%"></i><i class="b k-card" style="left:68%;top:62%;width:27%;height:27%"></i>
+        <i class="b k-cimg" style="left:6.5%;top:64.5%;width:24%;height:12%"></i><i class="b k-cimg" data-iss="2" style="left:38%;top:64.5%;width:24%;height:12%;--c:#f5a524" data-l="<img> no alt text"></i><i class="b k-cimg" style="left:69.5%;top:64.5%;width:24%;height:12%"></i>
+        <i class="b k-ct" style="left:6.5%;top:80%;width:18%;height:1.8%"></i><i class="b k-ct" style="left:38%;top:80%;width:18%;height:1.8%"></i><i class="b k-ct" style="left:69.5%;top:80%;width:18%;height:1.8%"></i>
+        <i class="b k-ct" style="left:6.5%;top:84%;width:12%;height:1.8%"></i><i class="b k-ct" style="left:38%;top:84%;width:12%;height:1.8%"></i><i class="b k-ct" style="left:69.5%;top:84%;width:12%;height:1.8%"></i>
+        <i class="b k-foot" style="left:5%;top:94%;width:8%;height:1.8%" data-l="<footer>"></i><i class="b k-foot" style="left:16%;top:94%;width:8%;height:1.8%"></i><i class="b k-foot" style="left:27%;top:94%;width:8%;height:1.8%"></i>
+        <i class="b k-foot" data-iss="3" style="left:77%;top:94%;width:12%;height:1.8%;--c:#e5484d" data-l="404 · /journal"></i>
+      </div>
+      <div class="xr-lens" id="xrLens"><span class="xr-ret"></span></div>
+      <p class="xr-hint">Move the lens</p>
     </div>
-    <div class="case-stage" aria-hidden="true">
-      <svg class="case-map" viewBox="0 0 520 300">
-        <circle class="cm-scan" cx="260" cy="44" r="14"/><circle class="cm-scan" cx="260" cy="44" r="14"/>
-        <path class="cm-e" pathLength="1" d="M260 56V87H72V118"/><path class="cm-e" pathLength="1" d="M260 56V87H206V118"/><path class="cm-e" pathLength="1" d="M260 56V87H316V118"/><path class="cm-e" pathLength="1" d="M260 56V87H446V118"/>
-        <path class="cm-e" pathLength="1" d="M72 142V175H38V208"/><path class="cm-e" pathLength="1" d="M72 142V175H106V208"/><path class="cm-e" pathLength="1" d="M206 142V175H172V208"/><path class="cm-e" pathLength="1" d="M206 142V175H240V208"/><path class="cm-e" pathLength="1" d="M316 142V208"/>
-        <path class="cm-x" d="M266 210C300 168 360 130 408 130"/><path class="cm-l" d="M446 142V186"/>
-        <g transform="translate(260 44)"><g class="cm-n home" style="--i:0"><rect x="-56" y="-13" width="112" height="26" rx="7"/><text y="3.5">yourwebsite.com</text></g></g>
-        <g transform="translate(72 130)"><g class="cm-n warn" style="--i:1"><rect x="-38" y="-12" width="76" height="24" rx="6"/><text y="3.5">/services</text><g class="cm-b"><circle class="cm-pulse" cx="38" cy="-12" r="7"/><circle cx="38" cy="-12" r="7"/><text class="bang" x="38" y="-8.8">!</text><text class="ok" x="38" y="-8.8">✓</text></g></g></g>
-        <g transform="translate(206 130)"><g class="cm-n" style="--i:2"><rect x="-38" y="-12" width="76" height="24" rx="6"/><text y="3.5">/blog</text></g></g>
-        <g transform="translate(316 130)"><g class="cm-n" style="--i:3"><rect x="-38" y="-12" width="76" height="24" rx="6"/><text y="3.5">/about</text></g></g>
-        <g transform="translate(446 130)"><g class="cm-n bad" style="--i:4"><rect x="-38" y="-12" width="76" height="24" rx="6"/><text y="3.5">/journal</text><g class="cm-b"><circle class="cm-pulse" cx="38" cy="-12" r="7"/><circle cx="38" cy="-12" r="7"/><text class="bang" x="38" y="-8.8">!</text><text class="ok" x="38" y="-8.8">✓</text></g></g></g>
-        <g transform="translate(38 220)"><g class="cm-n" style="--i:5"><rect x="-32" y="-12" width="64" height="24" rx="6"/><text y="3.5">/pricing</text></g></g>
-        <g transform="translate(106 220)"><g class="cm-n" style="--i:6"><rect x="-32" y="-12" width="64" height="24" rx="6"/><text y="3.5">/faq</text></g></g>
-        <g transform="translate(172 220)"><g class="cm-n warn" style="--i:7"><rect x="-32" y="-12" width="64" height="24" rx="6"/><text y="3.5">/post-1</text><g class="cm-b"><circle class="cm-pulse" cx="32" cy="-12" r="7"/><circle cx="32" cy="-12" r="7"/><text class="bang" x="32" y="-8.8">!</text><text class="ok" x="32" y="-8.8">✓</text></g></g></g>
-        <g transform="translate(240 220)"><g class="cm-n" style="--i:8"><rect x="-32" y="-12" width="64" height="24" rx="6"/><text y="3.5">/post-2</text></g></g>
-        <g transform="translate(316 220)"><g class="cm-n" style="--i:9"><rect x="-32" y="-12" width="64" height="24" rx="6"/><text y="3.5">/team</text></g></g>
-      </svg>
-      <div class="case-ev"><p>404 · Not found</p><p><code>/journal</code> is linked from <code>/post-2</code> and 2 other pages.</p></div>
-      <ol class="case-plan">
-        <li><b>1</b><div><strong>Redirect /journal</strong><span>301 to /blog · repairs 3 links</span></div><em class="hi">High</em></li>
-        <li><b>2</b><div><strong>Write a title for /services</strong><span>Shown as your headline in search</span></div><em class="md">Med</em></li>
-        <li><b>3</b><div><strong>Add alt text on /post-1</strong><span>6 images · helps image search</span></div><em class="lo">Low</em></li>
-      </ol>
-    </div>
-    <div class="case-ft">
-      <p class="case-copy" id="caseCopy" role="tabpanel" aria-labelledby="caseT0">Crawl your pages, links, sitemap and robots.txt.</p>
-      <div class="case-stats" aria-hidden="true"><span><b id="casePg" data-to="25">25</b>Pages</span><span><b id="caseLk" data-to="120">120</b>Links</span><span><b id="caseIss">—</b>Issues</span></div>
-    </div>
+    <ol class="xr-finds" aria-label="What Scoutly found on this example site">
+      <li><button type="button" data-i="0" style="--c:#e5484d"><em>High</em><b>Title tag missing</b><span>The homepage has no &lt;title&gt;</span></button></li>
+      <li><button type="button" data-i="1" style="--c:#f5a524"><em>Medium</em><b>Slow hero image</b><span>LCP 3.9s from a 2.4 MB file</span></button></li>
+      <li><button type="button" data-i="2" style="--c:#f5a524"><em>Medium</em><b>Alt text missing</b><span>A product image has no alt</span></button></li>
+      <li><button type="button" data-i="3" style="--c:#e5484d"><em>High</em><b>Broken link</b><span>/journal returns 404</span></button></li>
+    </ol>
   </div>
 </div></section>
 
@@ -1237,23 +1213,28 @@ if('IntersectionObserver' in window){
 }else q('[data-rv]').forEach(function(e){e.classList.add('in')});
 function count(el){if(RM)return;var to=+el.dataset.to,t0=performance.now();(function f(now){var p=clamp((now-t0)/1400,0,1),v=Math.round(to*(1-Math.pow(1-p,3)));el.textContent=(v<10?'0':'')+v;if(p<1)requestAnimationFrame(f)})(t0)}
 
-/* ---------- meet: the case file plays explore → investigate → act on its own; a click or arrow key hands control to the tabs ---------- */
-var cs=$('case'),cTabs=q('[role="tab"]',cs),cCopy=$('caseCopy'),cSt=$('caseSt'),cIss=$('caseIss'),cStep=0,cManual=false,cCounted=false;
-var CASE=[['Crawling','Crawl your pages, links, sitemap and robots.txt.','—'],
-  ['3 issues found','Flag technical, on-page and link issues, with the evidence for each.','3'],
-  ['Plan ready','See what to fix first and how to check the fix worked.','0']];
-function caseGo(n,focus){cStep=n;cs.setAttribute('data-step',n);
-  cTabs.forEach(function(t,i){t.setAttribute('aria-selected',i===n);t.tabIndex=i===n?0:-1});
-  cCopy.setAttribute('aria-labelledby',cTabs[n].id);cCopy.textContent=CASE[n][1];cSt.textContent=CASE[n][0];cIss.textContent=CASE[n][2];
-  if(focus)cTabs[n].focus()}
-function caseTake(n,focus){cManual=true;cs.classList.remove('play');caseGo(n,focus)}
-cTabs.forEach(function(t,i){t.addEventListener('click',function(){caseTake(i)})});
-q('[role="tablist"]',cs)[0].addEventListener('keydown',function(e){var k={ArrowRight:1,ArrowLeft:-1,Home:'h',End:'e'}[e.key];if(k===undefined)return;
-  e.preventDefault();caseTake(k==='h'?0:k==='e'?2:(cStep+k+3)%3,true)});
-cs.addEventListener('animationend',function(e){if(e.animationName==='ctfill')caseGo((cStep+1)%3)});
-if('IntersectionObserver' in window)new IntersectionObserver(function(es){var v=es[0].isIntersecting;
-  if(v&&!cCounted){cCounted=true;count($('casePg'));count($('caseLk'))}
-  cs.classList.toggle('play',v&&!cManual&&!RM)},{threshold:.35}).observe(cs);
+/* ---------- meet: the X-ray lens tours the issues on its own, follows the pointer on hover, and marks each issue it passes as found ---------- */
+var xr=$('xr'),xst=$('xrStage'),xsite=q('.xr-site',xst)[0],xlens=$('xrLens'),xbtn=q('.xr-finds button',xr),xn=$('xrN');
+var xray=xsite.cloneNode(true);xray.className='xr-ray';xst.insertBefore(xray,xlens);
+var xiss=q('[data-iss]',xsite),xpts=[],xR=90,xW=1,xH=1,xx=0,xy=0,xtx=0,xty=0,xhover=false,xhold=0,xauto=0,xnext=0,xfound=[],xon=-1,xvis=false,xlast='';
+function xmeasure(){var s=xst.getBoundingClientRect();xW=s.width||1;xH=s.height||1;xR=Math.max(58,Math.min(124,xW*.15));
+  xpts=xiss.map(function(b){var r=b.getBoundingClientRect();return{x:r.left-s.left+r.width/2,y:r.top-s.top+r.height/2}});
+  if(!xx&&xpts.length){xx=xtx=xpts[1].x;xy=xty=xpts[1].y}}
+function xgo(i,hold){var p=xpts[i];if(!p)return;xtx=p.x;xty=p.y;xauto=i;if(hold)xhold=performance.now()+hold}
+function xfind(i){if(xfound[i])return;xfound[i]=true;xbtn[i].classList.add('found');var n=xfound.filter(Boolean).length;xn.textContent=n;xr.classList.toggle('done',n===xpts.length)}
+xst.addEventListener('pointermove',function(e){var s=xst.getBoundingClientRect();xhover=true;xr.classList.add('touched');xtx=e.clientX-s.left;xty=e.clientY-s.top},{passive:true});
+xst.addEventListener('pointerleave',function(){xhover=false;xhold=performance.now()+1400});
+xbtn.forEach(function(b,i){b.addEventListener('click',function(){xhover=false;xgo(i,4000);xr.classList.add('touched')})});
+xmeasure();addEventListener('resize',xmeasure);
+if('IntersectionObserver' in window)new IntersectionObserver(function(e){xvis=e[0].isIntersecting;if(xvis)xmeasure()}).observe(xst);else xvis=true;
+if(RM){xpts.forEach(function(p,i){xfind(i)});xgo(1)}
+(function xloop(now){requestAnimationFrame(xloop);if(!xvis)return;
+  /* on its own: visit each issue in turn, wandering a little on the way */
+  if(!xhover&&now>xhold&&now>xnext&&!RM){xnext=now+2300;xgo((xauto+1)%xpts.length)}
+  var k=RM?1:(xhover?.22:.06);xx+=(xtx-xx)*k;xy+=(xty-xy)*k;
+  var key=xx.toFixed(1)+','+xy.toFixed(1);if(key!==xlast){xlast=key;xst.style.setProperty('--x',xx.toFixed(1)+'px');xst.style.setProperty('--y',xy.toFixed(1)+'px');xst.style.setProperty('--r',xR.toFixed(0)+'px')}
+  var on=-1,bd=1e9;xpts.forEach(function(p,i){var d=Math.hypot(p.x-xx,p.y-xy);if(d<xR*.75){xfind(i);if(d<bd){bd=d;on=i}}});
+  if(on!==xon){if(xon>=0)xbtn[xon].classList.remove('on');if(on>=0)xbtn[on].classList.add('on');xon=on}})(performance.now());
 
 /* ---------- 1. hero: scattered SEO work (exports, spreadsheets, tabs, a to-do note) flies into one Scoutly workspace ---------- */
 function band(p,a,b){return clamp((p-a)/(b-a),0,1)}
