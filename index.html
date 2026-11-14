@@ -372,55 +372,105 @@ code{font:400 12.5px var(--M)}
 .fade{position:relative;height:clamp(110px,11vw,170px);margin:-1px 0;pointer-events:none}
 .fade-dk{background:radial-gradient(55% 42% at 50% 55%,rgba(47,91,255,.15),transparent 100%),linear-gradient(180deg,var(--blend))}
 .fade-lt{background:radial-gradient(55% 42% at 50% 45%,rgba(47,91,255,.15),transparent 100%),linear-gradient(0deg,var(--blend))}
-/* ===== the problem, as the ⌘+Tab app switcher everyone knows: the section pins, each scroll step presses the keys and moves to the next tool,
-   and its statement takes the stage; "Sound familiar?" (.chaos) lights every app with badges ===== */
+/* ===== the problem, on a real-looking screen: one app window per tool over a wallpaper, and the ⌘+Tab switcher on top.
+   The section pins; each scroll step presses the keys and brings the next tool's window forward. "Sound familiar?" (.chaos)
+   spills every window across the screen and the notifications pour in ===== */
 @keyframes hxblink{50%{opacity:0}}
-.ax{position:relative;background:var(--bg)}
-.js .ax{height:360vh}
-.ax-pin{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:110px 0 70px;overflow:hidden}
+.ax{position:relative;background:var(--nv);color:#fff}
+.js .ax{height:380vh}
+.ax-pin{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:96px 0 40px;overflow:hidden}
 .js .ax-pin{position:sticky;top:0;height:100vh;height:100svh}
-.ax-pin:before{content:"";position:absolute;inset:0;background:radial-gradient(42% 40% at 50% 58%,rgba(47,91,255,.1),transparent 70%);pointer-events:none}
+.ax-pin:before{content:"";position:absolute;inset:0;background:radial-gradient(45% 40% at 50% 62%,rgba(47,91,255,.22),transparent 70%);pointer-events:none}
 .ax-in{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;width:100%}
-.ax-in .dh{max-width:900px}
+.ax .dh{max-width:900px;margin-top:14px;font-size:clamp(26px,2.9vw,46px);color:#fff}
+.ax .dh .l2{color:#a9c4ff}
+/* the screen */
+.ax-screen{position:relative;width:min(100%,980px);height:clamp(300px,54vh,540px);margin-top:clamp(18px,3vh,30px);border-radius:22px;padding:8px;background:linear-gradient(180deg,#1b2350,#0b1030);border:1px solid rgba(127,160,255,.25);box-shadow:0 0 0 1px rgba(5,10,31,.8),0 60px 120px -40px rgba(0,0,0,.9),0 30px 90px -40px rgba(47,91,255,.7)}
+.ax-desk{position:relative;height:100%;overflow:hidden;border-radius:15px;background:radial-gradient(55% 75% at 18% 18%,#3a5cff 0%,transparent 62%),radial-gradient(50% 70% at 86% 26%,#7a5cff 0%,transparent 60%),radial-gradient(70% 60% at 52% 108%,#13a4c8 0%,transparent 62%),linear-gradient(160deg,#16206a,#0a1240);text-align:left}
+.ax-desk:after{content:"";position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 50%,transparent,rgba(229,72,77,.35));opacity:0;transition:opacity .6s;pointer-events:none}
+.ax.chaos .ax-desk:after{opacity:1}
+.ax-menu{position:relative;z-index:8;display:flex;align-items:center;gap:16px;height:26px;padding:0 14px;background:rgba(10,16,48,.45);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);font:500 11.5px/1 var(--T);color:rgba(230,236,255,.85)}
+.ax-menu b{font-weight:700;color:#fff}
+.ax-menu span{opacity:.75}
+.ax-menu em{margin-left:auto;font:500 11px/1 var(--M);font-style:normal;opacity:.85}
+/* the app windows */
+.ax-win{position:absolute;left:50%;top:44%;z-index:1;display:flex;flex-direction:column;width:min(600px,66%);height:62%;border-radius:12px;background:#fff;color:var(--ink);box-shadow:0 30px 60px -20px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.4);overflow:hidden;opacity:.4;filter:blur(1.5px) saturate(.7);transform:translate(-50%,-50%) translate(var(--bx),var(--by)) scale(.88);transition:transform .7s cubic-bezier(.2,.8,.2,1),opacity .5s,filter .5s}
+.ax-win.on{z-index:4;opacity:1;filter:none;transform:translate(-50%,-50%)}
+.ax-wt{display:flex;align-items:center;gap:7px;height:32px;padding:0 12px;background:linear-gradient(180deg,#f7f8fb,#eceff5);border-bottom:1px solid rgba(10,26,74,.08);font:600 12px/1 var(--T);color:var(--sl)}
+.ax-wt i{width:10px;height:10px;border-radius:50%;background:#ff5f57}.ax-wt i+i{background:#febc2e}.ax-wt i+i+i{background:#28c840;margin-right:8px}
+.ax-wt em{margin-left:auto;padding:4px 8px;border-radius:6px;background:rgba(10,26,74,.06);font:500 10px/1 var(--M);font-style:normal;color:var(--mu)}
+.ax-wb{position:relative;flex:1;padding:16px 18px}
+/* window contents */
+.w-search{display:flex;align-items:center;gap:10px}
+.w-search p{flex:1;display:flex;align-items:center;height:34px;padding:0 12px;border-radius:9px;border:1px solid rgba(10,26,74,.14);font:400 13px/1 var(--T);color:var(--ink)}
+.w-search p:after{content:"";width:1.5px;height:15px;margin-left:2px;background:var(--b);animation:hxblink 1s steps(1) infinite}
+.w-search span{display:inline-flex;align-items:center;height:34px;padding:0 12px;border-radius:9px;background:var(--b);color:#fff;font:600 12px/1 var(--T);box-shadow:0 8px 18px -8px var(--b)}
+.w-chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:16px}
+.w-chips span{display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:#f2f4f9;border:1px solid rgba(10,26,74,.07);font:500 12.5px/1 var(--T)}
+.w-chips em{font:500 10.5px/1 var(--M);font-style:normal;color:var(--mu)}
+.w-chips span:nth-child(3n+1){background:rgba(47,91,255,.08);border-color:rgba(47,91,255,.25);color:var(--b)}
+.w-files{display:flex;justify-content:center;gap:clamp(14px,3vw,34px);padding-top:clamp(6px,2vh,22px)}
+.w-files figure{display:flex;flex-direction:column;align-items:center;gap:10px;width:120px;padding:12px 6px;border-radius:12px;font:500 11.5px/1.3 var(--T);color:var(--sl);text-align:center;word-break:break-all}
+.w-files figure i{position:relative;display:grid;place-items:end center;width:58px;height:72px;padding-bottom:9px;border-radius:7px 16px 7px 7px;background:linear-gradient(180deg,#2fc38a,#128a5c);box-shadow:0 12px 22px -12px rgba(18,138,92,.9);font:700 10px/1 var(--M);font-style:normal;color:#fff}
+.w-files .sel{background:rgba(47,91,255,.08);box-shadow:inset 0 0 0 1.5px rgba(47,91,255,.35);color:var(--ink)}
+.w-files .sel i:after{content:"?";position:absolute;right:-8px;top:-8px;display:grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--wa);color:#fff;font:700 12px/1 var(--M)}
+.w-chart{position:absolute;inset:14px 18px 40px}
+.w-chart svg{width:100%;height:100%;overflow:visible}
+.w-chart .ln{fill:none;stroke:#7a5cff;stroke-width:3;stroke-linejoin:round;stroke-linecap:round;vector-effect:non-scaling-stroke}
+.w-chart .ar{fill:rgba(122,92,255,.12)}
+.w-foot{position:absolute;left:18px;right:18px;bottom:12px;display:flex;justify-content:space-between;font:500 11px/1 var(--M);color:var(--mu)}
+.w-foot b{color:#7a5cff}.w-foot .old{color:#e5484d}
+.w-pdf{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:start}
+.w-pdf h4{margin:0;font:700 18px/1.2 var(--T);color:var(--ink)}
+.w-pdf u{display:block;height:8px;margin-top:10px;border-radius:4px;background:#e6eaf2;text-decoration:none}.w-pdf u:nth-of-type(2){width:82%}.w-pdf u:nth-of-type(3){width:64%}.w-pdf u:nth-of-type(4){width:90%}
+.w-pdf b{display:grid;place-items:center;padding:12px 14px;border-radius:12px;background:rgba(229,72,77,.1);color:var(--cr);font:700 26px/1 var(--T)}.w-pdf b small{display:block;margin-top:4px;font:600 10px/1 var(--M);letter-spacing:.06em;text-transform:uppercase}
 /* the switcher */
-.ax-sw{position:relative;margin-top:clamp(28px,4vh,46px)}
-.ax-keys{position:absolute;left:50%;top:-22px;z-index:2;display:flex;gap:6px;transform:translateX(-50%)}
-.ax-keys kbd{display:grid;place-items:center;min-width:40px;height:36px;padding:0 10px;border-radius:9px;background:linear-gradient(180deg,#fff,#eef1f7);border:1px solid rgba(10,26,74,.14);box-shadow:0 3px 0 rgba(10,26,74,.18),0 10px 20px -10px rgba(10,26,74,.5);font:600 13px/1 var(--M);color:var(--ink);transition:transform .12s,box-shadow .12s}
-.ax-keys.press kbd{transform:translateY(3px);box-shadow:0 0 0 rgba(10,26,74,.18),0 6px 14px -10px rgba(10,26,74,.5)}
+.ax-sw{position:absolute;left:50%;bottom:7%;z-index:6;transform:translateX(-50%)}
+.ax-keys{position:absolute;left:50%;top:-20px;z-index:2;display:flex;gap:6px;transform:translateX(-50%)}
+.ax-keys kbd{display:grid;place-items:center;min-width:36px;height:32px;padding:0 9px;border-radius:8px;background:linear-gradient(180deg,#fff,#eef1f7);border:1px solid rgba(10,26,74,.14);box-shadow:0 3px 0 rgba(10,26,74,.25),0 10px 20px -10px rgba(0,0,0,.6);font:600 12px/1 var(--M);color:var(--ink);transition:transform .12s,box-shadow .12s}
+.ax-keys.press kbd{transform:translateY(3px);box-shadow:0 0 0 rgba(10,26,74,.25),0 6px 14px -10px rgba(0,0,0,.6)}
 .ax-keys.press kbd.tab{background:linear-gradient(180deg,#eaf0ff,#dbe5ff);color:var(--b)}
-.ax-panel{display:flex;gap:8px;padding:22px 18px 16px;border-radius:30px;background:rgba(18,24,52,.78);border:1px solid rgba(255,255,255,.12);box-shadow:inset 0 1px 0 rgba(255,255,255,.08),0 50px 90px -40px rgba(10,26,74,.75),0 30px 70px -40px rgba(47,91,255,.6);backdrop-filter:blur(22px) saturate(1.4);-webkit-backdrop-filter:blur(22px) saturate(1.4)}
-.ax-app{position:relative;display:grid;place-items:center;width:clamp(74px,7.4vw,104px);height:clamp(74px,7.4vw,104px);border-radius:22px;transition:background .35s,transform .45s cubic-bezier(.2,1.3,.4,1)}
-.ax-app.on{background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 1px rgba(255,255,255,.18);transform:scale(1.06)}
-.ax-ic{display:grid;place-items:center;width:68%;height:68%;border-radius:24%;background:var(--g);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 20px -10px rgba(0,0,0,.7)}
+.ax-panel{display:flex;gap:6px;padding:18px 14px 12px;border-radius:26px;background:rgba(20,26,58,.62);border:1px solid rgba(255,255,255,.16);box-shadow:inset 0 1px 0 rgba(255,255,255,.1),0 30px 60px -20px rgba(0,0,0,.75);backdrop-filter:blur(24px) saturate(1.5);-webkit-backdrop-filter:blur(24px) saturate(1.5)}
+.ax-app{position:relative;display:grid;place-items:center;width:clamp(58px,6vw,82px);height:clamp(58px,6vw,82px);border-radius:18px;transition:background .35s,transform .45s cubic-bezier(.2,1.3,.4,1)}
+.ax-app.on{background:rgba(255,255,255,.18);box-shadow:inset 0 0 0 1px rgba(255,255,255,.22);transform:scale(1.06)}
+.ax-ic{display:grid;place-items:center;width:70%;height:70%;border-radius:24%;background:var(--g);box-shadow:inset 0 1px 0 rgba(255,255,255,.35),0 10px 20px -10px rgba(0,0,0,.7)}
 .ax-ic svg{width:48%;height:48%;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
 .ax-app.dim .ax-ic{filter:saturate(.25) brightness(.85);opacity:.55}
-.ax-app i{position:absolute;right:6%;top:4%;display:grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:999px;background:#ff453a;color:#fff;font:700 11px/1 var(--T);font-style:normal;box-shadow:0 0 0 2px rgba(18,24,52,.9);opacity:0;transform:scale(.4);transition:opacity .3s,transform .45s cubic-bezier(.2,1.6,.4,1)}
-.ax-cap{display:flex;align-items:center;justify-content:center;gap:10px;min-height:20px;margin-top:14px;font:500 13px/1 var(--T);color:var(--sl)}
-.ax-cap b{font-weight:600;color:var(--ink)}
-.ax-cap span{font:500 11px/1 var(--M);color:var(--mu)}
-/* the statement on stage */
-.ax-lines{display:grid;margin-top:clamp(24px,4vh,40px);min-height:clamp(120px,16vh,170px)}
-.ax-lines li{grid-area:1/1;align-self:start;font:500 clamp(26px,3vw,46px)/1.15 var(--T);letter-spacing:-.025em;color:var(--ink);transition:opacity .45s,transform .55s cubic-bezier(.2,.8,.2,1)}
-.ax-lines li b{font-weight:600;color:var(--c)}
-.ax-lines .q{font-size:clamp(34px,4.2vw,64px)}
-.ax-lines .q em{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400;color:#e5484d}
-.ax-lines .q span{display:block;max-width:560px;margin:14px auto 0;font:400 clamp(15px,1.25vw,18px)/1.6 var(--T);letter-spacing:0;color:var(--sl)}
-.js .ax-lines li{opacity:0;transform:translateY(22px);pointer-events:none}
-.js .ax-lines li.on{opacity:1;transform:none;pointer-events:auto}
-.ax-dots{display:flex;gap:8px;justify-content:center;margin-top:18px}
-.ax-dots i{width:22px;height:4px;border-radius:2px;background:rgba(10,26,74,.12);transition:background .35s,width .35s}
-.ax-dots i.on{width:38px;background:var(--b)}
-/* chaos: every app wants attention */
+.ax-app i{position:absolute;right:4%;top:2%;display:grid;place-items:center;min-width:20px;height:20px;padding:0 5px;border-radius:999px;background:#ff453a;color:#fff;font:700 10.5px/1 var(--T);font-style:normal;box-shadow:0 0 0 2px rgba(20,26,58,.9);opacity:0;transform:scale(.4);transition:opacity .3s,transform .45s cubic-bezier(.2,1.6,.4,1)}
+.ax-cap{margin-top:8px;font:600 12px/1 var(--T);color:#fff;text-align:center;text-shadow:0 1px 6px rgba(0,0,0,.6)}
+.ax-cap span{margin-left:8px;font:500 10.5px/1 var(--M);color:rgba(230,236,255,.7)}
+/* notifications */
+.ax-toasts{position:absolute;right:12px;top:36px;z-index:7;display:grid;gap:8px;width:min(280px,46%)}
+.ax-toasts p{display:grid;grid-template-columns:28px minmax(0,1fr);gap:2px 10px;padding:10px 12px;border-radius:14px;background:rgba(245,247,252,.9);box-shadow:0 18px 36px -16px rgba(0,0,0,.7);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:var(--ink);text-align:left;opacity:0;transform:translateX(30px);transition:opacity .4s,transform .55s cubic-bezier(.2,1.2,.4,1)}
+.ax-toasts p:before{content:"!";grid-row:1/3;display:grid;place-items:center;width:28px;height:28px;border-radius:8px;background:#ff453a;color:#fff;font:700 13px/1 var(--T)}
+.ax-toasts b{font:600 12px/1.2 var(--T)}.ax-toasts span{font:400 11px/1.3 var(--T);color:var(--sl)}
+.ax-toasts p:nth-child(2){transition-delay:.15s}.ax-toasts p:nth-child(3){transition-delay:.3s}
+.ax.chaos .ax-toasts p{opacity:1;transform:none}
+/* chaos: windows spill everywhere, every app wants attention */
+.ax.chaos .ax-win{opacity:1;filter:none;transform:translate(-50%,-50%) translate(var(--cx),var(--cy)) rotate(var(--cr)) scale(.58);animation:axjolt 2.4s ease-in-out infinite;animation-delay:var(--dl,0s)}
 .ax.chaos .ax-app{animation:axjolt 1.6s ease-in-out infinite;animation-delay:var(--dl,0s)}
 .ax.chaos .ax-app i{opacity:1;transform:none}
-.ax.chaos .ax-app.on{background:rgba(255,69,58,.14);box-shadow:inset 0 0 0 1px rgba(255,69,58,.4)}
-.ax.chaos .ax-cap b{color:#e5484d}
+.ax.chaos .ax-app.on{background:rgba(255,69,58,.2);box-shadow:inset 0 0 0 1px rgba(255,69,58,.5)}
 @keyframes axjolt{0%,100%{translate:0 0}25%{translate:-2px 2px}50%{translate:2px -2px}75%{translate:-1px -2px}}
-/* no JS or reduced motion: a plain list under the switcher */
-html:not(.js) .ax-lines li,.ax.ax-static .ax-lines li{position:static;grid-area:auto;opacity:1;transform:none;margin-top:10px}
+/* the statement on stage */
+.ax-lines{display:grid;margin-top:clamp(16px,2.6vh,28px);min-height:clamp(54px,8vh,96px)}
+.ax-lines li{grid-area:1/1;align-self:start;font:500 clamp(22px,2.4vw,36px)/1.2 var(--T);letter-spacing:-.025em;color:#fff;transition:opacity .45s,transform .55s cubic-bezier(.2,.8,.2,1)}
+.ax-lines li b{font-weight:600;color:var(--c)}
+.ax-lines .q{font-size:clamp(26px,3vw,44px)}
+.ax-lines .q em{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400;color:#ff8a8d}
+.ax-lines .q span{display:block;max-width:600px;margin:8px auto 0;font:400 clamp(14px,1.1vw,16px)/1.55 var(--T);letter-spacing:0;color:rgba(214,224,255,.7)}
+.js .ax-lines li{opacity:0;transform:translateY(16px);pointer-events:none}
+.js .ax-lines li.on{opacity:1;transform:none;pointer-events:auto}
+.ax-dots{display:flex;gap:8px;justify-content:center;margin-top:10px}
+.ax-dots i{width:22px;height:4px;border-radius:2px;background:rgba(214,224,255,.15);transition:background .35s,width .35s}
+.ax-dots i.on{width:38px;background:var(--sky)}
+/* no JS or reduced motion: a plain stack */
+html:not(.js) .ax-lines li,.ax.ax-static .ax-lines li{position:static;grid-area:auto;opacity:1;transform:none;margin-top:8px}
 .js .ax.ax-static{height:auto}.ax.ax-static .ax-pin{position:relative;height:auto}
-@media(max-width:700px){.ax-panel{gap:4px;padding:16px 10px 12px;border-radius:24px}.ax-app{width:56px;height:56px;border-radius:16px}.ax-app.dim:nth-of-type(n+6){display:none}.ax-keys kbd{min-width:34px;height:30px;font-size:12px}}
-@media(prefers-reduced-motion:reduce){.ax.chaos .ax-app{animation:none}}
+@media(max-width:700px){.ax-win{width:84%;height:56%;top:40%}.ax-wb{padding:12px}.w-files figure{width:76px;font-size:9.5px}.w-files figure i{width:42px;height:54px}.w-pdf h4{font-size:14px}
+  .ax-panel{gap:2px;padding:14px 8px 10px;border-radius:20px}.ax-app{width:42px;height:42px;border-radius:12px}.ax-app.dim{display:none}.ax-keys kbd{min-width:30px;height:28px;font-size:11px}
+  .ax-menu span:nth-of-type(n+3){display:none}.ax-toasts{width:62%}.ax-toasts p{padding:8px 10px}.ax-cap span{display:none}}
+@media(prefers-reduced-motion:reduce){.ax.chaos .ax-app,.ax.chaos .ax-win{animation:none}}
 /* ===== the turning point: pinned; the question lights word by word, then Scoutly appears and its six tools settle into orbit ===== */
 .tp{position:relative;background:var(--nv);color:#fff}
 .js .tp{height:300vh}
@@ -821,38 +871,42 @@ requestAnimationFrame(frame);
   </div></div>
 </section>
 
-<div class="fade fade-lt" aria-hidden="true"></div>
-
-<!-- 2. THE PROBLEM: ⌘+Tab through the tools -->
-<section class="ax" id="problem" aria-labelledby="pbTitle">
+<!-- 2. THE PROBLEM: a screen full of SEO tools, ⌘+Tab through them -->
+<section class="ax dk" id="problem" aria-labelledby="pbTitle">
   <div class="ax-pin"><div class="w ax-in">
-    <p class="lbl" data-rv>Every SEO professional knows this</p>
+    <p class="lbl lt" data-rv>Every SEO professional knows this</p>
     <h2 class="dh sm" id="pbTitle"><span data-scr>Your SEO work is everywhere.</span> <span class="l2" data-scr>Your data shouldn’t be.</span></h2>
-    <div class="ax-sw" aria-hidden="true">
-      <div class="ax-keys"><kbd>⌘</kbd><kbd class="tab">Tab</kbd></div>
-      <div class="ax-panel">
-        <span class="ax-app dim" style="--g:linear-gradient(160deg,#6b7a99,#3d4864);--dl:-.2s"><span class="ax-ic"><svg viewBox="0 0 24 24"><path d="M3 13h5l2 3h4l2-3h5"/><path d="M5 5h14l2 8v6H3v-6z"/></svg></span><i>12</i></span>
-        <span class="ax-app" data-i="0" style="--g:linear-gradient(160deg,#4d74ff,#1f45d6);--dl:-.5s"><span class="ax-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/></svg></span><i>3</i></span>
-        <span class="ax-app dim" style="--g:linear-gradient(160deg,#f7c948,#e0a800);--dl:-.8s"><span class="ax-ic"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M9 11h7M9 15h5"/></svg></span><i>!</i></span>
-        <span class="ax-app" data-i="1" style="--g:linear-gradient(160deg,#2fc38a,#128a5c);--dl:-1.1s"><span class="ax-ic"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2.5"/><path d="M4 10h16M4 15h16M10 4v16"/></svg></span><i>2</i></span>
-        <span class="ax-app" data-i="2" style="--g:linear-gradient(160deg,#9a7dff,#6440e8);--dl:-1.4s"><span class="ax-ic"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><i>1</i></span>
-        <span class="ax-app dim" style="--g:linear-gradient(160deg,#5ac8fa,#2f8fd6);--dl:-1.7s"><span class="ax-ic"><svg viewBox="0 0 24 24"><path d="M8 4h8l5 9-4 7H7l-4-7z"/></svg></span><i>5</i></span>
-        <span class="ax-app" data-i="3" style="--g:linear-gradient(160deg,#ffb84d,#e08a00);--dl:-2s"><span class="ax-ic"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></span><i>37</i></span>
+    <div class="ax-screen" aria-hidden="true"><div class="ax-desk">
+      <p class="ax-menu"><b id="axApp">Keyword tool</b><span>File</span><span>Edit</span><span>View</span><span>Window</span><em>Mon 9:41</em></p>
+        <div class="ax-win on" data-i="0" style="--bx:-90px;--by:-40px;--cx:-34%;--cy:-30%;--cr:-8deg;--dl:-0.0s"><p class="ax-wt"><i></i><i></i><i></i>Keyword tool<em>Login #1</em></p><div class="ax-wb"><div class="w-search"><p>seo management</p><span>Export CSV</span></div><p class="w-chips"><span>seo management tool<em>2.4k</em></span><span>seo dashboard<em>1.6k</em></span><span>backlink tracker<em>1.9k</em></span><span>rank tracker<em>1.3k</em></span><span>site audit tool<em>880</em></span><span>keyword gap<em>720</em></span><span>+42 more ideas</span></p></div></div>
+        <div class="ax-win" data-i="1" style="--bx:80px;--by:-50px;--cx:32%;--cy:-28%;--cr:7deg;--dl:-0.5s"><p class="ax-wt"><i></i><i></i><i></i>Shared drive — Backlinks<em>3 versions</em></p><div class="ax-wb"><div class="w-files"><figure><i>XLSX</i>backlinks_v1.xlsx</figure><figure><i>XLSX</i>backlinks_v2.xlsx</figure><figure class="sel"><i>XLSX</i>backlinks_FINAL_v3.xlsx</figure></div></div></div>
+        <div class="ax-win" data-i="2" style="--bx:-70px;--by:50px;--cx:-30%;--cy:22%;--cr:6deg;--dl:-1.0s"><p class="ax-wt"><i></i><i></i><i></i>Rank tracker<em>Login #2</em></p><div class="ax-wb"><div class="w-chart"><svg viewBox="0 0 200 80" preserveAspectRatio="none"><path class="ar" d="M0 62 L25 56 L50 64 L75 44 L100 50 L125 34 L150 40 L175 26 L200 30 L200 80 L0 80Z"/><path class="ln" d="M0 62 L25 56 L50 64 L75 44 L100 50 L125 34 L150 40 L175 26 L200 30"/></svg></div><p class="w-foot"><span>Position <b>14 → 11</b></span><span class="old">Last updated 6 days ago</span></p></div></div>
+        <div class="ax-win" data-i="3" style="--bx:100px;--by:40px;--cx:30%;--cy:24%;--cr:-9deg;--dl:-1.5s"><p class="ax-wt"><i></i><i></i><i></i>audit-report-march.pdf<em>Page 1 of 42</em></p><div class="ax-wb"><div class="w-pdf"><div><h4>Website audit · March</h4><u></u><u></u><u></u><u></u></div><b>37<small>issues</small></b></div></div></div>
+      <div class="ax-toasts"><p><b>Session expired</b><span>Rank tracker · log in again</span></p><p><b>Which file is final?</b><span>3 versions of backlinks.xlsx</span></p><p><b>37 new issues</b><span>audit-report-march.pdf</span></p></div>
+      <div class="ax-sw">
+        <div class="ax-keys"><kbd>⌘</kbd><kbd class="tab">Tab</kbd></div>
+        <div class="ax-panel">
+          <span class="ax-app dim" style="--g:linear-gradient(160deg,#6b7a99,#3d4864);--dl:-0.0s"><span class="ax-ic"><svg viewBox="0 0 24 24"><path d="M3 13h5l2 3h4l2-3h5"/><path d="M5 5h14l2 8v6H3v-6z"/></svg></span><i>12</i></span>
+          <span class="ax-app" data-i="0" style="--g:linear-gradient(160deg,#4d74ff,#1f45d6);--dl:-0.3s"><span class="ax-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/></svg></span><i>3</i></span>
+          <span class="ax-app dim" style="--g:linear-gradient(160deg,#f7c948,#e0a800);--dl:-0.6s"><span class="ax-ic"><svg viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z"/><path d="M9 11h7M9 15h5"/></svg></span><i>!</i></span>
+          <span class="ax-app" data-i="1" style="--g:linear-gradient(160deg,#2fc38a,#128a5c);--dl:-0.9s"><span class="ax-ic"><svg viewBox="0 0 24 24"><path d="M4 4h6l2 2h8v14H4z"/></svg></span><i>2</i></span>
+          <span class="ax-app" data-i="2" style="--g:linear-gradient(160deg,#9a7dff,#6440e8);--dl:-1.2s"><span class="ax-ic"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><i>1</i></span>
+          <span class="ax-app dim" style="--g:linear-gradient(160deg,#5ac8fa,#2f8fd6);--dl:-1.5s"><span class="ax-ic"><svg viewBox="0 0 24 24"><path d="M8 4h8l5 9-4 7H7l-4-7z"/></svg></span><i>5</i></span>
+          <span class="ax-app" data-i="3" style="--g:linear-gradient(160deg,#ffb84d,#e08a00);--dl:-1.8s"><span class="ax-ic"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></span><i>37</i></span>
+        </div>
+        <p class="ax-cap" id="axCap">Keyword tool<span id="axTab">Login #1 · tab 3</span></p>
       </div>
-      <p class="ax-cap"><b id="axApp">Keyword tool</b><span id="axTab">Login #1 · tab 3</span></p>
-    </div>
+    </div></div>
     <ol class="ax-lines" aria-label="Where SEO work usually lives">
-      <li class="on"><b style="--c:#2f5bff">Keyword research</b> in one tool.</li>
-      <li><b style="--c:#17a673">Backlinks</b> in spreadsheets.</li>
-      <li><b style="--c:#7a5cff">Rankings</b> somewhere else.</li>
-      <li><b style="--c:#d98a00">Website audits</b> in another platform.</li>
+      <li class="on"><b style="--c:#7d9bff">Keyword research</b> in one tool.</li>
+      <li><b style="--c:#3ddba5">Backlinks</b> in spreadsheets.</li>
+      <li><b style="--c:#b39dff">Rankings</b> somewhere else.</li>
+      <li><b style="--c:#f5b53d">Website audits</b> in another platform.</li>
       <li class="q">Sound <em>familiar?</em><span>Managing SEO shouldn’t mean switching between multiple tools and manually tracking everything.</span></li>
     </ol>
     <p class="ax-dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></p>
   </div></div>
 </section>
-
-<div class="fade fade-dk" aria-hidden="true"></div>
 <!-- 3. THE TURNING POINT: pinned; the question lights up, then Scoutly appears -->
 <section class="tp dk" id="turn" aria-labelledby="tpQ">
   <div class="tp-pin">
@@ -1132,14 +1186,14 @@ function heroScroll(){var r=hx.getBoundingClientRect(),vh=innerHeight;hxVis=r.bo
 /* the headline animates in once the preloader clears */
 function heroIntro(){hx.classList.add('hx-in')}
 
-/* ---------- 2. the problem: ⌘+Tab through the tools as you scroll; "Sound familiar?" sets every app off ---------- */
-var ax=$('problem'),axApps=q('.ax-app[data-i]',ax),axLines=q('.ax-lines li',ax),axDots=q('.ax-dots i',ax),axKeys=q('.ax-keys',ax)[0],axApp=$('axApp'),axTab=$('axTab'),pbOn=-1,axT=0;
+/* ---------- 2. the problem: ⌘+Tab through the tools as you scroll; each tool's window comes forward. "Sound familiar?" spills them all ---------- */
+var ax=$('problem'),axApps=q('.ax-app[data-i]',ax),axWins=q('.ax-win',ax),axLines=q('.ax-lines li',ax),axDots=q('.ax-dots i',ax),axKeys=q('.ax-keys',ax)[0],axApp=$('axApp'),axCap=$('axCap'),pbOn=-1,axT=0;
 var AXN=['Keyword tool','Spreadsheets','Rank tracker','Audit platform','Switching… again'],AXS=['Login #1 · tab 3','backlinks_FINAL_v3.xlsx','Login #2 · another tab','audit-report-march.pdf','7 apps · 4 logins · 0 shared view'];
 var axStatic=RM;if(axStatic)ax.classList.add('ax-static');
 function pbSet(n){if(n===pbOn)return;var first=pbOn<0;pbOn=n;ax.classList.toggle('chaos',n>=4);
-  axApps.forEach(function(a,i){a.classList.toggle('on',i===n)});
+  axApps.forEach(function(a,i){a.classList.toggle('on',i===n)});axWins.forEach(function(w,i){w.classList.toggle('on',i===n)});
   axLines.forEach(function(l,i){l.classList.toggle('on',i===n)});axDots.forEach(function(d,i){d.classList.toggle('on',i===n)});
-  axApp.textContent=AXN[n];axTab.textContent=AXS[n];
+  axApp.textContent=n>=4?'Everything':AXN[n];axCap.firstChild.nodeValue=AXN[n];$('axTab').textContent=AXS[n];
   if(!first&&!RM){axKeys.classList.add('press');clearTimeout(axT);axT=setTimeout(function(){axKeys.classList.remove('press')},180)}}
 pbSet(0);
 /* the pinned stretch is split into five steps: four tools, then "Sound familiar?" */
