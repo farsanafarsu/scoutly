@@ -28,6 +28,7 @@
 <link rel="stylesheet" href="https://api.fontshare.com/v2/css?f[]=clash-display@500,600,700&f[]=satoshi@400,500,700&display=swap">
 <style>
 :root{--bg:#eef1f7;--bg2:#e4e9f2;--card:#f8f9fc;--ink:#0a1230;--sl:#4a5675;--mu:#7d88a3;--ln:rgba(10,26,74,.13);--b:#2f5bff;--b2:#1f45d6;--sky:#5ac8fa;--nv:#050a1f;--nv2:#0a1a4a;--cr:#e5484d;--wa:#f5a524;--ok:#17a673;
+  --blend:var(--bg) 0%,color-mix(in oklab,#24357a 3%,var(--bg)) 10%,color-mix(in oklab,#1f2f70 10%,var(--bg)) 20%,color-mix(in oklab,#1a2862 22%,var(--bg)) 30%,color-mix(in oklab,#142055 35%,var(--bg)) 40%,color-mix(in oklab,#0f1a48 50%,var(--bg)) 50%,color-mix(in oklab,#0c153c 65%,var(--bg)) 60%,color-mix(in oklab,#091030 78%,var(--bg)) 70%,color-mix(in oklab,#070c27 90%,var(--bg)) 80%,color-mix(in oklab,var(--nv) 97%,var(--bg)) 90%,var(--nv) 100%;
   --D:"Clash Display",system-ui,sans-serif;--T:Satoshi,system-ui,"Segoe UI",sans-serif;--M:"Geist Mono",ui-monospace,monospace}
 *{box-sizing:border-box}html{scroll-behavior:smooth}
 /* Clash Display runs tight at heavy weights: big uppercase headlines get a touch of air between letters and words */
@@ -386,13 +387,13 @@ code{font:400 12.5px var(--M)}
 .anat li{counter-increment:a;padding:24px;border-right:1px solid rgba(255,255,255,.08)}.anat li:last-child{border-right:0}
 .anat li:before{content:"0" counter(a);display:block;margin-bottom:16px;font:500 26px/1 var(--D);color:var(--sky)}
 .anat b{display:block;font:600 12px/1.3 var(--M);letter-spacing:.1em;text-transform:uppercase}.anat span{display:block;margin-top:8px;font:400 14px/1.65 var(--T);color:rgba(214,224,255,.65)}
-#faq{padding-top:260px}
-#faq:after{content:"";position:absolute;left:0;right:0;top:0;height:280px;background:linear-gradient(180deg,var(--nv) 0%,#26304f 34%,#9aa6c4 68%,var(--bg) 100%);pointer-events:none}
+#faq{padding-top:clamp(300px,34vw,440px)}
+#faq:after{content:"";position:absolute;left:0;right:0;top:0;height:clamp(280px,32vw,420px);background:radial-gradient(55% 42% at 50% 45%,rgba(47,91,255,.14),transparent 100%),linear-gradient(0deg,var(--blend));pointer-events:none}
 #faq>*{z-index:1}
 /* fades between light and dark sections */
-.fade{height:240px;pointer-events:none}
-.fade-dk{background:linear-gradient(180deg,var(--bg) 0%,#9aa6c4 30%,#26304f 62%,var(--nv) 100%)}
-.fade-lt{background:linear-gradient(180deg,var(--nv) 0%,#26304f 34%,#9aa6c4 68%,var(--bg) 100%)}
+.fade{position:relative;height:clamp(280px,32vw,420px);margin:-1px 0;pointer-events:none}
+.fade-dk{background:radial-gradient(55% 42% at 50% 55%,rgba(47,91,255,.15),transparent 100%),linear-gradient(180deg,var(--blend))}
+.fade-lt{background:radial-gradient(55% 42% at 50% 45%,rgba(47,91,255,.15),transparent 100%),linear-gradient(0deg,var(--blend))}
 /* ===== the problem: each statement brings its tool forward on the desk; "Sound familiar?" lets them all pile up (data-on 0..4) ===== */
 .pb{padding:110px 0 120px}
 .pb .two{grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);align-items:start}
@@ -637,7 +638,7 @@ code{font:400 12.5px var(--M)}
 .ft{position:relative;overflow:hidden;padding:96px 0 28px;background:linear-gradient(180deg,#0a1a4a 0%,#070f30 38%,#050a1f 100%);color:#fff}
 .ft:before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(45% 45% at 85% 100%,rgba(122,92,255,.18),transparent 70%)}
 .ft>.w{position:relative}
-.fin:before{background:radial-gradient(50% 60% at 85% 0%,rgba(47,91,255,.32),transparent 70%)}
+.fin:before{background:radial-gradient(50% 50% at 82% 30%,rgba(47,91,255,.28),transparent 70%),radial-gradient(40% 40% at 10% 85%,rgba(90,200,250,.08),transparent 70%)}
 .ft-top{display:grid;grid-template-columns:minmax(0,1.5fr) repeat(3,minmax(0,1fr));gap:40px;padding-bottom:56px;border-bottom:1px solid rgba(255,255,255,.08)}
 .ft-brand .logo{color:#fff}
 .ft-brand p{max-width:330px;margin-top:18px;font:400 15px/1.65 var(--T);color:rgba(214,224,255,.62)}
@@ -1071,6 +1072,7 @@ requestAnimationFrame(frame);
   <div class="faq" data-rv><details><summary><h3>What is Scoutly?</h3></summary><div class="a"><p>Scoutly is an SEO and search visibility platform designed to bring website auditing, backlink analysis, broken link detection, keyword research, competitor research, and supported AI search visibility insights into one workspace.</p></div></details><details><summary><h3>What does an SEO audit tool do?</h3></summary><div class="a"><p>An SEO audit tool examines a website for technical and on-page issues that may affect crawling, indexability, site structure, content optimization, and user experience. It helps identify problems and organize potential improvements. See <a href="website-seo-audit/">what Scoutly’s website SEO audit checks</a>.</p></div></details><details><summary><h3>Can Scoutly find broken links?</h3></summary><div class="a"><p>Yes. Every website audit checks up to 120 internal and external links found on the pages it crawls, and reports errors, redirects and links that couldn’t be verified. Results depend on crawl limits, website access, and server responses.</p></div></details><details><summary><h3>Can Scoutly check backlinks?</h3></summary><div class="a"><p>Scoutly can analyze backlink information available through its configured data sources. Comprehensive backlink discovery generally requires an external backlink index or provider, and no provider is connected in the current early-access build.</p></div></details><details><summary><h3>Does Scoutly help with competitor analysis?</h3></summary><div class="a"><p>Yes. The intended workflow includes comparing available keyword, content, and backlink data to identify opportunities for your website. The depth of analysis depends on the data sources connected.</p></div></details><details><summary><h3>What are AEO and GEO?</h3></summary><div class="a"><p>AEO stands for Answer Engine Optimization, while GEO stands for Generative Engine Optimization. Both focus on improving how useful content can be understood and surfaced in answer-oriented and generative search experiences. Read more about <a href="aeo-geo/">AEO and GEO</a>.</p></div></details><details><summary><h3>Can Scoutly guarantee higher Google rankings?</h3></summary><div class="a"><p>No SEO platform can guarantee specific rankings. Scoutly can help identify issues and opportunities, but outcomes depend on your website, competition, content, technical implementation, and search engine systems.</p></div></details><details><summary><h3>Is Scoutly suitable for agencies?</h3></summary><div class="a"><p>Scoutly is intended to support agency workflows involving multiple website audits, backlink research, competitor analysis, and reporting. Project limits and collaboration features will depend on the plan, and will be published before launch.</p></div></details><details><summary><h3>Does Scoutly offer a free website audit?</h3></summary><div class="a"><p>The website audit works today. It fetches the page you enter, reads robots.txt and your XML sitemap, crawls up to 25 internal pages up to three clicks deep, checks up to 120 links, and adds Core Web Vitals from Google PageSpeed Insights. Create a free account to run audits and keep your results. Pricing and any free-tier limits will be published before they apply.</p></div></details><details><summary><h3>How often should I audit my website?</h3></summary><div class="a"><p>Run an audit when launching a new website or making significant changes, and repeat it periodically to detect new technical issues. Websites that change frequently may benefit from scheduled crawls.</p></div></details></div>
 </div></section>
 
+<div class="fade fade-dk" aria-hidden="true"></div>
 <!-- 8. FINAL CTA -->
 <section class="fin dk" id="start" aria-labelledby="ctaTitle"><div class="w">
   <div class="fin-g">
