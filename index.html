@@ -381,10 +381,22 @@ code{font:400 12.5px var(--M)}
    spills every window across the screen and the notifications pour in ===== */
 @keyframes hxblink{50%{opacity:0}}
 .ax{position:relative;background:var(--nv);color:#fff}
-.js .ax{height:380vh}
+.js .ax{height:470vh}
 .ax-pin{position:relative;min-height:100vh;min-height:100svh;display:flex;align-items:center;padding:96px 0 40px;overflow:hidden}
 .js .ax-pin{position:sticky;top:0;height:100vh;height:100svh}
 .ax-pin:before{content:"";position:absolute;inset:0;background:radial-gradient(45% 40% at 50% 62%,rgba(47,91,255,.22),transparent 70%);pointer-events:none}
+/* the finale (--f 0..1 from scroll): the screen pulls back and blurs, a red glow rises, and the line builds letter by letter */
+.ax-pin:after{content:"";position:absolute;inset:0;background:radial-gradient(40% 40% at 50% 50%,rgba(229,72,77,.22),transparent 70%);opacity:var(--f,0);pointer-events:none}
+.js .ax-screen{transform:scale(calc(1 - var(--f,0)*.2));opacity:calc(1 - var(--f,0)*.85);filter:blur(calc(var(--f,0)*7px))}
+.ax-final{position:absolute;inset:0;z-index:10;display:grid;place-content:center;justify-items:center;padding:0 24px;text-align:center;pointer-events:none}
+.ax-final h3{margin:0;font:500 clamp(56px,9vw,150px)/1 var(--T);letter-spacing:-.045em;color:#fff;white-space:nowrap}
+.ax-final em{font-family:"Instrument Serif",Georgia,serif;font-style:italic;font-weight:400;letter-spacing:-.01em;color:#ff8a8d;text-shadow:0 0 40px rgba(229,72,77,.45)}
+.ax-final .c{--r:clamp(0,calc(var(--f,0)*var(--n)*1.5 - var(--i)),1);display:inline-block;opacity:var(--r);transform:translateY(calc((1 - var(--r))*.45em)) scale(calc(.9 + var(--r)*.1));filter:blur(calc((1 - var(--r))*14px))}
+.ax-final .gp{display:inline-block;width:.26em}
+.ax-final p{max-width:720px;margin-top:22px;font:400 clamp(16px,1.4vw,21px)/1.55 var(--T);color:rgba(214,224,255,.78)}
+.ax-final .wd{--r:clamp(0,calc((var(--f,0) - .55)*var(--wn)*2.6 - var(--j)),1);display:inline-block;opacity:var(--r);transform:translateY(calc((1 - var(--r))*10px));filter:blur(calc((1 - var(--r))*6px))}
+html:not(.js) .ax-final,.ax.ax-static .ax-final{position:static;--f:1;padding:40px 0 0}
+@media(max-width:700px){.ax-final h3{font-size:clamp(44px,13vw,64px)}}
 .ax-in{position:relative;display:flex;flex-direction:column;align-items:center;text-align:center;width:100%}
 .ax .dh{max-width:900px;margin-top:14px;font-size:clamp(26px,2.9vw,46px);color:#fff}
 .ax .dh .l2{color:#a9c4ff}
@@ -974,9 +986,9 @@ requestAnimationFrame(frame);
       <li><b style="--c:#3ddba5">Backlinks</b> in spreadsheets.</li>
       <li><b style="--c:#b39dff">Rankings</b> somewhere else.</li>
       <li><b style="--c:#f5b53d">Website audits</b> in another platform.</li>
-      <li class="q">Sound <em>familiar?</em><span>Managing SEO shouldn’t mean switching between multiple tools and manually tracking everything.</span></li>
     </ol>
     <p class="ax-dots" aria-hidden="true"><i class="on"></i><i></i><i></i><i></i><i></i></p>
+    <div class="ax-final"><h3 aria-label="Sound familiar?" style="--n:14"><span aria-hidden="true"><span class="c" style="--i:0">S</span><span class="c" style="--i:1">o</span><span class="c" style="--i:2">u</span><span class="c" style="--i:3">n</span><span class="c" style="--i:4">d</span><span class="c gp"> </span><em><span class="c" style="--i:5">f</span><span class="c" style="--i:6">a</span><span class="c" style="--i:7">m</span><span class="c" style="--i:8">i</span><span class="c" style="--i:9">l</span><span class="c" style="--i:10">i</span><span class="c" style="--i:11">a</span><span class="c" style="--i:12">r</span><span class="c" style="--i:13">?</span></em></span></h3><p style="--wn:12"><span class="wd" style="--j:0">Managing</span> <span class="wd" style="--j:1">SEO</span> <span class="wd" style="--j:2">shouldn’t</span> <span class="wd" style="--j:3">mean</span> <span class="wd" style="--j:4">switching</span> <span class="wd" style="--j:5">between</span> <span class="wd" style="--j:6">multiple</span> <span class="wd" style="--j:7">tools</span> <span class="wd" style="--j:8">and</span> <span class="wd" style="--j:9">manually</span> <span class="wd" style="--j:10">tracking</span> <span class="wd" style="--j:11">everything.</span></p></div>
   </div></div>
 </section>
 <!-- 3. THE TURNING POINT: pinned; the question lights up, then Scoutly appears -->
@@ -1292,7 +1304,11 @@ function pbSet(n){if(n===pbOn)return;var first=pbOn<0;pbOn=n;ax.classList.toggle
   if(!first&&!RM){axKeys.classList.add('press');clearTimeout(axT);axT=setTimeout(function(){axKeys.classList.remove('press')},180)}}
 pbSet(0);
 /* the pinned stretch is split into five steps: four tools, then "Sound familiar?" */
-function pbScroll(){if(axStatic)return;var r=ax.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;pbSet(Math.min(4,Math.floor(prog(ax)*5.3)))}
+var axFade=q('.ax-in>.lbl,.ax-in>.dh,.ax-lines,.ax-dots',ax);
+function pbScroll(){if(axStatic)return;var r=ax.getBoundingClientRect();if(r.bottom<0||r.top>innerHeight)return;var p=prog(ax);
+  pbSet(Math.min(4,Math.floor(p*6.6)));
+  /* finale: after the last tool the screen pulls back and "Sound familiar?" builds up, letter by letter, then word by word */
+  var f=band(p,.62,.92);ax.style.setProperty('--f',f.toFixed(3));axFade.forEach(function(e){e.style.opacity=Math.max(0,1-f*1.6).toFixed(3)})}
 
 /* ---------- 3. turning point: the question lights up word by word, then Scoutly appears and its tools settle into orbit ---------- */
 var tp=$('turn'),tpQ=$('tpQ'),tpA=$('tpA'),tpB=$('tpB'),tpChips=q('.orb-c',tp),tpWhy=$('tpWhy'),tpTx=$('tpTx'),tpEye=$('tpEye'),tpPts=$('tpPts');
