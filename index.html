@@ -485,85 +485,114 @@ html:not(.js) .ax-lines li,.ax.ax-static .ax-lines li{position:static;grid-area:
 .eco .fh-h{color:#fff}
 .eco .fh-sub{color:rgba(214,224,255,.7)}
 .eco .hx-pill{background:rgba(255,255,255,.05);border-color:rgba(127,160,255,.3);color:rgba(214,224,255,.8);box-shadow:none}
-.bento{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:16px;margin-top:60px}
-.bx{--mx:50%;--my:0%;position:relative;grid-column:span 2;display:flex;flex-direction:column;min-width:0;padding:22px 22px 24px;border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.055),rgba(255,255,255,.015));border:1px solid rgba(127,160,255,.16);overflow:hidden;transition:border-color .35s,box-shadow .45s,transform .45s cubic-bezier(.2,.8,.2,1)}
-.js .bx[data-rv]{transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .45s}
-.js .bento .bx.in:nth-child(3n+2){transition-delay:.1s}.js .bento .bx.in:nth-child(3n){transition-delay:.2s}.js .bento .bx.in:hover{transition-delay:0s}
-.bx:before{content:"";position:absolute;inset:0;background:radial-gradient(420px circle at var(--mx) var(--my),color-mix(in srgb,var(--c) 16%,transparent),transparent 65%);opacity:0;transition:opacity .4s;pointer-events:none}
-.bx:after{content:"";position:absolute;left:24px;right:24px;top:0;height:1px;background:linear-gradient(90deg,transparent,var(--c),transparent);opacity:.55}
-.bx>*{position:relative}
-.bx:hover,.js .bx[data-rv].in:hover{border-color:color-mix(in srgb,var(--c) 45%,transparent);box-shadow:0 40px 80px -40px color-mix(in srgb,var(--c) 60%,transparent);transform:translateY(-4px)}
-.bx:hover:before{opacity:1}
-.bx.au,.bx.cp{grid-column:span 3}
-.bx-top{display:flex;align-items:center;gap:12px}
-.bx-ic{display:grid;place-items:center;width:42px;height:42px;border-radius:12px;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 32%,transparent)}
-.bx-ic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.bx-ix{margin-left:auto;font:500 11px/1 var(--M);letter-spacing:.14em;color:rgba(214,224,255,.4)}
-.bx h3{margin-top:22px;font:500 21px/1.15 var(--D);letter-spacing:.02em;text-transform:uppercase;color:#fff}
-.bx p{margin-top:9px;font:400 15px/1.6 var(--T);color:rgba(214,224,255,.7)}
-.bx-a{display:inline-flex;align-items:center;gap:8px;margin-top:18px;font:600 11px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--c);transition:gap .25s}
-.bx .bx-a,.bx .ds-copy{position:static}
-.bx-a:after{content:"";position:absolute;inset:0;z-index:3;border-radius:inherit}
-.bx:hover .bx-a{gap:12px}
-.bx-a:focus-visible{outline:none}.bx:focus-within{outline:2px solid var(--sky);outline-offset:3px}
-/* previews */
-.bx-viz{flex:1;display:flex;flex-direction:column;justify-content:center;margin-top:20px;padding:14px;border-radius:13px;background:rgba(5,10,31,.5);border:1px solid rgba(127,160,255,.12);font:400 12.5px/1.2 var(--T);color:rgba(214,224,255,.78)}
-.bx .v-q{margin:0;display:flex;align-items:center;gap:8px;height:32px;padding:0 11px;border-radius:8px;background:rgba(255,255,255,.05);border:1px solid rgba(127,160,255,.18);color:#fff}
-.v-q svg{width:14px;height:14px;fill:none;stroke:rgba(214,224,255,.5);stroke-width:2}.v-q i{width:1.5px;height:14px;margin-left:-6px;background:var(--sky);animation:hxblink 1s steps(1) infinite}
-.v-kw ul,.v-bl ul{margin-top:6px}
-.v-kw li,.v-bl li{display:grid;align-items:center;gap:10px;padding:8px 2px;border-bottom:1px solid rgba(127,160,255,.08)}
-.v-kw li{grid-template-columns:minmax(0,1fr) auto 26px}.v-bl li{grid-template-columns:22px minmax(0,1fr) auto}
-.v-kw li:last-child,.v-bl li:last-child{border-bottom:0}
-.v-kw span,.v-bl span{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.v-kw b{font:500 11.5px/1 var(--M);color:#fff}
-.v-kw .kd.l{background:rgba(61,219,165,.14);color:#3ddba5}.v-kw .kd.m{background:rgba(245,181,61,.15);color:#f5b53d}.v-kw .kd.h{background:rgba(255,107,111,.14);color:#ff8a8d}
-.fv{display:grid;place-items:center;width:22px;height:22px;border-radius:6px;background:rgba(255,255,255,.08);font:600 10px/1 var(--D);font-style:normal;color:#fff}
-.v-bl .st.lv{background:rgba(61,219,165,.14);color:#3ddba5}.v-bl .st.pd{background:rgba(245,181,61,.15);color:#f5b53d}.v-bl .st.lo{background:rgba(255,107,111,.14);color:#ff8a8d}
-.v-bl p{display:flex;align-items:baseline;gap:8px;margin-bottom:6px;font:500 10.5px/1 var(--M);letter-spacing:.08em;text-transform:uppercase;color:rgba(214,224,255,.5)}.v-bl p b{font:600 22px/1 var(--D);letter-spacing:0;color:#fff}.v-bl p em{margin-left:auto;font-style:normal;color:#3ddba5}
-.v-rk{position:relative;min-height:150px}
-.v-rk svg{display:block;width:100%;height:110px;overflow:visible}
-.v-rk .gr path{stroke:rgba(127,160,255,.1);stroke-width:1;vector-effect:non-scaling-stroke}
-.v-rk .ar{fill:url(#rkG)}
-.v-rk .ln{fill:none;stroke:#a98bff;stroke-width:2.5;stroke-linecap:round;vector-effect:non-scaling-stroke;stroke-dasharray:1;stroke-dashoffset:0;transition:stroke-dashoffset 1.8s cubic-bezier(.4,0,.2,1) .3s}
-.v-rk .ar{transition:opacity 1s ease 1.2s}
-.v-rk .pt{position:absolute;padding:4px 7px;border-radius:6px;font:600 11px/1 var(--M);transition:opacity .5s,transform .6s cubic-bezier(.2,1.4,.4,1)}
-.v-rk .pt.a{left:12px;bottom:12px;background:rgba(255,255,255,.07);color:rgba(214,224,255,.65)}
-.v-rk .pt.b{right:12px;top:10px;background:#a98bff;color:#0a0f2c;transition-delay:1.9s;box-shadow:0 0 18px rgba(169,139,255,.6)}
-.v-rk .pt.b:after{content:" ▲ 11";font-weight:500}
-.js .bx:not(.in) .v-rk .ln{stroke-dashoffset:1}.js .bx:not(.in) .v-rk .ar{opacity:0}.js .bx:not(.in) .v-rk .pt.b{opacity:0;transform:scale(.6)}
-.v-au{flex-direction:row;align-items:center;justify-content:flex-start;gap:22px}
-.v-ring{position:relative;flex:none;width:104px;height:104px}.v-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
-.v-ring circle{fill:none;stroke:rgba(255,255,255,.08);stroke-width:3.5}.v-ring .v{stroke:#f5b53d;stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:8;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1) .3s;filter:drop-shadow(0 0 6px rgba(245,181,61,.55))}
-.v-ring b{position:absolute;inset:0;display:grid;place-content:center;text-align:center;font:600 30px/1 var(--D);color:#fff}.v-ring b small{display:block;margin-top:5px;font:500 9.5px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:rgba(214,224,255,.5)}
-.js .bx:not(.in) .v-ring .v{stroke-dashoffset:100}
-.v-au ul{flex:1;min-width:0;display:grid;gap:7px}
-.v-au li{display:flex;align-items:center;gap:10px;padding:9px 11px;border-radius:9px;background:rgba(255,255,255,.04);white-space:nowrap;transition:opacity .5s,transform .6s cubic-bezier(.2,.8,.2,1)}
-.v-au li:before{content:"";flex:none;width:7px;height:7px;border-radius:50%;background:#3ddba5;box-shadow:0 0 8px #3ddba5}.v-au li.wn:before{background:#f5b53d;box-shadow:0 0 8px #f5b53d}
-.v-au li em{margin-left:auto;font:500 10.5px/1 var(--M);font-style:normal;color:rgba(214,224,255,.5)}
-.v-au li:nth-child(2){transition-delay:.12s}.v-au li:nth-child(3){transition-delay:.24s}
-.js .bx:not(.in) .v-au li{opacity:0;transform:translateX(14px)}
-.v-cp ul{display:grid;gap:12px}
-.v-cp li{display:grid;grid-template-columns:minmax(0,130px) minmax(0,1fr) 26px;align-items:center;gap:12px}
-.v-cp span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.v-cp b{font:500 11.5px/1 var(--M);color:#fff;text-align:right}
-.v-cp i{height:8px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden}
-.v-cp i:after{content:"";display:block;width:var(--w);height:100%;border-radius:4px;background:rgba(214,224,255,.32);transition:width 1.4s cubic-bezier(.2,.8,.2,1) .3s}
-.v-cp .me span{color:#4fd1e8;font-weight:600}.v-cp .me i:after{background:linear-gradient(90deg,#2f5bff,#4fd1e8);box-shadow:0 0 12px rgba(79,209,232,.5)}
-.js .bx:not(.in) .v-cp i:after{width:0}
-.bx .v-gap{display:flex;align-items:center;gap:10px;margin-top:16px;padding-top:14px;border-top:1px solid rgba(127,160,255,.1);font:400 13px/1.3 var(--T);color:rgba(214,224,255,.7)}.v-gap b{font:600 20px/1 var(--D);color:#4fd1e8}
-.bx.ds{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,2fr);gap:40px;align-items:center}
-.bx.ds .bx-viz{margin-top:0}
-.v-ds{display:grid!important;grid-template-columns:repeat(5,minmax(0,1fr));gap:10px;padding:12px}
-.ds-k{position:relative;padding:16px 14px 14px;border-radius:10px;background:rgba(255,255,255,.04);border:1px solid rgba(127,160,255,.1);overflow:hidden;transition:opacity .5s,transform .6s cubic-bezier(.2,.8,.2,1)}
-.ds-k:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--c);box-shadow:0 0 12px var(--c)}
-.ds-k span{display:block;font:500 10px/1.3 var(--M);letter-spacing:.08em;text-transform:uppercase;color:rgba(214,224,255,.5)}
-.ds-k b{display:block;margin-top:12px;font:600 30px/1 var(--D);letter-spacing:-.005em;color:#fff}
-.ds-k em{display:block;margin-top:8px;font:500 10.5px/1 var(--M);font-style:normal;color:var(--c)}
-.ds-k:nth-child(2){transition-delay:.08s}.ds-k:nth-child(3){transition-delay:.16s}.ds-k:nth-child(4){transition-delay:.24s}.ds-k:nth-child(5){transition-delay:.32s}
-.js .bx:not(.in) .ds-k{opacity:0;transform:translateY(14px)}
-.bx .ds-note{grid-column:1/-1;margin:2px 0 0;font:400 11px/1.4 var(--M);color:rgba(214,224,255,.4)}
-@media(max-width:1100px){.bento{grid-template-columns:repeat(2,minmax(0,1fr))}.bx,.bx.au,.bx.cp{grid-column:span 1}.bx.ds{grid-column:1/-1;grid-template-columns:minmax(0,1fr);gap:22px}.v-ds{grid-template-columns:repeat(3,minmax(0,1fr))}.v-ds .ds-k:nth-child(n+4){grid-column:span 1}}
-@media(max-width:640px){.bento{grid-template-columns:minmax(0,1fr)}.v-ds{grid-template-columns:repeat(2,minmax(0,1fr))}.v-ds .ds-k:last-of-type{grid-column:1/-1}.v-au{flex-direction:column;align-items:stretch}.v-ring{margin:0 auto}.v-cp li{grid-template-columns:minmax(0,108px) minmax(0,1fr) 24px}}
-@media(prefers-reduced-motion:reduce){.v-q i{animation:none}}
+/* the explorer: six tools as tabs on the left, a big live visual on the right; it advances by itself (the active tab's bar fills),
+   pauses on hover, and answers clicks and arrow keys */
+.ex{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.5fr);gap:22px;margin-top:56px;align-items:stretch}
+.ex-tabs{display:grid;gap:6px;align-content:start}
+.ex-tabs button{position:relative;display:grid;grid-template-columns:34px minmax(0,1fr);gap:14px;align-items:start;padding:16px 18px 18px;border:1px solid transparent;border-radius:16px;background:none;color:inherit;text-align:left;cursor:pointer;overflow:hidden;transition:background .35s,border-color .35s}
+.ex-tabs button:hover{background:rgba(255,255,255,.03)}
+.ex-tabs button:focus-visible{outline:2px solid var(--sky);outline-offset:2px}
+.ex-tabs [aria-selected="true"]{background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.02));border-color:rgba(127,160,255,.18)}
+.ex-ix{display:grid;place-items:center;width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.05);font:600 11px/1 var(--M);color:rgba(214,224,255,.5);transition:background .35s,color .35s,box-shadow .35s}
+.ex-tabs [aria-selected="true"] .ex-ix{background:var(--c);color:#fff;box-shadow:0 8px 20px -8px var(--c)}
+.ex-tx b{display:block;font:600 18px/1.2 var(--T);letter-spacing:-.01em;color:rgba(230,236,255,.6);transition:color .35s}
+.ex-tx span{display:block;max-height:0;overflow:hidden;margin-top:0;font:400 14.5px/1.5 var(--T);color:rgba(214,224,255,.62);opacity:0;transition:max-height .45s,opacity .35s,margin .35s}
+.ex-tabs [aria-selected="true"] .ex-tx b{color:#fff}
+.ex-tabs [aria-selected="true"] .ex-tx span{max-height:60px;margin-top:6px;opacity:1}
+.ex-bar{position:absolute;left:18px;right:18px;bottom:0;height:2px;background:rgba(127,160,255,.1);border-radius:1px}
+.ex-bar i{display:block;width:0;height:100%;border-radius:1px;background:linear-gradient(90deg,var(--c),#fff)}
+.ex-tabs [aria-selected="true"] .ex-bar i{width:100%}
+.ex.play [aria-selected="true"] .ex-bar i{animation:exfill 5.5s linear}
+.ex.play:hover [aria-selected="true"] .ex-bar i,.ex.play:focus-within [aria-selected="true"] .ex-bar i{animation-play-state:paused}
+@keyframes exfill{from{width:0}}
+/* the stage */
+.ex-stage{position:relative;display:grid;min-height:480px;border-radius:22px;background:radial-gradient(70% 60% at 70% 20%,rgba(47,91,255,.18),transparent 70%),linear-gradient(180deg,#0d1640,#070d29);border:1px solid rgba(127,160,255,.18);box-shadow:0 60px 110px -50px rgba(0,0,0,.8),0 40px 90px -60px rgba(47,91,255,.7);overflow:hidden}
+.ex-stage:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(127,160,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(127,160,255,.05) 1px,transparent 1px);background-size:32px 32px;-webkit-mask-image:radial-gradient(75% 70% at 50% 50%,#000,transparent);mask-image:radial-gradient(75% 70% at 50% 50%,#000,transparent);pointer-events:none}
+.ex-v{grid-area:1/1;position:relative;display:flex;flex-direction:column;padding:22px 24px 24px;opacity:0;visibility:hidden;transform:translateY(14px) scale(.985);transition:opacity .5s,transform .6s cubic-bezier(.2,.8,.2,1),visibility 0s .5s}
+.ex-v.on{opacity:1;visibility:visible;transform:none;transition:opacity .5s .1s,transform .6s cubic-bezier(.2,.8,.2,1) .1s,visibility 0s}
+.ex-hd{display:flex;align-items:center;gap:12px}
+.ex-hd .bx-ic{display:grid;place-items:center;width:40px;height:40px;border-radius:12px;background:color-mix(in srgb,var(--c) 16%,transparent);color:var(--c);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--c) 32%,transparent)}
+.ex-hd .bx-ic svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.ex-hd b{font:600 15px/1 var(--T);color:#fff}
+.ex-hd em{font:500 10.5px/1 var(--M);font-style:normal;letter-spacing:.12em;text-transform:uppercase;color:rgba(214,224,255,.4)}
+.ex-hd a{margin-left:auto;display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid rgba(127,160,255,.22);font:600 11px/1 var(--M);letter-spacing:.1em;text-transform:uppercase;color:#fff;transition:background .25s,gap .25s}
+.ex-hd a:hover{background:var(--c);gap:12px}
+.ex-art{position:relative;flex:1;margin-top:18px;min-height:340px}
+.ex-note{position:absolute;right:18px;bottom:12px;font:400 10.5px/1 var(--M);color:rgba(214,224,255,.3)}
+/* 0 keyword bubbles */
+.xk{position:absolute;left:var(--x);top:var(--y);display:grid;place-content:center;width:var(--s);height:var(--s);margin:calc(var(--s)/-2);border-radius:50%;background:radial-gradient(circle at 32% 28%,color-mix(in srgb,var(--c) 55%,transparent),color-mix(in srgb,var(--c) 16%,transparent) 72%);border:1px solid color-mix(in srgb,var(--c) 55%,transparent);box-shadow:0 0 30px color-mix(in srgb,var(--c) 30%,transparent);text-align:center;animation:xkfloat 7s ease-in-out infinite;animation-delay:var(--dl,0s);transition:transform .7s cubic-bezier(.2,1.3,.4,1)}
+.xk b{font:600 clamp(11px,1vw,14px)/1.15 var(--T);color:#fff;padding:0 8px}
+.xk small{display:block;margin-top:4px;font:500 10px/1 var(--M);color:rgba(230,236,255,.75)}
+.ex-v:not(.on) .xk{transform:scale(.4)}
+@keyframes xkfloat{50%{translate:0 -9px}}
+.xk-leg{position:absolute;left:0;bottom:0;display:flex;gap:14px;font:500 10.5px/1 var(--M);color:rgba(214,224,255,.5)}
+.xk-leg span{display:inline-flex;align-items:center;gap:6px}.xk-leg span:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c)}
+/* 1 backlink network */
+.xn svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.xn line{stroke:color-mix(in srgb,var(--c) 70%,transparent);stroke-width:1.4;stroke-dasharray:5 6;animation:xnflow 1.6s linear infinite}
+@keyframes xnflow{to{stroke-dashoffset:-22}}
+.xn-me{position:absolute;left:50%;top:50%;display:grid;place-content:center;width:132px;height:132px;margin:-66px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#4d74ff,#1a2f8f);box-shadow:0 0 0 10px rgba(47,91,255,.12),0 0 60px rgba(47,91,255,.6);text-align:center}
+.xn-me b{font:600 30px/1 var(--D);color:#fff}.xn-me span{display:block;margin-top:5px;font:500 10px/1.3 var(--M);color:rgba(230,236,255,.8)}
+.xn-n{position:absolute;left:var(--x);top:var(--y);display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(12,22,60,.92);border:1px solid color-mix(in srgb,var(--c) 45%,transparent);font:500 12px/1 var(--T);color:#e6ecff;white-space:nowrap;transform:translate(-50%,-50%);transition:transform .6s cubic-bezier(.2,1.3,.4,1),opacity .5s}
+.xn-n:before{content:"";width:8px;height:8px;border-radius:50%;background:var(--c);box-shadow:0 0 8px var(--c)}
+.ex-v:not(.on) .xn-n{opacity:0;transform:translate(-50%,-50%) scale(.6)}
+/* 2 rank chart */
+.xr2 svg{position:absolute;left:0;right:0;top:10px;width:100%;height:calc(100% - 70px);overflow:visible}
+.xr2 .gl{stroke:rgba(127,160,255,.1);stroke-width:1;vector-effect:non-scaling-stroke}
+.xr2 .ar{fill:url(#xrA)}
+.xr2 .ln{fill:none;stroke:url(#xrL);stroke-width:3;stroke-linecap:round;stroke-dasharray:1;stroke-dashoffset:0;filter:drop-shadow(0 0 8px rgba(169,139,255,.7));transition:stroke-dashoffset 1.6s cubic-bezier(.4,0,.2,1) .3s}
+.ex-v:not(.on) .xr2 .ln{stroke-dashoffset:1}
+.xr2-y{position:absolute;left:0;top:10px;bottom:70px;display:flex;flex-direction:column;justify-content:space-between;font:500 10.5px/1 var(--M);color:rgba(214,224,255,.35)}
+.xr2-pin{position:absolute;right:2%;top:2%;padding:8px 11px;border-radius:10px;background:#fff;color:var(--nv);font:600 14px/1 var(--D);box-shadow:0 14px 30px -12px rgba(0,0,0,.8)}
+.xr2-pin small{display:block;margin-bottom:4px;font:500 10px/1 var(--M);color:var(--mu)}
+.xr2-tiers{position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.xr2-tiers span{padding:11px 14px;border-radius:12px;background:rgba(255,255,255,.04);border:1px solid rgba(127,160,255,.12);font:500 10.5px/1 var(--M);color:rgba(214,224,255,.5)}
+.xr2-tiers b{display:block;margin-bottom:6px;font:600 22px/1 var(--D);color:#fff}
+/* 3 audit */
+.xa{display:grid;grid-template-columns:auto minmax(0,1fr);gap:36px;align-items:center;height:100%}
+.xa-ring{position:relative;width:210px;height:210px}
+.xa-ring svg{width:100%;height:100%;transform:rotate(-90deg);filter:drop-shadow(0 0 10px rgba(245,181,61,.35))}
+.xa-ring circle{fill:none;stroke:rgba(255,255,255,.07);stroke-width:3}
+.xa-ring .v{stroke:url(#xaG);stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:8;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.8,.2,1) .2s}
+.ex-v:not(.on) .xa-ring .v{stroke-dashoffset:100}
+.xa-ring b{position:absolute;inset:0;display:grid;place-content:center;text-align:center;font:600 56px/1 var(--D);color:#fff}
+.xa-ring b small{display:block;margin-top:8px;font:500 11px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:rgba(214,224,255,.5)}
+.xa-bars{display:grid;gap:16px}
+.xa-bars li{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;font:500 13.5px/1 var(--T);color:#e6ecff}
+.xa-bars li b{font:600 13px/1 var(--M);color:var(--c)}
+.xa-bars li i{grid-column:1/-1;height:7px;border-radius:4px;background:rgba(255,255,255,.06);overflow:hidden}
+.xa-bars li i:after{content:"";display:block;width:var(--w);height:100%;border-radius:4px;background:var(--c);box-shadow:0 0 12px var(--c);transition:width 1.3s cubic-bezier(.2,.8,.2,1) .3s}
+.ex-v:not(.on) .xa-bars li i:after{width:0}
+/* 4 competitors */
+.xc{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:24px;align-items:center;height:100%}
+.xc svg{width:100%;height:auto;max-height:330px;overflow:visible}
+.xc circle{mix-blend-mode:screen;transition:transform .8s cubic-bezier(.2,1.2,.4,1);transform-box:fill-box;transform-origin:center}
+.ex-v:not(.on) .xc circle{transform:scale(.6)}
+.xc text{font:600 13px var(--T);fill:#fff;text-anchor:middle}
+.xc-gap{font:600 64px/1 var(--D);color:#4fd1e8;text-shadow:0 0 30px rgba(79,209,232,.5)}
+.xc-gap+p{margin-top:8px;font:500 16px/1.4 var(--T);color:#e6ecff}
+.xc ul{display:grid;gap:10px;margin-top:20px}
+.xc li{display:flex;align-items:center;gap:10px;font:500 13px/1 var(--T);color:rgba(214,224,255,.7)}
+.xc li:before{content:"";width:10px;height:10px;border-radius:50%;background:var(--c)}
+/* 5 dashboard mosaic */
+.xd{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));grid-auto-rows:minmax(0,1fr);gap:12px;height:100%}
+.xd>div{position:relative;padding:16px;border-radius:14px;background:rgba(255,255,255,.045);border:1px solid rgba(127,160,255,.12);overflow:hidden;transition:opacity .5s,transform .6s cubic-bezier(.2,.8,.2,1)}
+.xd>div:before{content:"";position:absolute;left:0;right:0;top:0;height:2px;background:var(--c);box-shadow:0 0 12px var(--c)}
+.xd .w3{grid-column:span 3}.xd .w2{grid-column:span 2}
+.xd span{display:block;font:500 10.5px/1.3 var(--M);letter-spacing:.08em;text-transform:uppercase;color:rgba(214,224,255,.5)}
+.xd b{display:block;margin-top:12px;font:600 34px/1 var(--D);letter-spacing:-.02em;color:#fff}
+.xd em{display:block;margin-top:8px;font:500 11px/1 var(--M);font-style:normal;color:var(--c)}
+.xd svg{position:absolute;left:16px;right:16px;bottom:14px;width:calc(100% - 32px);height:34px;overflow:visible}
+.xd path{fill:none;stroke:var(--c);stroke-width:2;vector-effect:non-scaling-stroke}
+.ex-v:not(.on) .xd>div{opacity:0;transform:translateY(16px)}
+.xd>div:nth-child(2){transition-delay:.08s}.xd>div:nth-child(3){transition-delay:.16s}.xd>div:nth-child(4){transition-delay:.24s}.xd>div:nth-child(5){transition-delay:.32s}
+@media(max-width:1000px){.ex{grid-template-columns:minmax(0,1fr)}.ex-tabs{grid-auto-flow:column;grid-auto-columns:max-content;overflow-x:auto;gap:8px;padding-bottom:4px;scrollbar-width:none}
+  .ex-tabs button{grid-template-columns:auto auto;align-items:center;padding:10px 14px}.ex-tx span{display:none}.ex-bar{opacity:0}.ex-tx b{font-size:14px}.ex-ix{width:28px;height:28px}}
+@media(max-width:640px){.ex-stage{min-height:440px}.ex-v{padding:16px}.ex-hd a{padding:8px 10px;font-size:10px}.ex-hd em{display:none}.ex-art{min-height:320px}
+  .xa{grid-template-columns:minmax(0,1fr);gap:18px;justify-items:center}.xa-ring{width:150px;height:150px}.xa-bars{width:100%}.xa-ring b{font-size:40px}
+  .xc{grid-template-columns:minmax(0,1fr)}.xd{grid-template-columns:repeat(2,minmax(0,1fr))}.xd .w3,.xd .w2{grid-column:span 1}.xd b{font-size:26px}.xd svg{display:none}.xn-me{width:100px;height:100px;margin:-50px}.xn-me b{font-size:24px}.xn-n{font-size:10.5px;padding:6px 9px}}
+@media(max-width:640px){.xk{width:calc(var(--s)*.66);height:calc(var(--s)*.66);margin:calc(var(--s)*-.33)}.xk b{font-size:10px;padding:0 4px}.xk small{font-size:8.5px}.ex-note{display:none}}
+@media(prefers-reduced-motion:reduce){.xk,.xn line{animation:none}}
 /* ===== philosophy (horizontal cards) ===== */
 .hz-tx{max-width:440px;margin-top:22px;font:400 16.5px/1.65 var(--T);color:rgba(214,224,255,.74)}.hz-tx b{color:#fff;font-weight:600}
 .hz-pil{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
@@ -874,58 +903,23 @@ requestAnimationFrame(frame);
     <p class="fh-sub" data-rv>Six focused tools in one workspace, from the first keyword idea to the fix that moves your rankings.</p>
   </div>
   <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="rkG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a98bff" stop-opacity=".35"/><stop offset="1" stop-color="#a98bff" stop-opacity="0"/></linearGradient></defs></svg>
-  <div class="bento">
-    <article class="bx kw" data-rv style="--c:#6f8dff">
-      <div class="bx-top"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span><span class="bx-ix" aria-hidden="true">01</span></div>
-      <div class="bx-viz v-kw" aria-hidden="true"><p class="v-q"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>seo management<i></i></p><ul><li><span>seo management tool</span><b>2.4k</b><em class="kd m">38</em></li><li><span>backlink tracker</span><b>1.9k</b><em class="kd l">24</em></li><li><span>rank tracking software</span><b>1.3k</b><em class="kd h">61</em></li></ul></div>
-      <h3>Keyword Research</h3>
-      <p>Discover and organise keyword opportunities.</p>
-      <a class="bx-a" href="keyword-research/">Explore keywords <span aria-hidden="true">→</span></a>
-    </article>
-    <article class="bx bl" data-rv style="--c:#3ddba5">
-      <div class="bx-top"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg></span><span class="bx-ix" aria-hidden="true">02</span></div>
-      <div class="bx-viz v-bl" aria-hidden="true"><p><b>184</b>backlinks<em>+12 this week</em></p><ul><li><i class="fv">I</i><span>industry-blog.example</span><em class="st lv">Live</em></li><li><i class="fv">P</i><span>partner-site.example</span><em class="st pd">Pending</em></li><li><i class="fv">D</i><span>old-directory.example</span><em class="st lo">Lost</em></li></ul></div>
-      <h3>Backlink Manager</h3>
-      <p>Save, organise, and monitor backlink opportunities.</p>
-      <a class="bx-a" href="backlinks.html">Open the Backlink Manager <span aria-hidden="true">→</span></a>
-    </article>
-    <article class="bx rk" data-rv style="--c:#a98bff">
-      <div class="bx-top"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><span class="bx-ix" aria-hidden="true">03</span></div>
-      <div class="bx-viz v-rk" aria-hidden="true"><svg viewBox="0 0 240 110" preserveAspectRatio="none"><g class="gr"><path d="M0 22H240M0 55H240M0 88H240"/></g><path class="ar" d="M0 96 C30 92 50 84 80 80 S130 62 160 50 S210 26 240 14 L240 110 L0 110Z"/><path class="ln" pathLength="1" d="M0 96 C30 92 50 84 80 80 S130 62 160 50 S210 26 240 14"/></svg><span class="pt a">#14</span><span class="pt b">#3</span></div>
-      <h3>Rank Tracking</h3>
-      <p>Keep track of keyword performance.</p>
-      <a class="bx-a" href="position-tracking.html">Open Rank Tracking <span aria-hidden="true">→</span></a>
-    </article>
-    <article class="bx au" data-rv style="--c:#f5b53d">
-      <div class="bx-top"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></span><span class="bx-ix" aria-hidden="true">04</span></div>
-      <div class="bx-viz v-au" aria-hidden="true"><div class="v-ring"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19"/><circle class="v" cx="22" cy="22" r="19" pathLength="100"/></svg><b>92<small>Health</small></b></div><ul><li>Indexability<em>Pass</em></li><li class="wn">Broken links<em>2 found</em></li><li>Core Web Vitals<em>Good</em></li></ul></div>
-      <h3>Website Audit</h3>
-      <p>Identify technical SEO issues.</p>
-      <a class="bx-a" href="website-seo-audit/">Explore the Website Audit <span aria-hidden="true">→</span></a>
-    </article>
-    <article class="bx cp" data-rv style="--c:#4fd1e8">
-      <div class="bx-top"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg></span><span class="bx-ix" aria-hidden="true">05</span></div>
-      <div class="bx-viz v-cp" aria-hidden="true"><ul><li class="me"><span>yourwebsite.com</span><i style="--w:62%"></i><b>62</b></li><li><span>rival-one.example</span><i style="--w:74%"></i><b>74</b></li><li><span>rival-two.example</span><i style="--w:48%"></i><b>48</b></li></ul><p class="v-gap"><b>37</b>keyword gaps worth exploring</p></div>
-      <h3>Competitor Analysis</h3>
-      <p>Understand competitor strategies and opportunities.</p>
-      <a class="bx-a" href="competitor-analysis/">Explore Competitor Analysis <span aria-hidden="true">→</span></a>
-    </article>
-    <article class="bx ds" data-rv style="--c:#5ac8fa">
-      <div class="ds-copy">
-        <div class="bx-top"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span><span class="bx-ix" aria-hidden="true">06</span></div>
-        <h3>SEO Dashboard</h3>
-        <p>Bring your important SEO insights together.</p>
-        <a class="bx-a" href="dashboard.html">Open the SEO Dashboard <span aria-hidden="true">→</span></a>
-      </div>
-      <div class="bx-viz v-ds" aria-hidden="true">
-        <div class="ds-k" style="--c:#6f8dff"><span>Keywords tracked</span><b data-to="248">248</b><em>Keyword Research</em></div>
-        <div class="ds-k" style="--c:#3ddba5"><span>Backlinks</span><b data-to="184">184</b><em>Backlink Manager</em></div>
-        <div class="ds-k" style="--c:#a98bff"><span>Avg. position</span><b>8.4</b><em>Rank Tracking</em></div>
-        <div class="ds-k" style="--c:#f5b53d"><span>Site health</span><b data-to="92">92</b><em>Website Audit</em></div>
-        <div class="ds-k" style="--c:#4fd1e8"><span>Keyword gaps</span><b data-to="37">37</b><em>Competitor Analysis</em></div>
-        <p class="ds-note">Illustrative preview with sample data.</p>
-      </div>
-    </article>
+  <div class="ex" id="ex">
+    <div class="ex-tabs" role="tablist" aria-label="Scoutly tools" aria-orientation="vertical">
+      <button type="button" role="tab" id="exT0" aria-selected="true" aria-controls="exP" style="--c:#6f8dff"><span class="ex-ix">01</span><span class="ex-tx"><b>Keyword Research</b><span>Discover and organise keyword opportunities.</span></span><i class="ex-bar" aria-hidden="true"><i></i></i></button>
+      <button type="button" role="tab" id="exT1" aria-selected="false" aria-controls="exP" tabindex="-1" style="--c:#3ddba5"><span class="ex-ix">02</span><span class="ex-tx"><b>Backlink Manager</b><span>Save, organise, and monitor backlink opportunities.</span></span><i class="ex-bar" aria-hidden="true"><i></i></i></button>
+      <button type="button" role="tab" id="exT2" aria-selected="false" aria-controls="exP" tabindex="-1" style="--c:#a98bff"><span class="ex-ix">03</span><span class="ex-tx"><b>Rank Tracking</b><span>Keep track of keyword performance.</span></span><i class="ex-bar" aria-hidden="true"><i></i></i></button>
+      <button type="button" role="tab" id="exT3" aria-selected="false" aria-controls="exP" tabindex="-1" style="--c:#f5b53d"><span class="ex-ix">04</span><span class="ex-tx"><b>Website Audit</b><span>Identify technical SEO issues.</span></span><i class="ex-bar" aria-hidden="true"><i></i></i></button>
+      <button type="button" role="tab" id="exT4" aria-selected="false" aria-controls="exP" tabindex="-1" style="--c:#4fd1e8"><span class="ex-ix">05</span><span class="ex-tx"><b>Competitor Analysis</b><span>Understand competitor strategies and opportunities.</span></span><i class="ex-bar" aria-hidden="true"><i></i></i></button>
+      <button type="button" role="tab" id="exT5" aria-selected="false" aria-controls="exP" tabindex="-1" style="--c:#5ac8fa"><span class="ex-ix">06</span><span class="ex-tx"><b>SEO Dashboard</b><span>Bring your important SEO insights together.</span></span><i class="ex-bar" aria-hidden="true"><i></i></i></button>
+    </div>
+    <div class="ex-stage" id="exP" role="tabpanel" aria-labelledby="exT0">
+      <div class="ex-v on" style="--c:#6f8dff"><div class="ex-hd"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span><div><b>Keyword Research</b><br><em>Illustrative preview</em></div><a href="keyword-research/">Explore keywords <span aria-hidden="true">→</span></a></div><div class="ex-art"><span class="xk" style="--x:30%;--y:40%;--s:168px;--c:#f5b53d;--dl:0s"><b>seo management tool</b><small>2.4k/mo</small></span><span class="xk" style="--x:60%;--y:30%;--s:142px;--c:#3ddba5;--dl:-1.2s"><b>backlink tracker</b><small>1.9k/mo</small></span><span class="xk" style="--x:79%;--y:62%;--s:124px;--c:#ff8a8d;--dl:-2.4s"><b>rank tracking software</b><small>1.3k/mo</small></span><span class="xk" style="--x:52%;--y:70%;--s:132px;--c:#3ddba5;--dl:-3.6s"><b>seo dashboard</b><small>1.6k/mo</small></span><span class="xk" style="--x:17%;--y:76%;--s:100px;--c:#f5b53d;--dl:-4.8s"><b>site audit tool</b><small>880/mo</small></span><span class="xk" style="--x:88%;--y:22%;--s:90px;--c:#3ddba5;--dl:-1.8s"><b>keyword gap</b><small>720/mo</small></span><span class="xk" style="--x:11%;--y:22%;--s:84px;--c:#3ddba5;--dl:-3s"><b>seo workspace</b><small>590/mo</small></span><p class="xk-leg"><span style="--c:#3ddba5">Easy</span><span style="--c:#f5b53d">Medium</span><span style="--c:#ff8a8d">Hard</span></p><p class="ex-note">Bubble size: monthly searches · sample data</p></div></div>
+      <div class="ex-v" style="--c:#3ddba5"><div class="ex-hd"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg></span><div><b>Backlink Manager</b><br><em>Illustrative preview</em></div><a href="backlinks.html">Open the manager <span aria-hidden="true">→</span></a></div><div class="ex-art xn"><svg viewBox="0 0 100 100" preserveAspectRatio="none"><line x1="50" y1="50" x2="18" y2="22" style="--c:#3ddba5" vector-effect="non-scaling-stroke"/><line x1="50" y1="50" x2="80" y2="16" style="--c:#f5b53d" vector-effect="non-scaling-stroke"/><line x1="50" y1="50" x2="87" y2="54" style="--c:#3ddba5" vector-effect="non-scaling-stroke"/><line x1="50" y1="50" x2="74" y2="88" style="--c:#ff8a8d" vector-effect="non-scaling-stroke"/><line x1="50" y1="50" x2="24" y2="86" style="--c:#f5b53d" vector-effect="non-scaling-stroke"/><line x1="50" y1="50" x2="11" y2="52" style="--c:#3ddba5" vector-effect="non-scaling-stroke"/></svg><span class="xn-n" style="--x:18%;--y:22%;--c:#3ddba5">industry-blog.example</span><span class="xn-n" style="--x:80%;--y:16%;--c:#f5b53d">partner-site.example</span><span class="xn-n" style="--x:87%;--y:54%;--c:#3ddba5">news-site.example</span><span class="xn-n" style="--x:74%;--y:88%;--c:#ff8a8d">old-directory.example</span><span class="xn-n" style="--x:24%;--y:86%;--c:#f5b53d">guest-post.example</span><span class="xn-n" style="--x:11%;--y:52%;--c:#3ddba5">seo-weekly.example</span><div class="xn-me"><b>184</b><span>backlinks<br>+12 this week</span></div><p class="ex-note">Live · pending · lost · sample data</p></div></div>
+      <div class="ex-v" style="--c:#a98bff"><div class="ex-hd"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><div><b>Rank Tracking</b><br><em>Illustrative preview</em></div><a href="position-tracking.html">Open rank tracking <span aria-hidden="true">→</span></a></div><div class="ex-art xr2"><svg viewBox="0 0 600 260" preserveAspectRatio="none"><defs><linearGradient id="xrA" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#a98bff" stop-opacity=".4"/><stop offset="1" stop-color="#a98bff" stop-opacity="0"/></linearGradient><linearGradient id="xrL" x1="0" x2="1"><stop offset="0" stop-color="#2f5bff"/><stop offset=".6" stop-color="#a98bff"/><stop offset="1" stop-color="#5ac8fa"/></linearGradient></defs><path class="gl" d="M40 20H600M40 90H600M40 160H600M40 230H600"/><path class="ar" d="M40 230 C110 222 160 210 220 196 S320 160 380 132 S480 70 530 52 S585 30 600 24 L600 260 L40 260Z"/><path class="ln" pathLength="1" d="M40 230 C110 222 160 210 220 196 S320 160 380 132 S480 70 530 52 S585 30 600 24"/></svg><p class="xr2-y"><span>#1</span><span>#10</span><span>#20</span><span>#30</span></p><p class="xr2-pin"><small>Avg. position · Apr</small>#3 ▲ 11</p><p class="xr2-tiers"><span><b>12</b>Top 3</span><span><b>48</b>Top 10</span><span><b>162</b>Top 100</span></p></div></div>
+      <div class="ex-v" style="--c:#f5b53d"><div class="ex-hd"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></span><div><b>Website Audit</b><br><em>Illustrative preview</em></div><a href="website-seo-audit/">Explore the audit <span aria-hidden="true">→</span></a></div><div class="ex-art"><div class="xa"><div class="xa-ring"><svg viewBox="0 0 44 44"><defs><linearGradient id="xaG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f5b53d"/><stop offset="1" stop-color="#3ddba5"/></linearGradient></defs><circle cx="22" cy="22" r="19"/><circle class="v" cx="22" cy="22" r="19" pathLength="100"/></svg><b>92<small>Site health</small></b></div><ul class="xa-bars"><li style="--c:#3ddba5;--w:96%">Crawlability<b>96</b><i></i></li><li style="--c:#5ac8fa;--w:88%">On-page SEO<b>88</b><i></i></li><li style="--c:#f5b53d;--w:74%">Performance<b>74</b><i></i></li><li style="--c:#a98bff;--w:91%">Internal links<b>91</b><i></i></li></ul></div><p class="ex-note">Sample data</p></div></div>
+      <div class="ex-v" style="--c:#4fd1e8"><div class="ex-hd"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.2"/></svg></span><div><b>Competitor Analysis</b><br><em>Illustrative preview</em></div><a href="competitor-analysis/">Explore competitors <span aria-hidden="true">→</span></a></div><div class="ex-art"><div class="xc"><svg viewBox="0 0 360 290"><circle cx="135" cy="160" r="105" fill="rgba(47,91,255,.42)"/><circle cx="238" cy="118" r="88" fill="rgba(79,209,232,.32)"/><circle cx="230" cy="208" r="72" fill="rgba(169,139,255,.32)"/><text x="105" y="168">You</text><text x="268" y="98">Rival one</text><text x="252" y="238">Rival two</text></svg><div><p class="xc-gap">37</p><p>keyword gaps your rivals rank for, and you don’t yet</p><ul><li style="--c:#2f5bff">yourwebsite.com · 412 keywords</li><li style="--c:#4fd1e8">rival-one.example · 538 keywords</li><li style="--c:#a98bff">rival-two.example · 301 keywords</li></ul></div></div><p class="ex-note">Sample data</p></div></div>
+      <div class="ex-v" style="--c:#5ac8fa"><div class="ex-hd"><span class="bx-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9" rx="1.5"/><rect x="14" y="3" width="7" height="5" rx="1.5"/><rect x="14" y="12" width="7" height="9" rx="1.5"/><rect x="3" y="16" width="7" height="5" rx="1.5"/></svg></span><div><b>SEO Dashboard</b><br><em>Illustrative preview</em></div><a href="dashboard.html">Open the dashboard <span aria-hidden="true">→</span></a></div><div class="ex-art"><div class="xd"><div class="w3" style="--c:#5ac8fa"><span>Search visibility</span><b>68%</b><em>▲ 4.2 this month</em><svg viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 24 L15 22 L30 25 L45 16 L60 18 L75 10 L90 11 L100 4"/></svg></div><div class="w3" style="--c:#6f8dff"><span>Keywords tracked</span><b>248</b><em>▲ 32 new</em><svg viewBox="0 0 100 30" preserveAspectRatio="none"><path d="M0 26 L15 23 L30 20 L45 21 L60 14 L75 15 L90 8 L100 6"/></svg></div><div class="w2" style="--c:#3ddba5"><span>Backlinks</span><b>184</b><em>▲ 12</em></div><div class="w2" style="--c:#a98bff"><span>Avg. position</span><b>8.4</b><em>▲ 2.1</em></div><div class="w2" style="--c:#f5b53d"><span>Site health</span><b>92</b><em>▲ 3</em></div></div><p class="ex-note">Sample data</p></div></div>
+    </div>
   </div>
   <p class="fine" data-rv>Scoutly is in early access. Each tool page explains how it works, what data it relies on and where it stands today. See the <a href="about/#product-status">product status overview</a>.</p>
 </div></section>
@@ -1257,8 +1251,15 @@ function tunnel(p){var W=field.clientWidth,H=field.clientHeight;
 var hz=$('who'),track=$('hzTrack');
 function horizontal(){if(innerWidth<961){track.style.transform='';return}var p=prog(hz),max=track.scrollWidth-track.clientWidth;track.style.transform='translate3d('+(-max*ss(.05,.92,p)).toFixed(1)+'px,0,0)'}
 
-/* ---------- 5. ecosystem: a soft spotlight follows the pointer across each tool card ---------- */
-q('.bx').forEach(function(b){b.addEventListener('pointermove',function(e){var r=b.getBoundingClientRect();b.style.setProperty('--mx',(e.clientX-r.left).toFixed(0)+'px');b.style.setProperty('--my',(e.clientY-r.top).toFixed(0)+'px')},{passive:true})});
+/* ---------- 5. ecosystem: the explorer advances on its own while in view; a click or an arrow key hands control to the tabs ---------- */
+var exEl=$('ex'),exTabs=q('[role="tab"]',exEl),exVs=q('.ex-v',exEl),exP=$('exP'),exI=0,exManual=false;
+function exGo(n,focus){exI=n;exTabs.forEach(function(t,i){t.setAttribute('aria-selected',i===n);t.tabIndex=i===n?0:-1});
+  exVs.forEach(function(v,i){v.classList.toggle('on',i===n)});exP.setAttribute('aria-labelledby',exTabs[n].id);if(focus)exTabs[n].focus()}
+function exTake(n,focus){exManual=true;exEl.classList.remove('play');exGo(n,focus)}
+exTabs.forEach(function(t,i){t.addEventListener('click',function(){exTake(i)})});
+q('.ex-tabs',exEl)[0].addEventListener('keydown',function(e){var k={ArrowDown:1,ArrowRight:1,ArrowUp:-1,ArrowLeft:-1}[e.key];if(!k)return;e.preventDefault();exTake((exI+k+exTabs.length)%exTabs.length,true)});
+exEl.addEventListener('animationend',function(e){if(e.animationName==='exfill')exGo((exI+1)%exTabs.length)});
+if('IntersectionObserver' in window)new IntersectionObserver(function(es){exEl.classList.toggle('play',es[0].isIntersecting&&!exManual&&!RM)},{threshold:.3}).observe(exEl);
 
 /* ---------- footer: the wordmark lights up under the cursor; on touch it sweeps by itself ---------- */
 var ftEl=$('ft'),ftMark=$('ftMark'),ftC=$('ftC'),ftX=-300,ftY=95,ftTX=-300,ftTY=95,ftHover=false,ftVis=false;
