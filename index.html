@@ -401,48 +401,70 @@ code{font:400 12.5px var(--M)}
 .js .pb-steps li:not(.on){color:var(--mu)}
 .js .pb-steps li:not(.on) .ic{background:#fff;color:var(--mu);box-shadow:inset 0 0 0 1px var(--ln)}
 .js .pb-steps li.on .ic{transform:rotate(-6deg) scale(1.06)}
-@media(min-width:961px){.pb-steps li{min-height:118px}.pb-end{padding-bottom:170px}}
+@media(min-width:961px){.pb-steps li{min-height:118px}.pb-end{padding-bottom:250px}}
 .pb-end{margin-top:56px}
 .pb-q{font:600 clamp(36px,4.3vw,66px)/1 var(--D);letter-spacing:-.04em;text-transform:uppercase;color:var(--ink)}
 .pb-q em{font-style:normal;background:linear-gradient(100deg,#e5484d 0%,#f5a524 45%,#e5484d 90%);background-size:240% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:hxsheen 7s linear infinite}
 .pb-tx{max-width:500px;margin-top:20px;font:400 18px/1.6 var(--T);color:var(--sl)}
 .pb-vis{position:sticky;top:110px}
 .pb-cap{margin-top:14px;font:400 12px/1.5 var(--M);color:var(--mu);text-align:center}
-.desk{position:relative;height:clamp(440px,38vw,540px);border-radius:18px;overflow:hidden;background:radial-gradient(60% 50% at 70% 30%,rgba(47,91,255,.08),transparent 70%),linear-gradient(180deg,#f8f9fc,#e8ecf5);border:1px solid var(--ln);box-shadow:0 50px 100px -50px rgba(10,26,74,.45)}
-.desk-tabs{display:flex;gap:3px;padding:9px 9px 0;background:#dde3ee}
-.desk-tabs span{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:6px;padding:8px;border-radius:8px 8px 0 0;background:#e8ecf3;font:500 10.5px/1 var(--T);color:var(--sl);white-space:nowrap;overflow:hidden;transition:background .35s,color .35s}
-.desk-tabs span i{flex:none;width:9px;height:9px;border-radius:3px;background:var(--c)}
-.desk-tabs span.on{background:#f8f9fc;color:var(--ink)}
-.desk-n{position:absolute;right:12px;bottom:12px;z-index:9;display:inline-flex;align-items:center;gap:7px;padding:7px 11px;border-radius:999px;background:var(--nv);color:#fff;font:500 11px/1 var(--M);box-shadow:0 12px 26px -12px rgba(5,10,31,.8)}
-.desk-n i{width:6px;height:6px;border-radius:50%;background:var(--cr);animation:hxping 2s ease-out infinite}
-.pw{position:absolute;left:var(--x);top:var(--y);width:var(--w);border-radius:12px;background:#fff;border:1px solid rgba(10,26,74,.1);box-shadow:0 24px 50px -26px rgba(10,26,74,.5);transform:rotate(var(--r));transition:transform .65s cubic-bezier(.2,.8,.2,1),opacity .5s,filter .5s,box-shadow .5s}
-.pw-h{display:flex;align-items:center;gap:8px;padding:9px 12px;border-bottom:1px solid rgba(10,26,74,.07);border-radius:12px 12px 0 0;background:linear-gradient(180deg,#fff,#f6f8fb);font:500 11px/1 var(--M);color:var(--sl);white-space:nowrap;overflow:hidden}
-.pw-h i{flex:none;width:10px;height:10px;border-radius:3px;background:var(--c)}
-.pw-b{padding:12px}
-.pw-search{display:flex;align-items:center;height:30px;padding:0 10px;border-radius:7px;border:1px solid rgba(10,26,74,.12);font:400 12px/1 var(--T);color:var(--ink)}
-.pw-search span{width:1.5px;height:14px;margin-left:2px;background:var(--b);animation:hxblink 1s steps(1) infinite}
 @keyframes hxblink{50%{opacity:0}}
-.pw-rows{margin-top:8px}.pw-rows li{display:flex;justify-content:space-between;gap:10px;padding:6px 2px;border-top:1px solid rgba(10,26,74,.06);font:400 11.5px/1.2 var(--T);color:var(--sl)}.pw-rows b{font:500 11px/1 var(--M);color:var(--ink)}
-.pw-sheet{display:grid;grid-template-columns:22px repeat(3,minmax(0,1fr));font:400 10.5px/1 var(--M);color:var(--sl)}
-.pw-sheet span{padding:7px 6px;border-right:1px solid rgba(10,26,74,.07);border-bottom:1px solid rgba(10,26,74,.07);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.pw-sheet .xh,.pw-sheet .rn{background:#eef3ef;color:#4b6b57;text-align:center}
-.pw-sheet .bad{background:rgba(229,72,77,.08);color:var(--cr)}.pw-sheet .q{color:#b97600}
-.pw-chart svg{display:block;width:100%;height:70px;overflow:visible}.pw-chart path{fill:none;stroke:#7a5cff;stroke-width:2;stroke-linejoin:round;vector-effect:non-scaling-stroke}
-.pw-chart p{display:flex;justify-content:space-between;margin-top:8px;font:400 11px/1 var(--M);color:var(--mu)}.pw-chart b{color:var(--ink);font-weight:500}
-.pw-warn{display:inline-flex;padding:5px 8px;border-radius:6px;background:rgba(245,165,36,.14);font:600 11px/1 var(--M);color:#b97600}
-.pw-ln{display:block;width:var(--w);height:7px;margin-top:9px;border-radius:4px;background:linear-gradient(90deg,#e3e8f2,#eef1f7)}
-/* the active tool comes forward; the rest blur back */
-.js .desk .pw{opacity:.6;filter:saturate(.5) blur(.5px)}
-.js .desk .pw.on{z-index:5;opacity:1;filter:none;transform:rotate(0deg) translateY(-8px) scale(1.04);box-shadow:0 0 0 2px var(--c),0 40px 70px -30px rgba(10,26,74,.55)}
-.js .desk.chaos .pw{opacity:1;filter:none;animation:pwjolt 2.8s ease-in-out infinite;animation-delay:var(--dl,0s)}
-@keyframes pwjolt{0%,100%{translate:0 0}25%{translate:-4px 3px}50%{translate:3px -4px}75%{translate:-2px -2px}}
+/* the tangle: you in the middle, four tools around you, and the lines you keep running between them.
+   Each statement lights its tool and its line (data-i matches data-pb); "Sound familiar?" turns the whole knot red */
+.desk{position:relative;aspect-ratio:600/520;border-radius:22px;overflow:hidden;background:radial-gradient(45% 40% at 50% 52%,rgba(47,91,255,.1),transparent 70%),linear-gradient(180deg,#f8f9fc,#e9edf6);border:1px solid var(--ln);box-shadow:0 50px 100px -50px rgba(10,26,74,.45)}
+.desk:before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(10,26,74,.12) 1px,transparent 1.2px);background-size:22px 22px;-webkit-mask-image:radial-gradient(70% 70% at 50% 50%,#000,transparent);mask-image:radial-gradient(70% 70% at 50% 50%,#000,transparent);pointer-events:none}
+.sw-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.sw-p,.sw-x{fill:none;stroke-linecap:round;transition:stroke .45s,stroke-width .45s,opacity .45s}
+.sw-p{stroke:rgba(10,26,74,.2);stroke-width:2;stroke-dasharray:4 7}
+.sw-x{stroke:rgba(229,72,77,.5);stroke-width:1.6;stroke-dasharray:3 6;opacity:0}
+.sw-p.on{stroke:var(--c);stroke-width:3.2;stroke-dasharray:12 9;filter:drop-shadow(0 0 5px var(--c));animation:swflow .9s linear infinite}
+.desk.chaos .sw-p{stroke:var(--cr);stroke-width:2.6;stroke-dasharray:10 8;filter:none;animation:swflow .55s linear infinite}
+.desk.chaos .sw-x{opacity:1;animation:swflow .8s linear infinite reverse}
+@keyframes swflow{to{stroke-dashoffset:-42}}
+.sw-me{position:absolute;left:50%;top:52%;z-index:3;display:grid;place-items:center;width:92px;height:92px;margin:-46px;border-radius:50%;background:var(--nv);color:#fff;box-shadow:0 20px 40px -16px rgba(5,10,31,.7),0 0 0 8px rgba(255,255,255,.7);text-align:center}
+.sw-me b{display:block;font:600 18px/1 var(--D);letter-spacing:-.01em}
+.sw-me small{display:block;margin-top:5px;font:500 9px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--sky);transition:color .4s}
+.sw-ring{position:absolute;inset:-14px;border:1.5px dashed rgba(47,91,255,.45);border-radius:50%;animation:orbspin 14s linear infinite;transition:border-color .4s}
+.desk.chaos .sw-ring{border-color:rgba(229,72,77,.7);animation-duration:2.4s}
+.desk.chaos .sw-me small{color:#ff8a8d}
+.sw-t{position:absolute;left:var(--x);top:var(--y);z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;width:150px;transform:translate(-50%,-50%);text-align:center;transition:opacity .5s,filter .5s,transform .6s cubic-bezier(.2,1.3,.4,1)}
+.sw-t p b{display:block;font:600 13.5px/1.2 var(--T);color:var(--ink)}
+.sw-t p span{display:block;margin-top:4px;font:500 10.5px/1 var(--M);color:var(--mu)}
+.sw-art{position:relative;display:grid;place-items:center;width:96px;height:96px;border-radius:26px;background:#fff;border:1px solid rgba(10,26,74,.08);box-shadow:0 22px 40px -22px rgba(10,26,74,.55);transition:box-shadow .5s}
+.js .desk .sw-t{opacity:.5;filter:saturate(.35)}
+.js .desk .sw-t.on{opacity:1;filter:none;transform:translate(-50%,-50%) scale(1.1)}
+.js .desk .sw-t.on .sw-art{box-shadow:0 0 0 3px var(--c),0 26px 46px -20px var(--c)}
+.js .desk.chaos .sw-t{opacity:1;filter:none;transform:translate(-50%,-50%);animation:swjolt 2.6s ease-in-out infinite;animation-delay:var(--dl,0s)}
+@keyframes swjolt{0%,100%{translate:0 0}25%{translate:-5px 3px}50%{translate:4px -4px}75%{translate:-2px -3px}}
+/* tool art */
+.a-kw{width:58px;height:58px;border-radius:18px;background:linear-gradient(145deg,#4d74ff,#1f45d6);display:grid;place-items:center}
+.a-kw svg{width:30px;height:30px;fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round}
+.a-chip{position:absolute;padding:4px 7px;border-radius:999px;background:#fff;border:1px solid rgba(10,26,74,.1);box-shadow:0 8px 16px -10px rgba(10,26,74,.5);font:500 9.5px/1 var(--M);color:var(--sl);white-space:nowrap}
+.a-chip.c1{right:-34px;top:8px}.a-chip.c2{left:-30px;bottom:10px;color:#2f5bff}
+.a-file{position:absolute;width:42px;height:54px;border-radius:7px 14px 7px 7px;background:#fff;border:1.5px solid #17a673;box-shadow:0 8px 16px -10px rgba(10,26,74,.5);display:grid;place-items:end center;padding-bottom:7px}
+.a-file:before{content:"";position:absolute;right:-1px;top:-1px;width:13px;height:13px;border-radius:0 12px 0 5px;background:#c9ecdc}
+.a-file i{font:700 8px/1 var(--M);font-style:normal;color:#fff;background:#17a673;padding:3px 4px;border-radius:3px}
+.a-file.f1{transform:translate(-20px,4px) rotate(-14deg);opacity:.7}.a-file.f2{transform:translate(0,-2px) rotate(-2deg);opacity:.85}.a-file.f3{transform:translate(20px,4px) rotate(12deg)}
+.a-file.f3:after{content:"?";position:absolute;right:-9px;top:-9px;display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--wa);color:#fff;font:700 10px/1 var(--M)}
+.a-rk{width:66px}
+.a-rk svg{display:block;width:66px;height:40px;overflow:visible}.a-rk path{fill:none;stroke:#7a5cff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
+.a-rk b{display:block;margin-top:6px;font:600 11px/1 var(--M);color:#7a5cff}
+.a-doc{position:relative;width:50px;height:62px;border-radius:7px;background:#fff7e8;border:1.5px solid #f5a524;padding:16px 8px 0}
+.a-doc:before{content:"PDF";position:absolute;left:6px;top:5px;font:700 7.5px/1 var(--M);color:#b97600}
+.a-doc i{display:block;height:4px;margin-bottom:5px;border-radius:2px;background:#f3d9a8}.a-doc i:nth-child(2){width:70%}.a-doc i:nth-child(3){width:85%}
+.a-doc b{position:absolute;right:-12px;top:-10px;display:grid;place-items:center;min-width:24px;height:24px;padding:0 5px;border-radius:999px;background:var(--cr);color:#fff;font:700 10.5px/1 var(--M);box-shadow:0 6px 14px -6px var(--cr)}
+.desk-n{position:absolute;left:50%;top:14px;z-index:9;display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;background:var(--nv);color:rgba(214,224,255,.8);font:500 11px/1 var(--M);white-space:nowrap;transform:translateX(-50%);box-shadow:0 12px 26px -12px rgba(5,10,31,.8)}
+.desk-n b{color:#fff}
+.desk-n i{width:6px;height:6px;border-radius:50%;background:var(--cr);animation:hxping 2s ease-out infinite}
 .desk-toast{position:absolute;z-index:8;display:flex;align-items:center;gap:9px;padding:10px 14px 10px 10px;border-radius:11px;background:var(--nv);color:#fff;font:500 12.5px/1 var(--T);white-space:nowrap;box-shadow:0 24px 44px -20px rgba(5,10,31,.8);opacity:0;transform:translateY(10px) scale(.94);transition:opacity .4s,transform .5s cubic-bezier(.2,1.4,.4,1)}
 .desk-toast:before{content:"!";display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--cr);font:700 11px/1 var(--M)}
-.desk-toast.t1{left:8%;top:40%}.desk-toast.t2{right:6%;top:24%;transition-delay:.25s}.desk-toast.t3{left:24%;bottom:12%;transition-delay:.5s}
+.desk-toast.t1{left:50%;top:22%;translate:-50% 0}.desk-toast.t2{right:4%;top:47%;transition-delay:.25s}.desk-toast.t3{left:4%;top:61%;transition-delay:.5s}
 .desk.chaos .desk-toast{opacity:1;transform:none}
-@media(max-width:960px){.pb .two{grid-template-columns:minmax(0,1fr)}.pb-vis{position:relative;top:0;margin-top:8px}.desk{height:440px}}
-@media(max-width:600px){.desk{height:400px}.pw{--w:78%!important}.pw[data-i="1"],.pw[data-i="3"]{left:auto!important;right:4%}.desk-tabs span:nth-child(n+5){display:none}.desk-toast.t2{display:none}}
-@media(prefers-reduced-motion:reduce){.pb-q em{animation:none}.js .desk.chaos .pw{animation:none}}
+@media(max-width:960px){.pb .two{grid-template-columns:minmax(0,1fr)}.pb-vis{position:relative;top:0;margin-top:8px}}
+@media(max-width:600px){.desk{aspect-ratio:auto;height:420px}.sw-t{width:110px;gap:7px}.sw-art{width:70px;height:70px;border-radius:20px}.sw-art>*{scale:.75}.sw-t p b{font-size:12px}.sw-t p span{display:none}.a-chip{display:none}
+  .sw-me{width:72px;height:72px;margin:-36px}.sw-me b{font-size:15px}.desk-toast{font-size:11px;padding:8px 11px 8px 8px}.desk-toast.t2,.desk-toast.t3,.desk-n{display:none}}
+@media(prefers-reduced-motion:reduce){.sw-p.on,.desk.chaos .sw-p,.desk.chaos .sw-x,.sw-ring,.js .desk.chaos .sw-t{animation:none}}
+@media(prefers-reduced-motion:reduce){.pb-q em{animation:none}}
 /* ===== the turning point: pinned; the question lights word by word, then Scoutly appears and its six tools settle into orbit ===== */
 .tp{position:relative;background:var(--nv);color:#fff}
 .js .tp{height:300vh}
@@ -825,29 +847,38 @@ requestAnimationFrame(frame);
   </div>
   <div class="pb-vis" data-rv>
     <div class="desk" id="desk" aria-hidden="true">
-      <div class="desk-tabs"><span data-t="0" style="--c:#2f5bff"><i></i>Keyword tool</span><span data-t="1" style="--c:#17a673"><i></i>backlinks_FINAL_v3</span><span data-t="2" style="--c:#7a5cff"><i></i>Rank tracker</span><span data-t="3" style="--c:#f5a524"><i></i>Audit report</span><span style="--c:#9aa6c4"><i></i>Client notes</span><span style="--c:#9aa6c4"><i></i>Reporting</span><span style="--c:#9aa6c4"><i></i>Untitled</span></div>
-      <div class="pw" data-i="0" style="--x:4%;--y:62px;--w:54%;--r:-3deg;--c:#2f5bff;--dl:0s">
-        <p class="pw-h"><i></i>keyword-tool · tab 3</p>
-        <div class="pw-b"><p class="pw-search">seo management<span></span></p><ul class="pw-rows"><li>seo management tool<b>2.4k</b></li><li>seo dashboard<b>1.6k</b></li><li>seo workspace<b>880</b></li></ul></div>
+      <svg class="sw-svg" viewBox="0 0 600 520" preserveAspectRatio="none">
+        <path class="sw-x" d="M114 104 C30 210 200 320 108 426"/>
+        <path class="sw-x" d="M486 99 C570 210 400 320 492 416"/>
+        <path class="sw-x" d="M114 104 C250 170 360 20 486 99"/>
+        <path class="sw-p" data-i="0" style="--c:#2f5bff" d="M300 270 C420 208 372 42 240 73 S132 156 114 104"/>
+        <path class="sw-p" data-i="1" style="--c:#17a673" d="M300 270 C168 229 204 52 348 62 S456 146 486 99"/>
+        <path class="sw-p" data-i="2" style="--c:#7a5cff" d="M300 270 C444 322 360 499 240 458 S144 395 108 426"/>
+        <path class="sw-p" data-i="3" style="--c:#f5a524" d="M300 270 C156 333 216 489 360 468 S468 374 492 416"/>
+      </svg>
+      <div class="sw-me"><span class="sw-ring"></span><div><b>You</b><small>Switching</small></div></div>
+      <div class="sw-t" data-i="0" style="--x:19%;--y:20%;--c:#2f5bff;--dl:0s">
+        <div class="sw-art"><span class="a-kw"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/></svg></span><span class="a-chip c1">seo tool</span><span class="a-chip c2">+42 ideas</span></div>
+        <p><b>Keyword tool</b><span>Login #1</span></p>
       </div>
-      <div class="pw" data-i="1" style="--x:41%;--y:86px;--w:56%;--r:3deg;--c:#17a673;--dl:-.7s">
-        <p class="pw-h"><i></i>backlinks_FINAL_v3.xlsx</p>
-        <div class="pw-sheet"><span class="xh"></span><span class="xh">A</span><span class="xh">B</span><span class="xh">C</span><span class="rn">1</span><span>blog-one.example</span><span>live</span><span></span><span class="rn">2</span><span>partner.example</span><span class="bad">lost?</span><span class="q">check??</span><span class="rn">3</span><span>directory.example</span><span>live</span><span class="q">follow up</span><span class="rn">4</span><span>news-site.example</span><span class="bad">404</span><span></span></div>
+      <div class="sw-t" data-i="1" style="--x:81%;--y:19%;--c:#17a673;--dl:-.6s">
+        <div class="sw-art"><span class="a-file f1"><i>v1</i></span><span class="a-file f2"><i>v2</i></span><span class="a-file f3"><i>FINAL</i></span></div>
+        <p><b>Spreadsheets</b><span>3 versions</span></p>
       </div>
-      <div class="pw" data-i="2" style="--x:6%;--y:55%;--w:46%;--r:2.5deg;--c:#7a5cff;--dl:-1.4s">
-        <p class="pw-h"><i></i>rank-tracker · another login</p>
-        <div class="pw-b pw-chart"><svg viewBox="0 0 200 70" preserveAspectRatio="none"><path d="M0 50 L25 44 L50 54 L75 38 L100 48 L125 30 L150 42 L175 26 L200 34"/></svg><p><span>Position</span><b>14 → 11</b></p></div>
+      <div class="sw-t" data-i="2" style="--x:18%;--y:82%;--c:#7a5cff;--dl:-1.2s">
+        <div class="sw-art"><span class="a-rk"><svg viewBox="0 0 66 40"><path d="M2 30 L14 24 L24 32 L36 16 L46 22 L56 8 L64 14"/></svg><b>#14 → #11</b></span></div>
+        <p><b>Rank tracker</b><span>Login #2</span></p>
       </div>
-      <div class="pw" data-i="3" style="--x:50%;--y:51%;--w:46%;--r:-4deg;--c:#f5a524;--dl:-2.1s">
-        <p class="pw-h"><i></i>audit-report-march.pdf</p>
-        <div class="pw-b"><p class="pw-warn">⚠ 37 issues found</p><span class="pw-ln" style="--w:92%"></span><span class="pw-ln" style="--w:74%"></span><span class="pw-ln" style="--w:84%"></span><span class="pw-ln" style="--w:56%"></span></div>
+      <div class="sw-t" data-i="3" style="--x:82%;--y:80%;--c:#f5a524;--dl:-1.8s">
+        <div class="sw-art"><span class="a-doc"><i></i><i></i><i></i><b>37</b></span></div>
+        <p><b>Audit platform</b><span>Login #3</span></p>
       </div>
       <p class="desk-toast t1">Which spreadsheet is the latest?</p>
-      <p class="desk-toast t2">Session expired · log in again</p>
-      <p class="desk-toast t3">Did anyone update the rankings?</p>
-      <span class="desk-n"><i></i><b id="deskN">7</b>&nbsp;tabs open</span>
+      <p class="desk-toast t2">Session expired</p>
+      <p class="desk-toast t3">Rankings not updated</p>
+      <span class="desk-n"><i></i><b>4</b>&nbsp;tools · <b>3</b>&nbsp;logins · <b>0</b>&nbsp;shared view</span>
     </div>
-    <p class="pb-cap">Illustration: one SEO week, spread across four tools.</p>
+    <p class="pb-cap">Illustration: a typical SEO workflow, tangled across four tools.</p>
   </div>
 </div></section>
 
@@ -1207,7 +1238,7 @@ function cvAt(p){
 function heroIntro(){hx.classList.add('hx-in')}
 
 /* ---------- 2. the problem: each statement brings its tool forward; "Sound familiar?" lets them all pile up ---------- */
-var desk=$('desk'),pbSteps=q('[data-pb]'),pws=q('.pw',desk),dTabs=q('[data-t]',desk),pbOn=-1,pbAuto=null;
+var desk=$('desk'),pbSteps=q('[data-pb]'),pws=q('.sw-t',desk),dTabs=q('.sw-p',desk),pbOn=-1,pbAuto=null;
 function pbSet(n){if(n===pbOn)return;pbOn=n;desk.classList.toggle('chaos',n>=4);
   pws.forEach(function(w,i){w.classList.toggle('on',i===n)});dTabs.forEach(function(t,i){t.classList.toggle('on',i===n)});
   pbSteps.forEach(function(s){var i=+s.dataset.pb;s.classList.toggle('on',i===n||(n>=4&&i<4))})}
