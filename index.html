@@ -477,17 +477,27 @@ html:not(.js) .ax-lines li,.ax.ax-static .ax-lines li{position:static;grid-area:
 @media(prefers-reduced-motion:reduce){.ax.chaos .ax-app,.ax.chaos .ax-win{animation:none}}
 /* ===== the turning point: pinned; the question lights word by word, then Scoutly appears and its six tools settle into orbit ===== */
 .tp{position:relative;background:var(--nv);color:#fff}
-.js .tp{height:300vh}
+.js .tp{height:440vh}
 .tp-pin{position:relative;height:100vh;height:100svh;min-height:620px;overflow:hidden;display:grid;place-items:center;text-align:center}
 .js .tp-pin{position:sticky;top:0}
 .tp-pin:before{content:"";position:absolute;inset:0;background:radial-gradient(45% 45% at 50% 50%,rgba(47,91,255,.24),transparent 70%),radial-gradient(30% 30% at 80% 20%,rgba(122,92,255,.14),transparent 70%)}
 .tp-pin:after{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(127,160,255,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(127,160,255,.06) 1px,transparent 1px);background-size:64px 64px;background-position:center;-webkit-mask-image:radial-gradient(45% 50% at 50% 50%,#000,transparent);mask-image:radial-gradient(45% 50% at 50% 50%,#000,transparent);pointer-events:none}
 .tp-a,.tp-b{grid-area:1/1;position:relative;z-index:2;will-change:opacity,transform}
-.tp-a{max-width:1080px;padding:0 24px}
+.tp-a{width:100%;min-width:0;display:flex;flex-direction:column;align-items:center;perspective:1300px;perspective-origin:50% 50%}
+.js .tp-pin{grid-template-columns:minmax(0,1fr)}
+/* the run: one long line that glides across the screen in perspective (transform set by JS) */
+.tp-run{width:100%;min-width:0;contain:inline-size;margin-top:clamp(20px,4vh,40px);text-align:left;overflow:visible;transform:rotateY(-12deg);transform-style:preserve-3d}
+.js .tp-run .tp-q{display:inline-block;margin:0;white-space:nowrap;font-size:clamp(64px,10.5vw,190px);line-height:1.05;will-change:transform}
+/* stat cards that fade in above the line */
+.tp-stats{display:grid;grid-template-columns:repeat(3,minmax(0,220px));margin-top:clamp(18px,3vh,30px);border-left:1px solid rgba(127,160,255,.12)}
+.tp-st{padding:14px 20px 16px;border-right:1px solid rgba(127,160,255,.12);text-align:left;opacity:var(--k,1);transform:translateY(calc((1 - var(--k,1))*18px))}
+.tp-st b{display:block;font:600 clamp(26px,2.4vw,38px)/1 var(--T);letter-spacing:-.02em;color:#fff}.tp-st b i{font-style:normal;color:var(--sky)}
+.tp-st span{display:block;margin-top:8px;font:400 12.5px/1.45 var(--T);color:rgba(214,224,255,.55)}
+@media(max-width:700px){.tp-stats{grid-template-columns:repeat(3,minmax(0,1fr));width:calc(100% - 32px)}.tp-st{padding:10px 10px 12px}.tp-st span{font-size:11px}}
 .tp-q{margin-top:26px;font:600 clamp(34px,5.2vw,86px)/1 var(--D);letter-spacing:-.01em;text-transform:uppercase;color:#fff}
 .tp-q em{font-style:normal}
-.tp-q .tw{color:rgba(214,224,255,.16);transition:color .35s}
-.tp-q .tw.lit{color:#fff}
+.tp-q .tw{color:rgba(214,224,255,.14);transition:color .4s,text-shadow .4s}
+.tp-q .tw.lit{color:#fff;text-shadow:0 0 30px rgba(140,180,255,.35)}
 .tp-q em .tw.lit{color:transparent;background:linear-gradient(100deg,#5ac8fa,#a9bcff 55%,#fff);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 .25em rgba(90,200,250,.45))}
 .tp-hint{display:inline-flex;flex-direction:column;align-items:center;gap:12px;margin-top:44px;font:500 10.5px/1 var(--M);letter-spacing:.16em;text-transform:uppercase;color:rgba(214,224,255,.45)}
 .tp-hint:after{content:"";width:1px;height:44px;background:linear-gradient(var(--sky),transparent);animation:tphint 1.8s ease-in-out infinite;transform-origin:top}
@@ -512,6 +522,7 @@ html:not(.js) .ax-lines li,.ax.ax-static .ax-lines li{position:static;grid-area:
 .tp-static .tp-pin,html:not(.js) .tp-pin{position:relative;height:auto;min-height:0;gap:96px;padding:130px 0}
 .tp-static .tp-a,.tp-static .tp-b,html:not(.js) .tp-a,html:not(.js) .tp-b{grid-area:auto;opacity:1!important;transform:none!important}
 .tp-static .tp-hint,html:not(.js) .tp-hint{display:none}
+.tp-static .tp-q{white-space:normal!important;transform:none!important;text-align:center}.tp-static .tp-run{text-align:center;transform:none;contain:none}
 @media(max-width:960px){.tp-b{grid-template-columns:minmax(0,1fr);gap:20px;justify-items:center;text-align:center;padding:0 20px}.orb{--R:100px}.orb-core{width:88px;height:88px;margin:-44px;border-radius:25px}.orb-c>span{padding:7px 10px 7px 7px;font-size:11px}.orb-c i{width:14px;height:14px}.tp-tx{margin:16px auto 0}}
 @media(max-width:400px){.orb{--R:86px}.orb-c>span{font-size:10.5px}}
 @media(prefers-reduced-motion:reduce){.orb-ring.r2,.tp-hint:after{animation:none}}
@@ -948,7 +959,8 @@ requestAnimationFrame(frame);
   <div class="tp-pin">
     <div class="tp-a" id="tpA">
       <p class="lbl lt">The turning point</p>
-      <h2 class="tp-q" id="tpQ">What if everything you need for SEO was in <em>one place?</em></h2>
+      <div class="tp-stats" aria-hidden="true"><p class="tp-st"><b>6<i> tools</i></b><span>in one workspace</span></p><p class="tp-st"><b>1<i> place</i></b><span>for keywords, links, rankings and audits</span></p><p class="tp-st"><b>0<i> sheets</i></b><span>to keep in sync by hand</span></p></div>
+      <div class="tp-run"><h2 class="tp-q" id="tpQ">What if everything you need for SEO was in <em>one place?</em></h2></div>
       <p class="tp-hint" aria-hidden="true">Keep scrolling</p>
     </div>
     <div class="tp-b" id="tpB">
@@ -1273,16 +1285,24 @@ var tp=$('turn'),tpQ=$('tpQ'),tpA=$('tpA'),tpB=$('tpB'),tpChips=q('.orb-c',tp),t
   ns.forEach(function(t){var f=document.createDocumentFragment();t.nodeValue.split(/(\s+)/).forEach(function(w){if(!w)return;
     if(/^\s+$/.test(w)){f.appendChild(document.createTextNode(w));return}var s=document.createElement('span');s.className='tw';s.textContent=w;f.appendChild(s)});
     t.parentNode.replaceChild(f,t)})})();
-var tpW=q('.tw',tpQ),tpStatic=RM,tpLast={};
+var tpW=q('.tw',tpQ),tpStatic=RM,tpLast={},tpStats=q('.tp-st',tp),tpQW=0,TP_RY=-16;
+/* word centres along the line (measured untransformed), and the line's full width */
+/* layout offsets, so neither the slide nor the stage tilt skews the measurement */
+function tpMeasure(){tpQW=tpQ.offsetWidth;var q0=tpQ.offsetLeft;tpW.forEach(function(w){w.__c=w.offsetLeft-q0+w.offsetWidth/2;w.__l=null})}
+tpMeasure();addEventListener('resize',tpMeasure);if(document.fonts&&document.fonts.ready)document.fonts.ready.then(tpMeasure);
 if(tpStatic){tp.classList.add('tp-static');tpW.forEach(function(w){w.classList.add('lit')})}
 function turn(){if(tpStatic)return;var r=tp.getBoundingClientRect();if(r.bottom<-50||r.top>innerHeight+50)return;var p=prog(tp);
-  var n=Math.round(tpW.length*band(p,.03,.34));if(tpLast.n!==n){tpLast.n=n;tpW.forEach(function(w,i){w.classList.toggle('lit',i<n)})}
-  var x=ss(.4,.52,p);tpA.style.opacity=(1-x).toFixed(3);tpA.style.transform='translateY('+(-60*x).toFixed(1)+'px) scale('+(1-.06*x).toFixed(3)+')';
+  /* the line glides from the right edge until its last word sits left of centre; each word lights as it passes ~60% of the screen */
+  var vw=innerWidth,g=band(p,0,.52),start=vw*.7,end=vw*.42-tpQW,tx=start+(end-start)*g;
+  tpQ.style.transform='translate3d('+tx.toFixed(1)+'px,0,0)';
+  tpW.forEach(function(w){var lit=tx+w.__c<vw*.6;if(w.__l!==lit){w.__l=lit;w.classList.toggle('lit',lit)}});
+  tpStats.forEach(function(st,i){st.style.setProperty('--k',ss(.04+i*.11,.14+i*.11,p).toFixed(3))});
+  var x=ss(.54,.64,p);tpA.style.opacity=(1-x).toFixed(3);tpA.style.transform='translateY('+(-60*x).toFixed(1)+'px) scale('+(1-.06*x).toFixed(3)+')';
   tpB.style.opacity=x.toFixed(3);tpB.style.transform='translateY('+(40*(1-x)).toFixed(1)+'px)';
   tpA.style.visibility=x>=1?'hidden':'';tpB.style.visibility=x<=0?'hidden':'';
-  tpB.style.setProperty('--m',ss(.46,.6,p).toFixed(3));
-  tpChips.forEach(function(c,i){c.style.setProperty('--k',ss(.52+i*.045,.68+i*.045,p).toFixed(3))});
-  tpWhy.style.setProperty('--k',ss(.56,.68,p).toFixed(3));tpTx.style.setProperty('--k',ss(.68,.82,p).toFixed(3))}
+  tpB.style.setProperty('--m',ss(.6,.72,p).toFixed(3));
+  tpChips.forEach(function(c,i){c.style.setProperty('--k',ss(.64+i*.035,.78+i*.035,p).toFixed(3))});
+  tpWhy.style.setProperty('--k',ss(.66,.76,p).toFixed(3));tpTx.style.setProperty('--k',ss(.76,.88,p).toFixed(3))}
 
 /* aurora: slow-moving brand colour fields behind the hero (WebGL, half resolution, paused off-screen) */
 (function(){var cv=$('hxAurora'),gl=cv.getContext('webgl',{antialias:false,alpha:false});if(!gl)return;
