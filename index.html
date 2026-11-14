@@ -319,9 +319,13 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}ul,o
 .mt-art{position:relative;height:clamp(420px,62vh,580px)}
 .mt-words{position:absolute;inset:0 0 0 8px;overflow:hidden;display:flex;flex-direction:column;justify-content:center;-webkit-mask-image:linear-gradient(180deg,transparent,#000 16%,#000 84%,transparent),linear-gradient(90deg,transparent,#000 9%,#000 78%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(180deg,transparent,#000 16%,#000 84%,transparent),linear-gradient(90deg,transparent,#000 9%,#000 78%,transparent);mask-composite:intersect;padding-left:44px}
 .mt-words p{font:600 clamp(44px,min(6vw,9.4vh),104px)/.94 var(--T);letter-spacing:-.045em;white-space:nowrap;background:linear-gradient(90deg,#5ac8fa,#2f5bff 55%,#a98bff);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:var(--o,1);will-change:transform}
-.mt-lens{position:absolute;left:55%;top:48%;z-index:2;width:clamp(170px,19vw,290px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);border:2px solid rgba(255,255,255,.72);background:radial-gradient(circle at 30% 24%,rgba(255,255,255,.38),rgba(255,255,255,.05) 42%,rgba(90,200,250,.08));-webkit-backdrop-filter:blur(1px) brightness(1.8) saturate(1.7) contrast(1.05);backdrop-filter:blur(1px) brightness(1.8) saturate(1.7) contrast(1.05);box-shadow:0 0 0 1px rgba(90,200,250,.4),0 30px 60px -20px rgba(0,0,0,.8),0 0 90px rgba(90,200,250,.35),inset 0 0 44px rgba(90,200,250,.3);pointer-events:none}
+.mt-lens{position:absolute;left:42%;top:50%;z-index:3;width:clamp(170px,17vw,260px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);border:2px solid rgba(255,255,255,.85);background:radial-gradient(circle at 30% 22%,rgba(255,255,255,.22),transparent 38%),radial-gradient(circle at 70% 85%,rgba(90,200,250,.12),transparent 45%);box-shadow:0 0 0 1px rgba(90,200,250,.45),0 0 0 7px rgba(255,255,255,.04),0 30px 60px -20px rgba(0,0,0,.85),0 0 70px rgba(90,200,250,.28),inset 0 0 26px rgba(90,200,250,.22);pointer-events:none}
+/* the magnified copy: the same rows, enlarged around the lens centre and clipped to the glass (--lx, --ly, --lr set by JS) */
+.mt-mag{z-index:2;-webkit-mask-image:none!important;mask-image:none!important;clip-path:circle(var(--lr,0px) at var(--lx,50%) var(--ly,50%));transform:scale(1.32);transform-origin:var(--lx,50%) var(--ly,50%);pointer-events:none}
+.mt-mag p{background:linear-gradient(90deg,#fff,#d3e2ff 45%,#9fd8ff);-webkit-background-clip:text;background-clip:text;opacity:1!important;filter:drop-shadow(0 0 14px rgba(90,200,250,.45))}
+.mt-words:not(.mt-mag) p{opacity:calc(var(--o,1)*.55)}
 .mt-lens:after{content:"";position:absolute;left:84%;top:84%;width:34%;height:9%;min-height:12px;border-radius:999px;background:linear-gradient(180deg,#fff,#c9d6f0);box-shadow:0 10px 24px -8px rgba(0,0,0,.8);transform:rotate(45deg);transform-origin:0 50%}
-.mt-tag{position:absolute;left:50%;bottom:15%;transform:translateX(-50%);padding:6px 11px;border-radius:999px;background:rgba(5,10,31,.78);font:600 11px/1 var(--M);color:#fff;white-space:nowrap}
+.mt-tag{position:absolute;left:50%;bottom:-16px;box-shadow:0 8px 20px -8px rgba(0,0,0,.8);border:1px solid rgba(127,160,255,.3);transform:translateX(-50%);padding:6px 11px;border-radius:999px;background:rgba(5,10,31,.78);font:600 11px/1 var(--M);color:#fff;white-space:nowrap}
 @media(max-width:960px){.mt-in{grid-template-columns:minmax(0,1fr);min-height:0;padding-top:50px}.mt-art{height:340px}.mt-words p{font-size:clamp(40px,12vw,72px)}}
 @media(prefers-reduced-motion:reduce){.mt-run{animation:none}}
 /* tunnel */
@@ -1156,15 +1160,23 @@ if('IntersectionObserver' in window){
 function count(el){if(RM)return;var to=+el.dataset.to,t0=performance.now();(function f(now){var p=clamp((now-t0)/1400,0,1),v=Math.round(to*(1-Math.pow(1-p,3)));el.textContent=(v<10?'0':'')+v;if(p<1)requestAnimationFrame(f)})(t0)}
 
 /* ---------- meet: the "Find growth" rows slide with the scroll; the glass lens drifts on its own and follows the pointer ---------- */
-var mt=$('meet'),mtArt=$('mtArt'),mtRows=q('.mt-words p',mt),mtLens=$('mtLens'),mlx=.55,mly=.48,mtx=.55,mty=.48,mtHover=false,mtVis=false;
-mtArt.addEventListener('pointermove',function(e){var r=mtArt.getBoundingClientRect();mtHover=true;mtx=clamp((e.clientX-r.left)/r.width,.12,.88);mty=clamp((e.clientY-r.top)/r.height,.15,.85)},{passive:true});
+var mt=$('meet'),mtArt=$('mtArt'),mtBase=q('.mt-words',mt)[0],mtLens=$('mtLens');
+var mtMag=mtBase.cloneNode(true);mtMag.classList.add('mt-mag');mtArt.insertBefore(mtMag,mtLens);
+var mtRows=q('.mt-words p',mt),mtPer=q('p',mtBase).length,mlx=.42,mly=.5,mtx=.42,mty=.5,mtHover=false,mtVis=false,mtW=1,mtH=1,mtR=100,mtOff=0;
+function mtMeasure(){mtW=mtArt.offsetWidth||1;mtH=mtArt.offsetHeight||1;mtR=mtLens.offsetWidth/2-3;mtOff=mtBase.offsetLeft}
+/* lens position (fractions of the art box) -> lens element + the magnified copy's clip and origin */
+function mtPlace(){mtLens.style.left=(mlx*100).toFixed(2)+'%';mtLens.style.top=(mly*100).toFixed(2)+'%';
+  var x=mlx*mtW-mtOff,y=mly*mtH;mtArt.style.setProperty('--lx',x.toFixed(1)+'px');mtArt.style.setProperty('--ly',y.toFixed(1)+'px');mtArt.style.setProperty('--lr',(mtR/1.32).toFixed(1)+'px')}
+mtArt.addEventListener('pointermove',function(e){var r=mtArt.getBoundingClientRect();mtHover=true;mtx=clamp((e.clientX-r.left)/r.width,.2,.68);mty=clamp((e.clientY-r.top)/r.height,.22,.78)},{passive:true});
 mtArt.addEventListener('pointerleave',function(){mtHover=false});
-if('IntersectionObserver' in window)new IntersectionObserver(function(e){mtVis=e[0].isIntersecting}).observe(mt);else mtVis=true;
+if('IntersectionObserver' in window)new IntersectionObserver(function(e){mtVis=e[0].isIntersecting;if(mtVis){mtMeasure();mtPlace()}}).observe(mt);else mtVis=true;
+addEventListener('resize',function(){mtMeasure();mtPlace()});mtMeasure();mtPlace();
 function meetScroll(){if(!mtVis||RM)return;var r=mt.getBoundingClientRect(),p=clamp((innerHeight-r.top)/(innerHeight+r.height),0,1)-.5;
-  mtRows.forEach(function(row,i){row.style.transform='translate3d('+((i%2?1:-1)*p*90+(i%2?-24:0)).toFixed(1)+'px,0,0)'})}
+  mtRows.forEach(function(row,i){var k=i%mtPer;row.style.transform='translate3d('+((k%2?1:-1)*p*90+(k%2?-24:0)).toFixed(1)+'px,0,0)'})}
+/* on its own the lens glides slowly over the words; on hover it follows the pointer, staying over the text */
 (function mtLoop(now){requestAnimationFrame(mtLoop);if(!mtVis||RM)return;
-  if(!mtHover){mtx=.55+Math.sin(now/2600)*.2;mty=.48+Math.cos(now/3300)*.22}
-  mlx+=(mtx-mlx)*.06;mly+=(mty-mly)*.06;mtLens.style.left=(mlx*100).toFixed(2)+'%';mtLens.style.top=(mly*100).toFixed(2)+'%'})(0);
+  if(!mtHover){mtx=.42+Math.sin(now/3200)*.17;mty=.5+Math.cos(now/4100)*.22}
+  mlx+=(mtx-mlx)*.06;mly+=(mty-mly)*.06;mtPlace()})(0);
 
 /* ---------- 1. hero: a dark Scoutly dashboard rises out of the glowing horizon as you scroll; the light builds with it ---------- */
 function band(p,a,b){return clamp((p-a)/(b-a),0,1)}
