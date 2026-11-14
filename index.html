@@ -385,15 +385,15 @@ code{font:400 12.5px var(--M)}
 .anat li{counter-increment:a;padding:24px;border-right:1px solid rgba(255,255,255,.08)}.anat li:last-child{border-right:0}
 .anat li:before{content:"0" counter(a);display:block;margin-bottom:16px;font:500 26px/1 var(--D);color:var(--sky)}
 .anat b{display:block;font:600 12px/1.3 var(--M);letter-spacing:.1em;text-transform:uppercase}.anat span{display:block;margin-top:8px;font:400 14px/1.65 var(--T);color:rgba(214,224,255,.65)}
-#faq{padding-top:clamp(300px,34vw,440px)}
-#faq:after{content:"";position:absolute;left:0;right:0;top:0;height:clamp(280px,32vw,420px);background:radial-gradient(55% 42% at 50% 45%,rgba(47,91,255,.14),transparent 100%),linear-gradient(0deg,var(--blend));pointer-events:none}
+#faq{padding-top:clamp(170px,15vw,230px);padding-bottom:50px}
+#faq:after{content:"";position:absolute;left:0;right:0;top:0;height:clamp(110px,11vw,170px);background:radial-gradient(55% 42% at 50% 45%,rgba(47,91,255,.14),transparent 100%),linear-gradient(0deg,var(--blend));pointer-events:none}
 #faq>*{z-index:1}
 /* fades between light and dark sections */
-.fade{position:relative;height:clamp(280px,32vw,420px);margin:-1px 0;pointer-events:none}
+.fade{position:relative;height:clamp(110px,11vw,170px);margin:-1px 0;pointer-events:none}
 .fade-dk{background:radial-gradient(55% 42% at 50% 55%,rgba(47,91,255,.15),transparent 100%),linear-gradient(180deg,var(--blend))}
 .fade-lt{background:radial-gradient(55% 42% at 50% 45%,rgba(47,91,255,.15),transparent 100%),linear-gradient(0deg,var(--blend))}
 /* ===== the problem: each statement brings its tool forward on the desk; "Sound familiar?" lets them all pile up (data-on 0..4) ===== */
-.pb{padding:110px 0 120px}
+.pb{padding:110px 0 40px}
 .pb .two{grid-template-columns:minmax(0,1fr) minmax(0,1.08fr);align-items:start}
 .pb-steps{margin-top:44px}
 .pb-steps li{display:flex;align-items:center;gap:18px;padding:22px 0;border-top:1px solid var(--ln);font:500 clamp(19px,1.75vw,27px)/1.3 var(--T);letter-spacing:-.01em;color:var(--ink);transition:color .45s}
@@ -403,7 +403,7 @@ code{font:400 12.5px var(--M)}
 .js .pb-steps li:not(.on){color:var(--mu)}
 .js .pb-steps li:not(.on) .ic{background:#fff;color:var(--mu);box-shadow:inset 0 0 0 1px var(--ln)}
 .js .pb-steps li.on .ic{transform:rotate(-6deg) scale(1.06)}
-@media(min-width:961px){.pb-steps li{min-height:118px}.pb-end{padding-bottom:250px}}
+@media(min-width:961px){.pb-steps li{min-height:118px}.pb-end{padding-bottom:120px}}
 .pb-end{margin-top:56px}
 .pb-q{font:600 clamp(36px,4.3vw,66px)/1 var(--D);letter-spacing:-.01em;text-transform:uppercase;color:var(--ink)}
 .pb-q em{font-style:normal;background:linear-gradient(100deg,#e5484d 0%,#f5a524 45%,#e5484d 90%);background-size:240% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:hxsheen 7s linear infinite}
@@ -508,7 +508,7 @@ code{font:400 12.5px var(--M)}
 @media(max-width:400px){.orb{--R:86px}.orb-c>span{font-size:10.5px}}
 @media(prefers-reduced-motion:reduce){.orb-ring.r2,.tp-hint:after{animation:none}}
 /* ===== the ecosystem: a bento of the six tools, each with a small live preview ===== */
-.eco{padding:60px 0 150px;overflow:hidden}
+.eco{padding:60px 0 60px;overflow:hidden}
 .eco.dk.sec:before{background:radial-gradient(45% 22% at 80% 34%,rgba(47,91,255,.2),transparent 70%),radial-gradient(40% 30% at 10% 55%,rgba(90,200,250,.08),transparent 70%)}
 .fade-lt+.meet{padding-top:40px}
 .eco .fh-h{color:#fff}
@@ -624,7 +624,7 @@ code{font:400 12.5px var(--M)}
 .faq summary:after{content:"+";flex:none;display:grid;place-items:center;width:30px;height:30px;border:1px solid var(--ln);font:400 18px/1 var(--M);color:var(--b);transition:transform .3s}.faq details[open] summary:after{transform:rotate(45deg)}
 .faq .a{padding:0 50px 24px 0;font:400 15px/1.65 var(--T);color:var(--sl)}.faq .a a{color:var(--b);text-decoration:underline;text-underline-offset:3px}
 /* final */
-.fin{position:relative;padding:140px 0 120px;overflow:hidden;background:linear-gradient(180deg,var(--nv),#0a1a4a)}
+.fin{position:relative;padding:70px 0 120px;overflow:hidden;background:linear-gradient(180deg,var(--nv),#0a1a4a)}
 .fin>.w{position:relative}
 .fin-g{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:48px;align-items:end}
 .fin .tx{margin-top:22px}.fin .scan{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.16)}.fin .scan input{color:#fff}.fin .scan input::placeholder{color:rgba(214,224,255,.45)}
