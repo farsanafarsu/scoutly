@@ -1283,10 +1283,14 @@ function pbSet(n){if(n===pbOn)return;pbOn=n;desk.classList.toggle('chaos',n>=4);
   pws.forEach(function(w,i){w.classList.toggle('on',i===n)});dTabs.forEach(function(t,i){t.classList.toggle('on',i===n)});
   pbSteps.forEach(function(s){var i=+s.dataset.pb;s.classList.toggle('on',i===n||(n>=4&&i<4))})}
 pbSet(0);
+/* wide screens: the desk is sticky beside the list; on every scroll the statement nearest mid-screen leads,
+   so a quick scroll can never skip one (a thin trigger band could miss a statement that crossed it between frames) */
+var pbSec=$('problem');
+function pbScroll(){if(innerWidth<=960)return;var r=pbSec.getBoundingClientRect(),vh=innerHeight;if(r.bottom<0||r.top>vh)return;
+  var mid=vh*.5,best=0,bd=1e9;
+  pbSteps.forEach(function(s){var b=s.getBoundingClientRect(),d=Math.abs(b.top+Math.min(b.height,140)/2-mid);if(d<bd){bd=d;best=+s.dataset.pb}});
+  pbSet(best)}
 if('IntersectionObserver' in window){
-  /* wide screens: the desk is sticky beside the list, so the statement crossing mid-screen leads */
-  var pbIo=new IntersectionObserver(function(es){if(innerWidth<=960)return;es.forEach(function(e){if(e.isIntersecting)pbSet(+e.target.dataset.pb)})},{rootMargin:'-42% 0px -48% 0px'});
-  pbSteps.forEach(function(s){pbIo.observe(s)});
   /* phones: the desk sits below the list, so it plays through the tools by itself while on screen */
   new IntersectionObserver(function(es){clearInterval(pbAuto);pbAuto=null;
     if(es[0].isIntersecting&&innerWidth<=960&&!RM)pbAuto=setInterval(function(){pbSet((pbOn+1)%5)},1900)},{threshold:.45}).observe(desk);
@@ -1368,7 +1372,7 @@ ftMark.addEventListener('pointerleave',function(){ftHover=false});
 var queued=false;
 function frame(){queued=false;hdTheme();
   heroScroll();
-  if(tnVis||tstage<0)tunnel(prog(tn));turn();horizontal()}
+  if(tnVis||tstage<0)tunnel(prog(tn));turn();horizontal();pbScroll()}
 function req(){if(!queued){queued=true;requestAnimationFrame(frame)}}
 addEventListener('scroll',req,{passive:true});addEventListener('resize',req);
 if(!RM)(function idle(){requestAnimationFrame(idle);if(tnVis){drift+=.0006;tunnel(prog(tn))}})();
