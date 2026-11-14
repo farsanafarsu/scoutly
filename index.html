@@ -265,82 +265,41 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}ul,o
 .msg{min-height:20px;margin-top:8px;font:500 12px/1.5 var(--M);color:var(--b)}.msg.err{color:var(--cr)}.dk .msg{color:var(--sky)}.dk .msg.err{color:#ff9a9d}
 .note{font:400 13px/1.65 var(--T);color:var(--mu)}
 /* meet */
-/* meet: copy beside the X-ray lens */
-.meet{overflow:hidden}
-.meet .two{grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr)}
-.meet .dh{font-size:clamp(26px,2.3vw,38px);max-width:640px}
-.meet-lede{margin-top:22px;max-width:480px;font:400 17px/1.65 var(--T);color:var(--sl)}.meet-lede b{color:var(--ink);font-weight:600}
-.meet-ev{display:grid;gap:10px;margin-top:28px;max-width:440px}
-.meet-ev li{display:flex;align-items:center;gap:12px;font:400 14.5px/1.5 var(--T);color:var(--sl)}
-.meet-ev li:before{content:"";flex:none;width:22px;height:22px;border-radius:7px;background:rgba(47,91,255,.1) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232f5bff' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4 8-9'/%3E%3C/svg%3E") center/13px no-repeat}
-.meet-ev b{color:var(--ink);font-weight:600}
-.meet-acts{display:flex;flex-wrap:wrap;align-items:center;gap:16px 26px;margin-top:34px}
-.meet-link{font:600 11px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--b);border-bottom:1px solid currentColor;padding-bottom:4px}
-/* the X-ray lens: a website mockup; under the lens it turns into a blueprint of its code with the hidden issues marked.
-   The lens tours the issues by itself, follows the pointer on hover, and each issue it passes over is "found" */
-.xr{position:relative;border-radius:20px;background:#fff;border:1px solid rgba(10,26,74,.1);box-shadow:0 70px 120px -50px rgba(10,26,74,.55),0 40px 90px -60px rgba(47,91,255,.7);overflow:hidden}
-.xr-bar{display:flex;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid rgba(10,26,74,.07);background:linear-gradient(180deg,#fff,#f6f8fb)}
-.xr-url{flex:1;max-width:360px;margin:0 auto;display:flex;align-items:center;justify-content:center;gap:8px;height:32px;border-radius:999px;background:#f1f4f9;border:1px solid rgba(10,26,74,.08);font:500 12px/1 var(--M);color:var(--sl)}
-.xr-url:before{content:"";width:9px;height:11px;border:1.6px solid var(--ok);border-radius:3px 3px 2px 2px;box-sizing:border-box}
-.xr-st{display:inline-flex;align-items:center;gap:8px;padding:6px 11px;border-radius:999px;background:rgba(229,72,77,.08);font:500 11px/1 var(--M);color:var(--cr);white-space:nowrap;transition:background .4s,color .4s}
-.xr-st i{width:6px;height:6px;border-radius:50%;background:currentColor;animation:cping 1.6s ease-out infinite}
-.xr-st b{font-weight:600}
-@keyframes cping{0%{box-shadow:0 0 0 0 currentColor}100%{box-shadow:0 0 0 7px transparent}}
-.xr.done .xr-st{background:rgba(23,166,115,.1);color:var(--ok)}
-.xr-stage{--x:50%;--y:40%;--r:90px;position:relative;aspect-ratio:16/10;overflow:hidden;cursor:none;touch-action:pan-y;background:linear-gradient(180deg,#fbfcfe,#f2f5fa)}
-.xr-site,.xr-ray{position:absolute;inset:0}
-.xr-site .b,.xr-ray .b{position:absolute;display:block}
-/* the website */
-.xr-site .k-nav{background:#fff;border-bottom:1px solid rgba(10,26,74,.07)}
-.xr-site .k-logo{border-radius:5px;background:linear-gradient(90deg,#2f5bff,#5ac8fa)}
-.xr-site .k-link{border-radius:3px;background:#d9dfea}
-.xr-site .k-cta{border-radius:999px;background:var(--ink)}
-.xr-site .k-h1{border-radius:6px;background:#1c2a5e}
-.xr-site .k-p{border-radius:3px;background:#cdd5e4}
-.xr-site .k-btn{border-radius:999px;background:var(--b);box-shadow:0 8px 18px -8px rgba(47,91,255,.8)}
-.xr-site .k-img{border-radius:12px;background:radial-gradient(30% 30% at 70% 30%,#fff7d6,transparent 70%),linear-gradient(160deg,#b9c8ff 0%,#d9c8ff 50%,#c5ecff 100%);overflow:hidden}
-.xr-site .k-img:after{content:"";position:absolute;left:-10%;right:-10%;bottom:-30%;height:70%;border-radius:50% 50% 0 0;background:linear-gradient(180deg,#8fa6f5,#7a8ff0)}
-.xr-site .k-card{border-radius:12px;background:#fff;box-shadow:0 14px 30px -18px rgba(10,26,74,.45);border:1px solid rgba(10,26,74,.05)}
-.xr-site .k-cimg{border-radius:8px;background:linear-gradient(135deg,#dfe7ff,#efe3ff)}
-.xr-site .k-ct{border-radius:3px;background:#d6dcea}
-.xr-site .k-foot{border-radius:3px;background:#d9dfea}
-/* the blueprint under the lens */
-.xr-ray{background:linear-gradient(rgba(127,160,255,.08) 1px,transparent 1px) 0 0/22px 22px,linear-gradient(90deg,rgba(127,160,255,.08) 1px,transparent 1px) 0 0/22px 22px,radial-gradient(80% 80% at 50% 40%,#0f1d55,#070d2c);clip-path:circle(var(--r) at var(--x) var(--y))}
-.xr-ray .b{border:1px dashed rgba(127,160,255,.5);border-radius:4px;background:rgba(127,160,255,.04);box-shadow:none}
-.xr-ray .b:after{display:none}
-.xr-ray .b[data-l]:before{content:attr(data-l);position:absolute;left:0;bottom:calc(100% + 3px);font:500 9.5px/1 var(--M);color:#8fb0ff;white-space:nowrap}
-.xr-ray .b.k-nav{border-width:0 0 1px;border-radius:0}
-.xr-ray .b[data-iss]{border:1.5px solid var(--c);background:color-mix(in srgb,var(--c) 14%,transparent);box-shadow:0 0 18px color-mix(in srgb,var(--c) 45%,transparent)}
-.xr-ray .b[data-iss]:before{padding:4px 7px;border-radius:5px;background:var(--c);color:#fff;font-weight:600;bottom:calc(100% + 5px)}
-.xr-ray .b.lo:before{top:calc(100% + 5px);bottom:auto}
-.xr-ray .b[data-iss]:after{content:"";display:block;position:absolute;right:-5px;top:-5px;width:10px;height:10px;border-radius:50%;background:var(--c);animation:xrping 1.6s ease-out infinite}
-@keyframes xrping{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--c) 70%,transparent)}100%{box-shadow:0 0 0 10px transparent}}
-/* the lens */
-.xr-lens{position:absolute;left:var(--x);top:var(--y);z-index:3;width:calc(var(--r)*2);height:calc(var(--r)*2);border-radius:50%;transform:translate(-50%,-50%);border:3px solid #fff;box-shadow:0 0 0 1px rgba(10,26,74,.18),0 24px 60px -12px rgba(5,10,31,.6),0 0 40px rgba(90,200,250,.35),inset 0 0 30px rgba(90,200,250,.35);pointer-events:none}
-.xr-lens:before{content:"";position:absolute;inset:6px;border-radius:50%;background:radial-gradient(circle at 30% 25%,rgba(255,255,255,.28),transparent 45%);border:1px solid rgba(90,200,250,.4)}
-.xr-lens:after{content:"";position:absolute;left:84%;top:84%;width:calc(var(--r)*.62);height:12px;border-radius:7px;background:linear-gradient(180deg,#fff,#cfd8ea);box-shadow:0 10px 20px -8px rgba(5,10,31,.7);transform:rotate(45deg);transform-origin:0 50%}
-.xr-ret{position:absolute;left:50%;top:50%;width:14px;height:14px;margin:-7px;border-radius:50%;border:1.5px solid rgba(143,176,255,.8)}
-.xr-hint{position:absolute;left:50%;bottom:12px;translate:-50% 0;z-index:4;padding:7px 11px;border-radius:999px;background:rgba(5,10,31,.82);color:#fff;font:500 10.5px/1 var(--M);letter-spacing:.08em;text-transform:uppercase;transition:opacity .5s;pointer-events:none}
-.xr.touched .xr-hint{opacity:0}
-/* findings */
-.xr-finds{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-top:1px solid rgba(10,26,74,.07)}
-.xr-finds li+li{border-left:1px solid rgba(10,26,74,.07)}
-.xr-finds button{position:relative;display:flex;flex-direction:column;align-items:flex-start;gap:6px;width:100%;height:100%;padding:14px 16px 15px;border:0;background:none;text-align:left;cursor:pointer;transition:background .35s}
-.xr-finds button:hover{background:#f6f8fc}
-.xr-finds button:focus-visible{outline:2px solid var(--b);outline-offset:-2px}
-.xr-finds button:before{content:"";position:absolute;left:0;right:0;top:-1px;height:2px;background:var(--c);transform:scaleX(0);transform-origin:left;transition:transform .5s cubic-bezier(.2,.8,.2,1)}
-.xr-finds em{display:inline-flex;align-items:center;gap:6px;font:600 9.5px/1 var(--M);font-style:normal;letter-spacing:.1em;text-transform:uppercase;color:var(--mu);transition:color .35s}
-.xr-finds em:before{content:"";width:7px;height:7px;border-radius:50%;border:1.5px solid currentColor;box-sizing:border-box;transition:background .35s}
-.xr-finds b{font:600 13.5px/1.2 var(--T);color:var(--mu);transition:color .35s}
-.xr-finds span{font:400 12px/1.35 var(--T);color:var(--mu);opacity:.7;transition:opacity .35s}
-.xr-finds .found em{color:var(--c)}.xr-finds .found em:before{background:var(--c)}
-.xr-finds .found b{color:var(--ink)}.xr-finds .found span{opacity:1;color:var(--sl)}
-.xr-finds .on{background:color-mix(in srgb,var(--c) 7%,#fff)}.xr-finds .on:before{transform:none}
-html:not(.js) .xr-lens,html:not(.js) .xr-hint{display:none}
-@media(max-width:960px){.meet .two{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:600px){.xr-finds{grid-template-columns:repeat(2,minmax(0,1fr))}.xr-finds li:nth-child(3){border-left:0}.xr-finds li:nth-child(n+3){border-top:1px solid rgba(10,26,74,.07)}
-  .xr-bar .cv-dots,.xr-url:before{display:none}.xr-ray .b[data-l]:not([data-iss]):before{display:none}.xr-ray .b[data-iss]:before{font-size:8.5px;padding:3px 5px}.xr-hint{display:none}}
-@media(prefers-reduced-motion:reduce){.xr-st i,.xr-ray .b[data-iss]:after{animation:none}}
+/* meet: dark, like a trading floor: SEO signals stream along the top, the copy sits on the left, and "Find growth" repeats in big
+   type on the right while a glass lens glides over it (drifts on its own, follows the pointer; the rows slide with the scroll) */
+.mt{position:relative;overflow:clip;padding:0 0 100px;background:var(--nv);color:#fff}
+.mt:before{content:"";position:absolute;inset:0;background:radial-gradient(38% 46% at 6% 62%,rgba(90,200,250,.2),transparent 70%),radial-gradient(36% 46% at 72% 52%,rgba(47,91,255,.2),transparent 70%);pointer-events:none}
+.mt-tick{position:relative;display:grid;gap:7px;padding:16px 0;border-bottom:1px solid rgba(127,160,255,.1);-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.mt-row{overflow:hidden}
+.mt-run{display:flex;gap:10px;width:max-content;animation:mtrun 70s linear infinite}
+.mt-row.r2 .mt-run{animation-direction:reverse;animation-duration:85s}
+@keyframes mtrun{to{transform:translateX(-50%)}}
+.mt-run span{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 7px;border-radius:999px;background:rgba(255,255,255,.035);border:1px solid rgba(127,160,255,.1);font:500 11.5px/1 var(--T);color:rgba(214,224,255,.66);white-space:nowrap}
+.mt-run i{width:16px;height:16px;border-radius:50%;background:var(--c);box-shadow:0 0 8px color-mix(in srgb,var(--c) 60%,transparent)}
+.mt-run b{font:600 11.5px/1 var(--M);color:#fff}
+.mt-run em{padding:3px 6px;border-radius:999px;font:600 10px/1 var(--M);font-style:normal}
+.mt-run .up{background:rgba(61,219,165,.14);color:#3ddba5}.mt-run .dn{background:rgba(255,107,111,.14);color:#ff8a8d}
+.mt-in{position:relative;display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:40px;align-items:center;min-height:min(720px,88vh);padding-top:60px}
+.mt .dh{font-size:clamp(30px,3.1vw,52px);color:#fff}
+.mt-lede{margin-top:22px;max-width:470px;font:400 17px/1.65 var(--T);color:rgba(214,224,255,.72)}.mt-lede b{color:#fff;font-weight:600}
+.mt-ev{display:grid;gap:10px;margin-top:26px}
+.mt-ev li{display:flex;align-items:center;gap:12px;font:400 14.5px/1.5 var(--T);color:rgba(214,224,255,.7)}
+.mt-ev li:before{content:"✓";flex:none;display:grid;place-items:center;width:22px;height:22px;border-radius:7px;background:rgba(90,200,250,.12);color:var(--sky);font:700 12px/1 var(--T)}
+.mt-ev b{color:#fff;font-weight:600}
+.mt-acts{display:flex;flex-wrap:wrap;align-items:center;gap:12px;margin-top:34px}
+.mt-go{display:inline-flex;align-items:center;gap:14px;height:52px;padding:0 7px 0 22px;border-radius:999px;background:#fff;color:var(--nv);font:600 14.5px/1 var(--T);transition:box-shadow .25s}
+.mt-go span{display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--b);color:#fff;transition:transform .25s}
+.mt-go:hover{box-shadow:0 14px 34px -12px rgba(90,200,250,.65)}.mt-go:hover span{transform:translateX(3px)}
+.mt-acts .btn{height:52px;padding:0 22px;border-radius:999px;border-color:rgba(255,255,255,.24)}
+/* the words and the lens */
+.mt-art{position:relative;height:min(600px,72vh)}
+.mt-words{position:absolute;top:0;bottom:0;left:0;display:flex;flex-direction:column;justify-content:center}
+.mt-words p{font:600 clamp(52px,7.6vw,128px)/.9 var(--T);letter-spacing:-.045em;white-space:nowrap;background:linear-gradient(90deg,#5ac8fa,#2f5bff 55%,#a98bff);-webkit-background-clip:text;background-clip:text;color:transparent;opacity:var(--o,1);will-change:transform}
+.mt-lens{position:absolute;left:55%;top:48%;z-index:2;width:clamp(170px,19vw,290px);aspect-ratio:1;border-radius:50%;transform:translate(-50%,-50%);border:2px solid rgba(255,255,255,.72);background:radial-gradient(circle at 30% 24%,rgba(255,255,255,.38),rgba(255,255,255,.05) 42%,rgba(90,200,250,.08));-webkit-backdrop-filter:blur(1px) brightness(1.8) saturate(1.7) contrast(1.05);backdrop-filter:blur(1px) brightness(1.8) saturate(1.7) contrast(1.05);box-shadow:0 0 0 1px rgba(90,200,250,.4),0 30px 60px -20px rgba(0,0,0,.8),0 0 90px rgba(90,200,250,.35),inset 0 0 44px rgba(90,200,250,.3);pointer-events:none}
+.mt-lens:after{content:"";position:absolute;left:84%;top:84%;width:34%;height:9%;min-height:12px;border-radius:999px;background:linear-gradient(180deg,#fff,#c9d6f0);box-shadow:0 10px 24px -8px rgba(0,0,0,.8);transform:rotate(45deg);transform-origin:0 50%}
+.mt-tag{position:absolute;left:50%;bottom:15%;transform:translateX(-50%);padding:6px 11px;border-radius:999px;background:rgba(5,10,31,.78);font:600 11px/1 var(--M);color:#fff;white-space:nowrap}
+@media(max-width:960px){.mt-in{grid-template-columns:minmax(0,1fr);min-height:0;padding-top:50px}.mt-art{height:360px}.mt-words p{font-size:clamp(46px,13vw,84px)}}
+@media(prefers-reduced-motion:reduce){.mt-run{animation:none}}
 /* tunnel */
 .tn{position:relative;background:var(--bg)}
 .js .tn{height:460vh}
@@ -925,52 +884,32 @@ requestAnimationFrame(frame);
   </div></div>
   <p class="fine" data-rv>Scoutly is in early access. Each tool page explains how it works, what data it relies on and where it stands today. See the <a href="about/#product-status">product status overview</a>.</p>
 </div></section>
-<div class="fade fade-lt" aria-hidden="true"></div>
 
 <!-- 3. MEET SCOUTLY -->
-<section class="sec meet" id="meet" aria-labelledby="meetTitle"><div class="w two">
-  <div>
-    <p class="lbl" data-rv>Meet your SEO investigation partner</p>
-    <h2 class="dh" id="meetTitle"><span data-scr>Hi, I’m Scoutly.</span> <span class="l2" data-scr>Let’s find your next growth opportunity.</span></h2>
-    <p class="meet-lede" data-rv>I explore your website, check the signals that matter and turn scattered SEO data into a clear action plan. <b>No confusing reports. No guessing where to start.</b></p>
-    <ul class="meet-ev" data-rv aria-label="Every finding comes with">
-      <li><span><b>What</b> was found, in plain language</span></li>
-      <li><span><b>Where</b> it is, down to the page and the link</span></li>
-      <li><span><b>How</b> to fix it, and how to check the fix worked</span></li>
-    </ul>
-    <div class="meet-acts" data-rv><a class="btn p" href="#start">Let Scoutly Investigate <span aria-hidden="true">→</span></a><a class="meet-link" href="#how">See how it works →</a></div>
+<section class="mt dk" id="meet" aria-labelledby="meetTitle">
+  <div class="mt-tick" aria-hidden="true">
+    <div class="mt-row"><div class="mt-run"><span><i style="--c:#6f8dff"></i>seo management tool <b>#3</b><em class="up">▲ 2</em></span><span><i style="--c:#3ddba5"></i>Backlinks <b>184</b><em class="up">+12</em></span><span><i style="--c:#f5b53d"></i>Site health <b>92</b><em class="up">▲ 3</em></span><span><i style="--c:#a98bff"></i>backlink tracker <b>#7</b><em class="up">▲ 4</em></span><span><i style="--c:#ff8a8d"></i>/journal <b>404</b><em class="dn">fix</em></span><span><i style="--c:#5ac8fa"></i>LCP <b>2.1s</b><em class="up">good</em></span><span><i style="--c:#4fd1e8"></i>Keyword gaps <b>37</b><em class="up">new</em></span><span><i style="--c:#6f8dff"></i>rank tracking software <b>#11</b><em class="dn">▼ 1</em></span><span><i style="--c:#6f8dff"></i>seo management tool <b>#3</b><em class="up">▲ 2</em></span><span><i style="--c:#3ddba5"></i>Backlinks <b>184</b><em class="up">+12</em></span><span><i style="--c:#f5b53d"></i>Site health <b>92</b><em class="up">▲ 3</em></span><span><i style="--c:#a98bff"></i>backlink tracker <b>#7</b><em class="up">▲ 4</em></span><span><i style="--c:#ff8a8d"></i>/journal <b>404</b><em class="dn">fix</em></span><span><i style="--c:#5ac8fa"></i>LCP <b>2.1s</b><em class="up">good</em></span><span><i style="--c:#4fd1e8"></i>Keyword gaps <b>37</b><em class="up">new</em></span><span><i style="--c:#6f8dff"></i>rank tracking software <b>#11</b><em class="dn">▼ 1</em></span></div></div>
+    <div class="mt-row r2"><div class="mt-run"><span><i style="--c:#a98bff"></i>Search visibility <b>68%</b><em class="up">▲ 4.2</em></span><span><i style="--c:#3ddba5"></i>industry-blog.example <b>live</b><em class="up">new</em></span><span><i style="--c:#f5b53d"></i>Alt text <b>6 missing</b><em class="dn">med</em></span><span><i style="--c:#6f8dff"></i>seo dashboard <b>#5</b><em class="up">▲ 3</em></span><span><i style="--c:#4fd1e8"></i>Competitor overlap <b>41%</b><em class="up">▲ 2</em></span><span><i style="--c:#ff8a8d"></i>old-directory.example <b>lost</b><em class="dn">−1</em></span><span><i style="--c:#5ac8fa"></i>Pages crawled <b>25</b><em class="up">today</em></span><span><i style="--c:#3ddba5"></i>Top 10 keywords <b>48</b><em class="up">▲ 6</em></span><span><i style="--c:#a98bff"></i>Search visibility <b>68%</b><em class="up">▲ 4.2</em></span><span><i style="--c:#3ddba5"></i>industry-blog.example <b>live</b><em class="up">new</em></span><span><i style="--c:#f5b53d"></i>Alt text <b>6 missing</b><em class="dn">med</em></span><span><i style="--c:#6f8dff"></i>seo dashboard <b>#5</b><em class="up">▲ 3</em></span><span><i style="--c:#4fd1e8"></i>Competitor overlap <b>41%</b><em class="up">▲ 2</em></span><span><i style="--c:#ff8a8d"></i>old-directory.example <b>lost</b><em class="dn">−1</em></span><span><i style="--c:#5ac8fa"></i>Pages crawled <b>25</b><em class="up">today</em></span><span><i style="--c:#3ddba5"></i>Top 10 keywords <b>48</b><em class="up">▲ 6</em></span></div></div>
   </div>
-
-  <div class="xr" id="xr" data-rv>
-    <div class="xr-bar"><span class="cv-dots"><i></i><i></i><i></i></span><span class="xr-url">yourwebsite.com</span><span class="xr-st" id="xrSt"><i></i><span><b id="xrN">0</b>/4 issues found</span></span></div>
-    <div class="xr-stage" id="xrStage" aria-hidden="true">
-      <div class="xr-site">
-        <i class="b k-nav" style="left:0;top:0;width:100%;height:9%" data-l="&lt;nav&gt;"></i>
-        <i class="b k-logo lo" data-iss="0" style="left:4%;top:2.6%;width:11%;height:3.8%;--c:#e5484d" data-l="&lt;title&gt; missing"></i>
-        <i class="b k-link" style="left:50%;top:3.6%;width:7%;height:1.8%"></i><i class="b k-link" style="left:60%;top:3.6%;width:7%;height:1.8%"></i><i class="b k-link" style="left:70%;top:3.6%;width:7%;height:1.8%"></i>
-        <i class="b k-cta" style="left:83%;top:2.4%;width:13%;height:4.2%" data-l="&lt;a.cta&gt;"></i>
-        <i class="b k-h1" style="left:5%;top:17%;width:42%;height:5.4%" data-l="&lt;h1&gt;"></i><i class="b k-h1" style="left:5%;top:24.4%;width:31%;height:5.4%"></i>
-        <i class="b k-p" style="left:5%;top:34%;width:40%;height:1.9%" data-l="&lt;p&gt;"></i><i class="b k-p" style="left:5%;top:38%;width:33%;height:1.9%"></i>
-        <i class="b k-btn" style="left:5%;top:45%;width:15%;height:6%" data-l="&lt;button&gt;"></i>
-        <i class="b k-img" data-iss="1" style="left:55%;top:15%;width:40%;height:40%;--c:#f5a524" data-l="LCP 3.9s · hero.jpg 2.4 MB"></i>
-        <i class="b k-card" style="left:5%;top:62%;width:27%;height:27%" data-l="&lt;article&gt;"></i><i class="b k-card" style="left:36.5%;top:62%;width:27%;height:27%"></i><i class="b k-card" style="left:68%;top:62%;width:27%;height:27%"></i>
-        <i class="b k-cimg" style="left:6.5%;top:64.5%;width:24%;height:12%"></i><i class="b k-cimg" data-iss="2" style="left:38%;top:64.5%;width:24%;height:12%;--c:#f5a524" data-l="&lt;img&gt; no alt text"></i><i class="b k-cimg" style="left:69.5%;top:64.5%;width:24%;height:12%"></i>
-        <i class="b k-ct" style="left:6.5%;top:80%;width:18%;height:1.8%"></i><i class="b k-ct" style="left:38%;top:80%;width:18%;height:1.8%"></i><i class="b k-ct" style="left:69.5%;top:80%;width:18%;height:1.8%"></i>
-        <i class="b k-ct" style="left:6.5%;top:84%;width:12%;height:1.8%"></i><i class="b k-ct" style="left:38%;top:84%;width:12%;height:1.8%"></i><i class="b k-ct" style="left:69.5%;top:84%;width:12%;height:1.8%"></i>
-        <i class="b k-foot" style="left:5%;top:94%;width:8%;height:1.8%" data-l="&lt;footer&gt;"></i><i class="b k-foot" style="left:16%;top:94%;width:8%;height:1.8%"></i><i class="b k-foot" style="left:27%;top:94%;width:8%;height:1.8%"></i>
-        <i class="b k-foot" data-iss="3" style="left:77%;top:94%;width:12%;height:1.8%;--c:#e5484d" data-l="404 · /journal"></i>
-      </div>
-      <div class="xr-lens" id="xrLens"><span class="xr-ret"></span></div>
-      <p class="xr-hint">Move the lens</p>
+  <div class="w mt-in">
+    <div>
+      <p class="lbl lt" data-rv>Meet your SEO investigation partner</p>
+      <h2 class="dh" id="meetTitle"><span data-scr>Hi, I’m Scoutly.</span> <span class="l2" data-scr>Let’s find your next growth opportunity.</span></h2>
+      <p class="mt-lede" data-rv>I explore your website, check the signals that matter and turn scattered SEO data into a clear action plan. <b>No confusing reports. No guessing where to start.</b></p>
+      <ul class="mt-ev" data-rv aria-label="Every finding comes with">
+        <li><span><b>What</b> was found, in plain language</span></li>
+        <li><span><b>Where</b> it is, down to the page and the link</span></li>
+        <li><span><b>How</b> to fix it, and how to check the fix worked</span></li>
+      </ul>
+      <div class="mt-acts" data-rv><a class="mt-go" href="#start">Let Scoutly investigate<span aria-hidden="true">→</span></a><a class="btn" href="#how">See how it works</a></div>
     </div>
-    <ol class="xr-finds" aria-label="What Scoutly found on this example site">
-      <li><button type="button" data-i="0" style="--c:#e5484d"><em>High</em><b>Title tag missing</b><span>The homepage has no &lt;title&gt;</span></button></li>
-      <li><button type="button" data-i="1" style="--c:#f5a524"><em>Medium</em><b>Slow hero image</b><span>LCP 3.9s from a 2.4 MB file</span></button></li>
-      <li><button type="button" data-i="2" style="--c:#f5a524"><em>Medium</em><b>Alt text missing</b><span>A product image has no alt</span></button></li>
-      <li><button type="button" data-i="3" style="--c:#e5484d"><em>High</em><b>Broken link</b><span>/journal returns 404</span></button></li>
-    </ol>
+    <div class="mt-art" id="mtArt" aria-hidden="true">
+      <div class="mt-words"><p style="--o:1">Find growth</p><p style="--o:0.55">Find growth</p><p style="--o:0.85">Find growth</p><p style="--o:0.4">Find growth</p><p style="--o:0.7">Find growth</p><p style="--o:0.3">Find growth</p></div>
+      <div class="mt-lens" id="mtLens"><span class="mt-tag">✦ 37 opportunities</span></div>
+    </div>
   </div>
-</div></section>
+</section>
+<div class="fade fade-lt" aria-hidden="true"></div>
 
 <!-- 4. HOW IT WORKS: pinned tunnel -->
 <section class="tn" id="how" aria-labelledby="howTitle">
@@ -1133,32 +1072,20 @@ if('IntersectionObserver' in window){
     if(t.hasAttribute('data-rv'))t.classList.add('in');
     if(t.hasAttribute('data-scr')){if(ready)scr(t);else pend.push(t)}
     if(t.id==='cntN')count(t);if(t.classList.contains('ds'))q('[data-to]',t).forEach(count)})},{rootMargin:'0px 0px -12% 0px'});
-  q('[data-rv],.sec [data-scr],.ax [data-scr],.fin [data-scr],.ft [data-scr],.hz [data-scr],#cntN').forEach(function(el){io.observe(el)});
+  q('[data-rv],.sec [data-scr],.ax [data-scr],.mt [data-scr],.fin [data-scr],.ft [data-scr],.hz [data-scr],#cntN').forEach(function(el){io.observe(el)});
 }else q('[data-rv]').forEach(function(e){e.classList.add('in')});
 function count(el){if(RM)return;var to=+el.dataset.to,t0=performance.now();(function f(now){var p=clamp((now-t0)/1400,0,1),v=Math.round(to*(1-Math.pow(1-p,3)));el.textContent=(v<10?'0':'')+v;if(p<1)requestAnimationFrame(f)})(t0)}
 
-/* ---------- meet: the X-ray lens tours the issues on its own, follows the pointer on hover, and marks each issue it passes as found ---------- */
-var xr=$('xr'),xst=$('xrStage'),xsite=q('.xr-site',xst)[0],xlens=$('xrLens'),xbtn=q('.xr-finds button',xr),xn=$('xrN');
-var xray=xsite.cloneNode(true);xray.className='xr-ray';xst.insertBefore(xray,xlens);
-var xiss=q('[data-iss]',xsite),xpts=[],xR=90,xW=1,xH=1,xx=0,xy=0,xtx=0,xty=0,xhover=false,xhold=0,xauto=0,xnext=0,xfound=[],xon=-1,xvis=false,xlast='';
-function xmeasure(){var s=xst.getBoundingClientRect();xW=s.width||1;xH=s.height||1;xR=Math.max(58,Math.min(124,xW*.15));
-  xpts=xiss.map(function(b){var r=b.getBoundingClientRect();return{x:r.left-s.left+r.width/2,y:r.top-s.top+r.height/2}});
-  if(!xx&&xpts.length){xx=xtx=xpts[1].x;xy=xty=xpts[1].y}}
-function xgo(i,hold){var p=xpts[i];if(!p)return;xtx=p.x;xty=p.y;xauto=i;if(hold)xhold=performance.now()+hold}
-function xfind(i){if(xfound[i])return;xfound[i]=true;xbtn[i].classList.add('found');var n=xfound.filter(Boolean).length;xn.textContent=n;xr.classList.toggle('done',n===xpts.length)}
-xst.addEventListener('pointermove',function(e){var s=xst.getBoundingClientRect();xhover=true;xr.classList.add('touched');xtx=e.clientX-s.left;xty=e.clientY-s.top},{passive:true});
-xst.addEventListener('pointerleave',function(){xhover=false;xhold=performance.now()+1400});
-xbtn.forEach(function(b,i){b.addEventListener('click',function(){xhover=false;xgo(i,4000);xr.classList.add('touched')})});
-xmeasure();addEventListener('resize',xmeasure);
-if('IntersectionObserver' in window)new IntersectionObserver(function(e){xvis=e[0].isIntersecting;if(xvis)xmeasure()}).observe(xst);else xvis=true;
-if(RM){xpts.forEach(function(p,i){xfind(i)});xgo(1)}
-(function xloop(now){requestAnimationFrame(xloop);if(!xvis)return;
-  /* on its own: visit each issue in turn, wandering a little on the way */
-  if(!xhover&&now>xhold&&now>xnext&&!RM){xnext=now+2300;xgo((xauto+1)%xpts.length)}
-  var k=RM?1:(xhover?.22:.06);xx+=(xtx-xx)*k;xy+=(xty-xy)*k;
-  var key=xx.toFixed(1)+','+xy.toFixed(1);if(key!==xlast){xlast=key;xst.style.setProperty('--x',xx.toFixed(1)+'px');xst.style.setProperty('--y',xy.toFixed(1)+'px');xst.style.setProperty('--r',xR.toFixed(0)+'px')}
-  var on=-1,bd=1e9;xpts.forEach(function(p,i){var d=Math.hypot(p.x-xx,p.y-xy);if(d<xR*.75){xfind(i);if(d<bd){bd=d;on=i}}});
-  if(on!==xon){if(xon>=0)xbtn[xon].classList.remove('on');if(on>=0)xbtn[on].classList.add('on');xon=on}})(performance.now());
+/* ---------- meet: the "Find growth" rows slide with the scroll; the glass lens drifts on its own and follows the pointer ---------- */
+var mt=$('meet'),mtArt=$('mtArt'),mtRows=q('.mt-words p',mt),mtLens=$('mtLens'),mlx=.55,mly=.48,mtx=.55,mty=.48,mtHover=false,mtVis=false;
+mtArt.addEventListener('pointermove',function(e){var r=mtArt.getBoundingClientRect();mtHover=true;mtx=clamp((e.clientX-r.left)/r.width,.12,.88);mty=clamp((e.clientY-r.top)/r.height,.15,.85)},{passive:true});
+mtArt.addEventListener('pointerleave',function(){mtHover=false});
+if('IntersectionObserver' in window)new IntersectionObserver(function(e){mtVis=e[0].isIntersecting}).observe(mt);else mtVis=true;
+function meetScroll(){if(!mtVis||RM)return;var r=mt.getBoundingClientRect(),p=clamp((innerHeight-r.top)/(innerHeight+r.height),0,1)-.5;
+  mtRows.forEach(function(row,i){row.style.transform='translate3d('+((i%2?1:-1)*p*180+(i%2?-60:0)).toFixed(1)+'px,0,0)'})}
+(function mtLoop(now){requestAnimationFrame(mtLoop);if(!mtVis||RM)return;
+  if(!mtHover){mtx=.55+Math.sin(now/2600)*.2;mty=.48+Math.cos(now/3300)*.22}
+  mlx+=(mtx-mlx)*.06;mly+=(mty-mly)*.06;mtLens.style.left=(mlx*100).toFixed(2)+'%';mtLens.style.top=(mly*100).toFixed(2)+'%'})(0);
 
 /* ---------- 1. hero: a dark Scoutly dashboard rises out of the glowing horizon as you scroll; the light builds with it ---------- */
 function band(p,a,b){return clamp((p-a)/(b-a),0,1)}
@@ -1285,7 +1212,7 @@ ftMark.addEventListener('pointerleave',function(){ftHover=false});
 var queued=false;
 function frame(){queued=false;hdTheme();
   heroScroll();
-  if(tnVis||tstage<0)tunnel(prog(tn));turn();horizontal();pbScroll();exScroll()}
+  if(tnVis||tstage<0)tunnel(prog(tn));turn();horizontal();pbScroll();exScroll();meetScroll()}
 function req(){if(!queued){queued=true;requestAnimationFrame(frame)}}
 addEventListener('scroll',req,{passive:true});addEventListener('resize',req);
 if(!RM)(function idle(){requestAnimationFrame(idle);if(tnVis){drift+=.0006;tunnel(prog(tn))}})();
