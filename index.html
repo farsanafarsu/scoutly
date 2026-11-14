@@ -408,61 +408,54 @@ code{font:400 12.5px var(--M)}
 .pb-vis{position:sticky;top:110px}
 .pb-cap{margin-top:14px;font:400 12px/1.5 var(--M);color:var(--mu);text-align:center}
 @keyframes hxblink{50%{opacity:0}}
-/* the tangle: you in the middle, four tools around you, and the lines you keep running between them.
-   Each statement lights its tool and its line (data-i matches data-pb); "Sound familiar?" turns the whole knot red */
-.desk{position:relative;aspect-ratio:600/520;border-radius:22px;overflow:hidden;background:radial-gradient(45% 40% at 50% 52%,rgba(47,91,255,.1),transparent 70%),linear-gradient(180deg,#f8f9fc,#e9edf6);border:1px solid var(--ln);box-shadow:0 50px 100px -50px rgba(10,26,74,.45)}
+/* the deck: one card per tool, stacked in 3D. The statement you're reading brings its card to the front (--o: 0 front … 3 back, set by JS);
+   "Sound familiar?" (.chaos) throws the whole deck into a messy pile */
+.desk{position:relative;height:clamp(460px,38vw,540px);border-radius:24px;overflow:hidden;perspective:1400px;background:radial-gradient(50% 45% at 50% 50%,rgba(47,91,255,.1),transparent 70%),linear-gradient(180deg,#f8f9fc,#e9edf6);border:1px solid var(--ln);box-shadow:0 50px 100px -50px rgba(10,26,74,.45)}
 .desk:before{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(10,26,74,.12) 1px,transparent 1.2px);background-size:22px 22px;-webkit-mask-image:radial-gradient(70% 70% at 50% 50%,#000,transparent);mask-image:radial-gradient(70% 70% at 50% 50%,#000,transparent);pointer-events:none}
-.sw-svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
-.sw-p,.sw-x{fill:none;stroke-linecap:round;transition:stroke .45s,stroke-width .45s,opacity .45s}
-.sw-p{stroke:rgba(10,26,74,.2);stroke-width:2;stroke-dasharray:4 7}
-.sw-x{stroke:rgba(229,72,77,.5);stroke-width:1.6;stroke-dasharray:3 6;opacity:0}
-.sw-p.on{stroke:var(--c);stroke-width:3.2;stroke-dasharray:12 9;filter:drop-shadow(0 0 5px var(--c));animation:swflow .9s linear infinite}
-.desk.chaos .sw-p{stroke:var(--cr);stroke-width:2.6;stroke-dasharray:10 8;filter:none;animation:swflow .55s linear infinite}
-.desk.chaos .sw-x{opacity:1;animation:swflow .8s linear infinite reverse}
-@keyframes swflow{to{stroke-dashoffset:-42}}
-.sw-me{position:absolute;left:50%;top:52%;z-index:3;display:grid;place-items:center;width:92px;height:92px;margin:-46px;border-radius:50%;background:var(--nv);color:#fff;box-shadow:0 20px 40px -16px rgba(5,10,31,.7),0 0 0 8px rgba(255,255,255,.7);text-align:center}
-.sw-me b{display:block;font:600 18px/1 var(--D);letter-spacing:0}
-.sw-me small{display:block;margin-top:5px;font:500 9px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--sky);transition:color .4s}
-.sw-ring{position:absolute;inset:-14px;border:1.5px dashed rgba(47,91,255,.45);border-radius:50%;animation:orbspin 14s linear infinite;transition:border-color .4s}
-.desk.chaos .sw-ring{border-color:rgba(229,72,77,.7);animation-duration:2.4s}
-.desk.chaos .sw-me small{color:#ff8a8d}
-.sw-t{position:absolute;left:var(--x);top:var(--y);z-index:2;display:flex;flex-direction:column;align-items:center;gap:10px;width:150px;transform:translate(-50%,-50%);text-align:center;transition:opacity .5s,filter .5s,transform .6s cubic-bezier(.2,1.3,.4,1)}
-.sw-t p b{display:block;font:600 13.5px/1.2 var(--T);color:var(--ink)}
-.sw-t p span{display:block;margin-top:4px;font:500 10.5px/1 var(--M);color:var(--mu)}
-.sw-art{position:relative;display:grid;place-items:center;width:96px;height:96px;border-radius:26px;background:#fff;border:1px solid rgba(10,26,74,.08);box-shadow:0 22px 40px -22px rgba(10,26,74,.55);transition:box-shadow .5s}
-.js .desk .sw-t{opacity:.5;filter:saturate(.35)}
-.js .desk .sw-t.on{opacity:1;filter:none;transform:translate(-50%,-50%) scale(1.1)}
-.js .desk .sw-t.on .sw-art{box-shadow:0 0 0 3px var(--c),0 26px 46px -20px var(--c)}
-.js .desk.chaos .sw-t{opacity:1;filter:none;transform:translate(-50%,-50%);animation:swjolt 2.6s ease-in-out infinite;animation-delay:var(--dl,0s)}
+.dc{--o:0;position:absolute;left:50%;top:50%;z-index:calc(10 - var(--o));display:flex;flex-direction:column;width:min(320px,64%);height:360px;margin:-170px 0 0 -190px;padding:22px;border-radius:22px;background:#fff;border:1px solid rgba(10,26,74,.08);box-shadow:0 30px 60px -30px rgba(10,26,74,.5);transform:translate3d(calc(var(--o)*40px),calc(var(--o)*-26px),calc(var(--o)*-90px)) rotate(calc(var(--o)*4deg));opacity:calc(1 - var(--o)*.16);transition:transform .75s cubic-bezier(.2,.8,.2,1),opacity .5s,box-shadow .5s}
+.dc.on{box-shadow:0 0 0 2px var(--c),0 40px 80px -30px color-mix(in srgb,var(--c) 55%,rgba(10,26,74,.5))}
+.dc-top{display:flex;align-items:center;gap:12px}
+.dc-ic{display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:var(--c);color:#fff;box-shadow:0 12px 24px -12px var(--c)}
+.dc-ic svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+.dc-top b{display:block;font:600 17px/1.15 var(--D);color:var(--ink)}
+.dc-top small{display:block;margin-top:4px;font:500 10.5px/1 var(--M);color:var(--mu)}
+.dc-pain{margin-top:16px;font:500 15.5px/1.4 var(--T);color:var(--sl)}
+.dc-art{position:relative;flex:1;margin-top:16px;border-radius:14px;background:#f4f6fb;overflow:hidden}
+.dc-foot{display:flex;gap:6px;margin-top:14px}
+.dc-foot span{padding:5px 9px;border-radius:999px;background:#f1f3f8;font:500 10.5px/1 var(--M);color:var(--sl);white-space:nowrap}
+/* card art */
+.a-chips{position:absolute;inset:0;display:flex;flex-wrap:wrap;align-content:center;justify-content:center;gap:7px;padding:14px}
+.a-chips span{padding:6px 10px;border-radius:999px;background:#fff;border:1px solid rgba(10,26,74,.08);font:500 12px/1 var(--T);color:var(--ink);box-shadow:0 6px 14px -10px rgba(10,26,74,.5)}
+.a-chips span:nth-child(3n){background:rgba(47,91,255,.08);border-color:rgba(47,91,255,.25);color:var(--b)}
+.a-chips em{margin-left:5px;font:500 10px/1 var(--M);font-style:normal;color:var(--mu)}
+.a-files{position:absolute;inset:0;display:grid;place-items:center}
+.a-files i{position:absolute;display:grid;place-items:end center;width:62px;height:80px;padding-bottom:10px;border-radius:9px 18px 9px 9px;background:#fff;border:1.5px solid #17a673;box-shadow:0 12px 24px -14px rgba(10,26,74,.5);font:700 9px/1 var(--M);font-style:normal;color:#17a673}
+.a-files i:nth-child(1){transform:translateX(-58px) rotate(-14deg)}.a-files i:nth-child(2){transform:translateX(-4px) rotate(-3deg)}.a-files i:nth-child(3){transform:translateX(52px) rotate(11deg);background:#effaf5}
+.a-files b{position:absolute;right:calc(50% - 98px);top:calc(50% - 56px);display:grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--wa);color:#fff;font:700 12px/1 var(--M)}
+.a-chart svg{position:absolute;left:14px;right:14px;top:18px;bottom:30px;width:calc(100% - 28px);height:calc(100% - 48px);overflow:visible}
+.a-chart .ln{fill:none;stroke:#7a5cff;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.a-chart .ar{fill:rgba(122,92,255,.12)}
+.a-chart p{position:absolute;left:14px;right:14px;bottom:10px;display:flex;justify-content:space-between;font:500 10.5px/1 var(--M);color:var(--mu)}
+.a-chart p b{color:#7a5cff}
+.a-pdf{position:absolute;inset:0;display:grid;place-items:center}
+.a-pdf i{position:relative;display:block;width:96px;height:118px;padding:28px 14px 0;border-radius:10px;background:#fff7e8;border:1.5px solid #f5a524;box-shadow:0 14px 28px -16px rgba(10,26,74,.5)}
+.a-pdf i:before{content:"PDF";position:absolute;left:12px;top:10px;font:700 9px/1 var(--M);color:#b97600}
+.a-pdf u{display:block;height:6px;margin-bottom:8px;border-radius:3px;background:#f3d9a8;text-decoration:none}.a-pdf u:nth-child(2){width:72%}.a-pdf u:nth-child(4){width:58%}
+.a-pdf b{position:absolute;right:-14px;top:-12px;display:grid;place-items:center;min-width:32px;height:32px;padding:0 6px;border-radius:999px;background:var(--cr);color:#fff;font:700 13px/1 var(--M);box-shadow:0 8px 16px -6px var(--cr)}
+/* the pile */
+.desk.chaos .dc{z-index:auto;opacity:1;transform:translate3d(var(--cx),var(--cy),0) rotate(var(--cr)) scale(.74);animation:swjolt 2.6s ease-in-out infinite;animation-delay:var(--dl,0s)}
 @keyframes swjolt{0%,100%{translate:0 0}25%{translate:-5px 3px}50%{translate:4px -4px}75%{translate:-2px -3px}}
-/* tool art */
-.a-kw{width:58px;height:58px;border-radius:18px;background:linear-gradient(145deg,#4d74ff,#1f45d6);display:grid;place-items:center}
-.a-kw svg{width:30px;height:30px;fill:none;stroke:#fff;stroke-width:2.4;stroke-linecap:round}
-.a-chip{position:absolute;padding:4px 7px;border-radius:999px;background:#fff;border:1px solid rgba(10,26,74,.1);box-shadow:0 8px 16px -10px rgba(10,26,74,.5);font:500 9.5px/1 var(--M);color:var(--sl);white-space:nowrap}
-.a-chip.c1{right:-34px;top:8px}.a-chip.c2{left:-30px;bottom:10px;color:#2f5bff}
-.a-file{position:absolute;width:42px;height:54px;border-radius:7px 14px 7px 7px;background:#fff;border:1.5px solid #17a673;box-shadow:0 8px 16px -10px rgba(10,26,74,.5);display:grid;place-items:end center;padding-bottom:7px}
-.a-file:before{content:"";position:absolute;right:-1px;top:-1px;width:13px;height:13px;border-radius:0 12px 0 5px;background:#c9ecdc}
-.a-file i{font:700 8px/1 var(--M);font-style:normal;color:#fff;background:#17a673;padding:3px 4px;border-radius:3px}
-.a-file.f1{transform:translate(-20px,4px) rotate(-14deg);opacity:.7}.a-file.f2{transform:translate(0,-2px) rotate(-2deg);opacity:.85}.a-file.f3{transform:translate(20px,4px) rotate(12deg)}
-.a-file.f3:after{content:"?";position:absolute;right:-9px;top:-9px;display:grid;place-items:center;width:18px;height:18px;border-radius:50%;background:var(--wa);color:#fff;font:700 10px/1 var(--M)}
-.a-rk{width:66px}
-.a-rk svg{display:block;width:66px;height:40px;overflow:visible}.a-rk path{fill:none;stroke:#7a5cff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round}
-.a-rk b{display:block;margin-top:6px;font:600 11px/1 var(--M);color:#7a5cff}
-.a-doc{position:relative;width:50px;height:62px;border-radius:7px;background:#fff7e8;border:1.5px solid #f5a524;padding:16px 8px 0}
-.a-doc:before{content:"PDF";position:absolute;left:6px;top:5px;font:700 7.5px/1 var(--M);color:#b97600}
-.a-doc i{display:block;height:4px;margin-bottom:5px;border-radius:2px;background:#f3d9a8}.a-doc i:nth-child(2){width:70%}.a-doc i:nth-child(3){width:85%}
-.a-doc b{position:absolute;right:-12px;top:-10px;display:grid;place-items:center;min-width:24px;height:24px;padding:0 5px;border-radius:999px;background:var(--cr);color:#fff;font:700 10.5px/1 var(--M);box-shadow:0 6px 14px -6px var(--cr)}
-.desk-n{position:absolute;left:50%;top:14px;z-index:9;display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;background:var(--nv);color:rgba(214,224,255,.8);font:500 11px/1 var(--M);white-space:nowrap;transform:translateX(-50%);box-shadow:0 12px 26px -12px rgba(5,10,31,.8)}
+.desk-n{position:absolute;left:50%;top:14px;z-index:20;display:inline-flex;align-items:center;gap:7px;padding:7px 12px;border-radius:999px;background:var(--nv);color:rgba(214,224,255,.8);font:500 11px/1 var(--M);white-space:nowrap;transform:translateX(-50%);box-shadow:0 12px 26px -12px rgba(5,10,31,.8)}
 .desk-n b{color:#fff}
 .desk-n i{width:6px;height:6px;border-radius:50%;background:var(--cr);animation:hxping 2s ease-out infinite}
-.desk-toast{position:absolute;z-index:8;display:flex;align-items:center;gap:9px;padding:10px 14px 10px 10px;border-radius:11px;background:var(--nv);color:#fff;font:500 12.5px/1 var(--T);white-space:nowrap;box-shadow:0 24px 44px -20px rgba(5,10,31,.8);opacity:0;transform:translateY(10px) scale(.94);transition:opacity .4s,transform .5s cubic-bezier(.2,1.4,.4,1)}
+.desk-toast{position:absolute;z-index:20;display:flex;align-items:center;gap:9px;padding:10px 14px 10px 10px;border-radius:11px;background:var(--nv);color:#fff;font:500 12.5px/1 var(--T);white-space:nowrap;box-shadow:0 24px 44px -20px rgba(5,10,31,.8);opacity:0;transform:translateY(10px) scale(.94);transition:opacity .4s,transform .5s cubic-bezier(.2,1.4,.4,1)}
 .desk-toast:before{content:"!";display:grid;place-items:center;width:20px;height:20px;border-radius:50%;background:var(--cr);font:700 11px/1 var(--M)}
-.desk-toast.t1{left:50%;top:22%;translate:-50% 0}.desk-toast.t2{right:4%;top:47%;transition-delay:.25s}.desk-toast.t3{left:4%;top:61%;transition-delay:.5s}
+.desk-toast.t1{left:50%;top:44%;translate:-50% 0}.desk-toast.t2{right:5%;top:16%;transition-delay:.25s}.desk-toast.t3{left:5%;bottom:10%;transition-delay:.5s}
 .desk.chaos .desk-toast{opacity:1;transform:none}
+html:not(.js) .dc{position:relative;left:auto;top:auto;margin:16px auto;transform:none}html:not(.js) .desk{height:auto;padding:20px 0}
 @media(max-width:960px){.pb .two{grid-template-columns:minmax(0,1fr)}.pb-vis{position:relative;top:0;margin-top:8px}}
-@media(max-width:600px){.desk{aspect-ratio:auto;height:420px}.sw-t{width:110px;gap:7px}.sw-art{width:70px;height:70px;border-radius:20px}.sw-art>*{scale:.75}.sw-t p b{font-size:12px}.sw-t p span{display:none}.a-chip{display:none}
-  .sw-me{width:72px;height:72px;margin:-36px}.sw-me b{font-size:15px}.desk-toast{font-size:11px;padding:8px 11px 8px 8px}.desk-toast.t2,.desk-toast.t3,.desk-n{display:none}}
-@media(prefers-reduced-motion:reduce){.sw-p.on,.desk.chaos .sw-p,.desk.chaos .sw-x,.sw-ring,.js .desk.chaos .sw-t{animation:none}}
+@media(max-width:600px){.desk{height:440px}.dc{width:250px;height:320px;margin:-165px 0 0 -150px;padding:18px}.dc-pain{font-size:14px}.desk-toast{font-size:11px;padding:8px 11px 8px 8px}.desk-toast.t2,.desk-n{display:none}}
+@media(prefers-reduced-motion:reduce){.desk.chaos .dc{animation:none}}
 @media(prefers-reduced-motion:reduce){.pb-q em{animation:none}}
 /* ===== the turning point: pinned; the question lights word by word, then Scoutly appears and its six tools settle into orbit ===== */
 .tp{position:relative;background:var(--nv);color:#fff}
@@ -496,6 +489,21 @@ code{font:400 12.5px var(--M)}
 .tp-why b{font-weight:600;background:linear-gradient(100deg,#5ac8fa,#2f5bff 45%,#a98bff 80%);-webkit-background-clip:text;background-clip:text;color:transparent}
 .tp-tx{margin-top:24px;max-width:480px;font:400 clamp(16px,1.25vw,19px)/1.65 var(--T);color:rgba(214,224,255,.76);opacity:var(--k,1);transform:translateY(calc((1 - var(--k,1))*22px))}
 .tp-tx b{color:#fff;font-weight:600}
+/* turning point, spotlight style: a beam of light from above, a glowing headline and faded SEO symbols drifting in the dark
+   (--tpp 0..1 scroll progress, --tx 0..1 hand-over to Scoutly; set by JS) */
+.tp-pin:before{background:radial-gradient(38% 30% at 50% 0%,rgba(90,200,250,.2),transparent 70%),radial-gradient(45% 45% at 50% 58%,rgba(47,91,255,.15),transparent 70%)}
+.tp-beam{position:absolute;left:50%;top:-6%;z-index:1;width:min(1000px,110vw);height:88%;transform:translateX(-50%);background:conic-gradient(from 180deg at 50% 0%,transparent 154deg,rgba(90,200,250,.16) 167deg,rgba(205,228,255,.46) 180deg,rgba(90,200,250,.16) 193deg,transparent 206deg);filter:blur(14px);-webkit-mask-image:linear-gradient(#000 25%,transparent 95%);mask-image:linear-gradient(#000 25%,transparent 95%);opacity:calc(1 - var(--tx,0)*.5);pointer-events:none}
+.tp-syms li{position:absolute;left:var(--x);top:var(--y);z-index:1;font:500 clamp(18px,2vw,30px)/1 var(--M);color:rgba(190,210,255,.15);white-space:nowrap;transform:translateY(calc(var(--tpp,0)*var(--dy,0px))) rotate(var(--r,0deg));opacity:calc(1 - var(--tx,0)*.55);pointer-events:none}
+.tp-syms .bx{padding:8px 12px;border:2px solid rgba(190,210,255,.15);border-radius:7px}
+.tp-syms .lg{font-size:clamp(26px,3.2vw,46px)}
+.tp-dots li{position:absolute;left:var(--x);top:var(--y);z-index:1;width:3px;height:3px;border-radius:50%;background:#d6e4ff;box-shadow:0 0 8px 2px rgba(150,190,255,.6);animation:twk 3.2s ease-in-out infinite;animation-delay:var(--dl,0s)}
+@keyframes twk{50%{opacity:.15;transform:scale(.5)}}
+.tp-q .tw.lit{color:#fff;text-shadow:0 0 24px rgba(150,185,255,.55),0 0 60px rgba(90,200,250,.25)}
+.tp-badges{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 18px;margin:28px auto 0;max-width:980px;font:500 13px/1 var(--T);color:rgba(214,224,255,.66)}
+.tp-badges li{display:inline-flex;align-items:center;gap:8px}
+.tp-badges i{width:14px;height:14px;border-radius:4px;border:1.6px solid var(--c);box-shadow:0 0 10px color-mix(in srgb,var(--c) 55%,transparent)}
+@media(max-width:700px){.tp-syms li:nth-child(n+6){display:none}.tp-badges li:nth-child(n+4){display:none}}
+@media(prefers-reduced-motion:reduce){.tp-dots li{animation:none}}
 /* reduced motion and no JS: both halves simply stack */
 .js .tp.tp-static,html:not(.js) .tp{height:auto}
 .tp-static .tp-pin,html:not(.js) .tp-pin{position:relative;height:auto;min-height:0;gap:96px;padding:130px 0}
@@ -847,38 +855,36 @@ requestAnimationFrame(frame);
   </div>
   <div class="pb-vis" data-rv>
     <div class="desk" id="desk" aria-hidden="true">
-      <svg class="sw-svg" viewBox="0 0 600 520" preserveAspectRatio="none">
-        <path class="sw-x" d="M114 104 C30 210 200 320 108 426"/>
-        <path class="sw-x" d="M486 99 C570 210 400 320 492 416"/>
-        <path class="sw-x" d="M114 104 C250 170 360 20 486 99"/>
-        <path class="sw-p" data-i="0" style="--c:#2f5bff" d="M300 270 C420 208 372 42 240 73 S132 156 114 104"/>
-        <path class="sw-p" data-i="1" style="--c:#17a673" d="M300 270 C168 229 204 52 348 62 S456 146 486 99"/>
-        <path class="sw-p" data-i="2" style="--c:#7a5cff" d="M300 270 C444 322 360 499 240 458 S144 395 108 426"/>
-        <path class="sw-p" data-i="3" style="--c:#f5a524" d="M300 270 C156 333 216 489 360 468 S468 374 492 416"/>
-      </svg>
-      <div class="sw-me"><span class="sw-ring"></span><div><b>You</b><small>Switching</small></div></div>
-      <div class="sw-t" data-i="0" style="--x:19%;--y:20%;--c:#2f5bff;--dl:0s">
-        <div class="sw-art"><span class="a-kw"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4-4"/></svg></span><span class="a-chip c1">seo tool</span><span class="a-chip c2">+42 ideas</span></div>
-        <p><b>Keyword tool</b><span>Login #1</span></p>
+      <div class="dc" data-i="0" style="--c:#2f5bff;--cx:-150px;--cy:-90px;--cr:-12deg;--dl:0s">
+        <div class="dc-top"><span class="dc-ic"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></span><div><b>Keyword tool</b><small>Login #1 · tab 3</small></div></div>
+        <p class="dc-pain">Ideas everywhere, exported to yet another CSV.</p>
+        <div class="dc-art"><p class="a-chips"><span>seo tool<em>2.4k</em></span><span>rank tracker<em>1.3k</em></span><span>seo dashboard<em>1.6k</em></span><span>backlink checker<em>1.9k</em></span><span>site audit<em>880</em></span><span>+42 ideas</span></p></div>
+        <p class="dc-foot"><span>export.csv</span><span>copy · paste</span></p>
       </div>
-      <div class="sw-t" data-i="1" style="--x:81%;--y:19%;--c:#17a673;--dl:-.6s">
-        <div class="sw-art"><span class="a-file f1"><i>v1</i></span><span class="a-file f2"><i>v2</i></span><span class="a-file f3"><i>FINAL</i></span></div>
-        <p><b>Spreadsheets</b><span>3 versions</span></p>
+      <div class="dc" data-i="1" style="--c:#17a673;--cx:160px;--cy:-100px;--cr:10deg;--dl:-.6s">
+        <div class="dc-top"><span class="dc-ic"><svg viewBox="0 0 24 24"><path d="M10 14a4 4 0 0 0 5.66 0l3-3a4 4 0 0 0-5.66-5.66l-1 1"/><path d="M14 10a4 4 0 0 0-5.66 0l-3 3a4 4 0 0 0 5.66 5.66l1-1"/></svg></span><div><b>Spreadsheets</b><small>3 versions · shared drive</small></div></div>
+        <p class="dc-pain">Backlinks tracked by hand. Which file is the final one?</p>
+        <div class="dc-art"><div class="a-files"><i>v1</i><i>v2</i><i>FINAL_v3</i><b>?</b></div></div>
+        <p class="dc-foot"><span>backlinks_FINAL_v3.xlsx</span></p>
       </div>
-      <div class="sw-t" data-i="2" style="--x:18%;--y:82%;--c:#7a5cff;--dl:-1.2s">
-        <div class="sw-art"><span class="a-rk"><svg viewBox="0 0 66 40"><path d="M2 30 L14 24 L24 32 L36 16 L46 22 L56 8 L64 14"/></svg><b>#14 → #11</b></span></div>
-        <p><b>Rank tracker</b><span>Login #2</span></p>
+      <div class="dc" data-i="2" style="--c:#7a5cff;--cx:-140px;--cy:110px;--cr:8deg;--dl:-1.2s">
+        <div class="dc-top"><span class="dc-ic"><svg viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></svg></span><div><b>Rank tracker</b><small>Login #2 · another tab</small></div></div>
+        <p class="dc-pain">Rankings live somewhere else, on their own schedule.</p>
+        <div class="dc-art a-chart"><svg viewBox="0 0 200 90" preserveAspectRatio="none"><path class="ar" d="M0 70 L30 62 L60 72 L90 48 L120 56 L150 34 L180 40 L200 22 L200 90 L0 90Z"/><path class="ln" d="M0 70 L30 62 L60 72 L90 48 L120 56 L150 34 L180 40 L200 22"/></svg><p><span>Position</span><b>#14 → #11</b></p></div>
+        <p class="dc-foot"><span>weekly email</span><span>separate login</span></p>
       </div>
-      <div class="sw-t" data-i="3" style="--x:82%;--y:80%;--c:#f5a524;--dl:-1.8s">
-        <div class="sw-art"><span class="a-doc"><i></i><i></i><i></i><b>37</b></span></div>
-        <p><b>Audit platform</b><span>Login #3</span></p>
+      <div class="dc" data-i="3" style="--c:#f5a524;--cx:150px;--cy:100px;--cr:-9deg;--dl:-1.8s">
+        <div class="dc-top"><span class="dc-ic"><svg viewBox="0 0 24 24"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg></span><div><b>Audit platform</b><small>Login #3 · monthly</small></div></div>
+        <p class="dc-pain">37 issues in a PDF that nobody opens twice.</p>
+        <div class="dc-art a-pdf"><i><u></u><u></u><u></u><u></u><b>37</b></i></div>
+        <p class="dc-foot"><span>audit-report-march.pdf</span></p>
       </div>
       <p class="desk-toast t1">Which spreadsheet is the latest?</p>
       <p class="desk-toast t2">Session expired</p>
       <p class="desk-toast t3">Rankings not updated</p>
       <span class="desk-n"><i></i><b>4</b>&nbsp;tools · <b>3</b>&nbsp;logins · <b>0</b>&nbsp;shared view</span>
     </div>
-    <p class="pb-cap">Illustration: a typical SEO workflow, tangled across four tools.</p>
+    <p class="pb-cap">Illustration: a typical SEO workflow, spread across four tools.</p>
   </div>
 </div></section>
 
@@ -886,9 +892,13 @@ requestAnimationFrame(frame);
 <!-- 3. THE TURNING POINT: pinned; the question lights up, then Scoutly appears -->
 <section class="tp dk" id="turn" aria-labelledby="tpQ">
   <div class="tp-pin">
+    <div class="tp-beam" aria-hidden="true"></div>
+    <ul class="tp-syms" aria-hidden="true"><li style="--x:12%;--y:24%;--dy:-60px">404</li><li class="bx" style="--x:19%;--y:58%;--dy:-90px;--r:-12deg">#3</li><li style="--x:7%;--y:74%;--dy:-40px">&lt;h1&gt;</li><li style="--x:21%;--y:9%;--dy:-30px">+42</li><li style="--x:80%;--y:8%;--dy:-70px">LCP 2.1s</li><li class="bx" style="--x:85%;--y:42%;--dy:-110px;--r:10deg">301</li><li style="--x:72%;--y:70%;--dy:-50px">KD 38</li><li style="--x:88%;--y:82%;--dy:-80px">alt=""</li><li style="--x:60%;--y:86%;--dy:-60px">200 OK</li><li class="lg" style="--x:3%;--y:44%;--dy:-120px">↗184</li></ul>
+    <ul class="tp-dots" aria-hidden="true"><li style="--x:24%;--y:34%;--dl:0s"></li><li style="--x:68%;--y:30%;--dl:-1s"></li><li style="--x:41%;--y:78%;--dl:-2s"></li><li style="--x:82%;--y:58%;--dl:-.5s"></li><li style="--x:15%;--y:88%;--dl:-1.5s"></li><li style="--x:55%;--y:18%;--dl:-2.5s"></li><li style="--x:93%;--y:28%;--dl:-.8s"></li></ul>
     <div class="tp-a" id="tpA">
       <p class="lbl lt">The turning point</p>
       <h2 class="tp-q" id="tpQ">What if everything you need for SEO was in <em>one place?</em></h2>
+      <ul class="tp-badges" aria-label="Six tools in Scoutly"><li><i style="--c:#6f8dff"></i>Keyword research</li><li><i style="--c:#3ddba5"></i>Backlink manager</li><li><i style="--c:#a98bff"></i>Rank tracking</li><li><i style="--c:#f5b53d"></i>Website audit</li><li><i style="--c:#4fd1e8"></i>Competitor analysis</li><li><i style="--c:#5ac8fa"></i>SEO dashboard</li></ul>
       <p class="tp-hint" aria-hidden="true">Keep scrolling</p>
     </div>
     <div class="tp-b" id="tpB">
@@ -1229,9 +1239,9 @@ function heroScroll(){var r=hx.getBoundingClientRect(),vh=innerHeight;hxVis=r.bo
 function heroIntro(){hx.classList.add('hx-in')}
 
 /* ---------- 2. the problem: each statement brings its tool forward; "Sound familiar?" lets them all pile up ---------- */
-var desk=$('desk'),pbSteps=q('[data-pb]'),pws=q('.sw-t',desk),dTabs=q('.sw-p',desk),pbOn=-1,pbAuto=null;
+var desk=$('desk'),pbSteps=q('[data-pb]'),pws=q('.dc',desk),dTabs=[],pbOn=-1,pbAuto=null;
 function pbSet(n){if(n===pbOn)return;pbOn=n;desk.classList.toggle('chaos',n>=4);
-  pws.forEach(function(w,i){w.classList.toggle('on',i===n)});dTabs.forEach(function(t,i){t.classList.toggle('on',i===n)});
+  pws.forEach(function(w,i){w.classList.toggle('on',i===n);w.style.setProperty('--o',n>=4?0:(i-n+4)%4)});dTabs.forEach(function(t,i){t.classList.toggle('on',i===n)});
   pbSteps.forEach(function(s){var i=+s.dataset.pb;s.classList.toggle('on',i===n||(n>=4&&i<4))})}
 pbSet(0);
 /* wide screens: the desk is sticky beside the list; on every scroll the statement nearest mid-screen leads,
@@ -1257,7 +1267,7 @@ var tpW=q('.tw',tpQ),tpStatic=RM,tpLast={};
 if(tpStatic){tp.classList.add('tp-static');tpW.forEach(function(w){w.classList.add('lit')})}
 function turn(){if(tpStatic)return;var r=tp.getBoundingClientRect();if(r.bottom<-50||r.top>innerHeight+50)return;var p=prog(tp);
   var n=Math.round(tpW.length*band(p,.03,.34));if(tpLast.n!==n){tpLast.n=n;tpW.forEach(function(w,i){w.classList.toggle('lit',i<n)})}
-  var x=ss(.4,.52,p);tpA.style.opacity=(1-x).toFixed(3);tpA.style.transform='translateY('+(-60*x).toFixed(1)+'px) scale('+(1-.06*x).toFixed(3)+')';
+  var x=ss(.4,.52,p);tp.style.setProperty('--tpp',p.toFixed(3));tp.style.setProperty('--tx',x.toFixed(3));tpA.style.opacity=(1-x).toFixed(3);tpA.style.transform='translateY('+(-60*x).toFixed(1)+'px) scale('+(1-.06*x).toFixed(3)+')';
   tpB.style.opacity=x.toFixed(3);tpB.style.transform='translateY('+(40*(1-x)).toFixed(1)+'px)';
   tpA.style.visibility=x>=1?'hidden':'';tpB.style.visibility=x<=0?'hidden':'';
   tpB.style.setProperty('--m',ss(.46,.6,p).toFixed(3));
