@@ -655,13 +655,45 @@ html:not(.js) .ax-lines li,.ax.ax-static .ax-lines li{position:static;grid-area:
 .rows b{font:500 17px/1.2 var(--D);letter-spacing:.03em;text-transform:uppercase}.rows p{margin-top:6px;font:400 14.5px/1.65 var(--T);color:var(--sl)}
 .rows em{flex:none;font:600 10px/1 var(--M);font-style:normal;letter-spacing:.12em;text-transform:uppercase;padding:6px 8px;border:1px solid}
 .st-d{color:var(--ok)}.st-p{color:var(--b)}.st-r{color:#b97600}
-/* faq */
-.faq-h{position:sticky;top:110px}
-.faq{border-top:1px solid var(--ln)}.faq details{border-bottom:1px solid var(--ln)}
-.faq summary{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;cursor:pointer;list-style:none}.faq summary::-webkit-details-marker{display:none}
-.faq summary h3{font:500 16px/1.35 var(--D);letter-spacing:.03em;text-transform:uppercase;transition:color .2s}.faq summary:hover h3{color:var(--b)}
-.faq summary:after{content:"+";flex:none;display:grid;place-items:center;width:30px;height:30px;border:1px solid var(--ln);font:400 18px/1 var(--M);color:var(--b);transition:transform .3s}.faq details[open] summary:after{transform:rotate(45deg)}
-.faq .a{padding:0 50px 24px 0;font:400 15px/1.65 var(--T);color:var(--sl)}.faq .a a{color:var(--b);text-decoration:underline;text-underline-offset:3px}
+/* faq: a sticky intro with a help card on the left; category filters and soft accordion cards on the right */
+.fq{background:var(--bg)}
+.fq:before{content:"";position:absolute;inset:0;background:radial-gradient(40% 40% at 85% 30%,rgba(47,91,255,.08),transparent 70%),radial-gradient(35% 40% at 10% 80%,rgba(90,200,250,.08),transparent 70%);pointer-events:none}
+.fq-in{position:relative;display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:clamp(40px,6vw,90px);align-items:start}
+.fq-side{position:sticky;top:110px}
+.fq-sub{margin-top:18px;max-width:420px;font:400 16.5px/1.6 var(--T);color:var(--sl)}
+.fq-help{position:relative;overflow:hidden;margin-top:30px;max-width:420px;padding:24px;border-radius:22px;background:linear-gradient(160deg,#10205a,#050a1f 70%);color:#fff;box-shadow:0 40px 80px -40px rgba(10,26,74,.6)}
+.fq-help:before{content:"";position:absolute;right:-60px;top:-60px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(90,200,250,.35),transparent 70%);pointer-events:none}
+.fq-help>*{position:relative}
+.fq-av{position:relative;display:inline-block}.fq-av img{display:block;width:44px;height:44px}
+.fq-av i{position:absolute;right:-2px;bottom:-2px;width:11px;height:11px;border-radius:50%;background:#3ddba5;box-shadow:0 0 0 2px #0c173f}
+.fq-help b{display:block;margin-top:16px;font:600 20px/1.2 var(--T);letter-spacing:-.01em}
+.fq-help p{margin-top:6px;font:400 14.5px/1.55 var(--T);color:rgba(214,224,255,.72)}
+.fq-btns{display:flex;flex-wrap:wrap;align-items:center;gap:10px 18px;margin-top:20px}
+.fq-btns .btn{height:42px;padding:0 18px;border-radius:999px}
+.fq-link{display:inline-flex;gap:6px;font:600 14px/1 var(--T);color:var(--sky);transition:gap .25s,color .25s}.fq-link:hover{gap:10px;color:#fff}
+.fq-cats{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:18px}
+.fq-cats button{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 15px;border-radius:999px;border:1px solid var(--ln);background:rgba(255,255,255,.65);font:500 14px/1 var(--T);color:var(--sl);cursor:pointer;transition:background .25s,color .25s,border-color .25s}
+.fq-cats button:hover{border-color:rgba(47,91,255,.35);color:var(--ink)}
+.fq-cats i{padding:3px 7px;border-radius:999px;background:rgba(10,26,74,.06);font:600 10.5px/1 var(--M);font-style:normal}
+.fq-cats [aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff}.fq-cats [aria-pressed="true"] i{background:rgba(255,255,255,.16)}
+.fq-list{display:grid;gap:10px}
+.fq-list details{border-radius:18px;background:rgba(255,255,255,.7);border:1px solid rgba(10,26,74,.08);transition:border-color .3s,box-shadow .3s,background .3s}
+.fq-list details:hover{border-color:rgba(47,91,255,.25)}
+.fq-list details[open]{background:#fff;border-color:rgba(47,91,255,.35);box-shadow:0 30px 60px -36px rgba(47,91,255,.45)}
+.fq-list summary{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:16px;padding:20px 22px;cursor:pointer;list-style:none}
+.fq-list summary::-webkit-details-marker{display:none}
+.fq-list summary:focus-visible{outline:2px solid var(--b);outline-offset:2px;border-radius:18px}
+.fq-n{font:500 12px/1 var(--M);color:var(--mu);transition:color .3s}
+.fq-list details[open] .fq-n{color:var(--b)}
+.fq-list h3{font:600 17px/1.35 var(--T);letter-spacing:-.01em;color:var(--ink)}
+.fq-x{position:relative;width:34px;height:34px;border-radius:50%;background:rgba(10,26,74,.05);transition:background .3s,transform .45s cubic-bezier(.2,.8,.2,1)}
+.fq-x:before,.fq-x:after{content:"";position:absolute;left:50%;top:50%;width:12px;height:1.8px;margin:-.9px 0 0 -6px;border-radius:1px;background:var(--ink);transition:background .3s}
+.fq-x:after{transform:rotate(90deg)}
+.fq-list details[open] .fq-x{background:var(--b);transform:rotate(135deg)}.fq-list details[open] .fq-x:before,.fq-list details[open] .fq-x:after{background:#fff}
+.fq-list .a{overflow:hidden;padding:0 64px 22px 58px;font:400 15.5px/1.7 var(--T);color:var(--sl)}
+.fq-list .a a{color:var(--b);text-decoration:underline;text-underline-offset:3px}
+@media(max-width:960px){.fq-in{grid-template-columns:minmax(0,1fr)}.fq-side{position:static}}
+@media(max-width:600px){.fq-list summary{padding:16px;gap:12px}.fq-list .a{padding:0 16px 18px}.fq-list h3{font-size:15.5px}.fq-cats button{height:36px;padding:0 12px;font-size:13px}}
 /* final */
 .fin{position:relative;padding:70px 0 120px;overflow:hidden;background:linear-gradient(180deg,var(--nv),#0a1a4a)}
 .fin>.w{position:relative}
@@ -1030,9 +1062,33 @@ requestAnimationFrame(frame);
 </section>
 
 <!-- 7. FAQ -->
-<section class="sec grid-bg" id="faq" aria-labelledby="faqTitle"><div class="w two top">
-  <div class="faq-h"><p class="lbl" data-rv>FAQ</p><h2 class="dh sm" id="faqTitle"><span data-scr>Frequently asked questions</span> <span class="l2" data-scr>about Scoutly and SEO.</span></h2><p class="fine" data-rv>New to the terms? See the <a href="seo-glossary/">SEO glossary</a>.</p></div>
-  <div class="faq" data-rv><details><summary><h3>What is Scoutly?</h3></summary><div class="a"><p>Scoutly is an SEO and search visibility platform designed to bring website auditing, backlink analysis, broken link detection, keyword research, competitor research, and supported AI search visibility insights into one workspace.</p></div></details><details><summary><h3>What does an SEO audit tool do?</h3></summary><div class="a"><p>An SEO audit tool examines a website for technical and on-page issues that may affect crawling, indexability, site structure, content optimization, and user experience. It helps identify problems and organize potential improvements. See <a href="website-seo-audit/">what Scoutly’s website SEO audit checks</a>.</p></div></details><details><summary><h3>Can Scoutly find broken links?</h3></summary><div class="a"><p>Yes. Every website audit checks up to 120 internal and external links found on the pages it crawls, and reports errors, redirects and links that couldn’t be verified. Results depend on crawl limits, website access, and server responses.</p></div></details><details><summary><h3>Can Scoutly check backlinks?</h3></summary><div class="a"><p>Scoutly can analyze backlink information available through its configured data sources. Comprehensive backlink discovery generally requires an external backlink index or provider, and no provider is connected in the current early-access build.</p></div></details><details><summary><h3>Does Scoutly help with competitor analysis?</h3></summary><div class="a"><p>Yes. The intended workflow includes comparing available keyword, content, and backlink data to identify opportunities for your website. The depth of analysis depends on the data sources connected.</p></div></details><details><summary><h3>What are AEO and GEO?</h3></summary><div class="a"><p>AEO stands for Answer Engine Optimization, while GEO stands for Generative Engine Optimization. Both focus on improving how useful content can be understood and surfaced in answer-oriented and generative search experiences. Read more about <a href="aeo-geo/">AEO and GEO</a>.</p></div></details><details><summary><h3>Can Scoutly guarantee higher Google rankings?</h3></summary><div class="a"><p>No SEO platform can guarantee specific rankings. Scoutly can help identify issues and opportunities, but outcomes depend on your website, competition, content, technical implementation, and search engine systems.</p></div></details><details><summary><h3>Is Scoutly suitable for agencies?</h3></summary><div class="a"><p>Scoutly is intended to support agency workflows involving multiple website audits, backlink research, competitor analysis, and reporting. Project limits and collaboration features will depend on the plan, and will be published before launch.</p></div></details><details><summary><h3>Does Scoutly offer a free website audit?</h3></summary><div class="a"><p>The website audit works today. It fetches the page you enter, reads robots.txt and your XML sitemap, crawls up to 25 internal pages up to three clicks deep, checks up to 120 links, and adds Core Web Vitals from Google PageSpeed Insights. Create a free account to run audits and keep your results. Pricing and any free-tier limits will be published before they apply.</p></div></details><details><summary><h3>How often should I audit my website?</h3></summary><div class="a"><p>Run an audit when launching a new website or making significant changes, and repeat it periodically to detect new technical issues. Websites that change frequently may benefit from scheduled crawls.</p></div></details></div>
+<section class="sec fq" id="faq" aria-labelledby="faqTitle"><div class="w fq-in">
+  <div class="fq-side">
+    <p class="lbl" data-rv>FAQ</p>
+    <h2 class="dh sm" id="faqTitle"><span data-scr>Frequently asked questions</span> <span class="l2" data-scr>about Scoutly and SEO.</span></h2>
+    <p class="fq-sub" data-rv>Straight answers about what Scoutly does today, the data it relies on, and what’s still to come.</p>
+    <div class="fq-help" data-rv>
+      <span class="fq-av" aria-hidden="true"><img src="assets/scoutly-mark.svg" alt="" width="40" height="40"><i></i></span>
+      <b>Still have questions?</b>
+      <p>Book a short walkthrough, or look up a term in the SEO glossary.</p>
+      <div class="fq-btns"><button type="button" class="btn p fq-demo">Book a demo <span aria-hidden="true">→</span></button><a class="fq-link" href="seo-glossary/">Browse the glossary <span aria-hidden="true">→</span></a></div>
+    </div>
+  </div>
+  <div class="fq-main" data-rv>
+    <div class="fq-cats" role="group" aria-label="Filter the questions"><button type="button" data-cat="all" aria-pressed="true">All <i>10</i></button><button type="button" data-cat="product" aria-pressed="false">Product <i>4</i></button><button type="button" data-cat="seo" aria-pressed="false">SEO basics <i>4</i></button><button type="button" data-cat="access" aria-pressed="false">Access &amp; pricing <i>2</i></button></div>
+    <div class="fq-list">
+      <details name="faq" data-cat="product"><summary><span class="fq-n">01</span><h3>What is Scoutly?</h3><i class="fq-x" aria-hidden="true"></i></summary><div class="a"><p>Scoutly is an SEO and search visibility platform designed to bring website auditing, backlink analysis, broken link detection, keyword research, competitor research, and supported AI search visibility insights into one workspace.</p></div></details>
+      <details name="faq" data-cat="seo"><summary><span class="fq-n">02</span><h3>What does an SEO audit tool do?</h3><i class="fq-x" aria-hidden="true"></i></summary><div class="a"><p>An SEO audit tool examines a website for technical and on-page issues that may affect crawling, indexability, site structure, content optimization, and user experience. It helps identify problems and organize potential improvements. See <a href="website-seo-audit/">what Scoutly’s website SEO audit checks</a>.</p></div></details>
+      <details name="faq" data-cat="product"><summary><span class="fq-n">03</span><h3>Can Scoutly find broken links?</h3><i class="fq-x" aria-hidden="true"></i></summary><div class="a"><p>Yes. Every website audit checks up to 120 internal and external links found on the pages it crawls, and reports errors, redirects and links that couldn’t be verified. Results depend on crawl limits, website access, and server responses.</p></div></details>
+      <details name="faq" data-cat="product"><summary><span class="fq-n">04</span><h3>Can Scoutly check backlinks?</h3><i class="fq-x" aria-hidden="true"></i></summary><div class="a"><p>Scoutly can analyze backlink information available through its configured data sources. Comprehensive backlink discovery generally requires an external backlink index or provider, and no provider is connected in the current early-access build.</p></div></details>
+      <details name="faq" data-cat="product"><summary><span class="fq-n">05</span><h3>Does Scoutly help with competitor analysis?</h3><i class="fq-x" aria-hidden="true"></i></summary><div class="a"><p>Yes. The intended workflow includes comparing available keyword, content, and backlink data to identify opportunities for your website. The depth of analysis depends on the data sources connected.</p></div></details>
+      <details name="faq" data-cat="seo"><summary><span class="fq-n">06</span><h3>What are AEO and GEO?</h3><i class="fq-x" aria-hidden="true"></i></summary><div class="a"><p>AEO stands for Answer Engine Optimization, while GEO stands for Generative Engine Optimization. Both focus on improving how useful content can be understood and surfaced in answer-oriented and generative search experiences. Read more about <a href="aeo-geo/">AEO and GEO</a>.</p></div></details>
+      <details name="faq" data-cat="seo"><summary><span class="fq-n">07</span><h3>Can Scoutly guarantee higher Google rankings?</h3><i class="fq-x" aria-hidden="true"></i></summary><div class="a"><p>No SEO platform can guarantee specific rankings. Scoutly can help identify issues and opportunities, but outcomes depend on your website, competition, content, technical implementation, and search engine systems.</p></div></details>
+      <details name="faq" data-cat="access"><summary><span class="fq-n">08</span><h3>Is Scoutly suitable for agencies?</h3><i class="fq-x" aria-hidden="true"></i></summary><div class="a"><p>Scoutly is intended to support agency workflows involving multiple website audits, backlink research, competitor analysis, and reporting. Project limits and collaboration features will depend on the plan, and will be published before launch.</p></div></details>
+      <details name="faq" data-cat="access"><summary><span class="fq-n">09</span><h3>Does Scoutly offer a free website audit?</h3><i class="fq-x" aria-hidden="true"></i></summary><div class="a"><p>The website audit works today. It fetches the page you enter, reads robots.txt and your XML sitemap, crawls up to 25 internal pages up to three clicks deep, checks up to 120 links, and adds Core Web Vitals from Google PageSpeed Insights. Create a free account to run audits and keep your results. Pricing and any free-tier limits will be published before they apply.</p></div></details>
+      <details name="faq" data-cat="seo"><summary><span class="fq-n">10</span><h3>How often should I audit my website?</h3><i class="fq-x" aria-hidden="true"></i></summary><div class="a"><p>Run an audit when launching a new website or making significant changes, and repeat it periodically to detect new technical issues. Websites that change frequently may benefit from scheduled crawls.</p></div></details>
+    </div>
+  </div>
 </div></section>
 
 <div class="fade fade-dk" aria-hidden="true"></div>
@@ -1289,6 +1345,16 @@ function exJump(n,focus){if(!exPin){exGo(n,focus);return}
 exGo(0);
 exTabs.forEach(function(t,i){t.addEventListener('click',function(){exJump(i)})});
 exList.addEventListener('keydown',function(e){var k={ArrowDown:1,ArrowRight:1,ArrowUp:-1,ArrowLeft:-1}[e.key];if(!k)return;e.preventDefault();exJump((exI+k+exTabs.length)%exTabs.length,true)});
+
+/* ---------- faq: category filters; answers open and close with a smooth height animation, one at a time ---------- */
+var fq=$('faq'),fqItems=q('.fq-list details',fq),fqCats=q('.fq-cats button',fq);
+fqCats.forEach(function(b){b.addEventListener('click',function(){var c=b.dataset.cat,n=0;fqCats.forEach(function(x){x.setAttribute('aria-pressed',x===b)});
+  fqItems.forEach(function(d){var show=c==='all'||d.dataset.cat===c;d.hidden=!show;if(show)q('.fq-n',d)[0].textContent=(++n<10?'0':'')+n})})});
+fqItems.forEach(function(d){var a=q('.a',d)[0];q('summary',d)[0].addEventListener('click',function(e){if(RM||!a.animate)return;e.preventDefault();
+  var ease='cubic-bezier(.2,.8,.2,1)';
+  if(d.open){a.animate([{height:a.offsetHeight+'px',opacity:1},{height:'0px',paddingBottom:'0px',opacity:0}],{duration:260,easing:ease}).onfinish=function(){d.open=false};return}
+  fqItems.forEach(function(o){if(o!==d&&o.open)o.open=false});d.open=true;a.animate([{height:'0px',paddingBottom:'0px',opacity:0},{height:a.offsetHeight+'px',opacity:1}],{duration:340,easing:ease})})});
+q('.fq-demo',fq).forEach(function(b){b.addEventListener('click',function(){$('demoOpen').click()})});
 
 /* ---------- footer: the wordmark lights up under the cursor; on touch it sweeps by itself ---------- */
 var ftEl=$('ft'),ftMark=$('ftMark'),ftC=$('ftC'),ftX=-300,ftY=95,ftTX=-300,ftTY=95,ftHover=false,ftVis=false;
