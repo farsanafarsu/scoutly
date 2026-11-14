@@ -9,7 +9,7 @@
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/app.css">
 <style>
 .eng{display:flex;flex-wrap:wrap;gap:6px}
@@ -87,7 +87,7 @@
     if(!info.page.schema.some(function(s){return /Organization|LocalBusiness|Business/.test(s)}))tips.push('Add Organization or LocalBusiness structured data with your name, logo, address and sameAs links to your profiles, so AI systems connect your brand to the right entity.');
     tips.push('Answer the exact questions from the prompt tracker on your site, each under a question heading with a direct 40–60 word answer first. Check pages with the AEO · GEO checker.');
     tips.push('Get mentioned where assistants look: reviews, directories, “best of” lists, Reddit and industry sites. Third-party mentions drive many AI citations.');
-    $('tips').innerHTML=tips.map(function(t){return '<li style="padding:9px 0;border-bottom:1px solid var(--ln);font:400 13px/1.6 Geist,sans-serif;color:var(--sl)">'+esc(t)+'</li>'}).join('');
+    $('tips').innerHTML=tips.map(function(t){return '<li style="padding:9px 0;border-bottom:1px solid var(--ln);font:400 13px/1.6 Instrument Sans,sans-serif;color:var(--sl)">'+esc(t)+'</li>'}).join('');
   }
   function key(p,e){return p+'||'+e}
   function renderPrompts(){

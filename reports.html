@@ -9,14 +9,14 @@
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <script>(function(){var u=null;try{u=sessionStorage.getItem('scoutly.user')}catch(_){return}if(!u)location.replace('login.html?mode=login')})();</script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">
 <link rel="stylesheet" href="assets/app.css">
 <style>
 .rp{display:grid;grid-template-columns:300px minmax(0,1fr);gap:20px;margin-top:20px;align-items:start}
 .opts{background:var(--card);border:1px solid var(--ln);padding:16px;display:grid;gap:12px;position:sticky;top:84px}
 .opts h3{font:600 10px/1 var(--M);letter-spacing:.14em;text-transform:uppercase;color:var(--mu)}
 .opts .qf{flex:none}
-.secs label{display:flex;gap:8px;align-items:center;padding:6px 0;font:400 13px/1.3 Geist,sans-serif}.secs input{accent-color:var(--b)}
+.secs label{display:flex;gap:8px;align-items:center;padding:6px 0;font:400 13px/1.3 Instrument Sans,sans-serif}.secs input{accent-color:var(--b)}
 .secs em{margin-left:auto;font:400 11px/1 var(--M);font-style:normal;color:var(--mu)}
 .paper{background:#fff;border:1px solid var(--ln);box-shadow:0 30px 60px -40px rgba(10,26,74,.4);padding:44px 48px;color:#0a1230;min-width:0}
 .paper .cover{display:flex;justify-content:space-between;gap:20px;padding-bottom:22px;border-bottom:3px solid #0a1230}
@@ -24,7 +24,7 @@
 .paper .cover p{margin-top:8px;font:400 12.5px/1.6 var(--M);color:#4a5675}
 .paper .brand{display:flex;align-items:center;gap:8px;font:600 13px/1 var(--D);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}.paper .brand img{width:24px;height:24px}
 .paper h2{margin-top:30px;padding-bottom:8px;border-bottom:1px solid #d9deea;font:500 17px/1.2 var(--D);letter-spacing:.04em;text-transform:uppercase}
-.paper p.n{margin-top:10px;font:400 13.5px/1.7 Geist,sans-serif;white-space:pre-wrap}
+.paper p.n{margin-top:10px;font:400 13.5px/1.7 Instrument Sans,sans-serif;white-space:pre-wrap}
 .paper .kp{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:14px}
 .paper .kp div{padding:12px;border:1px solid #d9deea}.paper .kp small{display:block;font:600 9px/1.3 var(--M);letter-spacing:.12em;text-transform:uppercase;color:#7d88a3}.paper .kp b{display:block;margin-top:6px;font:500 22px/1 var(--D)}
 .paper table{width:100%;margin-top:12px;border-collapse:collapse;font:400 12px/1.45 var(--M)}
@@ -107,7 +107,7 @@
   ['title','client','notes'].forEach(function(i){$(i).addEventListener('input',render)});$('site').addEventListener('change',render);$('secs').addEventListener('change',render);
   $('print').onclick=function(){window.print()};
   $('html').onclick=function(){var css=[].map.call(document.querySelectorAll('style'),function(s){return s.textContent}).join('\n');
-    var doc='<!doctype html><html><head><meta charset="utf-8"><title>'+esc($('title').value)+'</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@500&display=swap"><style>:root{--D:Tektur,Geist,sans-serif;--M:"Geist Mono",monospace}body{margin:0;padding:30px;font-family:Geist,sans-serif}'+css+'</style></head><body><article class="paper">'+$('paper').innerHTML.replace(/src="assets\/scoutly-mark\.webp"/g,'src="" style="display:none"')+'</article></body></html>';
+    var doc='<!doctype html><html><head><meta charset="utf-8"><title>'+esc($('title').value)+'</title><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap"><style>:root{--D:Instrument Sans,Instrument Sans,sans-serif;--M:"Geist Mono",monospace}body{margin:0;padding:30px;font-family:Instrument Sans,sans-serif}'+css+'</style></head><body><article class="paper">'+$('paper').innerHTML.replace(/src="assets\/scoutly-mark\.webp"/g,'src="" style="display:none"')+'</article></body></html>';
     var a=document.createElement('a');a.href=URL.createObjectURL(new Blob([doc],{type:'text/html'}));a.download=($('client').value||'seo')+'-report-'+new Date().toISOString().slice(0,10)+'.html';document.body.appendChild(a);a.click();setTimeout(function(){a.remove()},500)};
   render();
 })();

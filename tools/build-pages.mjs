@@ -126,7 +126,7 @@ ${p.noindex ? '' : `<meta property="og:url" content="${url}">\n`}<meta property=
 <meta property="og:image:alt" content="The Scoutly logo, a search lens with a spark inside, next to the headline Get found on Google. Get discovered by AI.">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500&display=swap">
 <link rel="stylesheet" href="${r}assets/site.css">
 ${ld.map((o) => `<script type="application/ld+json">${JSON.stringify(o)}</script>`).join('\n')}
 </head>
@@ -186,7 +186,7 @@ PAGES.push({
         { chip: ['cr', 'Critical issues'], h: 'Pages that may not be crawled or indexed', p: 'For example, an important page blocked in robots.txt, a stray noindex tag, or a canonical tag pointing to the wrong URL.' },
         { chip: ['wr', 'Improvements'], h: 'Problems that weaken navigation or clarity', p: 'Broken internal links, redirect chains, duplicate page titles, missing meta descriptions and weak internal connections.' },
         { chip: ['in', 'Optimization opportunities'], h: 'Changes that can make good pages better', p: 'Clearer headings, stronger internal links to important pages, expanded topic coverage and better-structured answers.' },
-      ]) + split(`<h3 style="font:600 24px/1.2 Geist,system-ui,sans-serif;letter-spacing:-.03em;color:var(--ink)">Every finding answers four questions</h3>
+      ]) + split(`<h3 style="font:600 24px/1.2 Instrument Sans,system-ui,sans-serif;letter-spacing:-.03em;color:var(--ink)">Every finding answers four questions</h3>
         ${ticks(['<b>What was detected:</b> the exact issue and the URLs it affects.', '<b>Why it matters:</b> how it can affect crawling, indexing or visitors.', '<b>How to verify it:</b> a way to confirm the problem yourself, so you don’t have to take a score on trust.', '<b>What to do next:</b> a suggested fix, written for whoever will make the change.'])}
         <p>Severity reflects how directly an issue affects crawling, indexing and usability. It isn’t a prediction of ranking changes, because rankings depend on many factors no audit can measure.</p>`,
       mock('Example finding', 'Critical', `<dl>

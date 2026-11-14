@@ -115,7 +115,7 @@
         sprite=(document.querySelector('body>svg[aria-hidden="true"]')||{}).outerHTML||'',
         meta=(opt.meta||[]).filter(function(m){return m[1]}).concat([['Generated',now.toLocaleString()]]);
       var html='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>'+esc(opt.title)+' — Scoutly</title>'+
-        '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&family=Tektur:wght@400;500;600&display=swap">'+
+        '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap">'+
         '<style>'+r[0]+'\n'+page+'\n'+
         'body{padding:32px 16px 48px}body:after{display:none}.rp{max-width:1200px;margin:0 auto}'+
         '.rp-h{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px;padding-bottom:18px;border-bottom:2px solid var(--ink)}'+
