@@ -188,7 +188,7 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}ul,o
 .cv-side span:before{content:"";flex:none;width:8px;height:8px;border-radius:3px;border:1.5px solid currentColor;transition:background .4s,border-color .4s}
 .cv-side span:after{content:"✓";margin-left:auto;font:700 10px/1 var(--M);color:var(--ok);opacity:0;transform:scale(.4);transition:opacity .3s,transform .45s cubic-bezier(.2,1.6,.4,1)}
 .cv-side .on{color:var(--ink);background:rgba(47,91,255,.07)}.cv-side .on:before{background:var(--b);border-color:var(--b)}.cv-side .on:after{opacity:1;transform:none}
-.cv-main{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;padding:16px;align-content:start}
+.cv-main{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:12px;padding:16px;align-content:start}
 .cv-hi{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:2px 2px 4px}
 .cv-hi b{display:block;font:600 17px/1.1 var(--D);color:var(--ink)}.cv-hi div span{display:block;margin-top:6px;font:400 12.5px/1 var(--T);color:var(--mu)}
 .cv-tabs{display:inline-flex;align-items:center;gap:8px;padding:7px 11px;border-radius:999px;background:rgba(229,72,77,.08);font:500 11px/1 var(--M);color:var(--cr);white-space:nowrap;transition:background .4s,color .4s}
@@ -199,7 +199,7 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}ul,o
 .cv-meter{flex:1;max-width:220px;height:5px;margin-left:auto;border-radius:3px;background:rgba(10,26,74,.08);overflow:hidden}.cv-meter i{display:block;height:100%;width:var(--s,100%);background:linear-gradient(90deg,var(--b),var(--sky))}
 .cv-n{white-space:nowrap}.cv-n b{font:600 15px/1 var(--D);color:var(--ink)}
 /* a slot holds one piece; the dashed outline is the empty place waiting for it */
-.sl{--k:1;position:relative;z-index:2;grid-column:span 2;min-width:0;border-radius:12px}
+.sl{--k:1;position:relative;z-index:2;grid-column:span var(--sp,4);min-width:0;border-radius:12px}
 .sl:before{content:"";position:absolute;inset:0;border-radius:12px;border:1.5px dashed rgba(47,91,255,.32);opacity:calc(1 - var(--k));pointer-events:none}
 .pc{position:relative;height:100%;overflow:hidden;padding:12px 14px 13px;border-radius:12px;background:#fff;border:1px solid rgba(10,26,74,.08);box-shadow:0 calc(4px + 26px*(1 - var(--k))) calc(14px + 40px*(1 - var(--k))) -12px rgba(10,26,74,.38);transform:translate3d(calc(var(--sx,0px)*(1 - var(--k))*var(--spread,1)),calc(var(--sy,0px)*(1 - var(--k))*var(--spread,1)),0) rotate(calc(var(--sr,0deg)*(1 - var(--k)))) scale(calc(.94 + .06*var(--k)));transition:border-color .4s}
 .pc:before{content:"";position:absolute;inset:0;background:var(--tint,transparent);opacity:calc(1 - var(--k));pointer-events:none}
@@ -213,27 +213,56 @@ a{color:inherit;text-decoration:none}h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}ul,o
 .pc-in em{margin-left:auto;padding-left:8px;font:500 10.5px/1 var(--M);font-style:normal;color:var(--mu)}
 .fi{flex:none;display:grid;place-items:center;height:18px;padding:0 5px;border-radius:4px;background:var(--c);color:#fff;font:700 8.5px/1 var(--M);font-style:normal;letter-spacing:.04em}
 .mi{flex:none;width:18px;height:18px;border-radius:6px;background:var(--c);box-shadow:inset 0 0 0 4.5px rgba(255,255,255,.4)}
-.pc-kw li,.pc-bl li,.pc-td li{display:grid;align-items:center;gap:10px;padding:6px 0;border-top:1px solid rgba(10,26,74,.06);font:400 12px/1.2 var(--T);color:var(--sl)}
-.pc-kw li{grid-template-columns:minmax(0,1fr) auto 24px}.pc-bl li{grid-template-columns:minmax(0,1fr) auto}
-.pc-kw span,.pc-bl span,.pc-td span{min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
-.pc-kw b{font:500 11px/1 var(--M);color:var(--ink)}
-.kd{display:grid;place-items:center;height:18px;border-radius:5px;font:600 10px/1 var(--M);font-style:normal}.kd.l{background:rgba(23,166,115,.12);color:var(--ok)}.kd.m{background:rgba(245,165,36,.15);color:#b97600}.kd.h{background:rgba(229,72,77,.1);color:var(--cr)}
-.st{padding:4px 7px;border-radius:999px;font:600 9.5px/1 var(--M);font-style:normal;letter-spacing:.06em;text-transform:uppercase}.st.lv{background:rgba(23,166,115,.12);color:var(--ok)}.st.pd{background:rgba(245,165,36,.15);color:#b97600}.st.lo{background:rgba(229,72,77,.1);color:var(--cr)}
-.pc-rk{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding-top:4px}
-.pc-rk b{display:block;font:600 30px/1 var(--D);letter-spacing:-.005em;color:var(--ink)}.pc-rk p span{display:block;margin-top:7px;font:500 10.5px/1 var(--M);color:var(--mu);white-space:nowrap}
-.pc-rk svg{flex:1;max-width:58%;height:56px;overflow:visible}.pc-rk path{fill:none;stroke:#7a5cff;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}.pc-rk .ar{fill:rgba(122,92,255,.1);stroke:none}
-.pc-au{display:flex;align-items:center;gap:14px;padding-top:2px}
-.pc-ring{position:relative;flex:none;width:60px;height:60px}.pc-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
-.pc-ring circle{fill:none;stroke:rgba(10,26,74,.08);stroke-width:4}.pc-ring .v{stroke:var(--ok);stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:calc((100 - 92*var(--k))*1px)}
-.pc-ring b{position:absolute;inset:0;display:grid;place-items:center;font:600 17px/1 var(--D);color:var(--ink)}
-.pc-au li{display:flex;align-items:center;gap:8px;padding:3px 0;font:400 12px/1.3 var(--T);color:var(--sl);white-space:nowrap}.pc-au li:before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--ok)}.pc-au li.wn:before{background:var(--wa)}
-.pc-cp li{display:grid;grid-template-columns:minmax(0,92px) minmax(0,1fr) 20px;align-items:center;gap:8px;padding:4px 0;font:400 11.5px/1.2 var(--T);color:var(--sl)}
-.pc-cp span{overflow:hidden;white-space:nowrap;text-overflow:ellipsis}.pc-cp b{font:500 10.5px/1 var(--M);color:var(--ink);text-align:right}
-.pc-cp i{height:6px;border-radius:3px;background:rgba(10,26,74,.07);overflow:hidden}.pc-cp i:after{content:"";display:block;width:calc(var(--w)*var(--k));height:100%;border-radius:3px;background:#9aa6c4}.pc-cp .me i:after{background:linear-gradient(90deg,var(--b),var(--sky))}.pc-cp .me span{color:var(--b);font-weight:600}
-.pc-td li{grid-template-columns:14px minmax(0,1fr) auto}
-.pc-td li:before{content:"";width:14px;height:14px;border-radius:4px;border:1.5px solid rgba(10,26,74,.22);box-sizing:border-box}
-.pc-td li.dn span{color:var(--mu);text-decoration:line-through}.pc-td li.dn:before{border-color:var(--ok);background:var(--ok) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 12.5 4 4 8-9'/%3E%3C/svg%3E") center/10px no-repeat}
-.pc-td em{font:600 9.5px/1 var(--M);font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--mu)}.pc-td em.hi{color:var(--cr)}
+/* card visuals: each module shows its idea at a glance (numbers, chart, ring, bar, overlap), not rows of a table */
+.pc{display:flex;flex-direction:column}
+.pv-big{display:flex;align-items:baseline;gap:7px}
+.pv-big b{font:600 28px/1 var(--D);letter-spacing:-.03em;color:var(--ink)}
+.pv-big span{font:500 11px/1 var(--M);color:var(--mu)}
+.pv-big em{margin-left:auto;padding:4px 8px;border-radius:999px;background:rgba(23,166,115,.1);color:var(--ok);font:600 10.5px/1 var(--M);font-style:normal;white-space:nowrap}
+.pv-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.pv-chips span{display:inline-flex;align-items:center;gap:6px;padding:5px 9px;border-radius:999px;background:#f3f5fa;border:1px solid rgba(10,26,74,.07);font:500 11.5px/1 var(--T);color:var(--ink);white-space:nowrap}
+.pv-chips i{width:6px;height:6px;border-radius:50%;background:var(--c)}
+.pv-chips .hot{background:rgba(47,91,255,.08);border-color:rgba(47,91,255,.28);color:var(--b)}
+.pv-rk{display:grid;grid-template-columns:auto minmax(0,1fr);gap:16px;align-items:end}
+.pv-ch{position:relative;height:66px}
+.pv-ch svg{display:block;width:100%;height:100%;overflow:visible}
+.pv-ch .gl{stroke:rgba(10,26,74,.07);stroke-width:1;vector-effect:non-scaling-stroke}
+.pv-ch .ar{fill:url(#cvRkG)}
+.pv-ch .ln{fill:none;stroke:#7a5cff;stroke-width:2.6;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.pv-dot{position:absolute;right:-5px;top:calc(12% - 5px);width:10px;height:10px;border-radius:50%;background:#7a5cff;box-shadow:0 0 0 4px rgba(122,92,255,.18);animation:pvping 2s ease-out infinite}
+.pv-dot:after{content:"#3";position:absolute;right:14px;top:-22px;padding:3px 6px;border-radius:6px;background:#7a5cff;color:#fff;font:600 10px/1 var(--M);white-space:nowrap}
+@keyframes pvping{0%{box-shadow:0 0 0 0 rgba(122,92,255,.45)}100%{box-shadow:0 0 0 9px rgba(122,92,255,0)}}
+.pv-tiers{display:flex;gap:6px;margin-top:12px}
+.pv-tiers span{flex:1;padding:7px 9px;border-radius:9px;background:#f5f6fb;font:500 10px/1 var(--M);color:var(--mu);white-space:nowrap}
+.pv-tiers b{display:block;margin-bottom:4px;font:600 15px/1 var(--D);color:var(--ink)}
+.pv-au{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.pc-ring{position:relative;flex:none;width:86px;height:86px}.pc-ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.pc-ring circle{fill:none;stroke:rgba(10,26,74,.07);stroke-width:3.6}
+.pc-ring .v{stroke:url(#cvAuG);stroke-linecap:round;stroke-dasharray:100;stroke-dashoffset:calc((100 - 92*var(--k))*1px)}
+.pc-ring b{position:absolute;inset:0;display:grid;place-content:center;text-align:center;font:600 24px/1 var(--D);letter-spacing:-.03em;color:var(--ink)}
+.pc-ring b small{display:block;margin-top:4px;font:500 8.5px/1 var(--M);letter-spacing:.12em;text-transform:uppercase;color:var(--mu)}
+.pv-pills{display:flex;flex-wrap:wrap;justify-content:center;gap:5px}
+.pv-pills span{padding:4px 8px;border-radius:999px;font:600 9.5px/1 var(--M);letter-spacing:.03em;white-space:nowrap}
+.pv-pills .e{background:rgba(229,72,77,.1);color:var(--cr)}.pv-pills .w{background:rgba(245,165,36,.14);color:#b97600}
+.pv-bar{display:flex;gap:3px;height:8px;margin-top:12px}
+.pv-bar i{width:calc(var(--w)*var(--k));border-radius:4px;background:var(--c)}
+.pv-leg{display:flex;flex-wrap:wrap;gap:4px 12px;margin-top:8px;font:500 10.5px/1 var(--M);color:var(--mu)}
+.pv-leg span{display:inline-flex;align-items:center;gap:5px;font:500 10.5px/1 var(--M);color:var(--mu);white-space:nowrap}.pv-leg span:before{content:"";width:7px;height:7px;border-radius:2px;background:var(--c)}
+.pv-av{display:flex;align-items:center;margin-top:12px;padding-left:6px}
+.pv-av i{display:grid;place-items:center;width:24px;height:24px;margin-left:-6px;border-radius:50%;border:2px solid #fff;background:var(--c);color:#fff;font:600 10px/1 var(--D);font-style:normal}
+.pv-av span{margin-left:8px;font:500 10.5px/1 var(--M);color:var(--mu);white-space:nowrap}
+.pv-cp{flex:1;display:flex;align-items:center;gap:14px}
+.pv-cp svg{flex:none;width:118px;height:86px;overflow:visible}
+.pv-cp circle{mix-blend-mode:multiply}
+.pv-cp text{font:600 8.5px var(--M);fill:var(--ink);text-anchor:middle}
+.pv-cp p b{display:block;font:600 28px/1 var(--D);letter-spacing:-.03em;color:#0ea5c6}
+.pv-cp p span{display:block;margin-top:5px;font:500 12px/1.35 var(--T);color:var(--sl)}
+.pv-td{display:grid;gap:6px}
+.pv-td li{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:9px;background:#f6f7fb;box-shadow:inset 3px 0 0 var(--c);font:500 11.5px/1.2 var(--T);color:var(--ink)}
+.pv-td li span{flex:1;min-width:0;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.pv-td li em{font:600 9px/1 var(--M);font-style:normal;letter-spacing:.06em;text-transform:uppercase;color:var(--c)}
+.pv-td li.dn{opacity:.55}.pv-td li.dn span{text-decoration:line-through}
+@media(prefers-reduced-motion:reduce){.pv-dot{animation:none}}
 /* the noise around the window: what scattered SEO work feels like; it fades as the pieces land */
 .cv-noise{opacity:var(--no,1);transition:none}
 .cv-noise li{position:absolute;left:var(--x);top:var(--y);z-index:3;display:flex;align-items:center;gap:9px;padding:9px 13px 9px 9px;border-radius:11px;background:rgba(255,255,255,.94);border:1px solid rgba(229,72,77,.22);box-shadow:0 22px 44px -22px rgba(10,26,74,.5);font:500 12.5px/1 var(--T);color:var(--ink);white-space:nowrap;animation:hxbob 6.5s ease-in-out infinite;animation-delay:var(--dl,0s)}
@@ -792,34 +821,44 @@ requestAnimationFrame(frame);
         <div class="cv-main">
           <div class="cv-hi"><div><b>yourwebsite.com</b><span>SEO overview · every tool in one view</span></div><span class="cv-tabs"><i></i><b id="cvTabs">14 tabs</b> open</span></div>
 
-          <div class="sl" data-m="kw" style="--sx:-340px;--sy:40px;--sr:-9deg"><div class="pc" style="--tint:rgba(23,166,115,.13)">
-            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#17a673">CSV</i>keywords_export (3).csv</span><span class="pc-in"><i class="mi" style="--c:#2f5bff"></i>Keyword Research<em>248 saved</em></span></div>
-            <ul class="pc-kw"><li><span>seo management tool</span><b>2.4k</b><em class="kd m">38</em></li><li><span>backlink tracker</span><b>1.9k</b><em class="kd l">24</em></li><li><span>rank tracking software</span><b>1.3k</b><em class="kd h">61</em></li></ul>
+          <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><linearGradient id="cvRkG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a5cff" stop-opacity=".28"/><stop offset="1" stop-color="#7a5cff" stop-opacity="0"/></linearGradient><linearGradient id="cvAuG" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#17a673"/><stop offset="1" stop-color="#5ac8fa"/></linearGradient></defs></svg>
+
+          <div class="sl" data-m="kw" style="--sp:4;--sx:-340px;--sy:40px;--sr:-9deg"><div class="pc" style="--tint:rgba(23,166,115,.13)">
+            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#17a673">CSV</i>keywords_export (3).csv</span><span class="pc-in"><i class="mi" style="--c:#2f5bff"></i>Keyword Research</span></div>
+            <p class="pv-big"><b>248</b><span>keywords</span><em>+32 this week</em></p>
+            <p class="pv-chips"><span class="hot"><i style="--c:#2f5bff"></i>seo management tool</span><span><i style="--c:#17a673"></i>backlink tracker</span><span><i style="--c:#f5a524"></i>site audit</span><span><i style="--c:#e5484d"></i>rank tracker</span></p>
           </div></div>
 
-          <div class="sl" data-m="bl" style="--sx:110px;--sy:-30px;--sr:7deg"><div class="pc" style="--tint:rgba(29,122,76,.12)">
-            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#1d7a4c">XLS</i>backlinks_FINAL_v3.xlsx</span><span class="pc-in"><i class="mi" style="--c:#17a673"></i>Backlink Manager<em>184 links</em></span></div>
-            <ul class="pc-bl"><li><span>industry-blog.example</span><em class="st lv">Live</em></li><li><span>partner-site.example</span><em class="st pd">Pending</em></li><li><span>old-directory.example</span><em class="st lo">Lost</em></li></ul>
+          <div class="sl" data-m="rk" style="--sp:5;--sx:110px;--sy:-30px;--sr:7deg"><div class="pc" style="--tint:rgba(122,92,255,.1)">
+            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#7a5cff">TAB</i>rank-tracker · another login</span><span class="pc-in"><i class="mi" style="--c:#7a5cff"></i>Rank Tracking</span></div>
+            <div class="pv-rk"><p class="pv-big"><b>8.4</b><span>avg. position</span></p>
+              <div class="pv-ch"><svg viewBox="0 0 200 66" preserveAspectRatio="none"><path class="gl" d="M0 16H200M0 38H200M0 60H200"/><path class="ar" d="M0 56 C25 54 40 50 60 48 S95 40 115 34 S155 18 200 8 L200 66 L0 66Z"/><path class="ln" d="M0 56 C25 54 40 50 60 48 S95 40 115 34 S155 18 200 8"/></svg><span class="pv-dot"></span></div></div>
+            <p class="pv-tiers"><span><b>12</b>Top 3</span><span><b>48</b>Top 10</span><span><b>162</b>Top 100</span></p>
           </div></div>
 
-          <div class="sl" data-m="rk" style="--sx:370px;--sy:80px;--sr:11deg"><div class="pc" style="--tint:rgba(122,92,255,.1)">
-            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#7a5cff">TAB</i>rank-tracker · another login</span><span class="pc-in"><i class="mi" style="--c:#7a5cff"></i>Rank Tracking<em>▲ 2.1</em></span></div>
-            <div class="pc-rk"><p><b>8.4</b><span>Avg. position</span></p><svg viewBox="0 0 120 56" preserveAspectRatio="none"><path class="ar" d="M0 46 L20 42 L40 44 L60 30 L80 26 L100 14 L120 8 L120 56 L0 56Z"/><path d="M0 46 L20 42 L40 44 L60 30 L80 26 L100 14 L120 8"/></svg></div>
+          <div class="sl" data-m="au" style="--sp:3;--sx:370px;--sy:80px;--sr:11deg"><div class="pc" style="--tint:rgba(229,72,77,.08)">
+            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#e5484d">PDF</i>audit-report-march.pdf</span><span class="pc-in"><i class="mi" style="--c:#f5a524"></i>Website Audit</span></div>
+            <div class="pv-au"><div class="pc-ring"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19"/><circle class="v" cx="22" cy="22" r="19" pathLength="100"/></svg><b>92<small>Health</small></b></div>
+              <p class="pv-pills"><span class="e">2 errors</span><span class="w">5 warnings</span></p></div>
           </div></div>
 
-          <div class="sl" data-m="au" style="--sx:-390px;--sy:50px;--sr:6deg"><div class="pc" style="--tint:rgba(229,72,77,.08)">
-            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#e5484d">PDF</i>audit-report-march.pdf</span><span class="pc-in"><i class="mi" style="--c:#f5a524"></i>Website Audit<em>25 pages</em></span></div>
-            <div class="pc-au"><div class="pc-ring"><svg viewBox="0 0 44 44"><circle cx="22" cy="22" r="19"/><circle class="v" cx="22" cy="22" r="19" pathLength="100"/></svg><b>92</b></div><ul><li>Indexable pages</li><li class="wn">2 broken links</li><li>Core Web Vitals</li></ul></div>
+          <div class="sl" data-m="bl" style="--sp:4;--sx:-390px;--sy:50px;--sr:6deg"><div class="pc" style="--tint:rgba(29,122,76,.12)">
+            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#1d7a4c">XLS</i>backlinks_FINAL_v3.xlsx</span><span class="pc-in"><i class="mi" style="--c:#17a673"></i>Backlink Manager</span></div>
+            <p class="pv-big"><b>184</b><span>backlinks</span><em>+12 new</em></p>
+            <p class="pv-bar"><i style="--w:78%;--c:#17a673"></i><i style="--w:14%;--c:#f5a524"></i><i style="--w:8%;--c:#e5484d"></i></p>
+            <p class="pv-leg"><span style="--c:#17a673">152 live</span><span style="--c:#f5a524">24 pending</span><span style="--c:#e5484d">8 lost</span></p>
+            <p class="pv-av"><i style="--c:#2f5bff">I</i><i style="--c:#7a5cff">P</i><i style="--c:#0ea5c6">N</i><i style="--c:#f5a524">B</i><span>+180 sites</span></p>
           </div></div>
 
-          <div class="sl" data-m="cp" style="--sx:-60px;--sy:130px;--sr:-7deg"><div class="pc" style="--tint:rgba(90,200,250,.13)">
-            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#0ea5c6">TAB</i>competitor research · tab 9</span><span class="pc-in"><i class="mi" style="--c:#0ea5c6"></i>Competitor Analysis<em>3 sites</em></span></div>
-            <ul class="pc-cp"><li class="me"><span>yourwebsite.com</span><i style="--w:62%"></i><b>62</b></li><li><span>rival-one.example</span><i style="--w:74%"></i><b>74</b></li><li><span>rival-two.example</span><i style="--w:48%"></i><b>48</b></li></ul>
+          <div class="sl" data-m="cp" style="--sp:4;--sx:-60px;--sy:130px;--sr:-7deg"><div class="pc" style="--tint:rgba(90,200,250,.13)">
+            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#0ea5c6">TAB</i>competitor research · tab 9</span><span class="pc-in"><i class="mi" style="--c:#0ea5c6"></i>Competitor Analysis</span></div>
+            <div class="pv-cp"><svg viewBox="0 0 118 86"><circle cx="40" cy="43" r="32" fill="rgba(47,91,255,.22)"/><circle cx="78" cy="32" r="28" fill="rgba(14,165,198,.24)"/><circle cx="76" cy="60" r="22" fill="rgba(122,92,255,.2)"/><text x="30" y="46">You</text><text x="88" y="28">R1</text><text x="86" y="70">R2</text></svg>
+              <p><b>37</b><span>keyword gaps your rivals rank for</span></p></div>
           </div></div>
 
-          <div class="sl" data-m="ds" style="--sx:350px;--sy:120px;--sr:-12deg"><div class="pc" style="--tint:rgba(255,214,90,.34)">
-            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#d49a00">NOTE</i>TODO.txt</span><span class="pc-in"><i class="mi" style="--c:#0a1230"></i>Next actions<em>Dashboard</em></span></div>
-            <ul class="pc-td"><li><span>Redirect /journal (404)</span><em class="hi">High</em></li><li><span>Follow up on guest post</span><em>Med</em></li><li class="dn"><span>Rewrite /pricing title</span><em>Done</em></li></ul>
+          <div class="sl" data-m="ds" style="--sp:4;--sx:350px;--sy:120px;--sr:-12deg"><div class="pc" style="--tint:rgba(255,214,90,.34)">
+            <div class="pc-h"><span class="pc-src"><i class="fi" style="--c:#d49a00">NOTE</i>TODO.txt</span><span class="pc-in"><i class="mi" style="--c:#0a1230"></i>Next actions</span></div>
+            <ul class="pv-td"><li style="--c:#e5484d"><span>Redirect /journal (404)</span><em>High</em></li><li style="--c:#f5a524"><span>Follow up on guest post</span><em>Med</em></li><li class="dn" style="--c:#17a673"><span>Rewrite /pricing title</span><em>Done</em></li></ul>
           </div></div>
         </div>
         <div class="cv-foot"><span class="cv-live"></span><span id="cvStatus">Everything in one place</span><span class="cv-meter"><i id="cvMeter"></i></span><span class="cv-n"><b>6</b> tools · <b>1</b> workspace</span></div>
